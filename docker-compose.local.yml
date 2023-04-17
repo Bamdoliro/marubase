@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  mysql:
+    container_name: maru.local.db
+    image: mysql/mysql-server:5.7
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_USER: "bamdoliro"
+      MYSQL_PASSWORD: "bamdoliro"
+      MYSQL_DATABASE: "bamdoliro_maru"
+    ports:
+      - "3307:3306"
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+
+  redis:
+    image: redis:latest
+    container_name: maru.local.redis
+    command: /bin/sh -c "redis-server --requirepass bamdoliro"
+    ports:
+      - "6379:6379"

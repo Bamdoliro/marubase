@@ -1,0 +1,79 @@
+spring:
+  profiles:
+    active: local
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+
+  datasource:
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  cache:
+    type: redis
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      password: ${REDIS_PASSWORD}
+      port: 6379
+
+
+jwt:
+  refresh-time: 2592000000 # 30일
+  access-time: 3600000 # 1시간
+  prefix: Bearer
+  header: Authorization
+  secret-key: ${JWT_SECRET}
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+debug: true
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    url: jdbc:mysql://localhost:3307/bamdoliro_maru
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: bamdoliro
+    password: bamdoliro
+
+  data:
+    redis:
+      host: localhost
+      password: bamdoliro
+
+server:
+  port: 8088
+
+debug: true
