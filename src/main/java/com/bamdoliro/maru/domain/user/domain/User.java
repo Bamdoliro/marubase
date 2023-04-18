@@ -28,20 +28,20 @@ public class User {
     @Id
     private Long id;
 
-    @Embedded
-    private Password password;
-
     @Column(nullable = false, length = 100)
     private String email;
+
+    @Embedded
+    private Password password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
     private Authority authority;
 
     @Builder
-    public User(String password, String email) {
-        this.password = new Password(PasswordUtil.encode(password));
+    public User(String email, String password) {
         this.email = email;
+        this.password = new Password(PasswordUtil.encode(password));
         this.authority = Authority.ROLE_USER;
     }
 }

@@ -1,0 +1,48 @@
+package com.bamdoliro.maru.application.user;
+
+import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.infrastructure.persistence.user.UserRepository;
+import com.bamdoliro.maru.presentation.user.dto.request.SignUpUserRequest;
+import com.bamdoliro.maru.shared.UserFixture;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+@DisplayName("[USECASE] 유저는 회원가입을 할 수 있다.")
+@ExtendWith(MockitoExtension.class)
+class SignUpUserUseCaseTest {
+
+    @InjectMocks
+    private SignUpUserUseCase signUpUserUseCase;
+
+    @Mock
+    private UserRepository userRepository;
+
+    @Test
+    void 유저를_생성한다() {
+        // given
+        User user = UserFixture.createUser();
+        SignUpUserRequest request = new SignUpUserRequest(user.getEmail(), "해시값은항상다르다");
+        ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
+
+        given(userRepository.save(any(User.class))).willReturn(user);
+
+        // when
+        signUpUserUseCase.execute(request);
+
+        // then
+        verify(userRepository, times(1)).save(captor.capture());
+        User savedUser = captor.getValue();
+        assertEquals(user.getEmail(), savedUser.getEmail());
+    }
+}
