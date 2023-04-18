@@ -2,6 +2,7 @@ package com.bamdoliro.maru.domain.user.domain;
 
 import com.bamdoliro.maru.domain.user.domain.type.Authority;
 import com.bamdoliro.maru.domain.user.domain.value.Password;
+import com.bamdoliro.maru.infrastructure.security.PasswordUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -38,8 +39,8 @@ public class User {
     private Authority authority;
 
     @Builder
-    public User(Password password, String email) {
-        this.password = password;
+    public User(String password, String email) {
+        this.password = new Password(PasswordUtil.encode(password));
         this.email = email;
         this.authority = Authority.ROLE_USER;
     }
