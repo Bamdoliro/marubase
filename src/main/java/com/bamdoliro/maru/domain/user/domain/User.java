@@ -28,7 +28,7 @@ public class User {
     @Id
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @Column(unique = true, nullable = false, length = 100)
     private String email;
 
     @Embedded
