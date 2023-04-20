@@ -1,4 +1,4 @@
-package com.bamdoliro.maru.shared;
+package com.bamdoliro.maru.shared.fixture;
 
 import com.bamdoliro.maru.domain.user.domain.User;
 

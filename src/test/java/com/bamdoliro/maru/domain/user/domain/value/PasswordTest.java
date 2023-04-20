@@ -1,7 +1,7 @@
 package com.bamdoliro.maru.domain.user.domain.value;
 
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.shared.UserFixture;
+import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

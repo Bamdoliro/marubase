@@ -4,7 +4,7 @@ import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.exception.UserAlreadyExistsException;
 import com.bamdoliro.maru.infrastructure.persistence.user.UserRepository;
 import com.bamdoliro.maru.presentation.user.dto.request.SignUpUserRequest;
-import com.bamdoliro.maru.shared.UserFixture;
+import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
