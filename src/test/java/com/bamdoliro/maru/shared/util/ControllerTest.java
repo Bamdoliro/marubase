@@ -1,4 +1,4 @@
-package com.bamdoliro.maru.shared;
+package com.bamdoliro.maru.shared.util;
 
 import com.bamdoliro.maru.infrastructure.security.SecurityConfig;
 import com.fasterxml.jackson.core.JsonProcessingException;

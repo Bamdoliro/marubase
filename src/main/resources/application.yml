@@ -2,10 +2,6 @@ spring:
   profiles:
     active: local
 
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -16,7 +12,7 @@ spring:
 
     generate-ddl: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
 
   datasource:
     url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
@@ -32,7 +28,6 @@ spring:
       host: ${REDIS_HOST}
       password: ${REDIS_PASSWORD}
       port: 6379
-
 
 jwt:
   refresh-time: 2592000000 # 30일
@@ -52,15 +47,15 @@ spring:
   config:
     activate:
       on-profile: prod
-
-  jpa:
-    hibernate:
-      ddl-auto: validate
 ---
 spring:
   config:
     activate:
       on-profile: local
+
+  jpa:
+    hibernate:
+      ddl-auto: update
 
   datasource:
     url: jdbc:mysql://localhost:3307/bamdoliro_maru

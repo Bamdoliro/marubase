@@ -5,13 +5,13 @@
 
 [discrete]
 ==== Request Body
-include::{snippets}/user-controller-test/회원가입/request-fields.adoc[]
+include::{snippets}/user-controller-test/유저를_생성한다/request-fields.adoc[]
 
 [discrete]
 ==== 요청
-include::{snippets}/user-controller-test/회원가입/http-request.adoc[]
+include::{snippets}/user-controller-test/유저를_생성한다/http-request.adoc[]
 
 
 [discrete]
 ==== 응답
-include::{snippets}/user-controller-test/회원가입/http-response.adoc[]
+include::{snippets}/user-controller-test/유저를_생성한다/http-response.adoc[]

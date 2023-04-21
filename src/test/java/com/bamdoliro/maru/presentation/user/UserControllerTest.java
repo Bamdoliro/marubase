@@ -2,7 +2,7 @@ package com.bamdoliro.maru.presentation.user;
 
 import com.bamdoliro.maru.application.user.SignUpUserUseCase;
 import com.bamdoliro.maru.presentation.user.dto.request.SignUpUserRequest;
-import com.bamdoliro.maru.shared.RestDocsTestSupport;
+import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,7 +25,7 @@ class UserControllerTest extends RestDocsTestSupport {
 
     @WithAnonymousUser
     @Test
-    void 회원가입() throws Exception {
+    void 유저를_생성한다() throws Exception {
         willDoNothing().given(signUpUserUseCase).execute(any(SignUpUserRequest.class));
         SignUpUserRequest request = new SignUpUserRequest("maru@bamdoliro.com", "password123$");
 
