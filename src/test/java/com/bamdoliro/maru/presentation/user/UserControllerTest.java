@@ -19,11 +19,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(UserController.class)
 class UserControllerTest extends RestDocsTestSupport {
-
-    @MockBean
-    private SignUpUserUseCase signUpUserUseCase;
 
     @Test
     void 유저를_생성한다() throws Exception {
