@@ -1,4 +1,4 @@
-package com.bamdoliro.maru.shared;
+package com.bamdoliro.maru.shared.util;
 
 import com.bamdoliro.maru.shared.config.RestDocsConfig;
 import org.junit.jupiter.api.BeforeEach;

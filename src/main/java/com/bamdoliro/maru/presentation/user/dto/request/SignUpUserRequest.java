@@ -13,14 +13,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SignUpUserRequest {
 
-    @NotBlank
-    @Size(max = 100)
-    @Email
+    @NotBlank(message = "필수값입니다.")
+    @Size(max = 100, message = "100글자 이하여야 합니다.")
+    @Email(message = "올바른 형식의 이메일이어야 합니다.")
     private String email;
 
-    @NotBlank
-    // 최소 8 자, 최소 하나의 문자, 하나의 숫자 및 하나의 특수 문자
+    @NotBlank(message = "필수값입니다.")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$",
-            message = "올바른 형식의 비밀번호여야 합니다.")
+            message = "비밀번호는 최소 하나의 문자, 숫자, 특수문자를 포함하며 8 글자 이상이어야 합니다.")
     private String password;
 }

@@ -1,17 +1,23 @@
-== 유저 `User`
+== 유저 User
 
 === 회원가입
 이메일과 비밀번호를 입력해 회원가입을 할 수 있습니다.
 
-[discrete]
-==== Request Body
-include::{snippets}/user-controller-test/회원가입/request-fields.adoc[]
+==== 요청 형식
 
-[discrete]
+===== Request Body
+include::{snippets}/user-controller-test/유저를_생성한다/request-fields.adoc[]
+
 ==== 요청
-include::{snippets}/user-controller-test/회원가입/http-request.adoc[]
+include::{snippets}/user-controller-test/유저를_생성한다/http-request.adoc[]
 
 
-[discrete]
 ==== 응답
-include::{snippets}/user-controller-test/회원가입/http-response.adoc[]
+===== 정상 응답
+include::{snippets}/user-controller-test/유저를_생성한다/http-response.adoc[]
+
+===== 이미 가입한 유저가 있는 경우
+include::{snippets}/user-controller-test/유저를_생성할_때_이미_유저가_있다면_에러가_발생한다/http-response.adoc[]
+
+===== 요청 형식이 틀린 경우
+include::{snippets}/user-controller-test/유저를_생성할_때_잘못된_형식의_요청을_보내면_에러가_발생한다/http-response.adoc[]

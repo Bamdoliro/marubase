@@ -51,7 +51,7 @@ class SignUpUserUseCaseTest {
     }
 
     @Test
-    void 이미_유저가_있다면_예외가_발생한다() {
+    void 이미_유저가_있다면_에러가_발생한다() {
         // given
         User user = UserFixture.createUser();
         SignUpUserRequest request = new SignUpUserRequest(user.getEmail(), "해시값은항상다르다");

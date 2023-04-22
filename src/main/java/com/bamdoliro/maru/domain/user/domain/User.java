@@ -3,6 +3,7 @@ package com.bamdoliro.maru.domain.user.domain;
 import com.bamdoliro.maru.domain.user.domain.type.Authority;
 import com.bamdoliro.maru.domain.user.domain.value.Password;
 import com.bamdoliro.maru.infrastructure.security.PasswordUtil;
+import com.bamdoliro.maru.shared.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tbl_user")
 @Entity
-public class User {
+public class User extends BaseTimeEntity {
 
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
