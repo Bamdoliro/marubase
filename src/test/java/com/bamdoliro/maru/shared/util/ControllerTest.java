@@ -1,7 +1,7 @@
 package com.bamdoliro.maru.shared.util;
 
 import com.bamdoliro.maru.application.user.SignUpUserUseCase;
-import com.bamdoliro.maru.infrastructure.security.SecurityConfig;
+import com.bamdoliro.maru.shared.security.SecurityConfig;
 import com.bamdoliro.maru.presentation.user.UserController;
 import com.bamdoliro.maru.shared.response.CommonDocController;
 import com.fasterxml.jackson.core.JsonProcessingException;

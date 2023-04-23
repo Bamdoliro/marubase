@@ -1,4 +1,4 @@
-package com.bamdoliro.maru.infrastructure.security;
+package com.bamdoliro.maru.shared.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

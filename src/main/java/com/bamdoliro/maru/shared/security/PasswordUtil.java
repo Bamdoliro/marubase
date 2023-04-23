@@ -1,4 +1,4 @@
-package com.bamdoliro.maru.infrastructure.security;
+package com.bamdoliro.maru.shared.security;
 
 import lombok.experimental.UtilityClass;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
