@@ -30,8 +30,8 @@ spring:
       port: 6379
 
 jwt:
-  refresh-time: 2592000000 # 30일
-  access-time: 3600000 # 1시간
+  refresh-expiration-time: 2592000000 # 30일
+  access-expiration-time: 3600000 # 1시간
   prefix: Bearer
   header: Authorization
   secret-key: ${JWT_SECRET}
