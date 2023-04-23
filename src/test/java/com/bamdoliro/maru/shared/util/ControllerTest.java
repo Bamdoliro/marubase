@@ -1,6 +1,8 @@
 package com.bamdoliro.maru.shared.util;
 
+import com.bamdoliro.maru.application.auth.LogInUseCase;
 import com.bamdoliro.maru.application.user.SignUpUserUseCase;
+import com.bamdoliro.maru.presentation.auth.AuthController;
 import com.bamdoliro.maru.shared.security.SecurityConfig;
 import com.bamdoliro.maru.presentation.user.UserController;
 import com.bamdoliro.maru.shared.response.CommonDocController;
@@ -17,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @Import(SecurityConfig.class)
 @WebMvcTest({
         UserController.class,
+        AuthController.class,
         CommonDocController.class
 })
 public abstract class ControllerTest {
@@ -29,6 +32,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected SignUpUserUseCase signUpUserUseCase;
+
+    @MockBean
+    protected LogInUseCase logInUseCase;
 
 
     protected String toJson(Object object) throws JsonProcessingException {

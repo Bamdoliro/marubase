@@ -20,7 +20,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@DisplayName("[USECASE] 유저는 회원가입을 할 수 있다.")
 @ExtendWith(MockitoExtension.class)
 class SignUpUserUseCaseTest {
 
@@ -34,7 +33,7 @@ class SignUpUserUseCaseTest {
     void 유저를_생성한다() {
         // given
         User user = UserFixture.createUser();
-        SignUpUserRequest request = new SignUpUserRequest(user.getEmail(), "해시값은항상다르다");
+        SignUpUserRequest request = new SignUpUserRequest(user.getEmail(), "비밀번호");
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
 
         given(userRepository.save(any(User.class))).willReturn(user);
@@ -54,7 +53,7 @@ class SignUpUserUseCaseTest {
     void 이미_유저가_있다면_에러가_발생한다() {
         // given
         User user = UserFixture.createUser();
-        SignUpUserRequest request = new SignUpUserRequest(user.getEmail(), "해시값은항상다르다");
+        SignUpUserRequest request = new SignUpUserRequest(user.getEmail(), "비밀번호");
 
         given(userRepository.existsByEmail(request.getEmail())).willReturn(true);
 

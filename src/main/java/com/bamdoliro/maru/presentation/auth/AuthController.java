@@ -3,6 +3,8 @@ package com.bamdoliro.maru.presentation.auth;
 import com.bamdoliro.maru.application.auth.LogInUseCase;
 import com.bamdoliro.maru.presentation.auth.dto.request.LogInRequest;
 import com.bamdoliro.maru.presentation.auth.dto.response.TokenResponse;
+import com.bamdoliro.maru.shared.response.CommonResponse;
+import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +20,7 @@ public class AuthController {
     private final LogInUseCase logInUseCase;
 
     @PostMapping
-    public TokenResponse logIn(@RequestBody @Valid LogInRequest request) {
-        return logInUseCase.execute(request);
+    public SingleCommonResponse<TokenResponse> logIn(@RequestBody @Valid LogInRequest request) {
+        return CommonResponse.ok(logInUseCase.execute(request));
     }
 }

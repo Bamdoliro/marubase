@@ -1,0 +1,25 @@
+== 인증 Auth
+
+=== 로그인
+이메일과 비밀번호를 입력해 로그인을 할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Body
+include::{snippets}/auth-controller-test/유저가_로그인한다/request-fields.adoc[]
+
+==== 요청
+include::{snippets}/auth-controller-test/유저가_로그인한다/http-request.adoc[]
+
+==== 응답
+===== 정상 응답
+include::{snippets}/auth-controller-test/유저가_로그인한다/http-response.adoc[]
+
+===== 일치하는 유저가 없는 경우
+include::{snippets}/auth-controller-test/유저가_로그인할_때_유저가_없으면_에러가_발생한다/http-response.adoc[]
+
+===== 비밀번호가 틀린 경우
+include::{snippets}/auth-controller-test/유저가_로그인할_때_비밀번호가_틀리면_에러가_발생한다/http-response.adoc[]
+
+===== 요청 형식이 틀린 경우
+include::{snippets}/auth-controller-test/유저가_로그인할_때_잘못된_형식의_요청을_보내면_에러가_발생한다/http-response.adoc[]
