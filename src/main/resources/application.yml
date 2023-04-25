@@ -4,10 +4,10 @@ spring:
 
   jpa:
     database: mysql
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.MySQLDialect
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
 
     generate-ddl: true
@@ -33,7 +33,6 @@ jwt:
   refresh-expiration-time: 2592000000 # 30일
   access-expiration-time: 3600000 # 1시간
   prefix: Bearer
-  header: Authorization
   secret-key: ${JWT_SECRET}
 ---
 spring:

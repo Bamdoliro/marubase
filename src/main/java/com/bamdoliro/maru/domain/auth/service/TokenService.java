@@ -11,7 +11,6 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,11 +40,6 @@ public class TokenService {
         return token;
     }
 
-    private Key getSigningKey(String secretKey) {
-        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
-
     private String generateToken(String email, TokenType type, Long time) {
         Claims claims = Jwts.claims();
         claims.put("email", email);
@@ -58,6 +52,10 @@ public class TokenService {
                 .setExpiration(new Date(now.getTime() + time))
                 .signWith(getSigningKey(jwtProperties.getSecretKey()), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public String getEmail(String token) {
+        return extractAllClaims(token).get("email", String.class);
     }
 
     private Claims extractAllClaims(String token) {
@@ -74,18 +72,8 @@ public class TokenService {
         }
     }
 
-    public String resolveToken(HttpServletRequest request) {
-        String bearer = request.getHeader(jwtProperties.getHeader());
-        return parseToken(bearer);
-    }
-
-    public String parseToken(String bearerToken) {
-        if (bearerToken != null && bearerToken.startsWith(jwtProperties.getPrefix()))
-            return bearerToken.replace(jwtProperties.getPrefix(), "");
-        return null;
-    }
-
-    public String getEmail(String token) {
-        return extractAllClaims(token).get("email", String.class);
+    private Key getSigningKey(String secretKey) {
+        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 }

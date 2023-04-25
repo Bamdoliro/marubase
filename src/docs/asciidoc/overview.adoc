@@ -14,9 +14,9 @@
 [cols="2,5,3"]
 |====
 |환경         |DNS |비고
-|로컬 local   | link:[] |API 문서 제공
-|개발 dev   | link:[] |API 문서 제공
-|운영 prod   | link:[] |API 문서 미제공
+|local   | link:[] |API 문서 제공
+|dev   | link:[] |API 문서 제공
+|prod   | link:[] |API 문서 미제공
 |====
 
 === 응답형식
