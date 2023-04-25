@@ -2,13 +2,17 @@ package com.bamdoliro.maru.shared.util;
 
 import com.bamdoliro.maru.application.auth.LogInUseCase;
 import com.bamdoliro.maru.application.user.SignUpUserUseCase;
+import com.bamdoliro.maru.domain.auth.service.TokenService;
 import com.bamdoliro.maru.presentation.auth.AuthController;
+import com.bamdoliro.maru.shared.config.properties.JwtProperties;
 import com.bamdoliro.maru.shared.security.SecurityConfig;
 import com.bamdoliro.maru.presentation.user.UserController;
 import com.bamdoliro.maru.shared.response.CommonDocController;
+import com.bamdoliro.maru.shared.security.auth.AuthDetailsService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -30,11 +34,23 @@ public abstract class ControllerTest {
     @Autowired
     protected ObjectMapper objectMapper;
 
+
     @MockBean
     protected SignUpUserUseCase signUpUserUseCase;
 
     @MockBean
     protected LogInUseCase logInUseCase;
+
+
+    @MockBean
+    protected TokenService tokenService;
+
+    @MockBean
+    protected AuthDetailsService authDetailsService;
+
+
+    @MockBean
+    protected JwtProperties jwtProperties;
 
 
     protected String toJson(Object object) throws JsonProcessingException {

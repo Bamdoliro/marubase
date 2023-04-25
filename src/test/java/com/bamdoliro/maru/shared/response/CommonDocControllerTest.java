@@ -37,7 +37,7 @@ public class CommonDocControllerTest extends RestDocsTestSupport {
         result.andExpect(status().isOk())
                 .andDo(restDocs.document(
                         customResponseFields("custom-response",
-                                beneathPath("data.authority").withSubsectionId("authority"),
+                                beneathPath("authority").withSubsectionId("authority"),
                                 attributes(key("title").value("Authority")),
                                 enumConvertFieldDescriptor((enumDocs.getAuthority()))
                         )
@@ -45,9 +45,9 @@ public class CommonDocControllerTest extends RestDocsTestSupport {
     }
 
     public static CustomResponseFieldsSnippet customResponseFields
-    (String type,
-     PayloadSubsectionExtractor<?> subsectionExtractor,
-     Map<String, Object> attributes, FieldDescriptor... descriptors) {
+            (String type,
+             PayloadSubsectionExtractor<?> subsectionExtractor,
+             Map<String, Object> attributes, FieldDescriptor... descriptors) {
         return new CustomResponseFieldsSnippet(type, subsectionExtractor, Arrays.asList(descriptors), attributes
                 , true);
     }
@@ -59,10 +59,9 @@ public class CommonDocControllerTest extends RestDocsTestSupport {
     }
 
     private EnumDocs getData(MvcResult result) throws IOException {
-        SingleCommonResponse<EnumDocs> response = objectMapper
+        return objectMapper
                 .readValue(result.getResponse().getContentAsByteArray(),
-                        new TypeReference<SingleCommonResponse<EnumDocs>>() {}
+                        new TypeReference<EnumDocs>() {}
                 );
-        return response.getData();
     }
 }
