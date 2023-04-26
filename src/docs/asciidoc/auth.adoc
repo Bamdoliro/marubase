@@ -23,3 +23,24 @@ include::{snippets}/auth-controller-test/유저가_로그인할_때_비밀번호
 
 ===== 요청 형식이 틀린 경우
 include::{snippets}/auth-controller-test/유저가_로그인할_때_잘못된_형식의_요청을_보내면_에러가_발생한다/http-response.adoc[]
+
+=== 액세스 토큰 재발급
+리프레시 토큰을 입력해 액세스 토큰을 재발급할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/auth-controller-test/리프레시_토큰으로_액세스_토큰을_재발급한다/request-headers.adoc[]
+
+==== 요청
+include::{snippets}/auth-controller-test/리프레시_토큰으로_액세스_토큰을_재발급한다/http-request.adoc[]
+
+==== 응답
+===== 정상 응답
+include::{snippets}/auth-controller-test/리프레시_토큰으로_액세스_토큰을_재발급한다/http-response.adoc[]
+
+===== 리프레시 토큰이 만료된 경우
+include::{snippets}/auth-controller-test/만료된_리프레시_토큰으로_액세스_토큰_재발급을_요청하면_에러가_발생한다/http-response.adoc[]
+
+===== 리프레시 토큰을 보내지 않은 경우
+include::{snippets}/auth-controller-test/액세스_토큰을_재발급할_때_리프레시_토큰을_보내지_않으면_에러가_발생한다/http-response.adoc[]

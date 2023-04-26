@@ -7,6 +7,7 @@ import com.bamdoliro.maru.presentation.auth.dto.response.TokenResponse;
 import com.bamdoliro.maru.shared.response.CommonResponse;
 import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +30,7 @@ public class AuthController {
     }
 
     @PatchMapping
-    public TokenResponse refreshToken(@RequestHeader("Refresh-Token") String refreshToken) {
+    public TokenResponse refreshToken(@RequestHeader("Refresh-Token") @NotBlank String refreshToken) {
         return refreshTokenUseCase.execute(refreshToken);
     }
 }

@@ -35,7 +35,7 @@ class RefreshTokenUseCaseTest {
     private TokenRepository tokenRepository;
 
     @Test
-    void 리프레시_토큰으로_액세스_토큰을_재발급_한다() {
+    void 리프레시_토큰으로_액세스_토큰을_재발급한다() {
         // given
         Token refreshToken = AuthFixture.createRefreshToken();
         String accessToken = AuthFixture.createAccessTokenString();
