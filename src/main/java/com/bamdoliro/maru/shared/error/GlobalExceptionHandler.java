@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -30,11 +31,20 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(GlobalErrorProperty.BAD_REQUEST, errorMap));
     }
 
+    @ExceptionHandler(MissingRequestValueException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> missingRequestValueException(MissingRequestValueException e) {
+
+        return ResponseEntity
+                .status(GlobalErrorProperty.BAD_REQUEST.getStatus())
+                .body(new ErrorResponse(GlobalErrorProperty.BAD_REQUEST, e.getMessage()));
+    }
+
     @ExceptionHandler(MaruException.class)
     public ResponseEntity<ErrorResponse> handleMaruException(MaruException e) {
         return ResponseEntity
                 .status(e.getErrorProperty().getStatus())
-                .body(new ErrorResponse(e.getErrorProperty()));
+                .body(new ErrorResponse(e.getErrorProperty(), e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)

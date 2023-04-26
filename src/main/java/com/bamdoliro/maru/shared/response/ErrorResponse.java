@@ -15,6 +15,9 @@ public class ErrorResponse extends CommonResponse {
         this.error = error;
     }
 
+    public ErrorResponse(ErrorProperty errorProperty, String message) {
+        super(errorProperty.name(), message);
+    }
 
     public ErrorResponse(ErrorProperty errorProperty) {
         super(errorProperty.name(), errorProperty.getMessage());

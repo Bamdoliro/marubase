@@ -14,7 +14,7 @@ class PasswordTest {
         User user = UserFixture.createUser();
 
         // when and then
-        assertTrue(user.getPassword().match("해시값은항상다르다"));
+        assertTrue(user.getPassword().match("비밀번호"));
     }
 
     @Test
@@ -23,6 +23,6 @@ class PasswordTest {
         User user = UserFixture.createUser();
 
         // when and then
-        assertFalse(user.getPassword().match("해시값은항상다르다_이건값도다르다"));
+        assertFalse(user.getPassword().match("틀린비밀번호"));
     }
 }

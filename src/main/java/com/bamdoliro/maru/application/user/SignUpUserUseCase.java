@@ -8,8 +8,8 @@ import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
-@UseCase
 @RequiredArgsConstructor
+@UseCase
 public class SignUpUserUseCase {
 
     private final UserRepository userRepository;

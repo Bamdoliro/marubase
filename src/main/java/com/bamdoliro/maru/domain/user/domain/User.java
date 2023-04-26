@@ -2,7 +2,7 @@ package com.bamdoliro.maru.domain.user.domain;
 
 import com.bamdoliro.maru.domain.user.domain.type.Authority;
 import com.bamdoliro.maru.domain.user.domain.value.Password;
-import com.bamdoliro.maru.infrastructure.security.PasswordUtil;
+import com.bamdoliro.maru.shared.security.PasswordUtil;
 import com.bamdoliro.maru.shared.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
