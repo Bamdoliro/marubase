@@ -22,12 +22,12 @@ import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class CommonDocControllerTest extends RestDocsTestSupport {
+public class EnumControllerTest extends RestDocsTestSupport {
 
     @Test
-    public void enums() throws Exception {
+    void enums() throws Exception {
         ResultActions result = this.mockMvc.perform(
-                get("/common/enum")
+                get("/shared/enum")
                         .contentType(MediaType.APPLICATION_JSON)
         );
 

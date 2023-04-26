@@ -2,7 +2,7 @@ package com.bamdoliro.maru.shared.security;
 
 import com.bamdoliro.maru.domain.auth.service.TokenService;
 import com.bamdoliro.maru.shared.config.properties.JwtProperties;
-import com.bamdoliro.maru.shared.filter.GlobalErrorFilter;
+import com.bamdoliro.maru.shared.filter.FilterErrorFilter;
 import com.bamdoliro.maru.shared.filter.JwtAuthenticationFilter;
 import com.bamdoliro.maru.shared.security.auth.AuthDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,7 +54,7 @@ public class SecurityConfig {
         public void configure(HttpSecurity http) {
             http
                     .addFilterBefore(new JwtAuthenticationFilter(jwtProperties, tokenService, authDetailsService), UsernamePasswordAuthenticationFilter.class)
-                    .addFilterBefore(new GlobalErrorFilter(objectMapper), JwtAuthenticationFilter.class);
+                    .addFilterBefore(new FilterErrorFilter(objectMapper), JwtAuthenticationFilter.class);
         }
     }
 }

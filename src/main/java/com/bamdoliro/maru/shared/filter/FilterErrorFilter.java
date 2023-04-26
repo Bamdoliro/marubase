@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @RequiredArgsConstructor
-public class GlobalErrorFilter extends OncePerRequestFilter {
+public class FilterErrorFilter extends OncePerRequestFilter {
 
     private final ObjectMapper objectMapper;
 

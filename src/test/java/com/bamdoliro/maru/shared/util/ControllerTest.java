@@ -7,12 +7,11 @@ import com.bamdoliro.maru.presentation.auth.AuthController;
 import com.bamdoliro.maru.shared.config.properties.JwtProperties;
 import com.bamdoliro.maru.shared.security.SecurityConfig;
 import com.bamdoliro.maru.presentation.user.UserController;
-import com.bamdoliro.maru.shared.response.CommonDocController;
+import com.bamdoliro.maru.shared.response.SharedController;
 import com.bamdoliro.maru.shared.security.auth.AuthDetailsService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -24,7 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest({
         UserController.class,
         AuthController.class,
-        CommonDocController.class
+        SharedController.class
 })
 public abstract class ControllerTest {
 
