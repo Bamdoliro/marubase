@@ -1,6 +1,11 @@
 package com.bamdoliro.maru.shared.security;
 
+import com.bamdoliro.maru.domain.auth.service.TokenService;
+import com.bamdoliro.maru.shared.config.properties.JwtProperties;
+import com.bamdoliro.maru.shared.filter.GlobalErrorFilter;
 import com.bamdoliro.maru.shared.filter.JwtAuthenticationFilter;
+import com.bamdoliro.maru.shared.security.auth.AuthDetailsService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +22,10 @@ import org.springframework.web.cors.CorsUtils;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtProperties jwtProperties;
+    private final TokenService tokenService;
+    private final AuthDetailsService authDetailsService;
+    private final ObjectMapper objectMapper;
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
@@ -45,7 +53,8 @@ public class SecurityConfig {
         @Override
         public void configure(HttpSecurity http) {
             http
-                    .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                    .addFilterBefore(new JwtAuthenticationFilter(jwtProperties, tokenService, authDetailsService), UsernamePasswordAuthenticationFilter.class)
+                    .addFilterBefore(new GlobalErrorFilter(objectMapper), JwtAuthenticationFilter.class);
         }
     }
 }
