@@ -9,7 +9,6 @@ import com.bamdoliro.maru.presentation.auth.dto.request.LogInRequest;
 import com.bamdoliro.maru.presentation.auth.dto.response.TokenResponse;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,8 +39,8 @@ class LogInUseCaseTest {
         // given
         User user = UserFixture.createUser();
         LogInRequest request = new LogInRequest(user.getEmail(), "비밀번호");
-        String accessToken = AuthFixture.createAccessToken();
-        String refreshToken = AuthFixture.createRefreshToken();
+        String accessToken = AuthFixture.createAccessTokenString();
+        String refreshToken = AuthFixture.createRefreshTokenString();
 
         given(userFacade.getUser(request.getEmail())).willReturn(user);
         given(tokenService.generateAccessToken(user.getEmail())).willReturn(accessToken);

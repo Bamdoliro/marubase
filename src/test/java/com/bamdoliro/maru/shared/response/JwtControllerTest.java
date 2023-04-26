@@ -3,12 +3,10 @@ package com.bamdoliro.maru.shared.response;
 import com.bamdoliro.maru.domain.auth.exception.ExpiredTokenException;
 import com.bamdoliro.maru.domain.auth.exception.InvalidTokenException;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.presentation.auth.dto.request.LogInRequest;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.security.auth.AuthDetails;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
-import io.jsonwebtoken.ExpiredJwtException;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -30,7 +28,7 @@ public class JwtControllerTest extends RestDocsTestSupport {
     @Test
     void 인증에_성공한다() throws Exception {
         User user = UserFixture.createUser();
-        String token = AuthFixture.createAccessToken();
+        String token = AuthFixture.createAccessTokenString();
         given(jwtProperties.getPrefix()).willReturn("Bearer");
         given(tokenService.getEmail(anyString())).willReturn(user.getEmail());
         given(authDetailsService.loadUserByUsername(user.getEmail())).willReturn(new AuthDetails(user));
@@ -57,7 +55,7 @@ public class JwtControllerTest extends RestDocsTestSupport {
         doThrow(new ExpiredTokenException()).when(tokenService).getEmail(anyString());
 
         mockMvc.perform(get("/shared/jwt")
-                        .header(HttpHeaders.AUTHORIZATION, jwtProperties.getPrefix() + " " + AuthFixture.createAccessToken())
+                        .header(HttpHeaders.AUTHORIZATION, jwtProperties.getPrefix() + " " + AuthFixture.createAccessTokenString())
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isUnauthorized())

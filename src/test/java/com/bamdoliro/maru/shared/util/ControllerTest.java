@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.shared.util;
 
 import com.bamdoliro.maru.application.auth.LogInUseCase;
+import com.bamdoliro.maru.application.auth.RefreshTokenUseCase;
 import com.bamdoliro.maru.application.user.SignUpUserUseCase;
 import com.bamdoliro.maru.domain.auth.service.TokenService;
 import com.bamdoliro.maru.presentation.auth.AuthController;
@@ -39,6 +40,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected LogInUseCase logInUseCase;
+
+    @MockBean
+    protected RefreshTokenUseCase refreshTokenUseCase;
 
 
     @MockBean

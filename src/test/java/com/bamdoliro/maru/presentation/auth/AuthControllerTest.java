@@ -16,7 +16,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -30,7 +29,7 @@ class AuthControllerTest extends RestDocsTestSupport {
     void 유저가_로그인한다() throws Exception {
         User user = UserFixture.createUser();
         LogInRequest request = new LogInRequest(user.getEmail(), "비밀번호");
-        TokenResponse response = new TokenResponse(AuthFixture.createAccessToken(), AuthFixture.createRefreshToken());
+        TokenResponse response = new TokenResponse(AuthFixture.createAccessTokenString(), AuthFixture.createRefreshTokenString());
         given(logInUseCase.execute(any(LogInRequest.class))).willReturn(response);
 
         mockMvc.perform(post("/auth")

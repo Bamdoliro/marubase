@@ -8,8 +8,8 @@ import com.bamdoliro.maru.shared.response.CommonResponse;
 import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +28,7 @@ public class AuthController {
         return CommonResponse.ok(logInUseCase.execute(request));
     }
 
-    @PutMapping
+    @PatchMapping
     public TokenResponse refreshToken(@RequestHeader("Refresh-Token") String refreshToken) {
         return refreshTokenUseCase.execute(refreshToken);
     }
