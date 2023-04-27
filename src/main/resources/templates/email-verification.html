@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" as="style" crossorigin
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css"/>
+</head>
+<body style="margin:0;padding:0;width:100vw;height:100vh;">
+<div style="font-family: 'Pretendard';width:100%;height:100%;display:flex;justify-content:center;align-items:center;">
+<div style="width: 404px;">
+    <img style="height: 47px;" alt="logo"
+         src="https://user-images.githubusercontent.com/80656733/234810839-fdc293c0-1ba9-40ef-81b2-7ec55aac8624.png"/>
+    <h1 style="font-style:normal;font-weight:700;font-size:36px;line-height:140%;letter-spacing:0.25px;color:#21242C;margin-top:16px;">이메일 인증을 요청했습니다.</h1>
+    <p style="font-style:normal;font-weight:400;font-size:18px;line-height:160%;letter-spacing:-0.15px;color:#595B61;margin-top:8px;">아래 코드를 입력해주세요.<br>본인이 보낸 요청이 아니라면 해당 메일을 무시해주세요.</p>
+    <p th:text="${code}" style="width:100%;text-align:center;padding:8px 0;background:linear-gradient(0deg,rgba(255,255,255,0.9),rgba(255,255,255,0.9)),#257CFF;border-radius:8px;font-style:normal;font-weight:700;font-size:28px;line-height:39px;color:#21242C;margin-top:64px;"></p>
+</div>
+</div>
+</body>
+</html>

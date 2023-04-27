@@ -1,6 +1,8 @@
 package com.bamdoliro.maru.shared.error;
 
 import com.bamdoliro.maru.shared.response.ErrorResponse;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -31,6 +33,19 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(GlobalErrorProperty.BAD_REQUEST, errorMap));
     }
 
+    @ExceptionHandler({ConstraintViolationException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException e) {
+        Map<String, String> errorMap = new HashMap<>();
+        for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
+            errorMap.put(violation.getPropertyPath().toString(), violation.getMessage());
+        }
+
+        return ResponseEntity
+                .status(GlobalErrorProperty.BAD_REQUEST.getStatus())
+                .body(new ErrorResponse(GlobalErrorProperty.BAD_REQUEST, errorMap));
+    }
+
     @ExceptionHandler(MissingRequestValueException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> missingRequestValueException(MissingRequestValueException e) {
@@ -44,11 +59,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleMaruException(MaruException e) {
         return ResponseEntity
                 .status(e.getErrorProperty().getStatus())
-                .body(new ErrorResponse(e.getErrorProperty(), e.getMessage()));
+                .body(new ErrorResponse(e.getErrorProperty()));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException() {
+    public ResponseEntity<ErrorResponse> handleException(Exception e) {
+        e.printStackTrace();
         return ResponseEntity
                 .status(GlobalErrorProperty.INTERNAL_SERVER_ERROR.getStatus())
                 .body(new ErrorResponse(GlobalErrorProperty.INTERNAL_SERVER_ERROR));

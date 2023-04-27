@@ -29,6 +29,19 @@ spring:
       password: ${REDIS_PASSWORD}
       port: 6379
 
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
 jwt:
   refresh-expiration-time: 2592000000 # 30일
   access-expiration-time: 3600000 # 1시간
