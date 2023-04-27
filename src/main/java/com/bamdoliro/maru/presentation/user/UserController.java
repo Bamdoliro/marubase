@@ -5,8 +5,6 @@ import com.bamdoliro.maru.application.user.SignUpUserUseCase;
 import com.bamdoliro.maru.presentation.user.dto.request.SignUpUserRequest;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +26,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void signUp(@RequestBody SignUpUserRequest request) {
+    public void signUp(@RequestBody @Valid SignUpUserRequest request) {
         signUpUserUseCase.execute(request);
     }
 

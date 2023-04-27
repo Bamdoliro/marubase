@@ -44,11 +44,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleMaruException(MaruException e) {
         return ResponseEntity
                 .status(e.getErrorProperty().getStatus())
-                .body(new ErrorResponse(e.getErrorProperty(), e.getMessage()));
+                .body(new ErrorResponse(e.getErrorProperty()));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException() {
+    public ResponseEntity<ErrorResponse> handleException(Exception e) {
+        e.printStackTrace();
         return ResponseEntity
                 .status(GlobalErrorProperty.INTERNAL_SERVER_ERROR.getStatus())
                 .body(new ErrorResponse(GlobalErrorProperty.INTERNAL_SERVER_ERROR));
