@@ -29,7 +29,6 @@ public class SendEmailService {
 
             mailSender.send(message);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new FailedToSendMailException();
         }
     }
