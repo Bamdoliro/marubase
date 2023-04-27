@@ -4,6 +4,7 @@ import com.bamdoliro.maru.domain.user.exception.UserAlreadyExistsException;
 import com.bamdoliro.maru.domain.user.exception.VerificationCodeMismatchException;
 import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
 import com.bamdoliro.maru.domain.user.exception.error.UserErrorProperty;
+import com.bamdoliro.maru.infrastructure.mail.exception.FailedToSendMailException;
 import com.bamdoliro.maru.presentation.user.dto.request.SignUpUserRequest;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -127,5 +129,32 @@ class UserControllerTest extends RestDocsTestSupport {
                                         .description("이메일")
                         )
                 ));
+    }
+
+    @Test
+    void 이메일_인증을_요청할_때_잘못된_형식의_이메일을_보내면_에러가_발생한다() throws Exception {
+        willDoNothing().given(sendEmailVerificationUseCase).execute(any(String.class));
+
+        mockMvc.perform(post("/user/verification?email=누가봐도이메일아님")
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isBadRequest())
+
+                .andDo(restDocs.document());
+    }
+
+    @Test
+    void 이메일_인증을_요청할_때_이메일_전송이_실패하면_에러가_발생한다() throws Exception {
+        doThrow(new FailedToSendMailException())
+                .when(sendEmailVerificationUseCase).execute(anyString());
+
+        mockMvc.perform(post("/user/verification?email=maru@bamdoliro.com")
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isInternalServerError())
+
+                .andDo(restDocs.document());
     }
 }
