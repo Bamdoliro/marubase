@@ -3,6 +3,7 @@ package com.bamdoliro.maru.application.user;
 import com.bamdoliro.maru.domain.user.domain.EmailVerification;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.exception.UserAlreadyExistsException;
+import com.bamdoliro.maru.domain.user.exception.VerificationCodeMismatchException;
 import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
 import com.bamdoliro.maru.infrastructure.persistence.user.EmailVerificationRepository;
 import com.bamdoliro.maru.infrastructure.persistence.user.UserRepository;
@@ -35,7 +36,7 @@ public class SignUpUserUseCase {
                 .orElseThrow(VerifyingHasFailedException::new);
 
         if (!verification.getCode().equals(request.getCode())) {
-            throw new VerifyingHasFailedException();
+            throw new VerificationCodeMismatchException();
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {
