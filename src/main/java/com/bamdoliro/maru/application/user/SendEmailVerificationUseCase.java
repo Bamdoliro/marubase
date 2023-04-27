@@ -6,7 +6,7 @@ import com.bamdoliro.maru.infrastructure.persistence.user.EmailVerificationRepos
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.io.UnsupportedEncodingException;
@@ -17,11 +17,10 @@ public class SendEmailVerificationUseCase {
 
     private final EmailVerificationRepository emailVerificationRepository;
     private final SendEmailService sendEmailService;
-    private final TemplateEngine templateEngine;
+    private final ITemplateEngine templateEngine;
 
     public void execute(String email) throws MessagingException, UnsupportedEncodingException {
-        EmailVerification verification = emailVerificationRepository.save(
-                new EmailVerification(email));
+        EmailVerification verification = emailVerificationRepository.save(new EmailVerification(email));
 
         sendEmailService.execute(
                 email,

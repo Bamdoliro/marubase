@@ -2,8 +2,10 @@ package com.bamdoliro.maru.shared.util;
 
 import com.bamdoliro.maru.application.auth.LogInUseCase;
 import com.bamdoliro.maru.application.auth.RefreshTokenUseCase;
+import com.bamdoliro.maru.application.user.SendEmailVerificationUseCase;
 import com.bamdoliro.maru.application.user.SignUpUserUseCase;
 import com.bamdoliro.maru.domain.auth.service.TokenService;
+import com.bamdoliro.maru.infrastructure.mail.SendEmailService;
 import com.bamdoliro.maru.presentation.auth.AuthController;
 import com.bamdoliro.maru.shared.config.properties.JwtProperties;
 import com.bamdoliro.maru.shared.security.SecurityConfig;
@@ -44,12 +46,19 @@ public abstract class ControllerTest {
     @MockBean
     protected RefreshTokenUseCase refreshTokenUseCase;
 
+    @MockBean
+    protected SendEmailVerificationUseCase sendEmailVerificationUseCase;
+
 
     @MockBean
     protected TokenService tokenService;
 
     @MockBean
     protected AuthDetailsService authDetailsService;
+
+
+    @MockBean
+    protected SendEmailService sendEmailService;
 
 
     @MockBean

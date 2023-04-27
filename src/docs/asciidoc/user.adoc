@@ -16,8 +16,18 @@ include::{snippets}/user-controller-test/유저를_생성한다/http-request.ado
 ===== 정상 응답
 include::{snippets}/user-controller-test/유저를_생성한다/http-response.adoc[]
 
+==== 잘못된 인증 코드인 경우
+인증 요청을 하지 않았거나, 유효 시간이 만료되었거나, 인증 코드가 틀린 경우 모두 포함되어 처리됩니다.
+include::{snippets}/user-controller-test/유저를_생성할_때_인증되지_않은_이메일이라면_에러가_발생한다/http-response.adoc[]
+
 ===== 이미 가입한 유저가 있는 경우
 include::{snippets}/user-controller-test/유저를_생성할_때_이미_유저가_있다면_에러가_발생한다/http-response.adoc[]
 
 ===== 요청 형식이 틀린 경우
 include::{snippets}/user-controller-test/유저를_생성할_때_잘못된_형식의_요청을_보내면_에러가_발생한다/http-response.adoc[]
+
+=== 이메일 인증 요청
+
+==== 요청 형식
+
+===== RequestParam
