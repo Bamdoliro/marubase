@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.presentation.user;
 
 import com.bamdoliro.maru.domain.user.exception.UserAlreadyExistsException;
+import com.bamdoliro.maru.domain.user.exception.VerificationCodeMismatchException;
 import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
 import com.bamdoliro.maru.domain.user.exception.error.UserErrorProperty;
 import com.bamdoliro.maru.presentation.user.dto.request.SignUpUserRequest;
@@ -15,6 +16,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class UserControllerTest extends RestDocsTestSupport {
@@ -48,8 +51,22 @@ class UserControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 유저를_생성할_때_인증되지_않은_이메일이라면_에러가_발생한다() throws Exception {
+    void 유저를_생성할_때_인증하지_않은_이메일이거나_만료된_이메일이라면_에러가_발생한다() throws Exception {
         doThrow(new VerifyingHasFailedException()).when(signUpUserUseCase).execute(any(SignUpUserRequest.class));
+        SignUpUserRequest request = new SignUpUserRequest("maru@bamdoliro.com", "ABC123", "password123$");
+
+        mockMvc.perform(post("/user")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+                )
+                .andExpect(status().isUnauthorized())
+                .andDo(restDocs.document());
+    }
+
+    @Test
+    void 유저를_생성할_때_인증_코드가_틀렸으면_에러가_발생한다() throws Exception {
+        doThrow(new VerificationCodeMismatchException()).when(signUpUserUseCase).execute(any(SignUpUserRequest.class));
         SignUpUserRequest request = new SignUpUserRequest("maru@bamdoliro.com", "ABC123", "password123$");
 
         mockMvc.perform(post("/user")
@@ -92,5 +109,23 @@ class UserControllerTest extends RestDocsTestSupport {
                 .andExpect(status().isBadRequest())
 
                 .andDo(restDocs.document());
+    }
+
+    @Test
+    void 이메일_인증을_요청한다() throws Exception {
+        willDoNothing().given(sendEmailVerificationUseCase).execute(any(String.class));
+
+        mockMvc.perform(post("/user/verification?email=maru@bamdoliro.com")
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().is2xxSuccessful())
+
+                .andDo(restDocs.document(
+                        queryParameters(
+                                parameterWithName("email")
+                                        .description("이메일")
+                        )
+                ));
     }
 }

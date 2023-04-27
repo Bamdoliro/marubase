@@ -11,14 +11,15 @@ include::{snippets}/user-controller-test/유저를_생성한다/request-fields.a
 ==== 요청
 include::{snippets}/user-controller-test/유저를_생성한다/http-request.adoc[]
 
-
 ==== 응답
 ===== 정상 응답
 include::{snippets}/user-controller-test/유저를_생성한다/http-response.adoc[]
 
-==== 잘못된 인증 코드인 경우
-인증 요청을 하지 않았거나, 유효 시간이 만료되었거나, 인증 코드가 틀린 경우 모두 포함되어 처리됩니다.
-include::{snippets}/user-controller-test/유저를_생성할_때_인증되지_않은_이메일이라면_에러가_발생한다/http-response.adoc[]
+==== 이메일 인증 요청을 하지 않았거나 유효 시간이 만료된 경우
+include::{snippets}/user-controller-test/유저를_생성할_때_인증하지_않은_이메일이거나_만료된_이메일이라면_에러가_발생한다/http-response.adoc[]
+
+==== 인증 코드가 틀린 경우
+include::{snippets}/user-controller-test/유저를_생성할_때_인증_코드가_틀렸으면_에러가_발생한다/http-response.adoc[]
 
 ===== 이미 가입한 유저가 있는 경우
 include::{snippets}/user-controller-test/유저를_생성할_때_이미_유저가_있다면_에러가_발생한다/http-response.adoc[]
@@ -28,6 +29,20 @@ include::{snippets}/user-controller-test/유저를_생성할_때_잘못된_형�
 
 === 이메일 인증 요청
 
+이메일을 입력해 이메일 인증을 요청할 수 있습니다.
+
+해당 API에 요청을 보내게 되면, 입력받은 이메일로 인증 코드를 전송합니다.
+
+이 인증 코드는 5분간 유효합니다.
+
 ==== 요청 형식
 
-===== RequestParam
+===== Query Parameter
+include::{snippets}/user-controller-test/이메일_인증을_요청한다/query-parameters.adoc[]
+
+==== 요청
+include::{snippets}/user-controller-test/이메일_인증을_요청한다/http-request.adoc[]
+
+==== 응답
+===== 정상 응답
+include::{snippets}/user-controller-test/이메일_인증을_요청한다/http-response.adoc[]
