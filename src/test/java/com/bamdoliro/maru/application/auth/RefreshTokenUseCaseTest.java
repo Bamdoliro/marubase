@@ -1,7 +1,9 @@
 package com.bamdoliro.maru.application.auth;
 
 import com.bamdoliro.maru.domain.auth.domain.Token;
+import com.bamdoliro.maru.domain.auth.domain.type.TokenType;
 import com.bamdoliro.maru.domain.auth.exception.ExpiredTokenException;
+import com.bamdoliro.maru.domain.auth.exception.InvalidTokenException;
 import com.bamdoliro.maru.domain.auth.service.TokenService;
 import com.bamdoliro.maru.infrastructure.persistence.auth.TokenRepository;
 import com.bamdoliro.maru.presentation.auth.dto.response.TokenResponse;
@@ -39,6 +41,7 @@ class RefreshTokenUseCaseTest {
         // given
         Token refreshToken = AuthFixture.createRefreshToken();
         String accessToken = AuthFixture.createAccessTokenString();
+        given(tokenService.getType(refreshToken.getToken())).willReturn(TokenType.REFRESH_TOKEN.name());
         given(tokenRepository.findByToken(refreshToken.getToken())).willReturn(Optional.of(refreshToken));
         given(tokenService.generateAccessToken(refreshToken.getEmail())).willReturn(accessToken);
 
@@ -46,6 +49,7 @@ class RefreshTokenUseCaseTest {
         TokenResponse response = refreshTokenUseCase.execute(refreshToken.getToken());
 
         // then
+        verify(tokenService, times(1)).getType(refreshToken.getToken());
         verify(tokenRepository, times(1)).findByToken(refreshToken.getToken());
         verify(tokenService, times(1)).generateAccessToken(refreshToken.getEmail());
         assertEquals(accessToken, response.getAccessToken());
@@ -54,10 +58,26 @@ class RefreshTokenUseCaseTest {
     @Test
     void 리프레시_토큰이_만료되었으면_에러가_발생한다() {
         // given
-        given(tokenRepository.findByToken("만료.리프레시.토큰")).willReturn(Optional.empty());
+        String expiredRefreshToken = "만료.리프레시.토큰";
+        given(tokenService.getType(expiredRefreshToken)).willReturn(TokenType.REFRESH_TOKEN.name());
+        given(tokenRepository.findByToken(expiredRefreshToken)).willReturn(Optional.empty());
 
         // when and then
-        assertThrows(ExpiredTokenException.class, () -> refreshTokenUseCase.execute("만료.리프레시.토큰"));
+        assertThrows(ExpiredTokenException.class, () -> refreshTokenUseCase.execute(expiredRefreshToken));
+        verify(tokenService, times(1)).getType(expiredRefreshToken);
+        verify(tokenService, never()).generateAccessToken(anyString());
+    }
+
+    @Test
+    void 액세스_토큰으로_재발급을_시도하면_에러가_발생한다() {
+        // given
+        String accessToken = "이것은.액세스.토큰";
+        given(tokenService.getType(accessToken)).willReturn(TokenType.ACCESS_TOKEN.name());
+
+        // when and then
+        assertThrows(InvalidTokenException.class, () -> refreshTokenUseCase.execute(accessToken));
+        verify(tokenService, times(1)).getType(accessToken);
+        verify(tokenRepository, never()).findByToken(anyString());
         verify(tokenService, never()).generateAccessToken(anyString());
     }
 }

@@ -15,10 +15,10 @@ include::{snippets}/user-controller-test/유저를_생성한다/http-request.ado
 ===== 정상 응답
 include::{snippets}/user-controller-test/유저를_생성한다/http-response.adoc[]
 
-==== 이메일 인증 요청을 하지 않았거나 유효 시간이 만료된 경우
+===== 이메일 인증 요청을 하지 않았거나 유효 시간이 만료된 경우
 include::{snippets}/user-controller-test/유저를_생성할_때_인증하지_않은_이메일이거나_만료된_이메일이라면_에러가_발생한다/http-response.adoc[]
 
-==== 인증 코드가 틀린 경우
+===== 인증 코드가 틀린 경우
 include::{snippets}/user-controller-test/유저를_생성할_때_인증_코드가_틀렸으면_에러가_발생한다/http-response.adoc[]
 
 ===== 이미 가입한 유저가 있는 경우

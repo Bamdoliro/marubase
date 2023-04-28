@@ -42,5 +42,8 @@ include::{snippets}/auth-controller-test/리프레시_토큰으로_액세스_토
 ===== 리프레시 토큰이 만료된 경우
 include::{snippets}/auth-controller-test/만료된_리프레시_토큰으로_액세스_토큰_재발급을_요청하면_에러가_발생한다/http-response.adoc[]
 
+===== 액세스 토큰으로 요청한 경우
+include::{snippets}/auth-controller-test/액세스_토큰으로_액세스_토큰_재발급을_요청하면_에러가_발생한다/http-response.adoc[]
+
 ===== 리프레시 토큰을 보내지 않은 경우
 include::{snippets}/auth-controller-test/액세스_토큰을_재발급할_때_리프레시_토큰을_보내지_않으면_에러가_발생한다/http-response.adoc[]

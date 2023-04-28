@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.presentation.auth;
 
 import com.bamdoliro.maru.domain.auth.exception.ExpiredTokenException;
+import com.bamdoliro.maru.domain.auth.exception.InvalidTokenException;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.exception.PasswordMismatchException;
 import com.bamdoliro.maru.domain.user.exception.UserNotFoundException;
@@ -131,13 +132,29 @@ class AuthControllerTest extends RestDocsTestSupport {
 
     @Test
     void 만료된_리프레시_토큰으로_액세스_토큰_재발급을_요청하면_에러가_발생한다() throws Exception {
-        String refreshToken = AuthFixture.createRefreshTokenString();
-        doThrow(new ExpiredTokenException()).when(refreshTokenUseCase).execute(refreshToken);
+        String expiredRefreshToken = AuthFixture.createRefreshTokenString();
+        doThrow(new ExpiredTokenException()).when(refreshTokenUseCase).execute(expiredRefreshToken);
 
         mockMvc.perform(patch("/auth")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Refresh-Token", refreshToken)
+                        .header("Refresh-Token", expiredRefreshToken)
+                )
+
+                .andExpect(status().isUnauthorized())
+
+                .andDo(restDocs.document());
+    }
+
+    @Test
+    void 액세스_토큰으로_액세스_토큰_재발급을_요청하면_에러가_발생한다() throws Exception {
+        String accessToken = AuthFixture.createRefreshTokenString();
+        doThrow(new InvalidTokenException()).when(refreshTokenUseCase).execute(accessToken);
+
+        mockMvc.perform(patch("/auth")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Refresh-Token", accessToken)
                 )
 
                 .andExpect(status().isUnauthorized())

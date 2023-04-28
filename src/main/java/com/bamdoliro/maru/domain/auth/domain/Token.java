@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.RedisHash;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@RedisHash(value = "token")
+@RedisHash(value = "token", timeToLive = 60 * 60 * 24 * 15)
 public class Token {
 
     @Id

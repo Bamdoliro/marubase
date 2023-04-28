@@ -43,7 +43,7 @@ spring:
             required: true
 
 jwt:
-  refresh-expiration-time: 2592000000 # 30일
+  refresh-expiration-time: 1296000000 # 15일
   access-expiration-time: 3600000 # 1시간
   prefix: Bearer
   secret-key: ${JWT_SECRET}

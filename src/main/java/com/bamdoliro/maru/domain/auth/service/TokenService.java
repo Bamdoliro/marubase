@@ -58,6 +58,10 @@ public class TokenService {
         return extractAllClaims(token).get("email", String.class);
     }
 
+    public String getType(String token) {
+        return extractAllClaims(token).get("type", String.class);
+    }
+
     private Claims extractAllClaims(String token) {
         try {
             return Jwts.parserBuilder()
