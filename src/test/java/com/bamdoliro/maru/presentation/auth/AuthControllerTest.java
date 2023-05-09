@@ -43,7 +43,7 @@ class AuthControllerTest extends RestDocsTestSupport {
                         .content(toJson(request))
                 )
 
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().isOk())
 
                 .andDo(restDocs.document(
                         requestFields(

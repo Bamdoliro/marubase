@@ -1,0 +1,25 @@
+== 학교 School
+
+=== 학교 검색
+학교 이름으로 학교를 검색할 수 있습니다.
+
+==== 요청 형식
+
+==== Request Header
+include::{snippets}/school-controller-test/학교를_검색한다/request-headers.adoc[]
+
+===== Query Parameter
+include::{snippets}/school-controller-test/학교를_검색한다/query-parameters.adoc[]
+
+==== 요청
+include::{snippets}/school-controller-test/학교를_검색한다/http-request.adoc[]
+
+==== 응답
+===== 정상 응답
+include::{snippets}/school-controller-test/학교를_검색한다/http-response.adoc[]
+
+===== 검색 결과가 10개 이상인 경우(상위 10개만 반환)
+include::{snippets}/school-controller-test/학교를_검색할_때_결과가_10개_이상이라면_상위_10개만_반환한다/http-response.adoc[]
+
+===== 검색 결과가 없는 경우
+include::{snippets}/school-controller-test/학교를_검색할_때_결과가_없다면_빈_리스트를_반환한다/http-response.adoc[]

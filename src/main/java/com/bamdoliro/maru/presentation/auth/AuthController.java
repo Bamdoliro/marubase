@@ -30,7 +30,7 @@ public class AuthController {
     }
 
     @PatchMapping
-    public TokenResponse refreshToken(@RequestHeader("Refresh-Token") @NotBlank String refreshToken) {
-        return refreshTokenUseCase.execute(refreshToken);
+    public SingleCommonResponse<TokenResponse> refreshToken(@RequestHeader("Refresh-Token") @NotBlank String refreshToken) {
+        return CommonResponse.ok(refreshTokenUseCase.execute(refreshToken));
     }
 }

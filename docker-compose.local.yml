@@ -10,7 +10,7 @@ services:
       MYSQL_PASSWORD: "bamdoliro"
       MYSQL_DATABASE: "bamdoliro_maru"
     ports:
-      - "3307:3306"
+      - "3309:3306"
     command:
       - "mysqld"
       - "--character-set-server=utf8mb4"

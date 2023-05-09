@@ -22,11 +22,11 @@ public class CommonResponse {
         );
     }
 
-    public static <T> ListCommonResponse<T> ok(List<T> data) {
+    public static <T> ListCommonResponse<T> ok(List<T> dataList) {
         return new ListCommonResponse<>(
                 "OK",
                 "ok",
-                data
+                dataList
         );
     }
 
