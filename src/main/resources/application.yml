@@ -47,6 +47,9 @@ jwt:
   access-expiration-time: 3600000 # 1시간
   prefix: Bearer
   secret-key: ${JWT_SECRET}
+
+neis:
+  key: ${NEIS_KEY}
 ---
 spring:
   config:
