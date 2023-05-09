@@ -32,4 +32,11 @@ class SearchSchoolServiceTest {
         List<SchoolResponse> responseList = searchSchoolService.execute(q);
         assertEquals(10, responseList.size());
     }
+
+    @Test
+    void 검색_결과가_없다면_빈_리스트를_반환한다() throws JsonProcessingException {
+        String q = "누가봐도없을것같은검색어";
+        List<SchoolResponse> responseList = searchSchoolService.execute(q);
+        assertEquals(0, responseList.size());
+    }
 }

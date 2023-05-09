@@ -25,4 +25,8 @@ public class AuthFixture {
                 .token("new.refresh.token")
                 .build();
     }
+
+    public static String createAuthHeader() {
+        return "Bearer thisis.access.token";
+    }
 }
