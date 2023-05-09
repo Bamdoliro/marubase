@@ -1,7 +1,6 @@
 package com.bamdoliro.maru.infrastructure.neis.feign.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -123,6 +122,10 @@ public class NeisSchoolResponse {
     }
 
     public List<SchoolInfo.Row> getSchoolInfo() {
+        if (this.schoolInfo == null) {
+            return List.of();
+        }
+
         return this.schoolInfo.get(1).getRow();
     }
 }
