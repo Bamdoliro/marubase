@@ -2,6 +2,7 @@ package com.bamdoliro.maru.shared.util;
 
 import com.bamdoliro.maru.application.auth.LogInUseCase;
 import com.bamdoliro.maru.application.auth.RefreshTokenUseCase;
+import com.bamdoliro.maru.application.question.CreateQuestionUseCase;
 import com.bamdoliro.maru.application.school.SearchSchoolUseCase;
 import com.bamdoliro.maru.application.user.SendEmailVerificationUseCase;
 import com.bamdoliro.maru.application.user.SignUpUserUseCase;
@@ -9,6 +10,8 @@ import com.bamdoliro.maru.domain.auth.service.TokenService;
 import com.bamdoliro.maru.infrastructure.mail.SendEmailService;
 import com.bamdoliro.maru.infrastructure.neis.SearchSchoolService;
 import com.bamdoliro.maru.presentation.auth.AuthController;
+import com.bamdoliro.maru.presentation.question.QuestionController;
+import com.bamdoliro.maru.presentation.question.dto.request.CreateQuestionRequest;
 import com.bamdoliro.maru.presentation.school.SchoolController;
 import com.bamdoliro.maru.shared.config.properties.JwtProperties;
 import com.bamdoliro.maru.shared.security.SecurityConfig;
@@ -30,7 +33,8 @@ import org.springframework.test.web.servlet.MockMvc;
         UserController.class,
         AuthController.class,
         SharedController.class,
-        SchoolController.class
+        SchoolController.class,
+        QuestionController.class
 })
 public abstract class ControllerTest {
 
@@ -55,6 +59,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected SearchSchoolUseCase searchSchoolUseCase;
+
+    @MockBean
+    protected CreateQuestionUseCase createQuestionUseCase;
 
 
     @MockBean
