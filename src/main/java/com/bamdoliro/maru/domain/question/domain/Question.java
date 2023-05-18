@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.domain.question.domain;
 
+import com.bamdoliro.maru.presentation.question.dto.request.UpdateQuestionRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,5 +33,11 @@ public class Question {
     public Question(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public Long updateData(UpdateQuestionRequest request){
+        this.title = request.getTitle();
+        this.content = request.getContent();
+        return this.id;
     }
 }
