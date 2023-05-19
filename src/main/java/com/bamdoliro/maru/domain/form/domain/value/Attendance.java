@@ -1,6 +1,5 @@
 package com.bamdoliro.maru.domain.form.domain.value;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -11,14 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Embeddable
-public class Address {
+public class Attendance {
 
-    @Column(nullable = false, length = 5)
-    private String zoneCode;
+    private Integer absenceCount;
 
-    @Column(nullable = false, length = 100)
-    private String address;
+    private Integer latenessCount;
 
-    @Column(nullable = false, length = 100)
-    private String detailAddress;
+    private Integer earlyLeaveCount;
+
+    private Integer classAbsenceCount;
 }
