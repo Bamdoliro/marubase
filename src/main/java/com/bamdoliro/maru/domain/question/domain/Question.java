@@ -35,9 +35,8 @@ public class Question {
         this.content = content;
     }
 
-    public Long updateData(UpdateQuestionRequest request){
+    public void update(UpdateQuestionRequest request){
         this.title = request.getTitle();
         this.content = request.getContent();
-        return this.id;
     }
 }

@@ -6,8 +6,6 @@ import com.bamdoliro.maru.presentation.question.dto.request.CreateQuestionReques
 import com.bamdoliro.maru.presentation.question.dto.request.UpdateQuestionRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class QuestionController {
     private final CreateQuestionUseCase createQuestionUseCase;
-    //private final UpdateQuestionUseCase updateQuestionUseCase;
+    private final UpdateQuestionUseCase updateQuestionUseCase;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -32,8 +30,8 @@ public class QuestionController {
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateQuestion(@PathVariable Long id, @RequestBody UpdateQuestionRequest request){
-//        updateQuestionUseCase.execute(id, request);
+        updateQuestionUseCase.execute(id, request);
     }
 }
