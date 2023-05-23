@@ -3,6 +3,7 @@ package com.bamdoliro.maru.shared.util;
 import com.bamdoliro.maru.application.auth.LogInUseCase;
 import com.bamdoliro.maru.application.auth.RefreshTokenUseCase;
 import com.bamdoliro.maru.application.question.CreateQuestionUseCase;
+import com.bamdoliro.maru.application.question.UpdateQuestionUseCase;
 import com.bamdoliro.maru.application.school.SearchSchoolUseCase;
 import com.bamdoliro.maru.application.user.SendEmailVerificationUseCase;
 import com.bamdoliro.maru.application.user.SignUpUserUseCase;
@@ -62,6 +63,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected CreateQuestionUseCase createQuestionUseCase;
+
+    @MockBean
+    protected UpdateQuestionUseCase updateQuestionUseCase;
 
 
     @MockBean
