@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.domain.form.domain.value;
 
+import com.bamdoliro.maru.domain.form.domain.type.Certificate;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CollectionTable;
@@ -7,6 +8,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import lombok.AccessLevel;
@@ -63,5 +66,10 @@ public class Grade {
     @Column(nullable = true)
     private Integer volunteerTime3;
 
-    // TODO :: 가산점 추가
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "tbl_certificate",
+            joinColumns = @JoinColumn(name = "form_id"))
+    @Column(nullable = false, name = "certificate")
+    @Enumerated(EnumType.STRING)
+    private List<Certificate> certificateList;
 }
