@@ -8,6 +8,7 @@ import com.bamdoliro.maru.domain.form.domain.value.Education;
 import com.bamdoliro.maru.domain.form.domain.value.Grade;
 import com.bamdoliro.maru.domain.form.domain.value.Parent;
 import com.bamdoliro.maru.domain.form.domain.value.Score;
+import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.shared.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -17,8 +18,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -62,5 +66,23 @@ public class Form extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private FormStatus status;
+
+    @OneToOne
+    @JoinColumn(nullable = false, name = "user_id")
+    private User user;
+
+    @Builder
+    public Form(Applicant applicant, Parent parent, Education education, Grade grade, Score score, Document document, FormType type, User user) {
+        this.applicant = applicant;
+        this.parent = parent;
+        this.education = education;
+        this.grade = grade;
+        this.score = score;
+        this.document = document;
+        this.type = type;
+        this.user = user;
+        this.uuid = UUID.randomUUID();
+        this.status = FormStatus.SUBMITTED;
+    }
 }
 

@@ -22,4 +22,6 @@ public class Education {
 
     @Column(nullable = false, length = 4)
     private String graduationYear;
+
+    // TODO :: 학교 추가
 }
