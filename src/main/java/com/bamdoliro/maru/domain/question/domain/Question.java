@@ -39,6 +39,4 @@ public class Question {
         this.title = title;
         this.content = content;
     }
-
-    public void update1()
 }
