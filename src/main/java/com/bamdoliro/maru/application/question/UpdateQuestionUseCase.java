@@ -15,19 +15,15 @@ import org.springframework.validation.annotation.Validated;
 public class UpdateQuestionUseCase{
 
     private final QuestionRepository questionRepository;
+    private final QuestionFacade questionFacade;
 
     @Transactional
     public void execute(Long id, UpdateQuestionRequest request) {
 
-        Question question = getQuestion(id);
+        Question question = questionFacade.getQuestion1(id);
         question.update(request);
 
     }
-    private Question getQuestion(Long id) {
-        Question question = questionRepository.findById(id).orElseThrow(
-                QuestionIdNotFoundException::new
-        );
-        return question;
-    }
+
 
 }
