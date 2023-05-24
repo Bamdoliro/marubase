@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.presentation.form.dto.request;
 
 import com.bamdoliro.maru.domain.form.domain.type.GraduationType;
+import com.bamdoliro.maru.domain.form.domain.value.Education;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -19,4 +20,11 @@ public class EducationRequest {
     @NotBlank(message = "필수값입니다.")
     @Size(min = 4, max = 4, message = "4자여야 합니다.")
     private String graduationYear;
+
+    public Education toValue() {
+        return new Education(
+                graduationType,
+                graduationYear
+        );
+    }
 }

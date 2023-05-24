@@ -15,7 +15,7 @@ public enum FormType implements EnumProperty {
     NATIONAL_BASIC_LIVING("국가기초생활수급권자", Category.SPECIAL, Category.SOCIAL_INTEGRATION, Category.EQUAL_OPPORTUNITY),
     NEAR_POVERTY("차상위계층", Category.SPECIAL, Category.SOCIAL_INTEGRATION, Category.EQUAL_OPPORTUNITY),
     NATIONAL_VETERANS("국가보훈자녀", Category.SPECIAL, Category.SOCIAL_INTEGRATION, Category.EQUAL_OPPORTUNITY),
-    ONE_PARENT("한부모가정", Category.SOCIAL_INTEGRATION, Category.SOCIAL_INTEGRATION, Category.EQUAL_OPPORTUNITY),
+    ONE_PARENT("한부모가정", Category.SPECIAL, Category.SOCIAL_INTEGRATION, Category.EQUAL_OPPORTUNITY),
 
     FROM_NORTH_KOREA("북한이탈주민", Category.SPECIAL, Category.SOCIAL_INTEGRATION, Category.SOCIETY_DIVERSITY),
     MULTICULTURAL("다문화가정", Category.SPECIAL, Category.SOCIAL_INTEGRATION, Category.SOCIETY_DIVERSITY),
@@ -49,5 +49,13 @@ public enum FormType implements EnumProperty {
         SOCIETY_DIVERSITY("사회다양성전형");
 
         private final String description;
+    }
+
+    public boolean isRegular() {
+        return mainCategory == Category.REGULAR;
+    }
+
+    public boolean isSpecial() {
+        return mainCategory == Category.SPECIAL;
     }
 }

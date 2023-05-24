@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.presentation.form.dto.request;
 
 import com.bamdoliro.maru.domain.form.domain.type.Gender;
+import com.bamdoliro.maru.domain.form.domain.value.Applicant;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -32,4 +33,13 @@ public class ApplicantRequest {
 
     @NotNull(message = "필수값입니다.")
     private Gender gender;
+
+    public Applicant toValue() {
+        return new Applicant(
+                name,
+                phoneNumber,
+                birthDay,
+                gender
+        );
+    }
 }

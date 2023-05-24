@@ -24,4 +24,8 @@ public class Education {
     private String graduationYear;
 
     // TODO :: 학교 추가
+
+    public boolean isQualificationExamination() {
+        return graduationType.equals(GraduationType.QUALIFICATION_EXAMINATION);
+    }
 }

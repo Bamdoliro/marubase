@@ -1,5 +1,7 @@
 package com.bamdoliro.maru.presentation.form.dto.request;
 
+import com.bamdoliro.maru.domain.form.domain.value.Address;
+import com.bamdoliro.maru.domain.form.domain.value.Parent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -30,4 +32,16 @@ public class ParentRequest {
     @NotBlank(message = "필수값입니다.")
     @Size(max = 100, message = "100자 이하여야 합니다.")
     private String detailAddress;
+
+    public Parent toValue() {
+        return new Parent(
+                name,
+                phoneNumber,
+                new Address(
+                        zoneCode,
+                        address,
+                        detailAddress
+                )
+        );
+    }
 }

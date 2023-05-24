@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class Score {
 
     @Column(nullable = false)
-    private Integer subjectGradeScore;
+    private Double subjectGradeScore;
 
     @Column(nullable = false)
     private Integer attendanceScore;
@@ -33,4 +33,22 @@ public class Score {
 
     @Column(nullable = true)
     private Integer ncsScore;
+
+    public Score(Double subjectGradeScore, Integer attendanceScore, Integer volunteerScore, Integer bonusScore) {
+        this.subjectGradeScore = subjectGradeScore;
+        this.attendanceScore = attendanceScore;
+        this.volunteerScore = volunteerScore;
+        this.bonusScore = bonusScore;
+    }
+
+    public void updateSecondRoundMeisterScore(Integer depthInterviewScore, Integer codingTestScore, Integer ncsScore) {
+        this.depthInterviewScore = depthInterviewScore;
+        this.codingTestScore = codingTestScore;
+        this.ncsScore = ncsScore;
+    }
+
+    public void updateSecondRoundScore(Integer depthInterviewScore, Integer ncsScore) {
+        this.depthInterviewScore = depthInterviewScore;
+        this.ncsScore = ncsScore;
+    }
 }

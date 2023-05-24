@@ -72,17 +72,20 @@ public class Form extends BaseTimeEntity {
     private User user;
 
     @Builder
-    public Form(Applicant applicant, Parent parent, Education education, Grade grade, Score score, Document document, FormType type, User user) {
+    public Form(Applicant applicant, Parent parent, Education education, Grade grade, Document document, FormType type, User user) {
         this.applicant = applicant;
         this.parent = parent;
         this.education = education;
         this.grade = grade;
-        this.score = score;
         this.document = document;
         this.type = type;
         this.user = user;
         this.uuid = UUID.randomUUID();
         this.status = FormStatus.SUBMITTED;
+    }
+
+    public void updateScore(Score score) {
+        this.score = score;
     }
 }
 

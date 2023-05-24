@@ -11,7 +11,7 @@ public enum AchievementLevel implements EnumProperty {
     B("B", 4),
     C("C", 3),
     D("D", 2),
-    F("E", 1);
+    E("E", 1);
 
     private final String description;
     private final int score;

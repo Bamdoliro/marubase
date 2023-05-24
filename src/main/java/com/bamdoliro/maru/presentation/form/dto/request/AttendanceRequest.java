@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.presentation.form.dto.request;
 
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
+import com.bamdoliro.maru.domain.form.domain.value.Attendance;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -28,4 +29,13 @@ public class AttendanceRequest {
     @NotNull(message = "필수값입니다.")
     @Min(value = 0, message = "0 이상이여야 합니다.")
     private Integer classAbsenceCount;
+
+    public Attendance toValue() {
+        return new Attendance(
+                absenceCount,
+                latenessCount,
+                earlyLeaveCount,
+                classAbsenceCount
+        );
+    }
 }

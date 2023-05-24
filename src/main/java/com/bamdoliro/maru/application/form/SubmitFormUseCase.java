@@ -1,0 +1,47 @@
+package com.bamdoliro.maru.application.form;
+
+import com.bamdoliro.maru.domain.form.domain.Form;
+import com.bamdoliro.maru.domain.form.exception.AlreadySubmittedException;
+import com.bamdoliro.maru.domain.form.service.FormService;
+import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.domain.user.service.UserFacade;
+import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
+import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
+import com.bamdoliro.maru.shared.annotation.UseCase;
+import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
+
+@RequiredArgsConstructor
+@UseCase
+public class SubmitFormUseCase {
+
+    private final UserFacade userFacade;
+    private final FormRepository formRepository;
+    private final FormService formService;
+
+    @Transactional
+    public void execute(FormRequest request) {
+        User user = userFacade.getCurrentUser();
+        validateOnlyOneFormPerUser(user);
+
+        Form form = Form.builder()
+                .applicant(request.getApplicant().toValue())
+                .parent(request.getParent().toValue())
+                .education(request.getEducation().toValue())
+                .grade(request.getGrade().toValue())
+                .document(request.getDocument().toValue())
+                .type(request.getType())
+                .user(user)
+                .build();
+
+        formService.calculateScore(form);
+
+        formRepository.save(form);
+    }
+
+    private void validateOnlyOneFormPerUser(User user) {
+        if (formRepository.existsByUserId(user.getId())) {
+            throw new AlreadySubmittedException();
+        }
+    }
+}

@@ -1,7 +1,7 @@
 package com.bamdoliro.maru.presentation.form.dto.request;
 
 import com.bamdoliro.maru.domain.form.domain.type.AchievementLevel;
-import com.bamdoliro.maru.domain.form.domain.type.Gender;
+import com.bamdoliro.maru.domain.form.domain.value.Subject;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -10,8 +10,6 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
@@ -34,4 +32,13 @@ public class SubjectRequest {
 
     @NotNull(message = "필수값입니다.")
     private AchievementLevel achievementLevel;
+
+    public Subject toValue() {
+        return new Subject(
+                grade,
+                semester,
+                subjectName,
+                achievementLevel
+        );
+    }
 }

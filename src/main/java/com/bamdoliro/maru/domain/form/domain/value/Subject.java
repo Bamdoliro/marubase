@@ -28,4 +28,25 @@ public class Subject {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 2)
     private AchievementLevel achievementLevel;
+
+    public Integer getScore() {
+        if (subjectName.equals("수학")) {
+            return achievementLevel.getScore() * 2;
+        }
+
+        return achievementLevel.getScore();
+    }
+
+    public Integer getCount() {
+        if (subjectName.equals("수학")) {
+            return 2;
+        }
+
+        return 1;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d%d", grade, semester);
+    }
 }

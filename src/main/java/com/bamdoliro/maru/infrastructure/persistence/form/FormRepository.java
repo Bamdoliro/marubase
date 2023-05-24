@@ -4,4 +4,6 @@ import com.bamdoliro.maru.domain.form.domain.Form;
 import org.springframework.data.repository.CrudRepository;
 
 public interface FormRepository extends CrudRepository<Form, Long> {
+
+    boolean existsByUserId(Long userId);
 }

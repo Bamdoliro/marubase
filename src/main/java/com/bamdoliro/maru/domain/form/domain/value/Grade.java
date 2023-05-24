@@ -25,10 +25,8 @@ import java.util.List;
 @Embeddable
 public class Grade {
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "tbl_subject",
-            joinColumns = @JoinColumn(name = "form_id"))
-    private List<Subject> subjectList;
+    @Embedded
+    private SubjectList subjectList;
 
     @Embedded
     @AttributeOverrides({
@@ -72,4 +70,21 @@ public class Grade {
     @Column(nullable = false, name = "certificate")
     @Enumerated(EnumType.STRING)
     private List<Certificate> certificateList;
+
+    public Attendance getTotalAttendance() {
+        return new Attendance(
+                attendance1.getAbsenceCount() + attendance2.getAbsenceCount() + attendance3.getAbsenceCount(),
+                attendance1.getLatenessCount() + attendance2.getLatenessCount() + attendance3.getLatenessCount(),
+                attendance1.getEarlyLeaveCount() + attendance2.getEarlyLeaveCount() + attendance3.getEarlyLeaveCount(),
+                attendance1.getClassAbsenceCount() + attendance2.getClassAbsenceCount() + attendance3.getClassAbsenceCount()
+        );
+    }
+
+    public Integer getTotalVolunteerTime() {
+        return volunteerTime1 + volunteerTime2 + volunteerTime3;
+    }
+
+    public List<Subject> getSubjectListValue() {
+        return subjectList.getSubjectList();
+    }
 }
