@@ -54,10 +54,10 @@ public class Form extends BaseTimeEntity {
     private Grade grade;
 
     @Embedded
-    private Score score;
+    private Document document;
 
     @Embedded
-    private Document document;
+    private Score score;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)

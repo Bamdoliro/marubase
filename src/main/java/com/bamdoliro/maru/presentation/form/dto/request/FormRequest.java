@@ -19,13 +19,13 @@ public class FormRequest {
     private ParentRequest parent;
 
     @Valid
-    private DocumentRequest document;
-
-    @Valid
     private EducationRequest education;
 
     @Valid
     private GradeRequest grade;
+
+    @Valid
+    private DocumentRequest document;
 
     @NotNull(message = "필수값입니다.")
     private FormType type;
