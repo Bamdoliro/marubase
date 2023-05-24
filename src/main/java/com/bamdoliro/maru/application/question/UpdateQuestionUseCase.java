@@ -20,7 +20,7 @@ public class UpdateQuestionUseCase{
     @Transactional
     public void execute(Long id, UpdateQuestionRequest request) {
 
-        Question question = questionFacade.getQuestion1(id);
+        Question question = questionFacade.getQuestion(id);
         question.update(request);
 
     }

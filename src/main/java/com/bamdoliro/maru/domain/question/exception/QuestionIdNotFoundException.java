@@ -6,6 +6,6 @@ import org.springframework.http.HttpStatus;
 
 public class QuestionIdNotFoundException extends MaruException {
     public QuestionIdNotFoundException() {
-        super(QuestionErrorProperty.QUESTION_ID_NOT_FOUND);
+        super(QuestionErrorProperty.QUESTION_NOT_FOUND);
     }
 }
