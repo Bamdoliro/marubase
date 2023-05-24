@@ -2,7 +2,7 @@ package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
-import com.bamdoliro.maru.domain.form.exception.AlreadySubmittedException;
+import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
 import com.bamdoliro.maru.domain.form.service.FormService;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.service.UserFacade;
@@ -67,7 +67,7 @@ class SubmitFormUseCaseTest {
         given(formRepository.existsByUserId(user.getId())).willReturn(true);
 
         // when and then
-        assertThrows(AlreadySubmittedException.class, () -> submitFormUseCase.execute(request));
+        assertThrows(FormAlreadySubmittedException.class, () -> submitFormUseCase.execute(request));
         verify(userFacade, times(1)).getCurrentUser();
         verify(formRepository, times(1)).existsByUserId(user.getId());
         verify(formService, never()).calculateScore(any(Form.class));

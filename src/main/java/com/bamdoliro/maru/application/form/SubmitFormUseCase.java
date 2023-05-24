@@ -1,7 +1,7 @@
 package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
-import com.bamdoliro.maru.domain.form.exception.AlreadySubmittedException;
+import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
 import com.bamdoliro.maru.domain.form.service.FormService;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.service.UserFacade;
@@ -41,7 +41,7 @@ public class SubmitFormUseCase {
 
     private void validateOnlyOneFormPerUser(User user) {
         if (formRepository.existsByUserId(user.getId())) {
-            throw new AlreadySubmittedException();
+            throw new FormAlreadySubmittedException();
         }
     }
 }

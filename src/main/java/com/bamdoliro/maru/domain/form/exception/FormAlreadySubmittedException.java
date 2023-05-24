@@ -3,9 +3,9 @@ package com.bamdoliro.maru.domain.form.exception;
 import com.bamdoliro.maru.domain.form.exception.error.FormErrorProperty;
 import com.bamdoliro.maru.shared.error.MaruException;
 
-public class AlreadySubmittedException extends MaruException {
+public class FormAlreadySubmittedException extends MaruException {
 
-    public AlreadySubmittedException() {
-        super(FormErrorProperty.ALREADY_SUBMITTED);
+    public FormAlreadySubmittedException() {
+        super(FormErrorProperty.FORM_ALREADY_SUBMITTED);
     }
 }
