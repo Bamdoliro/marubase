@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-@Validated
 @RequiredArgsConstructor
 @UseCase
 public class UpdateQuestionUseCase{
@@ -19,11 +18,8 @@ public class UpdateQuestionUseCase{
 
     @Transactional
     public void execute(Long id, UpdateQuestionRequest request) {
-
         Question question = questionFacade.getQuestion(id);
-        question.update(request);
-
+        question.update(request.getTitle(), request.getContent());
     }
-
 
 }

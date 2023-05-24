@@ -35,8 +35,10 @@ public class Question {
         this.content = content;
     }
 
-    public void update(UpdateQuestionRequest request){
-        this.title = request.getTitle();
-        this.content = request.getContent();
+    public void update(String title, String content){
+        this.title = title;
+        this.content = content;
     }
+
+    public void update1()
 }
