@@ -13,8 +13,10 @@ import com.bamdoliro.maru.domain.form.domain.value.Document;
 import com.bamdoliro.maru.domain.form.domain.value.Education;
 import com.bamdoliro.maru.domain.form.domain.value.Grade;
 import com.bamdoliro.maru.domain.form.domain.value.Parent;
+import com.bamdoliro.maru.domain.form.domain.value.School;
 import com.bamdoliro.maru.domain.form.domain.value.Subject;
 import com.bamdoliro.maru.domain.form.domain.value.SubjectList;
+import com.bamdoliro.maru.domain.form.domain.value.Teacher;
 import com.bamdoliro.maru.presentation.form.dto.request.ApplicantRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.AttendanceRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.DocumentRequest;
@@ -48,7 +50,9 @@ public class FormFixture {
                 ),
                 new Education(
                         GraduationType.EXPECTED,
-                        "2021"
+                        "2021",
+                        new School("비전중학교", "경기도", "7631003"),
+                        new Teacher("나교사", "0519701234")
                 ),
                 new Grade(
                         new SubjectList(List.of(
@@ -107,7 +111,9 @@ public class FormFixture {
                 ),
                 new Education(
                         GraduationType.QUALIFICATION_EXAMINATION,
-                        "2021"
+                        "2021",
+                        null,
+                        null
                 ),
                 new Grade(
                         new SubjectList(List.of(
@@ -134,47 +140,6 @@ public class FormFixture {
         );
     }
 
-    public static FormRequest createQualificationExaminationFormRequest(FormType type) {
-        return new FormRequest(
-                new ApplicantRequest(
-                        "김밤돌",
-                        "01012345678",
-                        LocalDate.of(2005, 4, 15),
-                        Gender.FEMALE
-                ),
-                new ParentRequest(
-                        "김이로",
-                        "01012345678",
-                        "18071",
-                        "부산광역시 가락대로1393",
-                        "부산소프트웨어마이스터고"
-                ),
-                new EducationRequest(
-                        GraduationType.EXPECTED,
-                        "2021"
-                ),
-                new GradeRequest(
-                        List.of(new SubjectRequest(1, 1, "국어", AchievementLevel.A),
-                                new SubjectRequest(1, 1, "수학", AchievementLevel.E),
-                                new SubjectRequest(1, 1, "사회", AchievementLevel.A),
-                                new SubjectRequest(1, 1, "과학", AchievementLevel.D),
-                                new SubjectRequest(1, 1, "영어", AchievementLevel.A)
-                        ),
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        List.of(Certificate.CRAFTSMAN_INFORMATION_PROCESSING, Certificate.COMPUTER_SPECIALIST_LEVEL_1)
-                ),
-                new DocumentRequest(
-                        "하이난김밤돌",
-                        "공부열심히할게용"
-                ),
-                type
-        );
-    }
 
     public static FormRequest createFormRequest(FormType type) {
         return new FormRequest(
@@ -192,8 +157,13 @@ public class FormFixture {
                         "부산소프트웨어마이스터고"
                 ),
                 new EducationRequest(
-                        GraduationType.QUALIFICATION_EXAMINATION,
-                        "2021"
+                        GraduationType.EXPECTED,
+                        "2021",
+                        "비전중학교",
+                        "경기도",
+                        "7631003",
+                        "나교사",
+                        "0519701234"
                 ),
                 new GradeRequest(
                         List.of(new SubjectRequest(2, 1, "국어", AchievementLevel.A),
@@ -222,6 +192,53 @@ public class FormFixture {
                         2,
                         1,
                         List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2)
+                ),
+                new DocumentRequest(
+                        "하이난김밤돌",
+                        "공부열심히할게용"
+                ),
+                type
+        );
+    }
+
+    public static FormRequest createQualificationExaminationFormRequest(FormType type) {
+        return new FormRequest(
+                new ApplicantRequest(
+                        "김밤돌",
+                        "01012345678",
+                        LocalDate.of(2005, 4, 15),
+                        Gender.FEMALE
+                ),
+                new ParentRequest(
+                        "김이로",
+                        "01012345678",
+                        "18071",
+                        "부산광역시 가락대로1393",
+                        "부산소프트웨어마이스터고"
+                ),
+                new EducationRequest(
+                        GraduationType.QUALIFICATION_EXAMINATION,
+                        "2021",
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                ),
+                new GradeRequest(
+                        List.of(new SubjectRequest(1, 1, "국어", AchievementLevel.A),
+                                new SubjectRequest(1, 1, "수학", AchievementLevel.E),
+                                new SubjectRequest(1, 1, "사회", AchievementLevel.A),
+                                new SubjectRequest(1, 1, "과학", AchievementLevel.D),
+                                new SubjectRequest(1, 1, "영어", AchievementLevel.A)
+                        ),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        List.of(Certificate.CRAFTSMAN_INFORMATION_PROCESSING, Certificate.COMPUTER_SPECIALIST_LEVEL_1)
                 ),
                 new DocumentRequest(
                         "하이난김밤돌",

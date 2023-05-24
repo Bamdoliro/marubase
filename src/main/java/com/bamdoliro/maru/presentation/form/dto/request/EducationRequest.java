@@ -2,8 +2,12 @@ package com.bamdoliro.maru.presentation.form.dto.request;
 
 import com.bamdoliro.maru.domain.form.domain.type.GraduationType;
 import com.bamdoliro.maru.domain.form.domain.value.Education;
+import com.bamdoliro.maru.domain.form.domain.value.School;
+import com.bamdoliro.maru.domain.form.domain.value.Teacher;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,10 +25,33 @@ public class EducationRequest {
     @Size(min = 4, max = 4, message = "4자여야 합니다.")
     private String graduationYear;
 
+    @Nullable
+    @Size(max = 20, message = "20자 이하여야 합니다.")
+    private String schoolName;
+
+    @Nullable
+    @Size(max = 20, message = "20자 이하여야 합니다.")
+    private String schoolLocation;
+
+    @Nullable
+    @Size(max = 10, message = "10자 이하여야 합니다.")
+    private String schoolCode;
+
+    // TODO :: 검고졸, 졸업 지원자들은 슨상님 어떻게 채워넣는지?
+    @Nullable
+    @Size(max = 20, message = "20자 이하여야 합니다.")
+    private String teacherName;
+
+    @Nullable
+    @Size(max = 11, message = "11자 이하여야 합니다.")
+    private String teacherPhoneNumber;
+
     public Education toValue() {
         return new Education(
                 graduationType,
-                graduationYear
+                graduationYear,
+                new School(schoolName, schoolLocation, schoolCode),
+                new Teacher(teacherName, teacherPhoneNumber)
         );
     }
 }

@@ -3,6 +3,7 @@ package com.bamdoliro.maru.domain.form.domain.value;
 import com.bamdoliro.maru.domain.form.domain.type.GraduationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
@@ -23,7 +24,11 @@ public class Education {
     @Column(nullable = false, length = 4)
     private String graduationYear;
 
-    // TODO :: 학교 추가
+    @Embedded
+    private School school;
+
+    @Embedded
+    private Teacher teacher;
 
     public boolean isQualificationExamination() {
         return graduationType.equals(GraduationType.QUALIFICATION_EXAMINATION);

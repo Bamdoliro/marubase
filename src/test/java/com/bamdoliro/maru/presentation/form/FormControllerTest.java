@@ -91,6 +91,21 @@ class FormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("education.graduationYear")
                                         .type(JsonFieldType.STRING)
                                         .description("졸업 연도"),
+                                fieldWithPath("education.schoolName")
+                                        .type(JsonFieldType.STRING)
+                                        .description("출신 학교 이름 (출신 학교가 없는 경우 null)"),
+                                fieldWithPath("education.schoolLocation")
+                                        .type(JsonFieldType.STRING)
+                                        .description("출신 학교 지역 (출신 학교가 없는 경우 null)"),
+                                fieldWithPath("education.schoolCode")
+                                        .type(JsonFieldType.STRING)
+                                        .description("출신 학교 코드 (출신 학교가 없는 경우 null)"),
+                                fieldWithPath("education.teacherName")
+                                        .type(JsonFieldType.STRING)
+                                        .description("작성 교사 (없는 경우 null)"),
+                                fieldWithPath("education.teacherPhoneNumber")
+                                        .type(JsonFieldType.STRING)
+                                        .description("작성 교사 전화번호 (없는 경우 null)"),
                                 fieldWithPath("grade.subjectList[].grade")
                                         .type(JsonFieldType.NUMBER)
                                         .description("학년 (검정고시는 1로 통일)"),
