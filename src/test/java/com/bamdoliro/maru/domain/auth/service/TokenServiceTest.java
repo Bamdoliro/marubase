@@ -52,6 +52,7 @@ class TokenServiceTest {
         User user = UserFixture.createUser();
         given(jwtProperties.getRefreshExpirationTime()).willReturn(1000L);
         given(jwtProperties.getSecretKey()).willReturn("탑시크릿정말정말탑시크릿진짜옝용찐찐찐찐찐이야");
+        given(tokenRepository.save(any(Token.class))).willReturn(any(Token.class));
 
         // when
         String refreshToken = tokenService.generateRefreshToken(user.getEmail());
