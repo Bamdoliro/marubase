@@ -40,7 +40,38 @@ public class EnumControllerTest extends RestDocsTestSupport {
                                 beneathPath("authority").withSubsectionId("authority"),
                                 attributes(key("title").value("Authority")),
                                 enumConvertFieldDescriptor((enumDocs.getAuthority()))
+                        ),
+                        customResponseFields("custom-response",
+                                beneathPath("achievementLevel").withSubsectionId("achievementLevel"),
+                                attributes(key("title").value("AchievementLevel")),
+                                enumConvertFieldDescriptor((enumDocs.getAchievementLevel()))
+                        ),
+                        customResponseFields("custom-response",
+                                beneathPath("certificate").withSubsectionId("certificate"),
+                                attributes(key("title").value("Certificate")),
+                                enumConvertFieldDescriptor((enumDocs.getCertificate()))
+                        ),
+                        customResponseFields("custom-response",
+                                beneathPath("formStatus").withSubsectionId("formStatus"),
+                                attributes(key("title").value("FormStatus")),
+                                enumConvertFieldDescriptor((enumDocs.getFormStatus()))
+                        ),
+                        customResponseFields("custom-response",
+                                beneathPath("formType").withSubsectionId("formType"),
+                                attributes(key("title").value("FormType")),
+                                enumConvertFieldDescriptor((enumDocs.getFormType()))
+                        ),
+                        customResponseFields("custom-response",
+                                beneathPath("gender").withSubsectionId("gender"),
+                                attributes(key("title").value("GraduationType")),
+                                enumConvertFieldDescriptor((enumDocs.getGender()))
+                        ),
+                        customResponseFields("custom-response",
+                                beneathPath("graduationType").withSubsectionId("graduationType"),
+                                attributes(key("title").value("GraduationType")),
+                                enumConvertFieldDescriptor((enumDocs.getGraduationType()))
                         )
+
                 ));
     }
 
