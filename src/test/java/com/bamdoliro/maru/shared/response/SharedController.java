@@ -39,4 +39,9 @@ public class SharedController {
         return Arrays.stream(property)
                 .collect(Collectors.toMap(EnumProperty::name, EnumProperty::getDescription));
     }
+
+    @GetMapping("/jwt")
+    public String jwtTest() {
+        return "success";
+    }
 }
