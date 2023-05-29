@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.presentation.question;
 
+import com.bamdoliro.maru.application.question.UpdateQuestionUseCase;
 import com.bamdoliro.maru.domain.question.exception.QuestionNotFoundException;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.question.dto.request.CreateQuestionRequest;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -98,14 +98,14 @@ class QuestionControllerTest extends RestDocsTestSupport {
     }
     @Test
     void 자주묻는질문을_수정할_때_자주묻는질문이_없으면_에러가_발생한다() throws Exception {
-        willThrow(QuestionNotFoundException.class).given(updateQuestionUseCase).execute(eq(1L), any(UpdateQuestionRequest.class));
+
+        UpdateQuestionRequest request = new UpdateQuestionRequest("이거 맞나", "아님 말고...");
+        willThrow(new QuestionNotFoundException()).given(updateQuestionUseCase).execute(eq(1L), any(UpdateQuestionRequest.class));
 
         User user = UserFixture.createUser();
         given(jwtProperties.getPrefix()).willReturn("Bearer");
         given(tokenService.getEmail(anyString())).willReturn(user.getEmail());
         given(authDetailsService.loadUserByUsername(user.getEmail())).willReturn(new AuthDetails(user));
-
-        UpdateQuestionRequest request = new UpdateQuestionRequest("이거 맞나", "아님 말고...");
 
         long id = 1;
         mockMvc.perform(MockMvcRequestBuilders.put("/question/{id}", id)

@@ -23,7 +23,6 @@ include::{snippets}/question-controller-test/자주묻는질문을_생성한다/
 === 질문 수정
 어드민 권한을 가진 사용자가 제목과 내용을 입력해 자주 묻는 질문을 수정할 수 있습니다.
 
-
 ==== 요청 형식
 
 ===== Request Header
@@ -34,9 +33,13 @@ include::{snippets}/question-controller-test/자주묻는질문을_수정한다/
 [snippets/question-controller-test/자주묻는질문을_수정한다/request-fields.adoc]
 include::{snippets}/question-controller-test/자주묻는질문을_수정한다/request-fields.adoc[]
 
+==== 요청
 [snippets/question-controller-test/자주묻는질문을_수정한다/http-request.adoc]
 include::{snippets}/question-controller-test/자주묻는질문을_수정한다/http-request.adoc[]
 
+===== 정상 응답
 [snippets/question-controller-test/자주묻는질문을_수정한다/http-response.adoc]
 include::{snippets}/question-controller-test/자주묻는질문을_수정한다/http-response.adoc[]
 
+===== 자주묻는질문을 찾을수 없는 경우
+include::{snippets}/question-controller-test/자주묻는질문을_수정할_때_자주묻는질문이_없으면_에러가_발생한다/http-response.adoc[]
