@@ -12,7 +12,6 @@ import com.bamdoliro.maru.infrastructure.mail.SendEmailService;
 import com.bamdoliro.maru.infrastructure.neis.SearchSchoolService;
 import com.bamdoliro.maru.presentation.auth.AuthController;
 import com.bamdoliro.maru.presentation.question.QuestionController;
-import com.bamdoliro.maru.presentation.question.dto.request.CreateQuestionRequest;
 import com.bamdoliro.maru.presentation.school.SchoolController;
 import com.bamdoliro.maru.shared.config.properties.JwtProperties;
 import com.bamdoliro.maru.shared.security.SecurityConfig;

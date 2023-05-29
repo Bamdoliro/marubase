@@ -4,6 +4,7 @@ import com.bamdoliro.maru.domain.question.domain.Question;
 import com.bamdoliro.maru.infrastructure.persistence.question.QuestionRepository;
 import com.bamdoliro.maru.presentation.question.dto.request.CreateQuestionRequest;
 import com.bamdoliro.maru.shared.fixture.QuestionFixture;
+import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
