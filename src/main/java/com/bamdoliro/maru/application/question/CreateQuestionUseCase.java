@@ -14,7 +14,6 @@ public class CreateQuestionUseCase {
 
     private final QuestionRepository questionRepository;
 
-    @Transactional
     public void execute(CreateQuestionRequest request) {
         questionRepository.save(
                 new Question(request.getTitle(), request.getContent()));
