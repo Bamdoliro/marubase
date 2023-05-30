@@ -1,4 +1,4 @@
-package com.bamdoliro.maru.domain.form.facade;
+package com.bamdoliro.maru.domain.form.service;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.exception.FormNotFoundException;
