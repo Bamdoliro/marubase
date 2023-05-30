@@ -33,13 +33,12 @@ public class FormService {
     }
 
     private Double calculateSubjectGradeScore(Form form) {
-        if (form.getType().isRegular()) {
+        if (form.getType().isRegular() || form.getType().isSupernumerary()) {
             return calculateRegularScore(form);
         } else if (form.getType().isSpecial()) {
             return calculateSpecialScore(form);
         }
 
-        // TODO :: 정원 외 전형 성적 계산
         return null;
     }
 

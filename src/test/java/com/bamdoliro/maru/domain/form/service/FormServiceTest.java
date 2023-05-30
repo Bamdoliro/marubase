@@ -70,7 +70,6 @@ class FormServiceTest {
         formService.calculateScore(form);
 
         // then
-        // TODO :: 검정고시 특별전형 점수 계산 틀림 57.120
         assertEquals(93.6, form.getScore().getSubjectGradeScore());
         assertEquals(14, form.getScore().getAttendanceScore());
         assertEquals(14, form.getScore().getVolunteerScore());

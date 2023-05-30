@@ -58,4 +58,8 @@ public enum FormType implements EnumProperty {
     public boolean isSpecial() {
         return mainCategory == Category.SPECIAL;
     }
+
+    public boolean isSupernumerary() {
+        return mainCategory == Category.SUPERNUMERARY;
+    }
 }
