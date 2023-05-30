@@ -1,11 +1,12 @@
 package com.bamdoliro.maru.presentation.form;
 
+import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
 import com.bamdoliro.maru.domain.form.exception.FormNotFoundException;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.presentation.form.dto.request.ApplicantRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
+import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
@@ -15,6 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -26,6 +29,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -356,5 +360,52 @@ class FormControllerTest extends RestDocsTestSupport {
                 .andDo(restDocs.document());
 
         verify(rejectFormUseCase, times(1)).execute(formId);
+    }
+
+    @Test
+    void 검토해야_하는_원서를_조회한다() throws Exception {
+        given(querySubmittedFormUseCase.execute()).willReturn(List.of(
+                FormFixture.createFormResponse(FormStatus.SUBMITTED),
+                FormFixture.createFormResponse(FormStatus.REJECTED),
+                FormFixture.createFormResponse(FormStatus.SUBMITTED)
+        ));
+
+        User user = UserFixture.createAdminUser();
+        given(jwtProperties.getPrefix()).willReturn("Bearer");
+        given(tokenService.getEmail(anyString())).willReturn(user.getEmail());
+        given(authDetailsService.loadUserByUsername(user.getEmail())).willReturn(new AuthDetails(user));
+
+        mockMvc.perform(get("/form/review")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        )
+                ));
+    }
+
+    @Test
+    void 검토해야_하는_원서가_없으면_빈_리스트를_반환한다() throws Exception {
+        given(querySubmittedFormUseCase.execute()).willReturn(List.of());
+
+        User user = UserFixture.createAdminUser();
+        given(jwtProperties.getPrefix()).willReturn("Bearer");
+        given(tokenService.getEmail(anyString())).willReturn(user.getEmail());
+        given(authDetailsService.loadUserByUsername(user.getEmail())).willReturn(new AuthDetails(user));
+
+        mockMvc.perform(get("/form/review")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document());
     }
 }

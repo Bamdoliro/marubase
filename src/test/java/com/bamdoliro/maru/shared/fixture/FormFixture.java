@@ -3,6 +3,7 @@ package com.bamdoliro.maru.shared.fixture;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.AchievementLevel;
 import com.bamdoliro.maru.domain.form.domain.type.Certificate;
+import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.domain.type.Gender;
 import com.bamdoliro.maru.domain.form.domain.type.GraduationType;
@@ -25,6 +26,7 @@ import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.GradeRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.ParentRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubjectRequest;
+import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -249,6 +251,14 @@ public class FormFixture {
                         "공부열심히할게용"
                 ),
                 type
+        );
+    }
+
+    public static FormResponse createFormResponse(FormStatus status) {
+        return new FormResponse(
+                1L,
+                "김밤돌",
+                status
         );
     }
 }

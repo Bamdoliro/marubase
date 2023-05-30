@@ -3,9 +3,11 @@ package com.bamdoliro.maru.presentation.form.dto.response;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class FormResponse {
 
     private Long id;

@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -67,7 +69,7 @@ class SchoolControllerTest extends RestDocsTestSupport {
     @Test
     void 학교를_검색할_때_결과가_없다면_빈_리스트를_반환한다() throws Exception {
         User user = UserFixture.createUser();
-        given(searchSchoolUseCase.execute(anyString())).willReturn(SchoolFixture.createEmptySchoolListResponse());
+        given(searchSchoolUseCase.execute(anyString())).willReturn(List.of());
         given(jwtProperties.getPrefix()).willReturn("Bearer");
         given(tokenService.getEmail(anyString())).willReturn(user.getEmail());
         given(authDetailsService.loadUserByUsername(user.getEmail())).willReturn(new AuthDetails(user));
