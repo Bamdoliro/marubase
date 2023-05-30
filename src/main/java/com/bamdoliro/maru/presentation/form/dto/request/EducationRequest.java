@@ -37,7 +37,6 @@ public class EducationRequest {
     @Size(max = 10, message = "10자 이하여야 합니다.")
     private String schoolCode;
 
-    // TODO :: 검고졸, 졸업 지원자들은 슨상님 어떻게 채워넣는지?
     @Nullable
     @Size(max = 20, message = "20자 이하여야 합니다.")
     private String teacherName;

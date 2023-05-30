@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class Teacher {
 
-    @Column(name = "teacher_name", nullable = false, length = 20)
+    @Column(name = "teacher_name", nullable = true, length = 20)
     private String name;
 
-    @Column(name = "teacher_phone_number", nullable = false, length = 11)
+    @Column(name = "teacher_phone_number", nullable = true, length = 11)
     private String phoneNumber;
 }
