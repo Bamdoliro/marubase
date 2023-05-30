@@ -40,9 +40,9 @@ public class User extends BaseTimeEntity {
     private Authority authority;
 
     @Builder
-    public User(String email, String password) {
+    public User(String email, String password, Authority authority) {
         this.email = email;
         this.password = new Password(PasswordUtil.encode(password));
-        this.authority = Authority.ROLE_USER;
+        this.authority = authority;
     }
 }

@@ -26,8 +26,4 @@ public class SchoolFixture {
                 new SchoolResponse("또다른비전중학교", "경기도", "7631003")
         );
     }
-
-    public static List<SchoolResponse> createEmptySchoolListResponse() {
-        return List.of();
-    }
 }
