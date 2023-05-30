@@ -2,6 +2,7 @@ package com.bamdoliro.maru.application.user;
 
 import com.bamdoliro.maru.domain.user.domain.EmailVerification;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.domain.user.domain.type.Authority;
 import com.bamdoliro.maru.domain.user.exception.UserAlreadyExistsException;
 import com.bamdoliro.maru.domain.user.exception.VerificationCodeMismatchException;
 import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
@@ -27,6 +28,7 @@ public class SignUpUserUseCase {
                 User.builder()
                         .email(request.getEmail())
                         .password(request.getPassword())
+                        .authority(Authority.ROLE_USER)
                         .build()
         );
     }

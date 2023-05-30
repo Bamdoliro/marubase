@@ -27,3 +27,45 @@ include::{snippets}/form-controller-test/원서를_접수할_때_이미_접수�
 
 ===== 요청 형식이 틀린 경우
 include::{snippets}/form-controller-test/원서를_접수할_때_잘못된_형식의_요청을_보내면_에러가_발생한다/http-response.adoc[]
+
+=== 원서 승인
+어드민은 원서를 승인할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/원서를_승인한다/request-headers.adoc[]
+
+====== Path Parameter
+include::{snippets}/form-controller-test/원서를_승인한다/path-parameters.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/원서를_승인한다/http-request.adoc[]
+
+==== 응답
+===== 정상 응답
+include::{snippets}/form-controller-test/원서를_승인한다/http-response.adoc[]
+
+===== 해당하는 원서가 없는 경우
+include::{snippets}/form-controller-test/원서를_승인할_때_원서가_없으면_에러가_발생한다/http-response.adoc[]
+
+=== 원서 반려
+어드민은 원서를 반려할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/원서를_반려한다/request-headers.adoc[]
+
+====== Path Parameter
+include::{snippets}/form-controller-test/원서를_반려한다/path-parameters.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/원서를_반려한다/http-request.adoc[]
+
+==== 응답
+===== 정상 응답
+include::{snippets}/form-controller-test/원서를_반려한다/http-response.adoc[]
+
+===== 해당하는 원서가 없는 경우
+include::{snippets}/form-controller-test/원서를_반려할_때_원서가_없으면_에러가_발생한다/http-response.adoc[]
