@@ -14,5 +14,11 @@ import java.util.Map;
 @AllArgsConstructor
 public class EnumDocs {
 
-    Map<String,String> authority;
+    Map<String, String> authority;
+    Map<String, String> achievementLevel;
+    Map<String, String> certificate;
+    Map<String, String> formStatus;
+    Map<String, String> formType;
+    Map<String, String> gender;
+    Map<String, String> graduationType;
 }

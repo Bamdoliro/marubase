@@ -3,7 +3,9 @@ package com.bamdoliro.maru.domain.user.service;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.exception.UserNotFoundException;
 import com.bamdoliro.maru.infrastructure.persistence.user.UserRepository;
+import com.bamdoliro.maru.shared.security.auth.AuthDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,5 +19,10 @@ public class UserFacade {
     public User getUser(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    public User getCurrentUser() {
+        AuthDetails auth = (AuthDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return auth.getUser();
     }
 }

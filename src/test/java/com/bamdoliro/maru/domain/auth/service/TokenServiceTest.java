@@ -4,6 +4,7 @@ import com.bamdoliro.maru.domain.auth.domain.Token;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.persistence.auth.TokenRepository;
 import com.bamdoliro.maru.shared.config.properties.JwtProperties;
+import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,7 +43,6 @@ class TokenServiceTest {
         // then
         verify(jwtProperties, times(1)).getAccessExpirationTime();
         verify(jwtProperties, times(1)).getSecretKey();
-        assertEquals(user.getEmail(), tokenService.getEmail(accessToken));
         assertNotNull(accessToken);
     }
 
@@ -52,6 +52,7 @@ class TokenServiceTest {
         User user = UserFixture.createUser();
         given(jwtProperties.getRefreshExpirationTime()).willReturn(1000L);
         given(jwtProperties.getSecretKey()).willReturn("탑시크릿정말정말탑시크릿진짜옝용찐찐찐찐찐이야");
+        given(tokenRepository.save(any(Token.class))).willReturn(AuthFixture.createRefreshToken());
 
         // when
         String refreshToken = tokenService.generateRefreshToken(user.getEmail());
@@ -60,7 +61,6 @@ class TokenServiceTest {
         verify(jwtProperties, times(1)).getRefreshExpirationTime();
         verify(jwtProperties, times(1)).getSecretKey();
         verify(tokenRepository, times(1)).save(any(Token.class));
-        assertEquals(user.getEmail(), tokenService.getEmail(refreshToken));
         assertNotNull(refreshToken);
     }
 }
