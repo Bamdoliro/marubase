@@ -85,6 +85,6 @@ public class Grade {
     }
 
     public List<Subject> getSubjectListValue() {
-        return subjectList.getSubjectList();
+        return subjectList.getValue();
     }
 }

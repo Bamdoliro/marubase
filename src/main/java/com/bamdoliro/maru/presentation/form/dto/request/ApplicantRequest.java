@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDate;
 
@@ -17,7 +18,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ApplicantRequest {
 
-    // TODO :: 증명사진 추가
+    @NotBlank(message = "필수값입니다.")
+    @URL
+    private String identificationPictureUri;
 
     @NotBlank(message = "필수값입니다.")
     @Size(max = 20, message = "20자 이하여야 합니다.")

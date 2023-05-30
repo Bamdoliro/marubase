@@ -18,7 +18,8 @@ import java.time.LocalDate;
 @Embeddable
 public class Applicant {
 
-    // TODO :: 증명사진 추가
+    @Column(nullable = false, length = 150)
+    private String identificationPictureUri;
 
     @Column(nullable = false, length = 20)
     private String name;

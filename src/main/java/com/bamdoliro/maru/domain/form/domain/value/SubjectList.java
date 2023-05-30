@@ -23,14 +23,14 @@ public class SubjectList {
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "tbl_subject",
             joinColumns = @JoinColumn(name = "form_id"))
-    private List<Subject> subjectList;
+    private List<Subject> value;
 
     public static SubjectList of(List<Subject> subjectList) {
         return new SubjectList(subjectList);
     }
 
     public HashMap<String, List<Subject>> getSubjectMap() {
-        return subjectList.stream()
+        return value.stream()
                 .collect(Collectors.groupingBy(Subject::toString,
                         HashMap::new,
                         Collectors.toList()
@@ -42,13 +42,13 @@ public class SubjectList {
     }
 
     private Integer totalScore() {
-        return subjectList.stream()
+        return value.stream()
                 .mapToInt(Subject::getScore)
                 .sum();
     }
 
     private Integer size() {
-        return subjectList.stream()
+        return value.stream()
                 .mapToInt(Subject::getCount)
                 .sum();
     }
