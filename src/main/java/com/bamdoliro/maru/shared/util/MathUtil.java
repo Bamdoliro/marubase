@@ -1,9 +1,8 @@
 package com.bamdoliro.maru.shared.util;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access= AccessLevel.PRIVATE)
+@UtilityClass
 public class MathUtil {
 
     public static Double roundTo(double value, int place) {

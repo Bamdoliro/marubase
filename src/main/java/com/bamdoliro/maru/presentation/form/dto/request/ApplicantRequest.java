@@ -39,6 +39,7 @@ public class ApplicantRequest {
 
     public Applicant toValue() {
         return new Applicant(
+                identificationPictureUri,
                 name,
                 phoneNumber,
                 birthDay,

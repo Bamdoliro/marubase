@@ -13,6 +13,19 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.bamdoliro.maru.domain.form.constant.FormConstant.DEFAULT_ATTENDANCE_SCORE;
+import static com.bamdoliro.maru.domain.form.constant.FormConstant.DEFAULT_VOLUNTEER_SCORE;
+import static com.bamdoliro.maru.domain.form.constant.FormConstant.MAX_ABSENCE_COUNT;
+import static com.bamdoliro.maru.domain.form.constant.FormConstant.MAX_ATTENDANCE_SCORE;
+import static com.bamdoliro.maru.domain.form.constant.FormConstant.MAX_BONUS_SCORE;
+import static com.bamdoliro.maru.domain.form.constant.FormConstant.MAX_VOLUNTEER_SCORE;
+import static com.bamdoliro.maru.domain.form.constant.FormConstant.MAX_VOLUNTEER_TIME;
+import static com.bamdoliro.maru.domain.form.constant.FormConstant.MIN_ATTENDANCE_SCORE;
+import static com.bamdoliro.maru.domain.form.constant.FormConstant.MIN_VOLUNTEER_SCORE;
+import static com.bamdoliro.maru.domain.form.constant.FormConstant.MIN_VOLUNTEER_TIME;
+import static com.bamdoliro.maru.domain.form.constant.FormConstant.REGULAR_TYPE_DEFAULT_SCORE;
+import static com.bamdoliro.maru.domain.form.constant.FormConstant.SPECIAL_TYPE_DEFAULT_SCORE;
+
 @RequiredArgsConstructor
 @Service
 public class FormService {
@@ -53,7 +66,7 @@ public class FormService {
                     7.2 * 2 * SubjectList.of(subjectMap.get("31")).getAverageScore();
         }
 
-        return 80 + MathUtil.roundTo(score, 3);
+        return REGULAR_TYPE_DEFAULT_SCORE + MathUtil.roundTo(score, 3);
     }
 
     private Double calculateSpecialScore(Form form) {
@@ -67,17 +80,17 @@ public class FormService {
                     4.32 * 2 * SubjectList.of(subjectMap.get("31")).getAverageScore();
         }
 
-        return 48 + MathUtil.roundTo(score, 3);
+        return SPECIAL_TYPE_DEFAULT_SCORE + MathUtil.roundTo(score, 3);
     }
 
     private Integer calculateAttendanceScore(Form form) {
         if (form.getEducation().isQualificationExamination()) {
-            return 14;
+            return DEFAULT_ATTENDANCE_SCORE;
         }
 
         Attendance totalAttendance = form.getGrade().getTotalAttendance();
         int convertedAbsenceCount = getConvertedAbsenceCount(totalAttendance);
-        return convertedAbsenceCount > 18 ? 0 : 18 - convertedAbsenceCount;
+        return convertedAbsenceCount > MAX_ABSENCE_COUNT ? MIN_ATTENDANCE_SCORE : MAX_ATTENDANCE_SCORE - convertedAbsenceCount;
     }
 
     private Integer getConvertedAbsenceCount(Attendance attendance) {
@@ -91,20 +104,20 @@ public class FormService {
                         form.getGrade().getVolunteerTime2() == null ||
                         form.getGrade().getVolunteerTime3() == null
         ) {
-            return 14;
+            return DEFAULT_VOLUNTEER_SCORE;
         }
 
         int totalVolunteerTime = form.getGrade().getTotalVolunteerTime();
 
-        if (totalVolunteerTime < 7) {
-            return 0;
+        if (totalVolunteerTime < MIN_VOLUNTEER_TIME) {
+            return MIN_VOLUNTEER_SCORE;
         }
 
-        if (totalVolunteerTime > 13) {
-            return 18;
+        if (totalVolunteerTime > MAX_VOLUNTEER_TIME) {
+            return MAX_VOLUNTEER_SCORE;
         }
 
-        return Math.toIntExact(Math.round(18 - ((15 - totalVolunteerTime) * 0.5)));
+        return Math.toIntExact(Math.round(MAX_VOLUNTEER_SCORE - ((MAX_VOLUNTEER_TIME - totalVolunteerTime) * 0.5)));
     }
 
     private Integer calculateBonusScore(Form form) {
@@ -112,6 +125,6 @@ public class FormService {
                 .mapToInt(Certificate::getScore)
                 .sum();
 
-        return Math.min(bonusScore, 4);
+        return Math.min(bonusScore, MAX_BONUS_SCORE);
     }
 }

@@ -58,6 +58,9 @@ class FormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("type")
                                         .type(JsonFieldType.STRING)
                                         .description("원서 유형"),
+                                fieldWithPath("applicant.identificationPictureUri")
+                                        .type(JsonFieldType.STRING)
+                                        .description("증명사진 URI"),
                                 fieldWithPath("applicant.name")
                                         .type(JsonFieldType.STRING)
                                         .description("지원자 이름"),

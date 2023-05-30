@@ -34,6 +34,7 @@ public class FormFixture {
     public static Form createForm(FormType type) {
         return new Form(
                 new Applicant(
+                        "https://maru.com/photo.png",
                         "김밤돌",
                         "01012345678",
                         LocalDate.of(2005, 4, 15),
@@ -95,6 +96,7 @@ public class FormFixture {
     public static Form createQualificationExaminationForm(FormType type) {
         return new Form(
                 new Applicant(
+                        "https://maru.com/photo.png",
                         "김밤돌",
                         "01012345678",
                         LocalDate.of(2005, 4, 15),
@@ -144,6 +146,7 @@ public class FormFixture {
     public static FormRequest createFormRequest(FormType type) {
         return new FormRequest(
                 new ApplicantRequest(
+                        "https://maru.com/photo.png",
                         "김밤돌",
                         "01012345678",
                         LocalDate.of(2005, 4, 15),
@@ -204,6 +207,7 @@ public class FormFixture {
     public static FormRequest createQualificationExaminationFormRequest(FormType type) {
         return new FormRequest(
                 new ApplicantRequest(
+                        "https://maru.com/photo.png",
                         "김밤돌",
                         "01012345678",
                         LocalDate.of(2005, 4, 15),
