@@ -87,5 +87,13 @@ public class Form extends BaseTimeEntity {
     public void updateScore(Score score) {
         this.score = score;
     }
+
+    public void approve() {
+        this.status = FormStatus.APPROVED;
+    }
+
+    public void reject() {
+        this.status = FormStatus.REJECTED;
+    }
 }
 
