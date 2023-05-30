@@ -29,12 +29,8 @@ public class SubjectList {
         return new SubjectList(subjectList);
     }
 
-    public HashMap<String, List<Subject>> getSubjectMap() {
-        return value.stream()
-                .collect(Collectors.groupingBy(Subject::toString,
-                        HashMap::new,
-                        Collectors.toList()
-                ));
+    public SubjectMap getSubjectMap() {
+        return new SubjectMap(value);
     }
 
     public Double getAverageScore() {

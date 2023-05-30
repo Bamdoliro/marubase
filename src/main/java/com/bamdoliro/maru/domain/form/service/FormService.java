@@ -4,14 +4,10 @@ import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.Certificate;
 import com.bamdoliro.maru.domain.form.domain.value.Attendance;
 import com.bamdoliro.maru.domain.form.domain.value.Score;
-import com.bamdoliro.maru.domain.form.domain.value.Subject;
-import com.bamdoliro.maru.domain.form.domain.value.SubjectList;
+import com.bamdoliro.maru.domain.form.domain.value.SubjectMap;
 import com.bamdoliro.maru.shared.util.MathUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.List;
 
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.DEFAULT_ATTENDANCE_SCORE;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.DEFAULT_VOLUNTEER_SCORE;
@@ -30,7 +26,6 @@ import static com.bamdoliro.maru.domain.form.constant.FormConstant.SPECIAL_TYPE_
 @Service
 public class FormService {
 
-    // TODO :: 기본점수 constant로 빼기
     public void calculateScore(Form form) {
         Double subjectGradeScore = calculateSubjectGradeScore(form);
         Integer attendanceScore = calculateAttendanceScore(form);
@@ -61,9 +56,9 @@ public class FormService {
         if (form.getEducation().isQualificationExamination()) {
             score = 12 * 2 * form.getGrade().getSubjectList().getAverageScore();
         } else {
-            HashMap<String, List<Subject>> subjectMap = form.getGrade().getSubjectList().getSubjectMap();
-            score = 4.8 * (SubjectList.of(subjectMap.get("21")).getAverageScore() + SubjectList.of(subjectMap.get("22")).getAverageScore()) +
-                    7.2 * 2 * SubjectList.of(subjectMap.get("31")).getAverageScore();
+            SubjectMap subjectMap = form.getGrade().getSubjectList().getSubjectMap();
+            score = 4.8 * (subjectMap.getScoreOf(2, 1) + subjectMap.getScoreOf(2, 2)) +
+                    7.2 * 2 * subjectMap.getScoreOf(3, 1);
         }
 
         return REGULAR_TYPE_DEFAULT_SCORE + MathUtil.roundTo(score, 3);
@@ -75,9 +70,9 @@ public class FormService {
         if (form.getEducation().isQualificationExamination()) {
             score = 7.2 * 2 * form.getGrade().getSubjectList().getAverageScore();
         } else {
-            HashMap<String, List<Subject>> subjectMap = form.getGrade().getSubjectList().getSubjectMap();
-            score = 2.88 * (SubjectList.of(subjectMap.get("21")).getAverageScore() + SubjectList.of(subjectMap.get("22")).getAverageScore()) +
-                    4.32 * 2 * SubjectList.of(subjectMap.get("31")).getAverageScore();
+            SubjectMap subjectMap = form.getGrade().getSubjectList().getSubjectMap();
+            score = 2.88 * (subjectMap.getScoreOf(2, 1) + subjectMap.getScoreOf(2, 2)) +
+                    4.32 * 2 * subjectMap.getScoreOf(3, 1);
         }
 
         return SPECIAL_TYPE_DEFAULT_SCORE + MathUtil.roundTo(score, 3);

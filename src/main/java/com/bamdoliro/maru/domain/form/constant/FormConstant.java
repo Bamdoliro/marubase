@@ -1,5 +1,8 @@
 package com.bamdoliro.maru.domain.form.constant;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class FormConstant {
 
     public static final int MIN_BONUS_SCORE = 0;
