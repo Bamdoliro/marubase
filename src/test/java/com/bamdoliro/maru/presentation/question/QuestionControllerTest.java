@@ -10,6 +10,7 @@ import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.security.auth.AuthDetails;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -21,12 +22,14 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.BDDMockito.willThrow;
-import static org.springframework.http.RequestEntity.put;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class QuestionControllerTest extends RestDocsTestSupport {
@@ -76,7 +79,7 @@ class QuestionControllerTest extends RestDocsTestSupport {
         given(authDetailsService.loadUserByUsername(user.getEmail())).willReturn(new AuthDetails(user));
 
         long id = 1;
-        mockMvc.perform(MockMvcRequestBuilders.put("/question/{id}", id)
+        mockMvc.perform(put("/question/{id}", id)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -86,6 +89,7 @@ class QuestionControllerTest extends RestDocsTestSupport {
                                 headerWithName(HttpHeaders.AUTHORIZATION)
                                         .description("Bearer token")
                         ),
+                        pathParameters(parameterWithName("id").description("질문 ID")),
                         requestFields(
                                 fieldWithPath("title")
                                         .type(JsonFieldType.STRING)
@@ -108,12 +112,13 @@ class QuestionControllerTest extends RestDocsTestSupport {
         given(authDetailsService.loadUserByUsername(user.getEmail())).willReturn(new AuthDetails(user));
 
         long id = 1;
-        mockMvc.perform(MockMvcRequestBuilders.put("/question/{id}", id)
+        mockMvc.perform(put("/question/{id}", id)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andDo(restDocs.document());
     }
 
 }
