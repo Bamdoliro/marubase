@@ -443,7 +443,7 @@ class FormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 원서를_조회할_떄_원서가_없으면_에러가_발생한다() throws Exception {
+    void 원서를_조회할_때_원서가_없으면_에러가_발생한다() throws Exception {
         Long formId = 1L;
         given(queryFormUseCase.execute(formId)).willThrow(new FormNotFoundException());
 

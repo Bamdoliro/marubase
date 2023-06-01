@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 public enum FormErrorProperty implements ErrorProperty {
 
     FORM_NOT_FOUND(HttpStatus.NOT_FOUND, "원서를 찾을 수 없습니다."),
-    FORM_ALREADY_SUBMITTED(HttpStatus.CONFLICT, "원서는 한 번만 제출할 수 있습니다.");
+    FORM_ALREADY_SUBMITTED(HttpStatus.CONFLICT, "원서는 한 번만 제출할 수 있습니다."),
+    FORM_NOT_REJECTED(HttpStatus.CONFLICT, "원서는 반려된 상태여야 합니다."),
+    ;
 
     private final HttpStatus status;
     private final String message;
