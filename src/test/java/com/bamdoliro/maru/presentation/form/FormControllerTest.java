@@ -1,11 +1,13 @@
 package com.bamdoliro.maru.presentation.form;
 
+import com.bamdoliro.maru.domain.auth.exception.AuthorityMismatchException;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
 import com.bamdoliro.maru.domain.form.exception.FormNotFoundException;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
+import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
@@ -22,6 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -404,6 +407,77 @@ class FormControllerTest extends RestDocsTestSupport {
                 )
 
                 .andExpect(status().isOk())
+
+                .andDo(restDocs.document());
+    }
+
+    @Test
+    void 원서를_조회한다() throws Exception {
+        Long formId = 1L;
+        given(queryFormUseCase.execute(formId)).willReturn(FormFixture.createFormResponse());
+
+        User user = UserFixture.createAdminUser();
+        given(jwtProperties.getPrefix()).willReturn("Bearer");
+        given(tokenService.getEmail(anyString())).willReturn(user.getEmail());
+        given(authDetailsService.loadUserByUsername(user.getEmail())).willReturn(new AuthDetails(user));
+
+        mockMvc.perform(get("/form/{form-id}", formId)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        ),
+                        pathParameters(
+                                parameterWithName("form-id")
+                                        .description("조회할 원서의 id")
+                        )
+                ));
+
+        verify(queryFormUseCase, times(1)).execute(formId);
+    }
+
+    @Test
+    void 원서를_조회할_떄_원서가_없으면_에러가_발생한다() throws Exception {
+        Long formId = 1L;
+        given(queryFormUseCase.execute(formId)).willThrow(new FormNotFoundException());
+
+        User user = UserFixture.createAdminUser();
+        given(jwtProperties.getPrefix()).willReturn("Bearer");
+        given(tokenService.getEmail(anyString())).willReturn(user.getEmail());
+        given(authDetailsService.loadUserByUsername(user.getEmail())).willReturn(new AuthDetails(user));
+
+        mockMvc.perform(get("/form/{form-id}", formId)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isNotFound())
+
+                .andDo(restDocs.document());
+    }
+
+    @Test
+    void 원서를_조회할_때_본인의_원서가_아니면_에러가_발생한다() throws Exception {
+        Long formId = 1L;
+        given(queryFormUseCase.execute(formId)).willThrow(new AuthorityMismatchException());
+
+        User user = UserFixture.createAdminUser();
+        given(jwtProperties.getPrefix()).willReturn("Bearer");
+        given(tokenService.getEmail(anyString())).willReturn(user.getEmail());
+        given(authDetailsService.loadUserByUsername(user.getEmail())).willReturn(new AuthDetails(user));
+
+        mockMvc.perform(get("/form/{form-id}", formId)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isUnauthorized())
 
                 .andDo(restDocs.document());
     }
