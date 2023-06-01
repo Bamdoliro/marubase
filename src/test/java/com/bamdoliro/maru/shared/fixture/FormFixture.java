@@ -26,7 +26,15 @@ import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.GradeRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.ParentRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubjectRequest;
+import com.bamdoliro.maru.presentation.form.dto.response.ApplicantResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.AttendanceResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.DocumentResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.EducationResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.GradeResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.ParentResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.SubjectResponse;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -254,11 +262,75 @@ public class FormFixture {
         );
     }
 
-    public static FormResponse createFormResponse(FormStatus status) {
-        return new FormResponse(
+    public static FormSimpleResponse createFormSimpleResponse(FormStatus status) {
+        return new FormSimpleResponse(
                 1L,
                 "김밤돌",
                 status
+        );
+    }
+
+    public static FormResponse createFormResponse() {
+        return new FormResponse(
+                1L,
+                new ApplicantResponse(
+                        "https://maru.com/photo.png",
+                        "김밤돌",
+                        "01012345678",
+                        LocalDate.of(2005, 4, 15),
+                        Gender.FEMALE
+                ),
+                new ParentResponse(
+                        "김이로",
+                        "01012345678",
+                        "18071",
+                        "부산광역시 가락대로1393",
+                        "부산소프트웨어마이스터고"
+                ),
+                new EducationResponse(
+                        GraduationType.EXPECTED,
+                        "2021",
+                        "비전중학교",
+                        "경기도",
+                        "7631003",
+                        "나교사",
+                        "0519701234"
+                ),
+                new GradeResponse(
+                        List.of(
+                                new SubjectResponse(2, 1, "국어", AchievementLevel.A),
+                                new SubjectResponse(2, 1, "수학", AchievementLevel.A),
+                                new SubjectResponse(2, 1, "사회", AchievementLevel.A),
+                                new SubjectResponse(2, 1, "과학", AchievementLevel.A),
+                                new SubjectResponse(2, 1, "영어", AchievementLevel.A),
+                                new SubjectResponse(2, 1, "체육", AchievementLevel.A),
+                                new SubjectResponse(2, 2, "국어", AchievementLevel.A),
+                                new SubjectResponse(2, 2, "수학", AchievementLevel.A),
+                                new SubjectResponse(2, 2, "사회", AchievementLevel.A),
+                                new SubjectResponse(2, 2, "과학", AchievementLevel.A),
+                                new SubjectResponse(2, 2, "영어", AchievementLevel.A),
+                                new SubjectResponse(2, 2, "체육", AchievementLevel.A),
+                                new SubjectResponse(3, 1, "국어", AchievementLevel.A),
+                                new SubjectResponse(3, 1, "수학", AchievementLevel.B),
+                                new SubjectResponse(3, 1, "사회", AchievementLevel.A),
+                                new SubjectResponse(3, 1, "과학", AchievementLevel.A),
+                                new SubjectResponse(3, 1, "영어", AchievementLevel.A),
+                                new SubjectResponse(3, 1, "체육", AchievementLevel.A)
+                        ),
+                        new AttendanceResponse(0, 0, 0, 2),
+                        new AttendanceResponse(2, 1, 0, 0),
+                        new AttendanceResponse(0, 0, 1, 0),
+                        8,
+                        2,
+                        1,
+                        List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2)
+                ),
+                new DocumentResponse(
+                        "하이난김밤돌",
+                        "공부열심히할게용"
+                ),
+                FormType.REGULAR,
+                FormStatus.SUBMITTED
         );
     }
 }

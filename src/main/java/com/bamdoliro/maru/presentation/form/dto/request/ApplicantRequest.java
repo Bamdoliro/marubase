@@ -32,7 +32,7 @@ public class ApplicantRequest {
 
     @NotNull(message = "필수값입니다.")
     @Past(message = "과거여야 합니다.")
-    private LocalDate birthDay;
+    private LocalDate birthday;
 
     @NotNull(message = "필수값입니다.")
     private Gender gender;
@@ -42,7 +42,7 @@ public class ApplicantRequest {
                 identificationPictureUri,
                 name,
                 phoneNumber,
-                birthDay,
+                birthday,
                 gender
         );
     }

@@ -4,7 +4,7 @@ import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
-import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,14 +39,14 @@ class QuerySubmittedFormUseCaseTest {
         given(formRepository.findByStatus(FormStatus.SUBMITTED)).willReturn(formList);
 
         // when
-        List<FormResponse> formResponseList = querySubmittedFormUseCase.execute();
+        List<FormSimpleResponse> formSimpleResponseList = querySubmittedFormUseCase.execute();
 
         // then
         verify(formRepository, times(1)).findByStatus(FormStatus.SUBMITTED);
-        assertEquals(formResponseList.size(), formList.size());
-        assertEquals(formResponseList.get(0).getId(), formList.get(0).getId());
-        assertEquals(formResponseList.get(1).getId(), formList.get(1).getId());
-        assertEquals(formResponseList.get(2).getId(), formList.get(2).getId());
+        assertEquals(formSimpleResponseList.size(), formList.size());
+        assertEquals(formSimpleResponseList.get(0).getId(), formList.get(0).getId());
+        assertEquals(formSimpleResponseList.get(1).getId(), formList.get(1).getId());
+        assertEquals(formSimpleResponseList.get(2).getId(), formList.get(2).getId());
     }
 
     @Test
@@ -55,11 +55,11 @@ class QuerySubmittedFormUseCaseTest {
         given(formRepository.findByStatus(FormStatus.SUBMITTED)).willReturn(List.of());
 
         // when
-        List<FormResponse> formResponseList = querySubmittedFormUseCase.execute();
+        List<FormSimpleResponse> formSimpleResponseList = querySubmittedFormUseCase.execute();
 
         // then
         verify(formRepository, times(1)).findByStatus(FormStatus.SUBMITTED);
-        assertEquals(formResponseList.size(), 0);
+        assertEquals(formSimpleResponseList.size(), 0);
     }
 
 }

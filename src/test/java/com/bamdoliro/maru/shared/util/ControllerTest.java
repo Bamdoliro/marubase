@@ -3,9 +3,11 @@ package com.bamdoliro.maru.shared.util;
 import com.bamdoliro.maru.application.auth.LogInUseCase;
 import com.bamdoliro.maru.application.auth.RefreshTokenUseCase;
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
+import com.bamdoliro.maru.application.form.QueryFormUseCase;
 import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFormUseCase;
+import com.bamdoliro.maru.application.form.UpdateFormUseCase;
 import com.bamdoliro.maru.application.school.SearchSchoolUseCase;
 import com.bamdoliro.maru.application.user.SendEmailVerificationUseCase;
 import com.bamdoliro.maru.application.user.SignUpUserUseCase;
@@ -73,6 +75,12 @@ public abstract class ControllerTest {
 
     @MockBean
     protected QuerySubmittedFormUseCase querySubmittedFormUseCase;
+
+    @MockBean
+    protected QueryFormUseCase queryFormUseCase;
+
+    @MockBean
+    protected UpdateFormUseCase updateFormUseCase;
 
 
     @MockBean
