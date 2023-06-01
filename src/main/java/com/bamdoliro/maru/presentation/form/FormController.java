@@ -1,12 +1,15 @@
 package com.bamdoliro.maru.presentation.form;
 
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
+import com.bamdoliro.maru.application.form.QueryFormUseCase;
 import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
+import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.shared.response.ListCommonResponse;
+import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,6 +32,7 @@ public class FormController {
     private final ApproveFormUseCase approveFormUseCase;
     private final RejectFormUseCase rejectFormUseCase;
     private final QuerySubmittedFormUseCase querySubmittedFormUseCase;
+    private final QueryFormUseCase queryFormUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -55,6 +59,13 @@ public class FormController {
     public ListCommonResponse<FormSimpleResponse> getSubmittedFormList() {
         return ListCommonResponse.ok(
                 querySubmittedFormUseCase.execute()
+        );
+    }
+
+    @GetMapping("/{form-id}")
+    public SingleCommonResponse<FormResponse> getForm(@PathVariable(name = "form-id") Long formId) {
+        return SingleCommonResponse.ok(
+                queryFormUseCase.execute(formId)
         );
     }
 }
