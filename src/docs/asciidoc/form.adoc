@@ -111,3 +111,34 @@ include::{snippets}/form-controller-test/원서를_조회할_때_원서가_없�
 
 ===== 본인의 원서가 아닌 경우
 include::{snippets}/form-controller-test/원서를_조회할_때_본인의_원서가_아니면_에러가_발생한다/http-response.adoc[]
+
+=== 원서 수정
+원서가 반려된 경우에만 원서를 수정할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/원서를_수정한다/request-headers.adoc[]
+
+===== Path Parameter
+include::{snippets}/form-controller-test/원서를_수정한다/path-parameters.adoc[]
+
+===== Request Body
+include::{snippets}/form-controller-test/원서를_수정한다/request-fields.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/원서를_수정한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/원서를_수정한다/http-response.adoc[]
+
+===== 해당하는 원서가 없는 경우
+include::{snippets}/form-controller-test/원서를_수정할_때_원서가_없으면_에러가_발생한다/http-response.adoc[]
+
+===== 본인의 원서가 아닌 경우
+include::{snippets}/form-controller-test/원서를_수정할_때_본인의_원서가_아니면_에러가_발생한다/http-response.adoc[]
+
+===== 반려된 원서가 아닌 경우
+include::{snippets}/form-controller-test/원서를_수정할_때_반려된_원서가_아니면_에러가_발생한다/http-response.adoc[]
