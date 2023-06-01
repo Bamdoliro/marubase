@@ -6,7 +6,6 @@ import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
 import com.bamdoliro.maru.domain.form.exception.FormNotFoundException;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
-import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
@@ -77,7 +76,7 @@ class FormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("applicant.phoneNumber")
                                         .type(JsonFieldType.STRING)
                                         .description("지원자 전화번호"),
-                                fieldWithPath("applicant.birthDay")
+                                fieldWithPath("applicant.birthday")
                                         .type(JsonFieldType.STRING)
                                         .description("지원자 생년월일"),
                                 fieldWithPath("applicant.gender")
@@ -365,9 +364,9 @@ class FormControllerTest extends RestDocsTestSupport {
     @Test
     void 검토해야_하는_원서를_조회한다() throws Exception {
         given(querySubmittedFormUseCase.execute()).willReturn(List.of(
-                FormFixture.createFormResponse(FormStatus.SUBMITTED),
-                FormFixture.createFormResponse(FormStatus.REJECTED),
-                FormFixture.createFormResponse(FormStatus.SUBMITTED)
+                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
+                FormFixture.createFormSimpleResponse(FormStatus.REJECTED),
+                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED)
         ));
 
         User user = UserFixture.createAdminUser();

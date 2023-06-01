@@ -5,7 +5,7 @@ import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
-import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.shared.response.ListCommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +52,7 @@ public class FormController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/review")
-    public ListCommonResponse<FormResponse> getSubmittedFormList() {
+    public ListCommonResponse<FormSimpleResponse> getSubmittedFormList() {
         return ListCommonResponse.ok(
                 querySubmittedFormUseCase.execute()
         );

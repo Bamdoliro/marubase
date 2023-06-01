@@ -26,7 +26,7 @@ import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.GradeRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.ParentRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubjectRequest;
-import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -254,8 +254,8 @@ public class FormFixture {
         );
     }
 
-    public static FormResponse createFormResponse(FormStatus status) {
-        return new FormResponse(
+    public static FormSimpleResponse createFormSimpleResponse(FormStatus status) {
+        return new FormSimpleResponse(
                 1L,
                 "김밤돌",
                 status

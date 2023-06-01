@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.domain.form.domain;
 
+import com.bamdoliro.maru.domain.auth.exception.AuthorityMismatchException;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.domain.value.Applicant;
@@ -94,6 +95,12 @@ public class Form extends BaseTimeEntity {
 
     public void reject() {
         this.status = FormStatus.REJECTED;
+    }
+
+    public void validatePermission(User user) {
+        if (!this.user.equals(user)) {
+            throw new AuthorityMismatchException();
+        }
     }
 }
 
