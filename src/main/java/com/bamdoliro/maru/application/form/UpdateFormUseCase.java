@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
+import com.bamdoliro.maru.domain.form.exception.CannotUpdateNotRejectedFormException;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.service.UserFacade;
@@ -21,7 +22,7 @@ public class UpdateFormUseCase {
         User user = userFacade.getCurrentUser();
         Form form = formFacade.getForm(id);
         form.validatePermission(user);
-        form.isRejected();
+        validateFormStatus(form);
 
         form.update(
                 request.getApplicant().toValue(),
@@ -31,5 +32,11 @@ public class UpdateFormUseCase {
                 request.getDocument().toValue(),
                 request.getType()
         );
+    }
+
+    private void validateFormStatus(Form form) {
+        if (form.isRejected()) {
+            throw new CannotUpdateNotRejectedFormException();
+        }
     }
 }

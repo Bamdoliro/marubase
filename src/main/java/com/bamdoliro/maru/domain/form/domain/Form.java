@@ -9,7 +9,6 @@ import com.bamdoliro.maru.domain.form.domain.value.Education;
 import com.bamdoliro.maru.domain.form.domain.value.Grade;
 import com.bamdoliro.maru.domain.form.domain.value.Parent;
 import com.bamdoliro.maru.domain.form.domain.value.Score;
-import com.bamdoliro.maru.domain.form.exception.FormNotRejectedException;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.shared.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -104,10 +103,8 @@ public class Form extends BaseTimeEntity {
         }
     }
 
-    public void isRejected() {
-        if (!status.equals(FormStatus.REJECTED)) {
-            throw new FormNotRejectedException();
-        }
+    public boolean isRejected() {
+        return status.equals(FormStatus.REJECTED);
     }
 
     public void update(Applicant applicant, Parent parent, Education education, Grade grade, Document document, FormType type) {
