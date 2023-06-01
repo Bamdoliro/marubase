@@ -35,7 +35,7 @@ public class UpdateFormUseCase {
     }
 
     private void validateFormStatus(Form form) {
-        if (form.isRejected()) {
+        if (!form.isRejected()) {
             throw new CannotUpdateNotRejectedFormException();
         }
     }
