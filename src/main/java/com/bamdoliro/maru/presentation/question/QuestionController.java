@@ -24,16 +24,16 @@ public class QuestionController {
     private final CreateQuestionUseCase createQuestionUseCase;
     private final UpdateQuestionUseCase updateQuestionUseCase;
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public void createQuestion(@RequestBody @Valid CreateQuestionRequest request) {
         createQuestionUseCase.execute(request);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateQuestion(@PathVariable Long id, @RequestBody UpdateQuestionRequest request){
         updateQuestionUseCase.execute(id, request);
     }

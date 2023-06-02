@@ -38,8 +38,10 @@ class UpdateQuestionUseCaseTest {
 
         given(questionFacade.getQuestion(question.getId())).willReturn(question);
 
-        //when and then
+        //when
         updateQuestionUseCase.execute(question.getId(), request);
+
+        // then
         verify(questionFacade, times(1)).getQuestion(question.getId());
         assertEquals(request.getTitle(), question.getTitle());
         assertEquals(request.getContent(), question.getContent());

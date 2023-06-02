@@ -6,8 +6,8 @@ import com.bamdoliro.maru.infrastructure.persistence.question.QuestionRepository
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-@Component
 @RequiredArgsConstructor
+@Component
 public class QuestionFacade {
 
     private final QuestionRepository questionRepository;

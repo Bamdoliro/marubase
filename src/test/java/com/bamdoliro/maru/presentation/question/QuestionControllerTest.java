@@ -116,9 +116,11 @@ class QuestionControllerTest extends RestDocsTestSupport {
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .content(toJson(request)))
                 .andExpect(status().isNotFound())
                 .andDo(restDocs.document());
     }
+
+
 
 }
