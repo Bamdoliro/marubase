@@ -2,11 +2,16 @@ package com.bamdoliro.maru.shared.fixture;
 
 import com.bamdoliro.maru.domain.user.domain.EmailVerification;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.domain.user.domain.type.Authority;
 
 public class UserFixture {
 
     public static User createUser() {
-        return new User("maru@bamdoliro.com", "비밀번호");
+        return new User("maru@bamdoliro.com", "비밀번호", Authority.ROLE_USER);
+    }
+
+    public static User createAdminUser() {
+        return new User("maru@bamdoliro.com", "비밀번호", Authority.ROLE_ADMIN);
     }
 
     public static EmailVerification createVerification() {

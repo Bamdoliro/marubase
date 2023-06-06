@@ -16,3 +16,5 @@ include::auth.adoc[]
 include::school.adoc[]
 
 include::question.adoc[]
+
+include::form.adoc[]

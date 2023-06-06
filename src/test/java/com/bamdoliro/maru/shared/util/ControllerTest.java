@@ -4,6 +4,12 @@ import com.bamdoliro.maru.application.auth.LogInUseCase;
 import com.bamdoliro.maru.application.auth.RefreshTokenUseCase;
 import com.bamdoliro.maru.application.question.CreateQuestionUseCase;
 import com.bamdoliro.maru.application.question.UpdateQuestionUseCase;
+import com.bamdoliro.maru.application.form.ApproveFormUseCase;
+import com.bamdoliro.maru.application.form.QueryFormUseCase;
+import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
+import com.bamdoliro.maru.application.form.RejectFormUseCase;
+import com.bamdoliro.maru.application.form.SubmitFormUseCase;
+import com.bamdoliro.maru.application.form.UpdateFormUseCase;
 import com.bamdoliro.maru.application.school.SearchSchoolUseCase;
 import com.bamdoliro.maru.application.user.SendEmailVerificationUseCase;
 import com.bamdoliro.maru.application.user.SignUpUserUseCase;
@@ -12,11 +18,12 @@ import com.bamdoliro.maru.infrastructure.mail.SendEmailService;
 import com.bamdoliro.maru.infrastructure.neis.SearchSchoolService;
 import com.bamdoliro.maru.presentation.auth.AuthController;
 import com.bamdoliro.maru.presentation.question.QuestionController;
+import com.bamdoliro.maru.presentation.form.FormController;
 import com.bamdoliro.maru.presentation.school.SchoolController;
-import com.bamdoliro.maru.shared.config.properties.JwtProperties;
-import com.bamdoliro.maru.shared.security.SecurityConfig;
 import com.bamdoliro.maru.presentation.user.UserController;
+import com.bamdoliro.maru.shared.config.properties.JwtProperties;
 import com.bamdoliro.maru.shared.response.SharedController;
+import com.bamdoliro.maru.shared.security.SecurityConfig;
 import com.bamdoliro.maru.shared.security.auth.AuthDetailsService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,7 +41,8 @@ import org.springframework.test.web.servlet.MockMvc;
         AuthController.class,
         SharedController.class,
         SchoolController.class,
-        QuestionController.class
+        QuestionController.class,
+        FormController.class
 })
 public abstract class ControllerTest {
 
@@ -66,6 +74,24 @@ public abstract class ControllerTest {
     @MockBean
     protected UpdateQuestionUseCase updateQuestionUseCase;
 
+    @MockBean
+    protected SubmitFormUseCase submitFormUseCase;
+
+    @MockBean
+    protected ApproveFormUseCase approveFormUseCase;
+
+    @MockBean
+    protected RejectFormUseCase rejectFormUseCase;
+
+    @MockBean
+    protected QuerySubmittedFormUseCase querySubmittedFormUseCase;
+
+    @MockBean
+    protected QueryFormUseCase queryFormUseCase;
+
+    @MockBean
+    protected UpdateFormUseCase updateFormUseCase;
+
 
     @MockBean
     protected TokenService tokenService;
@@ -75,7 +101,6 @@ public abstract class ControllerTest {
 
     @MockBean
     protected SearchSchoolService searchSchoolService;
-
 
     @MockBean
     protected SendEmailService sendEmailService;
