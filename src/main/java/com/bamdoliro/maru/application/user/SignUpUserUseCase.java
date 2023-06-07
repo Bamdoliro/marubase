@@ -28,7 +28,7 @@ public class SignUpUserUseCase {
                 User.builder()
                         .email(request.getEmail())
                         .password(request.getPassword())
-                        .authority(Authority.ROLE_USER)
+                        .authority(Authority.USER)
                         .build()
         );
     }

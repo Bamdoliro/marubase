@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Authority implements EnumProperty {
-    ROLE_USER("일반 사용자"),
-    ROLE_ADMIN("어드민");
+    USER("일반 사용자"),
+    ADMIN("어드민");
 
     private final String description;
 }

@@ -1,20 +1,17 @@
 package com.bamdoliro.maru.presentation.question;
 
-import com.bamdoliro.maru.application.question.UpdateQuestionUseCase;
 import com.bamdoliro.maru.domain.question.exception.QuestionNotFoundException;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.question.dto.request.CreateQuestionRequest;
 import com.bamdoliro.maru.presentation.question.dto.request.UpdateQuestionRequest;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
-import com.bamdoliro.maru.shared.security.auth.AuthDetails;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -39,10 +36,9 @@ class QuestionControllerTest extends RestDocsTestSupport {
         willDoNothing().given(createQuestionUseCase).execute(any(CreateQuestionRequest.class));
         CreateQuestionRequest request = new CreateQuestionRequest("오늘 급식 맛있엇나용?", "토요일인데요");
 
-        User user = UserFixture.createUser();
-        given(jwtProperties.getPrefix()).willReturn("Bearer");
-        given(tokenService.getEmail(anyString())).willReturn(user.getEmail());
-        given(authDetailsService.loadUserByUsername(user.getEmail())).willReturn(new AuthDetails(user));
+        User user = UserFixture.createAdminUser();
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
         mockMvc.perform(post("/question")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
@@ -73,10 +69,10 @@ class QuestionControllerTest extends RestDocsTestSupport {
         willDoNothing().given(createQuestionUseCase).execute(any(CreateQuestionRequest.class));
         UpdateQuestionRequest request = new UpdateQuestionRequest("이거 맞나", "아님 말고...");
 
-        User user = UserFixture.createUser();
+        User user = UserFixture.createAdminUser();
         given(jwtProperties.getPrefix()).willReturn("Bearer");
-        given(tokenService.getEmail(anyString())).willReturn(user.getEmail());
-        given(authDetailsService.loadUserByUsername(user.getEmail())).willReturn(new AuthDetails(user));
+        given(tokenService.getUser(anyString())).willReturn(user);
+        
 
         long id = 1;
         mockMvc.perform(put("/question/{id}", id)
@@ -102,16 +98,14 @@ class QuestionControllerTest extends RestDocsTestSupport {
     }
     @Test
     void 자주묻는질문을_수정할_때_자주묻는질문이_없으면_에러가_발생한다() throws Exception {
-
+        Long id = 1L;
         UpdateQuestionRequest request = new UpdateQuestionRequest("이거 맞나", "아님 말고...");
         willThrow(new QuestionNotFoundException()).given(updateQuestionUseCase).execute(eq(1L), any(UpdateQuestionRequest.class));
 
-        User user = UserFixture.createUser();
-        given(jwtProperties.getPrefix()).willReturn("Bearer");
-        given(tokenService.getEmail(anyString())).willReturn(user.getEmail());
-        given(authDetailsService.loadUserByUsername(user.getEmail())).willReturn(new AuthDetails(user));
+        User user = UserFixture.createAdminUser();
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        long id = 1;
         mockMvc.perform(put("/question/{id}", id)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)

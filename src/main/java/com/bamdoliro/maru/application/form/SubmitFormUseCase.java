@@ -4,7 +4,6 @@ import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
 import com.bamdoliro.maru.domain.form.service.FormService;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.domain.user.service.UserFacade;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
 import com.bamdoliro.maru.shared.annotation.UseCase;
@@ -15,13 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 @UseCase
 public class SubmitFormUseCase {
 
-    private final UserFacade userFacade;
     private final FormRepository formRepository;
     private final FormService formService;
 
     @Transactional
-    public void execute(FormRequest request) {
-        User user = userFacade.getCurrentUser();
+    public void execute(User user, FormRequest request) {
         validateOnlyOneFormPerUser(user);
 
         Form form = Form.builder()

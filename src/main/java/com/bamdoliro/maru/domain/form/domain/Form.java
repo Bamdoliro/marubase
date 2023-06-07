@@ -97,8 +97,14 @@ public class Form extends BaseTimeEntity {
         this.status = FormStatus.REJECTED;
     }
 
-    public void validatePermission(User user) {
+    public void isApplicant(User user) {
         if (!this.user.equals(user)) {
+            throw new AuthorityMismatchException();
+        }
+    }
+
+    public void isApplicantOrAdmin(User user) {
+        if (!user.isAdmin() && !this.user.equals(user)) {
             throw new AuthorityMismatchException();
         }
     }

@@ -1,6 +1,6 @@
 package com.bamdoliro.maru.domain.user.domain.value;
 
-import com.bamdoliro.maru.shared.security.PasswordUtil;
+import com.bamdoliro.maru.shared.util.PasswordUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;

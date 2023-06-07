@@ -5,7 +5,7 @@
 
 ==== 요청 형식
 
-==== Request Header
+===== Request Header
 include::{snippets}/school-controller-test/학교를_검색한다/request-headers.adoc[]
 
 ===== Query Parameter

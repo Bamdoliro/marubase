@@ -1,0 +1,37 @@
+== 공통 Shared
+
+=== 인증
+로그인 한 유저가 API를 사용할 때 공통적으로 다음 형식을 따라야 합니다.
+
+==== 요청 형식
+
+===== Request Header
+*Bearer* prefix를 붙여서 토큰을 전송합니다.
+include::{snippets}/jwt-controller-test/인증에_성공한다/request-headers.adoc[]
+
+==== 요청
+include::{snippets}/jwt-controller-test/인증에_성공한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+API 마다 다릅니다.
+
+===== 토큰이 만료된 경우
+include::{snippets}/jwt-controller-test/토큰이_만료되어_인증에_실패한다/http-response.adoc[]
+
+===== 토큰이 유효하지 않은 경우
+- 토큰이 해당 서버에서 발급한 것이 아닌 경우
+- 토큰을 보낸 요청 형식이 잘못된 경우
+include::{snippets}/jwt-controller-test/유효하지_않은_토큰을_전달하면_인증에_실패한다/http-response.adoc[]
+
+===== 권한이 없는 경우
+- 어드민만 사용할 수 있는 API에 유저가 요청을 보낸 경우
+- 유저만 사용할 수 있는 API에 어드민이 요청을 보낸 경우
+include::{snippets}/jwt-controller-test/권한이_없다면_에러가_발생한다/http-response.adoc[]
+
+===== 토큰을 보내지 않은 경우
+include::{snippets}/jwt-controller-test/토큰을_전달하지_않으면_인증에_실패한다/http-response.adoc[]
+
+===== 토큰에 대응하는 유저가 없는 경우
+include::{snippets}/jwt-controller-test/유저가_없다면_에러가_발생한다/http-response.adoc[]

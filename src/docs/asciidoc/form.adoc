@@ -5,7 +5,7 @@
 
 ==== 요청 형식
 
-==== Request Header
+===== Request Header
 include::{snippets}/form-controller-test/원서를_접수한다/request-headers.adoc[]
 
 ===== Request Body
