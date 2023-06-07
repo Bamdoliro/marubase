@@ -77,8 +77,7 @@ public class FormController {
 
     @GetMapping("/{form-id}")
     public SingleCommonResponse<FormResponse> getForm(
-            // TODO :: admin도 조회 가능하게 수정
-            @AuthenticationPrincipal(authority = Authority.USER) User user,
+            @AuthenticationPrincipal(authority = Authority.ALL) User user,
             @PathVariable(name = "form-id") Long formId
     ) {
         return SingleCommonResponse.ok(

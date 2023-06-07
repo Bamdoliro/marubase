@@ -18,7 +18,7 @@ public class UpdateFormUseCase {
     @Transactional
     public void execute(User user, Long id, FormRequest request) {
         Form form = formFacade.getForm(id);
-        form.validatePermission(user);
+        form.isApplicant(user);
         validateFormStatus(form);
 
         form.update(
