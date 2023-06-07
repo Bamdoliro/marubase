@@ -1,8 +1,6 @@
 package com.bamdoliro.maru.application.question;
 
 import com.bamdoliro.maru.domain.question.domain.Question;
-import com.bamdoliro.maru.domain.question.exception.QuestionNotFoundException;
-import com.bamdoliro.maru.domain.user.exception.PasswordMismatchException;
 import com.bamdoliro.maru.presentation.question.dto.request.UpdateQuestionRequest;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
