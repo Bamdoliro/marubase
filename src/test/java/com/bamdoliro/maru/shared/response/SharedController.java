@@ -6,7 +6,9 @@ import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.domain.type.Gender;
 import com.bamdoliro.maru.domain.form.domain.type.GraduationType;
+import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.domain.type.Authority;
+import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.property.EnumProperty;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +43,9 @@ public class SharedController {
     }
 
     @GetMapping("/jwt")
-    public String jwtTest() {
+    public String jwtTest(
+            @AuthenticationPrincipal User user
+    ) {
         return "success";
     }
 }

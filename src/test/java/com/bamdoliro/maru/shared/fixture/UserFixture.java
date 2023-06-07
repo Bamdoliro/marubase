@@ -7,11 +7,11 @@ import com.bamdoliro.maru.domain.user.domain.type.Authority;
 public class UserFixture {
 
     public static User createUser() {
-        return new User("maru@bamdoliro.com", "비밀번호", Authority.ROLE_USER);
+        return new User("maru@bamdoliro.com", "비밀번호", Authority.USER);
     }
 
     public static User createAdminUser() {
-        return new User("maru@bamdoliro.com", "비밀번호", Authority.ROLE_ADMIN);
+        return new User("maru@bamdoliro.com", "비밀번호", Authority.ADMIN);
     }
 
     public static EmailVerification createVerification() {

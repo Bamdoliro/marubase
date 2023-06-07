@@ -1,8 +1,6 @@
 package com.bamdoliro.maru.shared.util;
 
 import com.bamdoliro.maru.shared.config.RestDocsConfig;
-import com.bamdoliro.maru.shared.filter.FilterErrorFilter;
-import com.bamdoliro.maru.shared.filter.JwtAuthenticationFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,8 +31,6 @@ public abstract class RestDocsTestSupport extends ControllerTest {
                 .alwaysDo(MockMvcResultHandlers.print())
                 .alwaysDo(restDocs)
                 .addFilters(new CharacterEncodingFilter("UTF-8", true))
-                .addFilter(new FilterErrorFilter(objectMapper))
-                .addFilter(new JwtAuthenticationFilter(jwtProperties, tokenService, authDetailsService))
                 .build();
     }
 }

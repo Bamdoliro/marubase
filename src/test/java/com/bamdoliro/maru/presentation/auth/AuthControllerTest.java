@@ -35,6 +35,7 @@ class AuthControllerTest extends RestDocsTestSupport {
         User user = UserFixture.createUser();
         LogInRequest request = new LogInRequest(user.getEmail(), "비밀번호");
         TokenResponse response = new TokenResponse(AuthFixture.createAccessTokenString(), AuthFixture.createRefreshTokenString());
+
         given(logInUseCase.execute(any(LogInRequest.class))).willReturn(response);
 
         mockMvc.perform(post("/auth")

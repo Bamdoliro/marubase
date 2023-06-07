@@ -31,9 +31,6 @@ class SubmitFormUseCaseTest {
     private SubmitFormUseCase submitFormUseCase;
 
     @Mock
-    private UserFacade userFacade;
-
-    @Mock
     private FormRepository formRepository;
 
     @Mock
@@ -44,15 +41,15 @@ class SubmitFormUseCaseTest {
         // given
         FormRequest request = FormFixture.createFormRequest(FormType.REGULAR);
         User user = UserFixture.createUser();
-        given(userFacade.getCurrentUser()).willReturn(user);
+        
         given(formRepository.existsByUserId(user.getId())).willReturn(false);
         willDoNothing().given(formService).calculateScore(any(Form.class));
 
         // when
-        submitFormUseCase.execute(request);
+        submitFormUseCase.execute(user, request);
 
         // then
-        verify(userFacade, times(1)).getCurrentUser();
+        
         verify(formRepository, times(1)).existsByUserId(user.getId());
         verify(formService, times(1)).calculateScore(any(Form.class));
         verify(formRepository, times(1)).save(any(Form.class));
@@ -63,12 +60,12 @@ class SubmitFormUseCaseTest {
         // given
         FormRequest request = FormFixture.createFormRequest(FormType.REGULAR);
         User user = UserFixture.createUser();
-        given(userFacade.getCurrentUser()).willReturn(user);
+        
         given(formRepository.existsByUserId(user.getId())).willReturn(true);
 
         // when and then
-        assertThrows(FormAlreadySubmittedException.class, () -> submitFormUseCase.execute(request));
-        verify(userFacade, times(1)).getCurrentUser();
+        assertThrows(FormAlreadySubmittedException.class, () -> submitFormUseCase.execute(user, request));
+        
         verify(formRepository, times(1)).existsByUserId(user.getId());
         verify(formService, never()).calculateScore(any(Form.class));
         verify(formRepository, never()).save(any(Form.class));

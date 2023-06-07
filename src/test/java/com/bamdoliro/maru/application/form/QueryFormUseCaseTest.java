@@ -30,9 +30,6 @@ class QueryFormUseCaseTest {
     private QueryFormUseCase queryFormUseCase;
 
     @Mock
-    private UserFacade userFacade;
-
-    @Mock
     private FormFacade formFacade;
 
     @Test
@@ -42,14 +39,14 @@ class QueryFormUseCaseTest {
         User user = form.getUser();
         Long id = user.getId();
 
-        given(userFacade.getCurrentUser()).willReturn(user);
+        
         given(formFacade.getForm(id)).willReturn(form);
 
         // when
-        FormResponse response = queryFormUseCase.execute(id);
+        FormResponse response = queryFormUseCase.execute(user, id);
 
         // then
-        verify(userFacade, times(1)).getCurrentUser();
+        
         verify(formFacade, times(1)).getForm(id);
         assertEquals(form.getId(), response.getId());
         assertEquals(form.getApplicant().getName(), response.getApplicant().getName());
@@ -62,30 +59,27 @@ class QueryFormUseCaseTest {
         // given
         Form form = FormFixture.createForm(FormType.REGULAR);
         User otherUser = UserFixture.createUser();
-        Long id = otherUser.getId();
 
-        given(userFacade.getCurrentUser()).willReturn(otherUser);
-        given(formFacade.getForm(id)).willReturn(form);
+        given(formFacade.getForm(form.getId())).willReturn(form);
 
         // when and then
-        assertThrows(AuthorityMismatchException.class, () -> queryFormUseCase.execute(id));
-        verify(userFacade, times(1)).getCurrentUser();
-        verify(formFacade, times(1)).getForm(id);
+        assertThrows(AuthorityMismatchException.class, () -> queryFormUseCase.execute(otherUser, form.getId()));
+        
+        verify(formFacade, times(1)).getForm(form.getId());
     }
 
     @Test
     void 원서를_조회할_때_없는_원서라면_에러가_발생한다() {
         // given
-        Form form = FormFixture.createForm(FormType.REGULAR);
-        User user = form.getUser();
-        Long id = user.getId();
+        Long id = -1L;
+        User user = UserFixture.createUser();
 
-        given(userFacade.getCurrentUser()).willReturn(user);
+        
         willThrow(new FormNotFoundException()).given(formFacade).getForm(id);
 
         // when and then
-        assertThrows(FormNotFoundException.class, () -> queryFormUseCase.execute(id));
-        verify(userFacade, times(1)).getCurrentUser();
+        assertThrows(FormNotFoundException.class, () -> queryFormUseCase.execute(user, id));
+        
         verify(formFacade, times(1)).getForm(id);
     }
 }
