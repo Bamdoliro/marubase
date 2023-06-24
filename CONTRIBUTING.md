@@ -100,3 +100,8 @@ docs 유형의 커밋을 제외하고 필수로 작성해야 합니다.
 선택 사항입니다.
 
 참고 사항이나 추가로 할 말이 있을 떄 작성합니다.
+
+## 코드 컨벤션
+
+[Google Java Style Guide](https://google.github.io/styleguide/javaguide.html)를 따릅니다.
+
