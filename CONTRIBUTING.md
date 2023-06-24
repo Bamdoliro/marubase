@@ -7,7 +7,10 @@
 - [질문이 있나요?](#질문이-있나요)
 - [Pull Request](#pull-request)
 - [Branch](#branch)
+- [Commit Message](#commit-message)
 - [코드 컨벤션](#코드-컨벤션)
+
+<br>
 
 ## 버그를 찾았나요?
 
