@@ -1,5 +1,5 @@
-name: "질문하기"
-description: "질문이 있을 때 사용합니다."
+name: "🙋🏻 질문하기"
+description: "질문이 있나요?"
 title: "[질문] "
 labels: "질문"
 body:
@@ -11,5 +11,5 @@ body:
       required: true
   - type: textarea
     attributes:
-      label: 🏄‍♂️참고자료
+      label: 🏄‍♂️ 참고 자료
       description: 참고 자료가 있다면 작성해 주세요.
