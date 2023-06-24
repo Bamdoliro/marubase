@@ -1,10 +1,15 @@
-name: "🙋🏻 Question"
-description: "질문이 있나요?"
-labels: "🙋🏻 Question"
+name: "질문하기"
+description: "질문이 있을 때 사용합니다."
+title: "[질문] "
+labels: "질문"
 body:
   - type: textarea
     attributes:
       label: ❓궁금해요
-      description: 질문을 입력해 주세요.
+      description: 질문을 작성해 주세요.
     validations:
       required: true
+  - type: textarea
+    attributes:
+      label: 🏄‍♂️참고자료
+      description: 참고 자료가 있다면 작성해 주세요.
