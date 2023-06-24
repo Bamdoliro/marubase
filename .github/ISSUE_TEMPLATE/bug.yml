@@ -1,12 +1,23 @@
-name: "🐞 Bug"
-description: "버그가 발생했나요?"
-labels: "🐞 Bug"
+name: "버그 리포트"
+description: "버그가 있을 때 사용합니다."
+title: "[버그] "
+labels: "버그"
 body:
   - type: textarea
     attributes:
       label: 🐞설명
       description: 버그에 대한 설명을 작성해 주세요.
       placeholder: 꼼꼼하게 적을수록 좋습니다!
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: ⛰️ 맥락
+      description: 버그가 발생한 맥락(=재현 방법)을 작성해 주세요.
+      placeholder: |
+        1. 회원가입을 한다.
+        2. 새로운 창으로 이동한다.
+        3. "로그인을 할 수 없습니다."라는 메시지가 뜬다.
     validations:
       required: true
   - type: textarea

@@ -1,8 +1,9 @@
-name: "✨ Feature"
-description: "새로운 기능에 대한 이슈를 작성하세요!"
-labels: "✨ Feature"
+name: "새로운 기능"
+description: "새로운 기능을 추가할 때 사용합니다."
+title: "[새기능] "
+labels: "새기능"
 body:
-  - type: textarea
+  - type: input
     attributes:
       label: ✨ 개요
       description: 새로운 기능에 대한 설명을 작성해 주세요.
@@ -13,7 +14,19 @@ body:
     attributes:
       label: ✅ 해야 할 일
       description: 해야 할 일을 작성해 주세요.
-      placeholder: ◻︎ User Entity 작성
+      placeholder: |
+        - [ ] 회원가입 API 구현
+        - [ ] 회원가입 API 테스트 코드 작성
+        - [ ] 회원가입 API 문서화
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 🙏🏻 요구사항
+      description: 개발시 유의해야 할 요구사항을 정리해 주세요.
+      placeholder: |
+        - [ ] 하나의 이메일로 한 번만 가입할 수 있다.
+        - [ ] 이메일은 반드시 @bssm.hs.k로 끝나야 한다.
     validations:
       required: true
   - type: textarea
