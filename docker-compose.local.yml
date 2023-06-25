@@ -3,18 +3,13 @@ version: '3'
 services:
   mysql:
     container_name: maru.local.db
-    image: mysql/mysql-server:5.7
+    image: postgres:15-alpine
     environment:
-      MYSQL_ROOT_HOST: "%"
-      MYSQL_USER: "bamdoliro"
-      MYSQL_PASSWORD: "bamdoliro"
-      MYSQL_DATABASE: "bamdoliro_maru"
+      POSTGRES_USER: "bamdoliro"
+      POSTGRES_PASSWORD: "bamdoliro"
+      POSTGRES_DB: "maru"
     ports:
-      - "3309:3306"
-    command:
-      - "mysqld"
-      - "--character-set-server=utf8mb4"
-      - "--collation-server=utf8mb4_unicode_ci"
+      - "5432:5432"
 
   redis:
     image: redis:latest

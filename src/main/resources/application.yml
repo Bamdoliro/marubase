@@ -3,11 +3,10 @@ spring:
     active: local
 
   jpa:
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQLDialect
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
 
     generate-ddl: true
@@ -15,8 +14,8 @@ spring:
       ddl-auto: validate
 
   datasource:
-    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    driver-class-name: org.postgresql.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
@@ -73,8 +72,8 @@ spring:
       ddl-auto: update
 
   datasource:
-    url: jdbc:mysql://localhost:3309/bamdoliro_maru
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://localhost:5432/maru
+    driver-class-name: org.postgresql.Driver
     username: bamdoliro
     password: bamdoliro
 
