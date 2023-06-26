@@ -67,6 +67,7 @@ tasks.named('test') {
 }
 
 asciidoctor {
+	println("========================================> asciidoctor")
 	configurations 'asciidoctorExtensions'
 	baseDirFollowsSourceFile()
 	inputs.dir snippetsDir
