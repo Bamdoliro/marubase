@@ -67,10 +67,11 @@ test {
 }
 
 asciidoctor {
+	dependsOn test
+
 	configurations 'asciidoctorExtensions'
 	baseDirFollowsSourceFile()
 	inputs.dir snippetsDir
-	dependsOn test
 
 	sources {
 		include('**/index.adoc')
@@ -97,3 +98,5 @@ bootJar {
 		into 'static/docs'
 	}
 }
+
+jar.enabled = false
