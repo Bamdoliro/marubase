@@ -23,12 +23,13 @@ jobs:
           project: ${{ secrets.CLOUDTYPE_PROJECT }}
           stage: main
           yaml: >
-            name: marubase
+            name: maru
 
-            app: java@17
+            app: dockerfile
 
             options:
               ports: 8080
+              dockerfile: Dockerfile
               env:
                 - name: DB_NAME
                   value: ${{ secrets.DEV_DB_NAME }}
@@ -58,7 +59,10 @@ jobs:
                   value: ${{ secrets.DEV_REDIS_PASSWORD }}
                 - name: NEIS_KEY
                   value: ${{ secrets.DEV_NEIS_KEY }}
+                - name: TZ
+                  value: Asia/Seoul
             context:
               git:
                 url: git@github.com:${{ github.repository }}.git
                 ref: ${{ github.ref }}
+              preset: dockerfile

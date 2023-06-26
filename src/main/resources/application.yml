@@ -83,7 +83,4 @@ spring:
       port: 6379
       password: bamdoliro
 
-server:
-  port: 8088
-
 debug: true
