@@ -66,16 +66,15 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-tasks.named('asciidoctor') {
-	dependsOn test
+asciidoctor {
 	configurations 'asciidoctorExtensions'
-	inputs.dir snippetsDir
-
-	sources{
-		include("**/index.adoc","**/common/*.adoc")
-	}
-
 	baseDirFollowsSourceFile()
+	inputs.dir snippetsDir
+	dependsOn test
+
+	sources {
+		include('**/index.adoc', "**/docs/*.adoc")
+	}
 }
 
 asciidoctor.doFirst {
