@@ -1,0 +1,64 @@
+name: Deploy to cloudtype
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Connect deploy key
+        uses: cloudtype-github-actions/connect@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          ghtoken: ${{ secrets.GHP_TOKEN }}
+      - name: Deploy
+        uses: cloudtype-github-actions/deploy@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          project: ${{ secrets.CLOUDTYPE_PROJECT }}
+          stage: main
+          yaml: >
+            name: marubase
+
+            app: java@17
+
+            options:
+              ports: 8080
+              env:
+                - name: DB_NAME
+                  value: ${{ secrets.DEV_DB_NAME }}
+                - name: DB_USERNAME
+                  value: ${{ secrets.DEV_DB_USERNAME }}
+                - name: DB_HOST
+                  value: ${{ secrets.DEV_DB_HOST }}
+                - name: DB_PORT
+                  value: ${{ secrets.DEV_DB_PORT }}
+                - name: DB_PASSWORD
+                  value: ${{ secrets.DEV_DB_PASSWORD }}
+                - name: JWT_SECRET
+                  value: ${{ secrets.DEV_JWT_SECRET }}
+                - name: MAIL_HOST
+                  value: ${{ secrets.DEV_MAIL_HOST }}
+                - name: MAIL_PORT
+                  value: ${{ secrets.DEV_MAIL_PORT }}
+                - name: MAIL_USERNAME
+                  value: ${{ secrets.DEV_MAIL_USERNAME }}
+                - name: MAIL_PASSWORD
+                  value: ${{ secrets.DEV_MAIL_PASSWORD }}
+                - name: REDIS_HOST
+                  value: ${{ secrets.DEV_REDIS_HOST }}
+                - name: REDIS_PORT
+                  value: ${{ secrets.DEV_REDIS_PORT }}
+                - name: REDIS_PASSWORD
+                  value: ${{ secrets.DEV_REDIS_PASSWORD }}
+                - name: NEIS_KEY
+                  value: ${{ secrets.DEV_NEIS_KEY }}
+            context:
+              git:
+                url: git@github.com:${{ github.repository }}.git
+                ref: ${{ github.ref }}

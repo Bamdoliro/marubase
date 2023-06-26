@@ -61,20 +61,19 @@ dependencyManagement {
 	}
 }
 
-tasks.named('test') {
+test {
 	outputs.dir snippetsDir
 	useJUnitPlatform()
 }
 
 asciidoctor {
-	println("========================================> asciidoctor")
 	configurations 'asciidoctorExtensions'
 	baseDirFollowsSourceFile()
 	inputs.dir snippetsDir
 	dependsOn test
 
 	sources {
-		include('**/index.adoc', "**/docs/*.adoc")
+		include('**/index.adoc')
 	}
 }
 
