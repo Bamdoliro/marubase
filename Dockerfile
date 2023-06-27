@@ -13,7 +13,6 @@ RUN ./gradlew bootJAR
 
 FROM openjdk:17-jdk
 COPY --from=builder app/build/libs/*.jar app.jar
-COPY --from=builder app/build/docs/asciidoc src/main/resources/static/docs
 
 EXPOSE 8080
 
