@@ -88,16 +88,8 @@ tasks.register('copyDocument', Copy) {
 	into file("src/main/resources/static/docs")
 }
 
-build {
-	dependsOn copyDocument
-}
-
 bootJar {
-	dependsOn asciidoctor
-	copy {
-		from "${asciidoctor.outputDir}"
-		into 'BOOT-INF/classes/static/docs'
-	}
+	dependsOn copyDocument
 }
 
 jar.enabled = false
