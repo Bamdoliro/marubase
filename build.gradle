@@ -70,12 +70,13 @@ asciidoctor {
 	dependsOn test
 
 	configurations 'asciidoctorExtensions'
-	baseDirFollowsSourceFile()
 	inputs.dir snippetsDir
 
 	sources {
-		include('**/index.adoc')
+		include('**/index.adoc', '**/docs/*.adoc')
 	}
+
+	baseDirFollowsSourceFile()
 }
 
 asciidoctor.doFirst {
@@ -88,8 +89,15 @@ tasks.register('copyDocument', Copy) {
 	into file("src/main/resources/static/docs")
 }
 
-bootJar {
+build {
 	dependsOn copyDocument
+}
+
+bootJar {
+	dependsOn asciidoctor
+	from (asciidoctor.outputDir) {
+		into 'static/docs'
+	}
 }
 
 jar.enabled = false
