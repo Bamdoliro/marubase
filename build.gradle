@@ -95,7 +95,7 @@ build {
 bootJar {
 	dependsOn asciidoctor
 	copy {
-		from asciidoctor.outputDir
+		from "${asciidoctor.outputDir}"
 		into 'BOOT-INF/classes/static/docs'
 	}
 }
