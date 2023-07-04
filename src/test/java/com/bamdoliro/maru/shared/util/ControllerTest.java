@@ -9,6 +9,7 @@ import com.bamdoliro.maru.application.form.RejectFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.application.form.UpdateFormUseCase;
 import com.bamdoliro.maru.application.question.CreateQuestionUseCase;
+import com.bamdoliro.maru.application.question.GetAllQuestionUseCase;
 import com.bamdoliro.maru.application.question.UpdateQuestionUseCase;
 import com.bamdoliro.maru.application.school.SearchSchoolUseCase;
 import com.bamdoliro.maru.application.user.SendEmailVerificationUseCase;
@@ -71,6 +72,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected UpdateQuestionUseCase updateQuestionUseCase;
+
+    @MockBean
+    protected GetAllQuestionUseCase getAllQuestionUseCase;
 
     @MockBean
     protected SubmitFormUseCase submitFormUseCase;
