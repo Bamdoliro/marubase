@@ -53,14 +53,18 @@ neis:
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: prod
 
-debug: true
+  web:
+    resources:
+      add-mappings: false
 ---
 spring:
   config:
     activate:
-      on-profile: prod
+      on-profile: dev
+
+debug: true
 ---
 spring:
   config:
