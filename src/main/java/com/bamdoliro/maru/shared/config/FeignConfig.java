@@ -5,5 +5,5 @@ import org.springframework.context.annotation.Configuration;
 
 @EnableFeignClients(basePackages = "com.bamdoliro.maru.infrastructure")
 @Configuration
-public class FeignClient {
+public class FeignConfig {
 }
