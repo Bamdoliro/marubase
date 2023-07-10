@@ -195,7 +195,10 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("1600자 이내의 자기소개서"),
                                 fieldWithPath("document.statementOfPurpose")
                                         .type(JsonFieldType.STRING)
-                                        .description("1600자 이내의 학업계획서")
+                                        .description("1600자 이내의 학업계획서"),
+                                fieldWithPath("formUrl")
+                                        .type(JsonFieldType.STRING)
+                                        .description("제출 서류 URL")
                         )
                 ));
     }
@@ -640,7 +643,10 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("1600자 이내의 자기소개서"),
                                 fieldWithPath("document.statementOfPurpose")
                                         .type(JsonFieldType.STRING)
-                                        .description("1600자 이내의 학업계획서")
+                                        .description("1600자 이내의 학업계획서"),
+                                fieldWithPath("formUrl")
+                                        .type(JsonFieldType.STRING)
+                                        .description("제출 서류 URL")
                         )
                 ));
 

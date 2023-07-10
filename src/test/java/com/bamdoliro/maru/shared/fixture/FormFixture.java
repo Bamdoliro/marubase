@@ -98,6 +98,7 @@ public class FormFixture {
                         "하이난김밤돌",
                         "공부열심히할게용"
                 ),
+                "https://maru.bamdoliro.com/form.pdf",
                 type,
                 UserFixture.createUser()
         );
@@ -147,6 +148,7 @@ public class FormFixture {
                         "하이난김밤돌",
                         "공부열심히할게용"
                 ),
+                "https://maru.bamdoliro.com/form.pdf",
                 type,
                 UserFixture.createUser()
         );
@@ -210,6 +212,7 @@ public class FormFixture {
                         "하이난김밤돌",
                         "공부열심히할게용"
                 ),
+                "https://maru.bamdoliro.com/form.pdf",
                 type
         );
     }
@@ -258,6 +261,7 @@ public class FormFixture {
                         "하이난김밤돌",
                         "공부열심히할게용"
                 ),
+                "https://maru.bamdoliro.com/form.pdf",
                 type
         );
     }
@@ -329,6 +333,7 @@ public class FormFixture {
                         "하이난김밤돌",
                         "공부열심히할게용"
                 ),
+                "https://maru.bamdoliro.com/form.pdf",
                 FormType.REGULAR,
                 FormStatus.SUBMITTED
         );

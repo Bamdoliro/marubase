@@ -27,6 +27,7 @@ public class SubmitFormUseCase {
                 .education(request.getEducation().toValue())
                 .grade(request.getGrade().toValue())
                 .document(request.getDocument().toValue())
+                .formUrl(request.getFormUrl())
                 .type(request.getType())
                 .user(user)
                 .build();
