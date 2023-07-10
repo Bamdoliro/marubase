@@ -3,6 +3,7 @@ package com.bamdoliro.maru.infrastructure.s3;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
 import com.bamdoliro.maru.infrastructure.s3.exception.EmptyFileException;
 import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
 import com.bamdoliro.maru.infrastructure.s3.exception.InvalidFileNameException;
@@ -50,10 +51,10 @@ class UploadFileServiceTest {
         given(amazonS3Client.getUrl(any(String.class), any(String.class))).willReturn(new URL(url));
 
         // when
-        String uploadedUrl = uploadFileService.execute(image, "folder", file -> {});
+        UploadResponse response = uploadFileService.execute(image, "folder", file -> {});
 
         // then
-        assertEquals(url, uploadedUrl);
+        assertEquals(url, response.getUrl());
         verify(s3Properties, times(2)).getBucket();
         verify(amazonS3Client, times(1)).putObject(any(PutObjectRequest.class));
         verify(amazonS3Client, times(1)).getUrl(any(String.class), any(String.class));
