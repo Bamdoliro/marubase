@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.bamdoliro.maru.infrastructure.s3.exception.EmptyFileException;
 import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
+import com.bamdoliro.maru.infrastructure.s3.exception.InvalidFileNameException;
 import com.bamdoliro.maru.shared.config.properties.S3Properties;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -83,6 +84,45 @@ class UploadFileServiceTest {
 
         verify(s3Properties, times(1)).getBucket();
         verify(amazonS3Client, times(1)).putObject(any(PutObjectRequest.class));
+        verify(amazonS3Client, never()).getUrl(any(String.class), any(String.class));
+    }
+
+    @Test
+    void 파일을_업로드할_때_원본_파일_이름이_없으면_에러가_발생한다() {
+        // given
+        MockMultipartFile image = new MockMultipartFile("image", null, MediaType.IMAGE_PNG_VALUE, "<<image>>".getBytes(StandardCharsets.UTF_8));
+
+        // when and then
+        assertThrows(InvalidFileNameException.class, () -> uploadFileService.execute(image, "folder", file -> {}));
+
+        verify(s3Properties, never()).getBucket();
+        verify(amazonS3Client, never()).putObject(any(PutObjectRequest.class));
+        verify(amazonS3Client, never()).getUrl(any(String.class), any(String.class));
+    }
+
+    @Test
+    void 파일을_업로드할_때_원본_파일_이름이_있는데_없으면_에러가_발생한다() {
+        // given
+        MockMultipartFile image = new MockMultipartFile("image", "  ", MediaType.IMAGE_PNG_VALUE, "<<image>>".getBytes(StandardCharsets.UTF_8));
+
+        // when and then
+        assertThrows(InvalidFileNameException.class, () -> uploadFileService.execute(image, "folder", file -> {}));
+
+        verify(s3Properties, never()).getBucket();
+        verify(amazonS3Client, never()).putObject(any(PutObjectRequest.class));
+        verify(amazonS3Client, never()).getUrl(any(String.class), any(String.class));
+    }
+
+    @Test
+    void 파일을_업로드할_때_원본_파일_이름이_너무_길면_에러가_발생한다() {
+        // given
+        MockMultipartFile image = new MockMultipartFile("image", "itisjonnalonglongtoolonglonglongnamenamelonglong.png", MediaType.IMAGE_PNG_VALUE, "<<image>>".getBytes(StandardCharsets.UTF_8));
+
+        // when and then
+        assertThrows(InvalidFileNameException.class, () -> uploadFileService.execute(image, "folder", file -> {}));
+
+        verify(s3Properties, never()).getBucket();
+        verify(amazonS3Client, never()).putObject(any(PutObjectRequest.class));
         verify(amazonS3Client, never()).getUrl(any(String.class), any(String.class));
     }
 }
