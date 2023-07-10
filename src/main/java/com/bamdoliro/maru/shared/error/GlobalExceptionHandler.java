@@ -3,6 +3,7 @@ package com.bamdoliro.maru.shared.error;
 import com.bamdoliro.maru.shared.response.ErrorResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -53,6 +54,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(GlobalErrorProperty.BAD_REQUEST.getStatus())
                 .body(new ErrorResponse(GlobalErrorProperty.BAD_REQUEST, e.getMessage()));
+    }
+
+    @ExceptionHandler(FileSizeLimitExceededException.class)
+    @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
+    public String handleFileSizeLimitExceededException(Exception e) {
+        return e.getMessage();
     }
 
     @ExceptionHandler(MaruException.class)
