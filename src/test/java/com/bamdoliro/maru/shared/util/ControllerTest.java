@@ -34,9 +34,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 @Disabled
 @WebMvcTest({
         UserController.class,

@@ -7,7 +7,6 @@ import com.bamdoliro.maru.domain.form.exception.CannotUpdateNotRejectedFormExcep
 import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
 import com.bamdoliro.maru.domain.form.exception.FormNotFoundException;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.infrastructure.mail.exception.FailedToSendMailException;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
 import com.bamdoliro.maru.infrastructure.s3.exception.EmptyFileException;
 import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
@@ -25,14 +24,10 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-import javax.naming.InvalidNameException;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doThrow;
@@ -52,7 +47,6 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class FormControllerTest extends RestDocsTestSupport {
