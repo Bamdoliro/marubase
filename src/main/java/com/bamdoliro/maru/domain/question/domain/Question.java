@@ -1,8 +1,6 @@
 package com.bamdoliro.maru.domain.question.domain;
 
-import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.question.domain.type.Category;
-import com.bamdoliro.maru.presentation.question.dto.request.UpdateQuestionRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

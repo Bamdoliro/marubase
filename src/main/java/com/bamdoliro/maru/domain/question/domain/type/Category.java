@@ -7,11 +7,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Category implements EnumProperty {
-    Top_Question("질문 top"),
-    Admission_Process("입학 과정"),
-    School_Life("학교 생활"),
-    Submit_Documents("관련 제출 서류");
-
+    TOP_QUESTION("질문 top"),
+    ADMISSION_PROCESS("입학 과정"),
+    SCHOOL_LIFE("학교 생활"),
+    SUBMIT_DOCUMENT("관련 제출 서류");
 
     private final String description;
 }

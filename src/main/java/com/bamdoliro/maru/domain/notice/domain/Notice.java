@@ -35,7 +35,6 @@ public class Notice {
     private Category category;
 
     @Builder
-
     public Notice(String title, String content, Category category) {
         this.title = title;
         this.content = content;
