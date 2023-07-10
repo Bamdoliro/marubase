@@ -7,6 +7,12 @@ import com.bamdoliro.maru.domain.form.exception.CannotUpdateNotRejectedFormExcep
 import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
 import com.bamdoliro.maru.domain.form.exception.FormNotFoundException;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.infrastructure.mail.exception.FailedToSendMailException;
+import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
+import com.bamdoliro.maru.infrastructure.s3.exception.EmptyFileException;
+import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
+import com.bamdoliro.maru.infrastructure.s3.exception.ImageSizeMismatchException;
+import com.bamdoliro.maru.infrastructure.s3.exception.InvalidFileNameException;
 import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
@@ -16,8 +22,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import javax.naming.InvalidNameException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -32,13 +42,17 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class FormControllerTest extends RestDocsTestSupport {
@@ -709,5 +723,149 @@ class FormControllerTest extends RestDocsTestSupport {
                 .andDo(restDocs.document());
 
         verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(FormRequest.class));
+    }
+
+    @Test
+    void 증명_사진을_업로드한다() throws Exception {
+        MockMultipartFile image = new MockMultipartFile(
+                "image",
+                "image.png",
+                MediaType.IMAGE_PNG_VALUE,
+                "<<image>>".getBytes()
+        );
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(uploadIdentificationPictureUseCase.execute(image)).willReturn(new UploadResponse("https://example.com/image.png"));
+
+        mockMvc.perform(multipart("/form/identification-picture")
+                        .file(image)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                )
+
+                .andExpect(status().isCreated())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        ),
+                        requestParts(
+                                partWithName("image")
+                                        .description("증명사진 파일, 3*4cm, 117*156px")
+                        )
+                ));
+
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(image);
+    }
+
+    @Test
+    void 증명_사진_업로드가_실패한다() throws Exception {
+        MockMultipartFile image = new MockMultipartFile(
+                "image",
+                "image.png",
+                MediaType.IMAGE_PNG_VALUE,
+                "<<image>>".getBytes()
+        );
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        doThrow(new FailedToSaveException()).when(uploadIdentificationPictureUseCase).execute(image);
+
+        mockMvc.perform(multipart("/form/identification-picture")
+                        .file(image)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                )
+
+                .andExpect(status().isInternalServerError())
+
+                .andDo(restDocs.document());
+
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(image);
+    }
+
+    @Test
+    void 증명_사진을_업로드할_때_사진_크기가_다르면_에러가_발생한다() throws Exception {
+        MockMultipartFile image = new MockMultipartFile(
+                "image",
+                "image.png",
+                MediaType.IMAGE_PNG_VALUE,
+                "<<image>>".getBytes()
+        );
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        doThrow(new ImageSizeMismatchException()).when(uploadIdentificationPictureUseCase).execute(image);
+
+        mockMvc.perform(multipart("/form/identification-picture")
+                        .file(image)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                )
+
+                .andExpect(status().isBadRequest())
+
+                .andDo(restDocs.document());
+
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(image);
+    }
+
+    @Test
+    void 증명_사진을_업로드할_때_파일_이름이_잘못됐으면_에러가_발생한다() throws Exception {
+        MockMultipartFile image = new MockMultipartFile(
+                "image",
+                "toolonglonglongreallylong.png",
+                MediaType.IMAGE_PNG_VALUE,
+                "<<image>>".getBytes()
+        );
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        doThrow(new InvalidFileNameException()).when(uploadIdentificationPictureUseCase).execute(image);
+
+        mockMvc.perform(multipart("/form/identification-picture")
+                        .file(image)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                )
+
+                .andExpect(status().isBadRequest())
+
+                .andDo(restDocs.document());
+
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(image);
+    }
+
+    @Test
+    void 증명_사진을_업로드할_때_파일이_비었으면_에러가_발생한다() throws Exception {
+        MockMultipartFile image = new MockMultipartFile(
+                "image",
+                "toolonglonglongreallylong.png",
+                MediaType.IMAGE_PNG_VALUE,
+                "".getBytes()
+        );
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        doThrow(new EmptyFileException()).when(uploadIdentificationPictureUseCase).execute(image);
+
+        mockMvc.perform(multipart("/form/identification-picture")
+                        .file(image)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                )
+
+                .andExpect(status().isBadRequest())
+
+                .andDo(restDocs.document());
+
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(image);
     }
 }

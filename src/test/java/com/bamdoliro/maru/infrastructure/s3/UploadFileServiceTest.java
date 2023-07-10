@@ -207,7 +207,7 @@ class UploadFileServiceTest {
     }
 
     private FileInputStream getFileStreamWith(String fileName) throws FileNotFoundException {
-        final String path = String.format("src/test/resources/images/%s", fileName); //파일경로
+        final String path = String.format("src/test/resources/images/%s", fileName);
         return new FileInputStream(path);
     }
 }

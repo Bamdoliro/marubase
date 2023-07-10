@@ -8,6 +8,7 @@ import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.application.form.UpdateFormUseCase;
+import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
 import com.bamdoliro.maru.application.question.CreateQuestionUseCase;
 import com.bamdoliro.maru.application.question.UpdateQuestionUseCase;
 import com.bamdoliro.maru.application.school.SearchSchoolUseCase;
@@ -32,6 +33,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 @Disabled
 @WebMvcTest({
@@ -89,6 +93,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected UpdateFormUseCase updateFormUseCase;
+
+    @MockBean
+    protected UploadIdentificationPictureUseCase uploadIdentificationPictureUseCase;
 
 
     @MockBean
