@@ -6,7 +6,9 @@ import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.application.form.UpdateFormUseCase;
+import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
 import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
 import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
@@ -24,8 +26,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RequestMapping("/form")
@@ -38,6 +42,7 @@ public class FormController {
     private final QuerySubmittedFormUseCase querySubmittedFormUseCase;
     private final QueryFormUseCase queryFormUseCase;
     private final UpdateFormUseCase updateFormUseCase;
+    private final UploadIdentificationPictureUseCase uploadIdentificationPictureUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -93,5 +98,16 @@ public class FormController {
             @RequestBody @Valid FormRequest request
     ) {
         updateFormUseCase.execute(user, formId, request);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/identification-picture")
+    public SingleCommonResponse<UploadResponse> uploadIdentificationPicture(
+            @AuthenticationPrincipal(authority = Authority.USER) User user,
+            @RequestPart(value = "image") MultipartFile image
+    ) {
+        return SingleCommonResponse.ok(
+                uploadIdentificationPictureUseCase.execute(image)
+        );
     }
 }

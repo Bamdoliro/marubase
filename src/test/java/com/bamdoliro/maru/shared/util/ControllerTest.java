@@ -8,6 +8,7 @@ import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.application.form.UpdateFormUseCase;
+import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
 import com.bamdoliro.maru.application.question.CreateQuestionUseCase;
 import com.bamdoliro.maru.application.question.UpdateQuestionUseCase;
 import com.bamdoliro.maru.application.school.SearchSchoolUseCase;
@@ -89,6 +90,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected UpdateFormUseCase updateFormUseCase;
+
+    @MockBean
+    protected UploadIdentificationPictureUseCase uploadIdentificationPictureUseCase;
 
 
     @MockBean

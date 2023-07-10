@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
 import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
 import com.bamdoliro.maru.infrastructure.s3.validator.FileValidator;
 import com.bamdoliro.maru.shared.config.properties.S3Properties;
@@ -22,7 +23,7 @@ public class UploadFileService {
     private final S3Properties s3Properties;
     private final AmazonS3Client amazonS3Client;
 
-    public String execute(MultipartFile file, String folder, FileValidator validator) {
+    public UploadResponse execute(MultipartFile file, String folder, FileValidator validator) {
         validator.validate(file);
         String fileName = createFileName(folder, file.getOriginalFilename());
 
@@ -38,7 +39,9 @@ public class UploadFileService {
             throw new FailedToSaveException();
         }
 
-        return amazonS3Client.getUrl(s3Properties.getBucket(), fileName).toString();
+        return new UploadResponse(
+                amazonS3Client.getUrl(s3Properties.getBucket(), fileName).toString()
+        );
     }
 
     private String createFileName(String folder, String originalName) {
