@@ -20,16 +20,16 @@ public class UploadFileService {
     private final S3Properties s3Properties;
     private final AmazonS3Client amazonS3Client;
 
-    public String execute(MultipartFile image, String folder, FileValidator validator) {
-        validator.validate(image);
-        String fileName = createFileName(folder, image.getOriginalFilename());
+    public String execute(MultipartFile file, String folder, FileValidator validator) {
+        validator.validate(file);
+        String fileName = createFileName(folder, file.getOriginalFilename());
 
         try {
             PutObjectRequest request = new PutObjectRequest(
                     s3Properties.getBucket(),
                     fileName,
-                    image.getInputStream(),
-                    getObjectMetadata(image)
+                    file.getInputStream(),
+                    getObjectMetadata(file)
             );
             amazonS3Client.putObject(request.withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (Exception e) {
