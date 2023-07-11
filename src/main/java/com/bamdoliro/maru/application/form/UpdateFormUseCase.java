@@ -27,6 +27,7 @@ public class UpdateFormUseCase {
                 request.getEducation().toValue(),
                 request.getGrade().toValue(),
                 request.getDocument().toValue(),
+                request.getFormUrl(),
                 request.getType()
         );
     }

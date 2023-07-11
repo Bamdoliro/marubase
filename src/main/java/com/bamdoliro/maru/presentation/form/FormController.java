@@ -6,6 +6,7 @@ import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.application.form.UpdateFormUseCase;
+import com.bamdoliro.maru.application.form.UploadFormUseCase;
 import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
@@ -19,6 +20,7 @@ import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +45,7 @@ public class FormController {
     private final QueryFormUseCase queryFormUseCase;
     private final UpdateFormUseCase updateFormUseCase;
     private final UploadIdentificationPictureUseCase uploadIdentificationPictureUseCase;
+    private final UploadFormUseCase uploadFormUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -101,13 +104,27 @@ public class FormController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/identification-picture")
+    @PostMapping(
+            value = "/identification-picture",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     public SingleCommonResponse<UploadResponse> uploadIdentificationPicture(
             @AuthenticationPrincipal(authority = Authority.USER) User user,
             @RequestPart(value = "image") MultipartFile image
     ) {
         return SingleCommonResponse.ok(
                 uploadIdentificationPictureUseCase.execute(image)
+        );
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(value = "/form-document", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public SingleCommonResponse<UploadResponse> uploadFormDocument(
+            @AuthenticationPrincipal(authority = Authority.USER) User user,
+            @RequestPart(value = "file") MultipartFile file
+    ) {
+        return SingleCommonResponse.ok(
+                uploadFormUseCase.execute(file)
         );
     }
 }

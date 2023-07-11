@@ -16,7 +16,7 @@ public class S3Config {
 
     private final S3Properties s3Properties;
 
-    @Value("${cloud.aws.region.static}")
+    @Value("${spring.cloud.aws.region.static}")
     private String region;
 
     @Bean
