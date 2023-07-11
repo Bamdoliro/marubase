@@ -6,6 +6,7 @@ import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.application.form.UpdateFormUseCase;
+import com.bamdoliro.maru.application.form.UploadFormUseCase;
 import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
@@ -44,6 +45,7 @@ public class FormController {
     private final QueryFormUseCase queryFormUseCase;
     private final UpdateFormUseCase updateFormUseCase;
     private final UploadIdentificationPictureUseCase uploadIdentificationPictureUseCase;
+    private final UploadFormUseCase uploadFormUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -122,7 +124,7 @@ public class FormController {
             @RequestPart(value = "file") MultipartFile file
     ) {
         return SingleCommonResponse.ok(
-                uploadIdentificationPictureUseCase.execute(file)
+                uploadFormUseCase.execute(file)
         );
     }
 }

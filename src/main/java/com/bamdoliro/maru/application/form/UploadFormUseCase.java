@@ -20,7 +20,7 @@ public class UploadFormUseCase {
 
     public UploadResponse execute(MultipartFile form) {
         return uploadFileService.execute(form, FolderConstant.FORM, file -> {
-            if (file.getContentType() != null && file.getContentType().equals(MediaType.APPLICATION_PDF_VALUE)) {
+            if (file.getContentType() != null && !file.getContentType().equals(MediaType.APPLICATION_PDF_VALUE)) {
                 throw new MediaTypeMismatchException();
             }
 
