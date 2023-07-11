@@ -14,6 +14,7 @@ public enum S3ErrorProperty implements ErrorProperty {
     OVER_FILE_SIZE_LIMIT(HttpStatus.BAD_REQUEST, "파일 크기가 너무 큽니다."),
     IMAGE_SIZE_MISMATCH(HttpStatus.BAD_REQUEST, "이미지가 정해진 규격과 다릅니다."),
     FILE_SIZE_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "파일 용량이 최대 크기를 넘었습니다."),
+    MEDIA_TYPE_MISMATCH(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "파일 형식이 다릅니다."),
     ;
 
     private final HttpStatus status;

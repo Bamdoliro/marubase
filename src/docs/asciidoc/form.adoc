@@ -180,3 +180,6 @@ include::{snippets}/form-controller-test/증명_사진을_업로드할_때_파�
 
 ===== 용량이 2MB를 초과한 경우
 include::{snippets}/form-controller-test/증명_사진을_업로드할_때_파일이_용량_제한을_넘으면_에러가_발생한다/http-response.adoc[]
+
+===== jpg, jpeg, png 파일이 아닌 경우
+include::{snippets}/form-controller-test/증명_사진을_업로드할_때_콘텐츠_타입이_다르다면_에러가_발생한다/http-response.adoc[]

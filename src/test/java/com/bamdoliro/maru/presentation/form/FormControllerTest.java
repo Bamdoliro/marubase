@@ -13,6 +13,7 @@ import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
 import com.bamdoliro.maru.infrastructure.s3.exception.FileSizeLimitExceededException;
 import com.bamdoliro.maru.infrastructure.s3.exception.ImageSizeMismatchException;
 import com.bamdoliro.maru.infrastructure.s3.exception.InvalidFileNameException;
+import com.bamdoliro.maru.infrastructure.s3.exception.MediaTypeMismatchException;
 import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
@@ -744,7 +745,8 @@ class FormControllerTest extends RestDocsTestSupport {
         mockMvc.perform(multipart("/form/identification-picture")
                         .file(image)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 )
 
                 .andExpect(status().isCreated())
@@ -780,7 +782,8 @@ class FormControllerTest extends RestDocsTestSupport {
         mockMvc.perform(multipart("/form/identification-picture")
                         .file(image)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 )
 
                 .andExpect(status().isInternalServerError())
@@ -807,7 +810,8 @@ class FormControllerTest extends RestDocsTestSupport {
         mockMvc.perform(multipart("/form/identification-picture")
                         .file(image)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 )
 
                 .andExpect(status().isBadRequest())
@@ -834,7 +838,8 @@ class FormControllerTest extends RestDocsTestSupport {
         mockMvc.perform(multipart("/form/identification-picture")
                         .file(image)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 )
 
                 .andExpect(status().isBadRequest())
@@ -861,7 +866,8 @@ class FormControllerTest extends RestDocsTestSupport {
         mockMvc.perform(multipart("/form/identification-picture")
                         .file(image)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 )
 
                 .andExpect(status().isBadRequest())
@@ -888,10 +894,39 @@ class FormControllerTest extends RestDocsTestSupport {
         mockMvc.perform(multipart("/form/identification-picture")
                         .file(image)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 )
 
                 .andExpect(status().isBadRequest())
+
+                .andDo(restDocs.document());
+
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(image);
+    }
+
+    @Test
+    void 증명_사진을_업로드할_때_콘텐츠_타입이_다르다면_에러가_발생한다() throws Exception {
+        MockMultipartFile image = new MockMultipartFile(
+                "image",
+                "image.pdf",
+                MediaType.APPLICATION_PDF_VALUE,
+                "<<pdf>>".getBytes()
+        );
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        doThrow(new MediaTypeMismatchException()).when(uploadIdentificationPictureUseCase).execute(image);
+
+        mockMvc.perform(multipart("/form/identification-picture")
+                        .file(image)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                )
+
+                .andExpect(status().isUnsupportedMediaType())
 
                 .andDo(restDocs.document());
 
