@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
 import com.bamdoliro.maru.infrastructure.s3.exception.EmptyFileException;
 import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
+import com.bamdoliro.maru.infrastructure.s3.exception.FileSizeLimitExceededException;
 import com.bamdoliro.maru.infrastructure.s3.exception.ImageSizeMismatchException;
 import com.bamdoliro.maru.infrastructure.s3.exception.InvalidFileNameException;
 import com.bamdoliro.maru.shared.config.properties.S3Properties;
@@ -26,6 +27,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+import static com.bamdoliro.maru.shared.constants.FileConstants.MB;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -140,6 +142,32 @@ class UploadFileServiceTest {
     }
 
     @Test
+    void 파일을_업로드할_때_파일_용량이_크면_에러가_발생한다() {
+        // given
+        MockMultipartFile image = new MockMultipartFile(
+                "image",
+                "image.png",
+                MediaType.IMAGE_PNG_VALUE,
+                new byte[2 * 1024 * 1024 + 1]
+        );
+
+        // when and then
+        assertThrows(
+                FileSizeLimitExceededException.class,
+                () -> uploadFileService.execute(image, "folder", file -> {
+                    if (file.getSize() > 2 * MB) {
+                        throw new FileSizeLimitExceededException();
+                    }
+                })
+        );
+
+        // then
+        verify(s3Properties, never()).getBucket();
+        verify(amazonS3Client, never()).putObject(any(PutObjectRequest.class));
+        verify(amazonS3Client, never()).getUrl(any(String.class), any(String.class));
+    }
+
+    @Test
     void 파일을_업로드할_때_검증_함수를_통해_이미지_크기를_확인한다() throws IOException {
         // given
         String fileName = "id-picture.png";
@@ -175,7 +203,7 @@ class UploadFileServiceTest {
     }
 
     @Test
-    void 파일을_업로드할_때_검증_함수를_통해_이미지_크기를_할_때_이미지_크기가_크면_에러가_발생한다() throws IOException {
+    void 파일을_업로드할_때_이미지_크기가_크면_에러가_발생한다() throws IOException {
         // given
         String fileName = "id-picture-big.png";
         MockMultipartFile image = new MockMultipartFile(

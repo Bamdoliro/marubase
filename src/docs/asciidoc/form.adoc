@@ -177,3 +177,6 @@ include::{snippets}/form-controller-test/증명_사진을_업로드할_때_파�
 
 ===== 빈 파일인 경우
 include::{snippets}/form-controller-test/증명_사진을_업로드할_때_파일이_비었으면_에러가_발생한다/http-response.adoc[]
+
+===== 용량이 2MB를 초과한 경우
+include::{snippets}/form-controller-test/증명_사진을_업로드할_때_파일이_용량_제한을_넘으면_에러가_발생한다/http-response.adoc[]

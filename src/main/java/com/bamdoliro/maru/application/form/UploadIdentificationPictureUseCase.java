@@ -4,6 +4,7 @@ import com.bamdoliro.maru.infrastructure.s3.UploadFileService;
 import com.bamdoliro.maru.infrastructure.s3.constants.FolderConstant;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
 import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
+import com.bamdoliro.maru.infrastructure.s3.exception.FileSizeLimitExceededException;
 import com.bamdoliro.maru.infrastructure.s3.exception.ImageSizeMismatchException;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+
+import static com.bamdoliro.maru.shared.constants.FileConstants.MB;
 
 @RequiredArgsConstructor
 @UseCase
@@ -28,6 +31,10 @@ public class UploadIdentificationPictureUseCase {
                 }
             } catch (IOException e) {
                 throw new FailedToSaveException();
+            }
+
+            if (file.getSize() > 2 * MB) {
+                throw new FileSizeLimitExceededException();
             }
         });
     }

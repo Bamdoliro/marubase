@@ -10,6 +10,7 @@ import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
 import com.bamdoliro.maru.infrastructure.s3.exception.EmptyFileException;
 import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
+import com.bamdoliro.maru.infrastructure.s3.exception.FileSizeLimitExceededException;
 import com.bamdoliro.maru.infrastructure.s3.exception.ImageSizeMismatchException;
 import com.bamdoliro.maru.infrastructure.s3.exception.InvalidFileNameException;
 import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
@@ -26,6 +27,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.util.List;
 
+import static com.bamdoliro.maru.shared.constants.FileConstants.MB;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -846,7 +848,7 @@ class FormControllerTest extends RestDocsTestSupport {
     void 증명_사진을_업로드할_때_파일이_비었으면_에러가_발생한다() throws Exception {
         MockMultipartFile image = new MockMultipartFile(
                 "image",
-                "toolonglonglongreallylong.png",
+                "image.png",
                 MediaType.IMAGE_PNG_VALUE,
                 "".getBytes()
         );
@@ -855,6 +857,33 @@ class FormControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
         doThrow(new EmptyFileException()).when(uploadIdentificationPictureUseCase).execute(image);
+
+        mockMvc.perform(multipart("/form/identification-picture")
+                        .file(image)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                )
+
+                .andExpect(status().isBadRequest())
+
+                .andDo(restDocs.document());
+
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(image);
+    }
+
+    @Test
+    void 증명_사진을_업로드할_때_파일이_용량_제한을_넘으면_에러가_발생한다() throws Exception {
+        MockMultipartFile image = new MockMultipartFile(
+                "image",
+                "image.png",
+                MediaType.IMAGE_PNG_VALUE,
+                new byte[(int) (10 * MB + 1)]
+        );
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        doThrow(new FileSizeLimitExceededException()).when(uploadIdentificationPictureUseCase).execute(image);
 
         mockMvc.perform(multipart("/form/identification-picture")
                         .file(image)
