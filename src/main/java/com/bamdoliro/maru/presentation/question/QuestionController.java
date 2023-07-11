@@ -1,15 +1,19 @@
 package com.bamdoliro.maru.presentation.question;
 
 import com.bamdoliro.maru.application.question.CreateQuestionUseCase;
+import com.bamdoliro.maru.application.question.QueryAllQuestionUseCase;
 import com.bamdoliro.maru.application.question.UpdateQuestionUseCase;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.question.dto.request.CreateQuestionRequest;
+import com.bamdoliro.maru.presentation.question.dto.request.QueryQuestionRequest;
 import com.bamdoliro.maru.presentation.question.dto.request.UpdateQuestionRequest;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.auth.Authority;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,6 +29,7 @@ public class QuestionController {
 
     private final CreateQuestionUseCase createQuestionUseCase;
     private final UpdateQuestionUseCase updateQuestionUseCase;
+    private final QueryAllQuestionUseCase queryAllQuestionUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -44,4 +49,11 @@ public class QuestionController {
     ) {
         updateQuestionUseCase.execute(id, request);
     }
+    @GetMapping
+    public QueryQuestionRequest getQuestions(@PageableDefault(size = 10) QueryQuestionRequest queryQuestionRequest) {
+        queryAllQuestionUseCase.queryQuestions((QueryQuestionRequest) queryQuestionRequest.getPageable());
+        return queryQuestionRequest;
+    }
+
+
 }

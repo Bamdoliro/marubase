@@ -1,4 +1,4 @@
-package com.bamdoliro.maru.domain.question.domain;
+package com.bamdoliro.maru.domain.notice.domain;
 
 import com.bamdoliro.maru.domain.question.domain.type.Category;
 import jakarta.persistence.Column;
@@ -16,10 +16,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "tbl_question")
+@Table(name = "tbl_notice")
 @Entity
-public class Question {
-
+public class Notice {
     @Column(name = "question_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -36,14 +35,7 @@ public class Question {
     private Category category;
 
     @Builder
-    public Question(String title, String content, Category category) {
-        this.title = title;
-        this.content = content;
-        this.category = category;
-    }
-
-
-    public void update(String title, String content, Category category){
+    public Notice(String title, String content, Category category) {
         this.title = title;
         this.content = content;
         this.category = category;

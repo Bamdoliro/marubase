@@ -30,7 +30,7 @@ class CreateQuestionUseCaseTest {
     void 유저가_자주묻는질문을_생성한다() {
         // given
         Question question = QuestionFixture.createQuestion();
-        CreateQuestionRequest request = new CreateQuestionRequest(question.getTitle(), question.getContent());
+        CreateQuestionRequest request = new CreateQuestionRequest(question.getTitle(), question.getContent(), question.getCategory());
         ArgumentCaptor<Question> captor = ArgumentCaptor.forClass(Question.class);
 
         given(questionRepository.save(any(Question.class))).willReturn(question);

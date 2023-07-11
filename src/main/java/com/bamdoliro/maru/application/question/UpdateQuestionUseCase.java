@@ -15,6 +15,6 @@ public class UpdateQuestionUseCase{
     @Transactional
     public void execute(Long id, UpdateQuestionRequest request) {
         Question question = questionFacade.getQuestion(id);
-        question.update(request.getTitle(), request.getContent());
+        question.update(request.getTitle(), request.getContent(), request.getCategory());
     }
 }
