@@ -107,7 +107,7 @@ public class FormController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
     public SingleCommonResponse<UploadResponse> uploadIdentificationPicture(
-//            @AuthenticationPrincipal(authority = Authority.USER) User user,
+            @AuthenticationPrincipal(authority = Authority.USER) User user,
             @RequestPart(value = "image") MultipartFile image
     ) {
         return SingleCommonResponse.ok(
@@ -119,10 +119,10 @@ public class FormController {
     @PostMapping(value = "/form-document", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public SingleCommonResponse<UploadResponse> uploadFormDocument(
             @AuthenticationPrincipal(authority = Authority.USER) User user,
-            @RequestPart(value = "file") MultipartFile image
+            @RequestPart(value = "file") MultipartFile file
     ) {
         return SingleCommonResponse.ok(
-                uploadIdentificationPictureUseCase.execute(image)
+                uploadIdentificationPictureUseCase.execute(file)
         );
     }
 }
