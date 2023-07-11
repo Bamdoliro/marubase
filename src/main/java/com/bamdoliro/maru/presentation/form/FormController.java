@@ -19,6 +19,7 @@ import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -101,7 +102,7 @@ public class FormController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/identification-picture")
+    @PostMapping(value = "/identification-picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public SingleCommonResponse<UploadResponse> uploadIdentificationPicture(
             @AuthenticationPrincipal(authority = Authority.USER) User user,
             @RequestPart(value = "image") MultipartFile image
