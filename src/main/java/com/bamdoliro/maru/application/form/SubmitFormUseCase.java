@@ -27,7 +27,7 @@ public class SubmitFormUseCase {
     }
 
     private void validateFormStatus(Form form) {
-        if (!form.isDraft()) {
+        if (!(form.isDraft() || form.isRejected())) {
             throw new FormAlreadySubmittedException();
         }
     }

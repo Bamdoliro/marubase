@@ -14,6 +14,6 @@ public class SubmitFormRequest {
 
     @NotBlank(message = "필수값입니다.")
     @Size(max = 150, message = "150자 이하여야 합니다.")
-    @URL
+    @URL(message = "올바른 URL 형식이어야 합니다.")
     private String formUrl;
 }

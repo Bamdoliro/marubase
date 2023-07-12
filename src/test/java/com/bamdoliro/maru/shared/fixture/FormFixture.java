@@ -277,7 +277,6 @@ public class FormFixture {
                         List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2)
                 ),
                 createDocumentRequest(),
-                "https://maru.bamdoliro.com/form.pdf",
                 type
         );
     }

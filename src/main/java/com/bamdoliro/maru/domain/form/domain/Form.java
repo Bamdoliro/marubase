@@ -126,13 +126,12 @@ public class Form extends BaseTimeEntity {
         return status.equals(FormStatus.DRAFT);
     }
 
-    public void update(Applicant applicant, Parent parent, Education education, Grade grade, Document document, String formUrl, FormType type) {
+    public void update(Applicant applicant, Parent parent, Education education, Grade grade, Document document, FormType type) {
         this.applicant = applicant;
         this.parent = parent;
         this.education = education;
         this.grade = grade;
         this.document = document;
-        this.formUrl = formUrl;
         this.type = type;
         this.status = FormStatus.SUBMITTED;
     }
