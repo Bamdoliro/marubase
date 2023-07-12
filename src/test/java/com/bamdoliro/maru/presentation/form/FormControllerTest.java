@@ -14,7 +14,8 @@ import com.bamdoliro.maru.infrastructure.s3.exception.FileSizeLimitExceededExcep
 import com.bamdoliro.maru.infrastructure.s3.exception.ImageSizeMismatchException;
 import com.bamdoliro.maru.infrastructure.s3.exception.InvalidFileNameException;
 import com.bamdoliro.maru.infrastructure.s3.exception.MediaTypeMismatchException;
-import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormDraftRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.UpdateFormRequest;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
@@ -56,12 +57,12 @@ class FormControllerTest extends RestDocsTestSupport {
 
     @Test
     void 원서를_접수한다() throws Exception {
-        FormRequest request = FormFixture.createFormRequest(FormType.REGULAR);
+        SubmitFormDraftRequest request = FormFixture.createFormRequest(FormType.REGULAR);
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        willDoNothing().given(submitFormUseCase).execute(user, request);
+        willDoNothing().given(submitFormDraftUseCase).execute(user, request);
 
 
         mockMvc.perform(post("/form")
@@ -198,22 +199,19 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("1600자 이내의 자기소개서"),
                                 fieldWithPath("document.statementOfPurpose")
                                         .type(JsonFieldType.STRING)
-                                        .description("1600자 이내의 학업계획서"),
-                                fieldWithPath("formUrl")
-                                        .type(JsonFieldType.STRING)
-                                        .description("제출 서류 URL")
+                                        .description("1600자 이내의 학업계획서")
                         )
                 ));
     }
 
     @Test
     void 중졸_껌정고시_합격자가_원서를_접수한다() throws Exception {
-        FormRequest request = FormFixture.createQualificationExaminationFormRequest(FormType.MEISTER_TALENT);
+        SubmitFormDraftRequest request = FormFixture.createQualificationExaminationFormRequest(FormType.MEISTER_TALENT);
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        willDoNothing().given(submitFormUseCase).execute(user, request);
+        willDoNothing().given(submitFormDraftUseCase).execute(user, request);
 
 
         mockMvc.perform(post("/form")
@@ -230,12 +228,12 @@ class FormControllerTest extends RestDocsTestSupport {
 
     @Test
     void 원서를_접수할_때_이미_접수한_원서가_있으면_에러가_발생한다() throws Exception {
-        FormRequest request = FormFixture.createFormRequest(FormType.REGULAR);
+        SubmitFormDraftRequest request = FormFixture.createFormRequest(FormType.REGULAR);
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FormAlreadySubmittedException()).when(submitFormUseCase).execute(any(User.class), any(FormRequest.class));
+        doThrow(new FormAlreadySubmittedException()).when(submitFormDraftUseCase).execute(any(User.class), any(SubmitFormDraftRequest.class));
 
 
         mockMvc.perform(post("/form")
@@ -252,7 +250,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
     @Test
     void 원서를_접수할_때_잘못된_형식의_요청을_보내면_에러가_발생한다() throws Exception {
-        FormRequest request = new FormRequest();
+        SubmitFormDraftRequest request = new SubmitFormDraftRequest();
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
@@ -270,7 +268,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(submitFormUseCase, never()).execute(any(User.class), any(FormRequest.class));
+        verify(submitFormDraftUseCase, never()).execute(any(User.class), any(SubmitFormDraftRequest.class));
     }
 
     @Test
@@ -500,7 +498,7 @@ class FormControllerTest extends RestDocsTestSupport {
     @Test
     void 원서를_수정한다() throws Exception {
         Long formId = 1L;
-        FormRequest request = FormFixture.createFormRequest(FormType.REGULAR);
+        UpdateFormRequest request = FormFixture.createUpdateFormRequest(FormType.REGULAR);
         User user = UserFixture.createAdminUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
@@ -653,7 +651,7 @@ class FormControllerTest extends RestDocsTestSupport {
                         )
                 ));
 
-        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(FormRequest.class));
+        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
     }
 
     @Test
@@ -663,21 +661,21 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FormNotFoundException()).when(updateFormUseCase).execute(any(User.class), anyLong(), any(FormRequest.class));
+        doThrow(new FormNotFoundException()).when(updateFormUseCase).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
 
 
         mockMvc.perform(put("/form/{form-id}", formId)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJson(FormFixture.createFormRequest(FormType.REGULAR)))
+                        .content(toJson(FormFixture.createUpdateFormRequest(FormType.REGULAR)))
                 )
 
                 .andExpect(status().isNotFound())
 
                 .andDo(restDocs.document());
 
-        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(FormRequest.class));
+        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
     }
 
     @Test
@@ -687,21 +685,21 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new AuthorityMismatchException()).when(updateFormUseCase).execute(any(User.class), anyLong(), any(FormRequest.class));
+        doThrow(new AuthorityMismatchException()).when(updateFormUseCase).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
 
 
         mockMvc.perform(put("/form/{form-id}", formId)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJson(FormFixture.createFormRequest(FormType.REGULAR)))
+                        .content(toJson(FormFixture.createUpdateFormRequest(FormType.REGULAR)))
                 )
 
                 .andExpect(status().isUnauthorized())
 
                 .andDo(restDocs.document());
 
-        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(FormRequest.class));
+        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
     }
 
     @Test
@@ -711,21 +709,21 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new CannotUpdateNotRejectedFormException()).when(updateFormUseCase).execute(any(User.class), anyLong(), any(FormRequest.class));
+        doThrow(new CannotUpdateNotRejectedFormException()).when(updateFormUseCase).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
 
 
         mockMvc.perform(put("/form/{form-id}", formId)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJson(FormFixture.createFormRequest(FormType.REGULAR)))
+                        .content(toJson(FormFixture.createUpdateFormRequest(FormType.REGULAR)))
                 )
 
                 .andExpect(status().isConflict())
 
                 .andDo(restDocs.document());
 
-        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(FormRequest.class));
+        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
     }
 
     @Test

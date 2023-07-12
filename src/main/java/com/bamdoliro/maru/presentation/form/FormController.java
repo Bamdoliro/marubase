@@ -4,13 +4,14 @@ import com.bamdoliro.maru.application.form.ApproveFormUseCase;
 import com.bamdoliro.maru.application.form.QueryFormUseCase;
 import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
-import com.bamdoliro.maru.application.form.SubmitFormUseCase;
+import com.bamdoliro.maru.application.form.SubmitFormDraftUseCase;
 import com.bamdoliro.maru.application.form.UpdateFormUseCase;
 import com.bamdoliro.maru.application.form.UploadFormUseCase;
 import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
-import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormDraftRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.UpdateFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
@@ -38,7 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class FormController {
 
-    private final SubmitFormUseCase submitFormUseCase;
+    private final SubmitFormDraftUseCase submitFormDraftUseCase;
     private final ApproveFormUseCase approveFormUseCase;
     private final RejectFormUseCase rejectFormUseCase;
     private final QuerySubmittedFormUseCase querySubmittedFormUseCase;
@@ -51,9 +52,9 @@ public class FormController {
     @PostMapping
     public void submitForm(
             @AuthenticationPrincipal(authority = Authority.USER) User user,
-            @RequestBody @Valid FormRequest request
+            @RequestBody @Valid SubmitFormDraftRequest request
     ) {
-        submitFormUseCase.execute(user, request);
+        submitFormDraftUseCase.execute(user, request);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -98,7 +99,7 @@ public class FormController {
     public void updateForm(
             @AuthenticationPrincipal(authority = Authority.USER) User user,
             @PathVariable(name = "form-id") Long formId,
-            @RequestBody @Valid FormRequest request
+            @RequestBody @Valid UpdateFormRequest request
     ) {
         updateFormUseCase.execute(user, formId, request);
     }

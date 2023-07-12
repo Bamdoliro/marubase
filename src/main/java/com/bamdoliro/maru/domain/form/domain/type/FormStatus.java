@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum FormStatus implements EnumProperty {
-    SUBMITTED("제출됨"),
+    DRAFT("제출됨"),
+    SUBMITTED("최종 제출됨"),
     APPROVED("승인됨"),
     REJECTED("반려됨"),
     FIRST_PASSED("1차 합격"),

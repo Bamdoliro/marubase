@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.URL;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FormRequest {
+public class UpdateFormRequest {
 
     @Valid
     @NotNull(message = "필수값입니다.")
