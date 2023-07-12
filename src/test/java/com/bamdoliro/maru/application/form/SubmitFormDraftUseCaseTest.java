@@ -36,7 +36,7 @@ class SubmitFormDraftUseCaseTest {
     private FormService formService;
 
     @Test
-    void 원서를_접수한다() {
+    void 원서_초안을_제출한다() {
         // given
         SubmitFormDraftRequest request = FormFixture.createFormRequest(FormType.REGULAR);
         User user = UserFixture.createUser();
@@ -55,7 +55,7 @@ class SubmitFormDraftUseCaseTest {
     }
 
     @Test
-    void 원서를_접수할_때_이미_접수한_원서가_있으면_에러가_발생한다() {
+    void 원서_초안을_제출할_때_이미_제출한_원서가_있으면_에러가_발생한다() {
         // given
         SubmitFormDraftRequest request = FormFixture.createFormRequest(FormType.REGULAR);
         User user = UserFixture.createUser();
