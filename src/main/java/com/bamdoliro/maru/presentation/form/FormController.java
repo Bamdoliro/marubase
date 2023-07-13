@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.presentation.form;
 
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
+import com.bamdoliro.maru.application.form.ExportFormUseCase;
 import com.bamdoliro.maru.application.form.QueryFormUseCase;
 import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
@@ -20,6 +21,7 @@ import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.auth.Authority;
 import com.bamdoliro.maru.shared.response.ListCommonResponse;
 import com.bamdoliro.maru.shared.response.SingleCommonResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -50,6 +52,7 @@ public class FormController {
     private final UpdateFormUseCase updateFormUseCase;
     private final UploadIdentificationPictureUseCase uploadIdentificationPictureUseCase;
     private final UploadFormUseCase uploadFormUseCase;
+    private final ExportFormUseCase exportFormUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -139,5 +142,13 @@ public class FormController {
         return SingleCommonResponse.ok(
                 uploadFormUseCase.execute(file)
         );
+    }
+
+    @GetMapping("/export")
+    public void exportForm(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
+            HttpServletResponse response
+    ) {
+        exportFormUseCase.execute(user, response);
     }
 }
