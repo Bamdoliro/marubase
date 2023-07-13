@@ -28,6 +28,28 @@ include::{snippets}/form-controller-test/원서_초안을_제출할_때_이미_�
 ===== 요청 형식이 틀린 경우
 include::{snippets}/form-controller-test/원서_초안을_제출할_때_잘못된_형식의_요청을_보내면_에러가_발생한다/http-response.adoc[]
 
+=== 원서 최종 제출
+원서 초안을 제출한 후에는 원서를 최종 제출할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/원서를_최종_제출한다/request-headers.adoc[]
+
+===== Request Body
+include::{snippets}/form-controller-test/원서를_최종_제출한다/request-fields.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/원서를_최종_제출한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/원서를_최종_제출한다/http-response.adoc[]
+
+===== 이미 원서를 제출한 경우
+include::{snippets}/form-controller-test/원서를_최종_제출할_때_이미_제출한_원서라면_에러가_발생한다/http-response.adoc[]
+
 === 원서 승인
 어드민은 원서를 승인할 수 있습니다.
 

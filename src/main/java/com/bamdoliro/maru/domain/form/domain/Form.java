@@ -76,13 +76,12 @@ public class Form extends BaseTimeEntity {
     private User user;
 
     @Builder
-    public Form(Applicant applicant, Parent parent, Education education, Grade grade, Document document, String formUrl, FormType type, User user) {
+    public Form(Applicant applicant, Parent parent, Education education, Grade grade, Document document, FormType type, User user) {
         this.applicant = applicant;
         this.parent = parent;
         this.education = education;
         this.grade = grade;
         this.document = document;
-        this.formUrl = formUrl;
         this.type = type;
         this.user = user;
         this.uuid = UUID.randomUUID();

@@ -5,12 +5,14 @@ import com.bamdoliro.maru.application.form.QueryFormUseCase;
 import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFormDraftUseCase;
+import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.application.form.UpdateFormUseCase;
 import com.bamdoliro.maru.application.form.UploadFormUseCase;
 import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormDraftRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.UpdateFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
@@ -40,6 +42,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class FormController {
 
     private final SubmitFormDraftUseCase submitFormDraftUseCase;
+    private final SubmitFormUseCase submitFormUseCase;
     private final ApproveFormUseCase approveFormUseCase;
     private final RejectFormUseCase rejectFormUseCase;
     private final QuerySubmittedFormUseCase querySubmittedFormUseCase;
@@ -50,11 +53,20 @@ public class FormController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public void submitForm(
+    public void submitFormDraft(
             @AuthenticationPrincipal(authority = Authority.USER) User user,
             @RequestBody @Valid SubmitFormDraftRequest request
     ) {
         submitFormDraftUseCase.execute(user, request);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping
+    public void submitForm(
+            @AuthenticationPrincipal(authority = Authority.USER) User user,
+            @RequestBody @Valid SubmitFormRequest request
+    ) {
+        submitFormUseCase.execute(user, request);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
