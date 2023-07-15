@@ -135,6 +135,9 @@ class FormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("education.teacherPhoneNumber")
                                         .type(JsonFieldType.STRING)
                                         .description("작성 교사 전화번호 (없는 경우 null)"),
+                                fieldWithPath("education.teacherMobilePhoneNumber")
+                                        .type(JsonFieldType.STRING)
+                                        .description("작성 교사 휴대전화번호 (없는 경우 null)"),
                                 fieldWithPath("grade.subjectList[].grade")
                                         .type(JsonFieldType.NUMBER)
                                         .description("학년 (검정고시는 1로 통일)"),
@@ -636,6 +639,9 @@ class FormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("education.teacherPhoneNumber")
                                         .type(JsonFieldType.STRING)
                                         .description("작성 교사 전화번호 (없는 경우 null)"),
+                                fieldWithPath("education.teacherMobilePhoneNumber")
+                                        .type(JsonFieldType.STRING)
+                                        .description("작성 교사 휴대전화번호 (없는 경우 null)"),
                                 fieldWithPath("grade.subjectList[].grade")
                                         .type(JsonFieldType.NUMBER)
                                         .description("학년 (검정고시는 1로 통일)"),

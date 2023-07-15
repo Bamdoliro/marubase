@@ -64,7 +64,7 @@ public class FormFixture {
                         GraduationType.EXPECTED,
                         "2021",
                         new School("비전중학교", "경기도", "7631003"),
-                        new Teacher("나교사", "0519701234")
+                        new Teacher("나교사", "0519701234", "01012344321")
                 ),
                 new Grade(
                         new SubjectList(List.of(
@@ -165,7 +165,8 @@ public class FormFixture {
                         "경기도",
                         "7631003",
                         "나교사",
-                        "0519701234"
+                        "0519701234",
+                        "01012344321"
                 ),
                 new GradeRequest(
                         List.of(new SubjectRequest(2, 1, "국어", AchievementLevel.A),
@@ -211,6 +212,7 @@ public class FormFixture {
                         null,
                         null,
                         null,
+                        null,
                         null
                 ),
                 new GradeRequest(
@@ -244,7 +246,8 @@ public class FormFixture {
                         "경기도",
                         "7631003",
                         "나교사",
-                        "0519701234"
+                        "0519701234",
+                        "01012344321"
                 ),
                 new GradeRequest(
                         List.of(new SubjectRequest(2, 1, "국어", AchievementLevel.A),
