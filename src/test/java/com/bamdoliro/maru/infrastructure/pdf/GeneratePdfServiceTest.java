@@ -25,7 +25,7 @@ class GeneratePdfServiceTest {
     @Test
     void 파일을_저장한다() throws DocumentException, IOException {
         // given
-        String html = processTemplateService.execute("form", null);
+        String html = processTemplateService.execute("no-smoking", null);
 
         // when
         generatePdfService.execute(html);
