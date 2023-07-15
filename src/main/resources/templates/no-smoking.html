@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8"/>
     <style>
@@ -94,14 +94,14 @@
         <td colspan="4">금연 동의서</td>
     </tr>
     <tr>
-        <th class="ba" style="width:15%;">성명</th>
-        <td class="ba" style="width:35%;">김한울</td>
-        <th class="ba" style="width:15%;">접수번호</th>
-        <td class="ba" style="width:35%;">1000</td>
+        <th scope="row" class="ba" style="width:15%;">성명</th>
+        <td class="ba" style="width:35%;" th:text="${form.applicant.name}"></td>
+        <th scope="row" class="ba" style="width:15%;">접수번호</th>
+        <td class="ba" style="width:35%;" th:text="${form.id}">1000</td>
     </tr>
     <tr>
-        <th class="ba">출신중학교</th>
-        <td class="ba" colspan="3">비전중학교</td>
+        <th scope="row" class="ba">출신중학교</th>
+        <td class="ba" colspan="3" th:text="${form.education.school.name}"></td>
     </tr>
     <tr><td style="height: 24px"></td></tr>
     <tr>
@@ -116,9 +116,9 @@
             <p>■ 개인 정보 수집·이용 동의</p>
             <table>
                 <tr>
-                    <th class="ba" style="width: 35%">항목</th>
-                    <th class="ba" style="width: 30%">수집목적</th>
-                    <th class="ba" style="width: 35%">보유기간</th>
+                    <th scope="col" class="ba" style="width: 35%">항목</th>
+                    <th scope="col" class="ba" style="width: 30%">수집목적</th>
+                    <th scope="col" class="ba" style="width: 35%">보유기간</th>
                 </tr>
                 <tr>
                     <td class="ba">학생(성명, 출신중학교)</td>
@@ -130,15 +130,23 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;그러나 동의를 거부할 경우 최종입학에 제한을 받을 수 있습니다.</td>
                 </tr>
                 <tr>
-                    <th class="ba">개인정보 수집·이용 동의</th>
+                    <th scope="row" class="ba">개인정보 수집·이용 동의</th>
                     <td class="ba" colspan="2">□ 예&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;□ 아니오</td>
                 </tr>
             </table>
             <div style="height: 36px;"></div>
-            <p class="middle center">2032년 10월 10일</p>
+            <p class="middle center" th:text="${#dates.format(#dates.createNow(),'YYYY년 MM월 dd일')}"></p>
             <div style="height: 36px;"></div>
-            <p class="right">지원자&nbsp;&nbsp;김한울&nbsp;&nbsp;&nbsp;<span class="guide">(서명)</span></p>
-            <p class="right">보호자&nbsp;&nbsp;방미론&nbsp;&nbsp;&nbsp;<span class="guide">(서명)</span></p>
+            <p class="right">
+                지원자&nbsp;&nbsp;
+                <span th:text="${form.applicant.name}"></span>&nbsp;&nbsp;&nbsp;
+                <span class="guide">(서명)</span>
+            </p>
+            <p class="right">
+                보호자&nbsp;&nbsp;
+                <span th:text="${form.parent.name}"></span>&nbsp;&nbsp;&nbsp;
+                <span class="guide">(서명)</span>
+            </p>
             <div style="height: 36px;"></div>
             <p class="school left">부산소프트웨어마이스터고등학교장 귀하</p>
         </td>

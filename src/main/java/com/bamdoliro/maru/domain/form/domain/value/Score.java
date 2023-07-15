@@ -41,6 +41,10 @@ public class Score {
         this.bonusScore = bonusScore;
     }
 
+    public double getFirstRoundScore() {
+        return subjectGradeScore + attendanceScore + volunteerScore + bonusScore;
+    }
+
     public void updateSecondRoundMeisterScore(Integer depthInterviewScore, Integer codingTestScore, Integer ncsScore) {
         this.depthInterviewScore = depthInterviewScore;
         this.codingTestScore = codingTestScore;

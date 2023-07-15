@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8"/>
     <style>
@@ -84,30 +84,30 @@
         <td colspan="4">학교장 추천서</td>
     </tr>
     <tr>
-        <th class="ba" style="width:15%;">성명</th>
-        <td class="ba" style="width:35%;">김한울</td>
-        <th class="ba" style="width:15%;">접수번호</th>
-        <td class="ba" style="width:35%;">1000</td>
+        <th scope="row" class="ba" style="width:15%;">성명</th>
+        <td class="ba" style="width:35%;" th:text="${form.applicant.name}"></td>
+        <th scope="row" class="ba" style="width:15%;">접수번호</th>
+        <td class="ba" style="width:35%;" th:text="${form.id}"></td>
     </tr>
     <tr>
-        <th class="ba">출신중학교</th>
-        <td class="ba" colspan="3">비전중학교</td>
+        <th scope="row" class="ba">출신중학교</th>
+        <td class="ba" colspan="3" th:text="${form.education.school.name}"></td>
     </tr>
     <tr><td style="height: 24px"></td></tr>
     <tr>
         <td class="ba text-box" colspan="4">
             <table>
                 <tr>
-                    <th class="middle ba" colspan="4">특별전형 추천분야</th>
+                    <th scope="colgroup" class="middle ba" colspan="4">특별전형 추천분야</th>
                 </tr>
                 <tr>
-                    <th class="ba" style="width: 40%">전형 유형</th>
-                    <th class="ba" style="width: 20%">마이스터인재전형</th>
-                    <th class="ba" style="width: 20%">사회통합전형</th>
-                    <th class="ba" style="width: 20%">정원외</th>
+                    <th scope="colgroup" class="ba" style="width: 40%">전형 유형</th>
+                    <th scope="col" class="ba" style="width: 20%">마이스터인재전형</th>
+                    <th scope="col" class="ba" style="width: 20%">사회통합전형</th>
+                    <th scope="col" class="ba" style="width: 20%">정원외</th>
                 </tr>
                 <tr>
-                    <th class="ba">
+                    <th scope="row" class="ba">
                         부산광역시교육청 관내
                     </th>
                     <td class="ba"></td>
@@ -115,7 +115,7 @@
                     <td class="ba"></td>
                 </tr>
                 <tr>
-                    <th class="ba">
+                    <th scope="row" class="ba">
                         부산광역시교육청 관외
                     </th>
                     <td class="ba"></td>
@@ -126,12 +126,18 @@
             <div style="height: 64px;"></div>
             <p class="middle left indent">위 학생을 2022학년도 부산소프트웨어마이스터고등학교 특별전형 대상자로 추천합니다.</p>
             <div style="height: 81px;"></div>
-            <p class="middle">2023년 5월 20일</p>
+            <p class="middle" th:text="${#dates.format(#dates.createNow(),'YYYY년 MM월 dd일')}"></p>
             <div style="height: 81px;"></div>
-            <p class="middle">작성자 담임:&nbsp;&nbsp;차수민&nbsp;&nbsp;&nbsp;<span class="guide">(서명)</span>
+            <p class="middle">
+                작성자 담임:&nbsp;&nbsp;
+                <span th:text="${form.education.teacher.name}"></span>&nbsp;&nbsp;&nbsp;
+                <span class="guide">(서명)</span>
             </p>
             <div style="height: 54px;"></div>
-            <p class="school">비전중학교장&nbsp;&nbsp;<span class="guide">(직인)</span></p>
+            <p class="school">
+                <span th:text="${form.education.school.name}"></span>장&nbsp;&nbsp;
+                <span class="guide">(직인)</span>
+            </p>
             <div style="height: 81px;"></div>
             <p class="school left">부산소프트웨어마이스터고등학교장 귀하</p>
         </td>

@@ -80,6 +80,22 @@ public class Grade {
         );
     }
 
+    public Integer getTotalAbsenceCount() {
+        return attendance1.getAbsenceCount() + attendance2.getAbsenceCount() + attendance3.getAbsenceCount();
+    }
+
+    public Integer getTotalLatenessCount() {
+        return attendance1.getLatenessCount() + attendance2.getLatenessCount() + attendance3.getLatenessCount();
+    }
+
+    public Integer getTotalEarlyLeaveCount() {
+        return attendance1.getEarlyLeaveCount() + attendance2.getEarlyLeaveCount() + attendance3.getEarlyLeaveCount();
+    }
+
+    public Integer getTotalClassAbsenceCount() {
+        return attendance1.getClassAbsenceCount() + attendance2.getClassAbsenceCount() + attendance3.getClassAbsenceCount();
+    }
+
     public Integer getTotalVolunteerTime() {
         return volunteerTime1 + volunteerTime2 + volunteerTime3;
     }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8"/>
     <style>
@@ -46,7 +46,7 @@
         th {
             background-color: #ECF2FA;
             font-weight: 500;
-            padding: 4px 0;
+            padding: 8px 0;
         }
 
         .ba {
@@ -90,6 +90,11 @@
         .inline {
             display: inline-block;
         }
+
+        .disabled {
+            color: #f3f3f3;
+            background-color: #f3f3f3;
+        }
     </style>
     <title>원서</title>
 </head>
@@ -122,146 +127,158 @@
         <td colspan="21">2023학년도 부산소프트웨어마이스터고등학교 전형원서</td>
     </tr>
     <tr>
-        <th class="ba" colspan="2">접수번호</th>
-        <td class="ba" colspan="6">1</td>
+        <th scope="row" class="ba" colspan="2">접수번호</th>
+        <td class="ba" colspan="6" th:text="${form.id}"></td>
         <td colspan="6"></td>
-        <th class="ba" colspan="4">수험번호</th>
-        <td class="ba" colspan="3">1</td>
+        <th scope="row" class="ba" colspan="4">수험번호</th>
+        <td class="ba" colspan="3" th:text="${form.id}"></td>
     </tr>
     <tr>
-        <th class="ba" rowspan="4">지원자</th>
-        <th class="ba" colspan="3">성명</th>
-        <td class="ba" colspan="5">김한울</td>
-        <th class="ba" colspan="2">출신지역</th>
-        <td class="ba" colspan="7">경기도</td>
+        <th scope="rowgroup" class="ba" rowspan="4">지원자</th>
+        <th scope="row" class="ba" colspan="3">성명</th>
+        <td class="ba" colspan="5" th:text="${form.applicant.name}"></td>
+        <th scope="row" class="ba" colspan="2">출신지역</th>
+        <td class="ba" colspan="7" th:text="${form.education.school.location}"></td>
         <td class="ba" rowspan="5" colspan="3">
-            <img src="https://s3.ap-northeast-2.amazonaws.com/maru.bamdoliro/id-picture.png" alt="증명사진"/>
+            <img
+                    th:src="${form.applicant.identificationPictureUri}"
+                    alt="증명사진"/>
         </td>
     </tr>
     <tr>
-        <th class="ba" colspan="3">생년월일</th>
-        <td class="ba" colspan="5">2005년 4월 15일</td>
-        <th class="ba" colspan="2">출신학교</th>
-        <td class="ba" colspan="7">비전중학교</td>
+        <th scope="row" class="ba" colspan="3">생년월일</th>
+        <td class="ba" colspan="5" th:text="${#temporals.format(form.applicant.birthday, 'YYYY년 MM월 dd일')}"></td>
+        <th scope="row" class="ba" colspan="2">출신학교</th>
+        <td class="ba" colspan="7" th:text="${form.education.school.name}"></td>
     </tr>
     <tr>
-        <th class="ba" colspan="3">성별</th>
-        <td class="ba" colspan="5">여</td>
-        <th class="ba" colspan="2">학교번호</th>
-        <td class="ba" colspan="7">7631003</td>
+        <th scope="row" class="ba" colspan="3">성별</th>
+        <td class="ba" colspan="5">
+            <span th:text="${form.applicant.gender.getDescription()}"></span>
+        </td>
+        <th scope="row" class="ba" colspan="2">학교번호</th>
+        <td class="ba" colspan="7" th:text="${form.education.school.code}"></td>
     </tr>
     <tr>
-        <th class="ba" colspan="3">휴대전화</th>
-        <td class="ba" colspan="5">010-4567-2345</td>
-        <th class="ba" colspan="2">구 분</th>
+        <th scope="row" class="ba" colspan="3">휴대전화</th>
+        <td class="ba" colspan="5" th:text="${form.applicant.phoneNumber}"></td>
+        <th scope="row" class="ba" colspan="2">구 분</th>
         <td class="ba" colspan="7">2023년 졸업예정</td>
     </tr>
     <tr>
-        <th class="ba" rowspan="2">보호자</th>
-        <th class="ba" colspan="3">성명</th>
-        <td class="ba" colspan="5">방미론</td>
-        <th class="ba" colspan="2">휴대전화</th>
-        <td class="ba" colspan="7">010-4567-1234</td>
+        <th scope="rowgroup" class="ba" rowspan="2">보호자</th>
+        <th scope="row" class="ba" colspan="3">성명</th>
+        <td class="ba" colspan="5" th:text="${form.parent.name}"></td>
+        <th scope="row" class="ba" colspan="2">휴대전화</th>
+        <td class="ba" colspan="7" th:text="${form.parent.phoneNumber}"></td>
     </tr>
     <tr>
-        <th class="ba" colspan="3">주소</th>
-        <td class="ba" colspan="17">경기도 평택시 무슨길3길 105동 105호 (동송,동 평택센트럴자심3단지앞파트)</td>
-    </tr>
-    <tr><td style="height: 16px"></td></tr>
-    <tr>
-        <th class="ba" colspan="4">전형 구분</th>
-        <td class="ba" colspan="5">특별</td>
-        <th class="ba" colspan="6">특별전형 대상</th>
-        <td class="ba" colspan="6">마이스터인재전형</td>
-    </tr>
-    <tr><td style="height: 16px"></td></tr>
-    <tr>
-        <th class="ba" rowspan="2">학년</th>
-        <th class="ba" colspan="8">교과성적</th>
-        <th class="ba" colspan="7">출결상황</th>
-        <th class="ba" colspan="3">봉사활동</th>
-        <th class="ba">가산점</th>
-        <th class="ba" rowspan="2">총점</th>
+        <th scope="row" class="ba" colspan="3">주소</th>
+        <td class="ba" colspan="17" th:text="${form.parent.address.toString()}"></td>
     </tr>
     <tr>
-        <th class="ba" colspan="2">학기</th>
-        <th class="ba" colspan="3">과목수</th>
-        <th class="ba">환산<br/>점수합</th>
-        <th class="ba" colspan="2">점수</th>
-        <th class="ba">미인정<br/>결석</th>
-        <th class="ba" colspan="2">미인정<br/>지각</th>
-        <th class="ba">미인정<br/>조퇴</th>
-        <th class="ba" colspan="2">미인정<br/>결과</th>
-        <th class="ba">점수</th>
-        <th class="ba">시간</th>
-        <th class="ba" colspan="2">점수</th>
-        <th class="ba">점수</th>
+        <td style="height: 16px"></td>
     </tr>
     <tr>
-        <th class="ba" rowspan="2">1</th>
+        <th scope="row" class="ba" colspan="4">전형 구분</th>
+        <td class="ba" colspan="5" th:if="${form.type.isRegular()}">일반전형</td>
+        <td class="ba" colspan="5" th:unless="${form.type.isRegular()}">특별전형</td>
+        <th scope="row" class="ba" colspan="6">특별전형 대상</th>
+        <td class="ba disabled" colspan="6" th:if="${form.type.isRegular()}">-</td>
+        <td class="ba" colspan="6" th:unless="${form.type.isRegular()}" th:text="${form.type.getDescription()}"></td>
+    </tr>
+    <tr>
+        <td style="height: 16px"></td>
+    </tr>
+    <tr>
+        <th scope="rowgroup" class="ba" rowspan="2">학년</th>
+        <th scope="colgroup" class="ba" colspan="8">교과성적</th>
+        <th scope="colgroup" class="ba" colspan="7">출결상황</th>
+        <th scope="colgroup" class="ba" colspan="3">봉사활동</th>
+        <th scope="col" class="ba">가산점</th>
+        <th scope="col" class="ba" rowspan="2">총점</th>
+    </tr>
+    <tr>
+        <th scope="col" class="ba" colspan="2">학기</th>
+        <th scope="col" class="ba" colspan="3">과목수</th>
+        <th scope="col" class="ba">환산<br/>점수합</th>
+        <th scope="col" class="ba" colspan="2">점수</th>
+        <th scope="col" class="ba">미인정<br/>결석</th>
+        <th scope="col" class="ba" colspan="2">미인정<br/>지각</th>
+        <th scope="col" class="ba">미인정<br/>조퇴</th>
+        <th scope="col" class="ba" colspan="2">미인정<br/>결과</th>
+        <th scope="col" class="ba">점수</th>
+        <th scope="col" class="ba">시간</th>
+        <th scope="col" class="ba" colspan="2">점수</th>
+        <th scope="col" class="ba">점수</th>
+    </tr>
+    <tr>
+        <th scope="row" class="ba" rowspan="2">1</th>
+        <td class="ba disabled" colspan="2">-</td>
+        <td class="ba disabled" colspan="3"></td>
+        <td class="ba disabled" colspan="1"></td>
+        <td class="ba" rowspan="7" colspan="2" th:text="${form.score.subjectGradeScore}"></td>
+        <td class="ba" rowspan="2" colspan="1" th:text="${form.grade.attendance1.absenceCount}"></td>
+        <td class="ba" rowspan="2" colspan="2" th:text="${form.grade.attendance1.latenessCount}"></td>
+        <td class="ba" rowspan="2" colspan="1" th:text="${form.grade.attendance1.earlyLeaveCount}"></td>
+        <td class="ba" rowspan="2" colspan="2" th:text="${form.grade.attendance1.classAbsenceCount}"></td>
+        <td class="ba" rowspan="7" colspan="1" th:text="${form.score.attendanceScore}"></td>
+        <td class="ba" rowspan="2" colspan="1" th:text="${form.grade.volunteerTime1}"></td>
+        <td class="ba" rowspan="7" colspan="2" th:text="${form.score.volunteerScore}"></td>
+        <td class="ba" rowspan="7" colspan="1" th:text="${form.score.bonusScore}"></td>
+        <td class="ba" rowspan="7" colspan="1" th:text="${form.score.getFirstRoundScore()}"></td>
+    </tr>
+    <tr>
+        <td class="ba disabled" colspan="2">-</td>
+        <td class="ba disabled" colspan="3"></td>
+        <td class="ba disabled" colspan="1"></td>
+    </tr>
+    <tr>
+        <th scope="row" class="ba" rowspan="2">2</th>
         <td class="ba" colspan="2">1</td>
-        <td class="ba" colspan="3">1</td>
-        <td class="ba" colspan="1">1</td>
-        <td class="ba" rowspan="7" colspan="2">1</td>
-        <td class="ba" rowspan="2" colspan="1">1</td>
-        <td class="ba" rowspan="2" colspan="2">1</td>
-        <td class="ba" rowspan="2" colspan="1">1</td>
-        <td class="ba" rowspan="2" colspan="2">1</td>
-        <td class="ba" rowspan="7" colspan="1">1</td>
-        <td class="ba" rowspan="2" colspan="1">1</td>
-        <td class="ba" rowspan="7" colspan="2">1</td>
-        <td class="ba" rowspan="7" colspan="1">1</td>
-        <td class="ba" rowspan="7" colspan="1">1</td>
+        <td class="ba" colspan="3">+</td>
+        <td class="ba" colspan="1">+</td>
+        <td class="ba" rowspan="2" colspan="1" th:text="${form.grade.attendance2.absenceCount}"></td>
+        <td class="ba" rowspan="2" colspan="2" th:text="${form.grade.attendance2.latenessCount}"></td>
+        <td class="ba" rowspan="2" colspan="1" th:text="${form.grade.attendance2.earlyLeaveCount}"></td>
+        <td class="ba" rowspan="2" colspan="2" th:text="${form.grade.attendance2.classAbsenceCount}"></td>
+        <td class="ba" rowspan="2" colspan="1" th:text="${form.grade.volunteerTime2}"></td>
     </tr>
     <tr>
-        <td class="ba" colspan="2">1</td>
-        <td class="ba" colspan="3">1</td>
-        <td class="ba" colspan="1">1</td>
+        <td class="ba" colspan="2">2</td>
+        <td class="ba" colspan="3">+</td>
+        <td class="ba" colspan="1">+</td>
     </tr>
     <tr>
-        <th class="ba" rowspan="2">2</th>
+        <th scope="row" class="ba" rowspan="2">3</th>
         <td class="ba" colspan="2">1</td>
-        <td class="ba" colspan="3">1</td>
-        <td class="ba" colspan="1">1</td>
-        <td class="ba" rowspan="2" colspan="1">1</td>
-        <td class="ba" rowspan="2" colspan="2">1</td>
-        <td class="ba" rowspan="2" colspan="1">1</td>
-        <td class="ba" rowspan="2" colspan="2">1</td>
-        <td class="ba" rowspan="2" colspan="1">1</td>
+        <td class="ba" colspan="3">+</td>
+        <td class="ba" colspan="1">+</td>
+        <td class="ba" rowspan="2" colspan="1" th:text="${form.grade.attendance3.absenceCount}"></td>
+        <td class="ba" rowspan="2" colspan="2" th:text="${form.grade.attendance3.latenessCount}"></td>
+        <td class="ba" rowspan="2" colspan="1" th:text="${form.grade.attendance3.earlyLeaveCount}"></td>
+        <td class="ba" rowspan="2" colspan="2" th:text="${form.grade.attendance3.classAbsenceCount}"></td>
+        <td class="ba" rowspan="2" colspan="1" th:text="${form.grade.volunteerTime3}"></td>
     </tr>
     <tr>
-        <td class="ba" colspan="2">1</td>
-        <td class="ba" colspan="3">1</td>
-        <td class="ba" colspan="1">1</td>
+        <td class="ba" colspan="2">2</td>
+        <td class="ba" colspan="3">+</td>
+        <td class="ba" colspan="1">+</td>
     </tr>
     <tr>
-        <th class="ba" rowspan="2">3</th>
-        <td class="ba" colspan="2">1</td>
-        <td class="ba" colspan="3">1</td>
-        <td class="ba" colspan="1">1</td>
-        <td class="ba" rowspan="2" colspan="1">1</td>
-        <td class="ba" rowspan="2" colspan="2">1</td>
-        <td class="ba" rowspan="2" colspan="1">1</td>
-        <td class="ba" rowspan="2" colspan="2">1</td>
-        <td class="ba" rowspan="2" colspan="1">1</td>
+        <th scope="row" class="ba">계</th>
+        <td class="ba disabled" colspan="2"></td>
+        <td class="ba" colspan="3">+</td>
+        <td class="ba disabled" colspan="1"></td>
+        <td class="ba" colspan="1" th:text="${form.grade.getTotalAbsenceCount()}"></td>
+        <td class="ba" colspan="2" th:text="${form.grade.getTotalLatenessCount()}"></td>
+        <td class="ba" colspan="1" th:text="${form.grade.getTotalEarlyLeaveCount()}"></td>
+        <td class="ba" colspan="2" th:text="${form.grade.getTotalClassAbsenceCount()}"></td>
+        <td class="ba" colspan="1" th:text="${form.grade.getTotalVolunteerTime()}"></td>
     </tr>
     <tr>
-        <td class="ba" colspan="2">1</td>
-        <td class="ba" colspan="3">1</td>
-        <td class="ba" colspan="1">1</td>
+        <td style="height: 16px"></td>
     </tr>
-    <tr>
-        <th class="ba">계</th>
-        <td class="ba" colspan="2">1</td>
-        <td class="ba" colspan="3">1</td>
-        <td class="ba" colspan="1">1</td>
-        <td class="ba" colspan="1">1</td>
-        <td class="ba" colspan="2">1</td>
-        <td class="ba" colspan="1">1</td>
-        <td class="ba" colspan="2">1</td>
-        <td class="ba" colspan="1">123</td>
-    </tr>
-    <tr><td style="height: 16px"></td></tr>
     <tr>
         <td class="ba text-box" colspan="21">
             <p class="left small">
@@ -271,12 +288,21 @@
                 ※ 개인정보 수집을 거부할 수 있으며, 미동의 시 고등학교 입학 원서 접수를 할 수 없습니다.
             </p>
             <div class="space"></div>
-            <p class="middle">2032년 10월 10일</p>
+            <p class="middle" th:text="${#dates.format(#dates.createNow(),'YYYY년 MM월 dd일')}"></p>
             <div class="space"></div>
             <div class="right">
                 <div class="left space-right middle inline">
-                    <p>지원자&nbsp;&nbsp;김한울&nbsp;&nbsp;&nbsp;<span class="guide">(인)</span></p>
-                    <p>보호자&nbsp;&nbsp;방미론&nbsp;&nbsp;&nbsp;<span class="guide">(인)</span>&nbsp;&nbsp;&nbsp;&nbsp;관계:</p>
+                    <p>
+                        지원자&nbsp;&nbsp;
+                        <span th:text="${form.applicant.name}"></span>&nbsp;&nbsp;&nbsp;
+                        <span class="guide">(인)</span>
+                    </p>
+                    <p>
+                        보호자&nbsp;&nbsp;
+                        <span th:text="${form.parent.name}"></span>&nbsp;&nbsp;&nbsp;
+                        <span class="guide">(인)</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                        관계:
+                    </p>
                 </div>
             </div>
         </td>
@@ -285,15 +311,22 @@
         <td class="ba text-box" colspan="21">
             <p class="left middle">위의 기재 사항은 사실과 상위없음을 확인하고, 귀교의 신입생 입학전형 대상자로 추천합니다.</p>
             <div class="space"></div>
-            <p class="middle">2032년 10월 10일</p>
+            <p class="middle" th:text="${#dates.format(#dates.createNow(),'YYYY년 MM월 dd일')}"></p>
             <div class="space"></div>
-            <p class="school right space-right">비전중학교장&nbsp;&nbsp;<span class="guide">(직인)</span></p>
+            <p class="school right space-right">
+                <span th:text="${form.education.school.name}"></span>장&nbsp;&nbsp;
+                <span class="guide">(직인)</span>
+            </p>
             <p class="school left">부산소프트웨어마이스터고등학교장 귀하</p>
         </td>
     </tr>
     <tr>
-        <th class="ba" colspan="4">원서작성자</th>
-        <td class="ba" colspan="17">학교 전화번호 051-970-2323&nbsp;&nbsp;|&nbsp;&nbsp;휴대전화번호 010-2356-4567</td>
+        <th scope="row" class="ba" colspan="4">원서작성자</th>
+        <td class="ba" colspan="17">
+            학교 전화번호 <span th:text="${form.education.teacher.phoneNumber}"></span>&nbsp;&nbsp;
+            |&nbsp;&nbsp;
+            휴대전화번호 <span th:text="${form.education.teacher.mobilePhoneNumber}"></span>
+        </td>
     </tr>
 </table>
 </body>
