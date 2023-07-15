@@ -4,16 +4,21 @@ import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.service.FormService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
+import com.bamdoliro.maru.infrastructure.thymeleaf.Templates;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.utils.PdfMerger;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @Disabled
@@ -29,20 +34,50 @@ class GeneratePdfServiceTest {
     @Autowired
     private ProcessTemplateService processTemplateService;
 
+    @Autowired
+    private MergePdfService mergePdfService;
+
     @Test
     void 파일을_저장한다() throws IOException {
         // given
-        Form form = FormFixture.createForm(FormType.REGULAR);
+        Form form = FormFixture.createForm(FormType.MEISTER_TALENT);
         formService.calculateScore(form);
-        String html = processTemplateService.execute("form", Map.of(
-                "form", form
-        ));
+        Map<String, Object> formMap = Map.of("form", form);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PdfDocument mergedDocument = new PdfDocument(new PdfWriter(outputStream));
+        PdfMerger pdfMerger = new PdfMerger(mergedDocument);
+
+        getRequiredTemplates(form.getType())
+                .stream()
+                .map((t) -> processTemplateService.execute(t, formMap))
+                .map(generatePdfService::execute)
+                .forEach((s) -> mergePdfService.execute(pdfMerger, s));
+
+        mergedDocument.close();
+        pdfMerger.close();
 
         // when
-        ByteArrayOutputStream stream = generatePdfService.execute(html);
         FileOutputStream fileOutputStream = new FileOutputStream("src/test/resources/test.pdf");
-        stream.writeTo(fileOutputStream);
-        stream.close();
+        outputStream.writeTo(fileOutputStream);
+        outputStream.close();
         fileOutputStream.close();
+    }
+
+    private List<String> getRequiredTemplates(FormType formType) {
+        if (formType.isRegular()) {
+            return List.of(
+                    Templates.FORM,
+                    Templates.DOCUMENT,
+                    Templates.NO_SMOKING
+            );
+        }
+
+        return List.of(
+                Templates.FORM,
+                Templates.DOCUMENT,
+                Templates.RECOMMENDATION,
+                Templates.NO_SMOKING
+        );
     }
 }

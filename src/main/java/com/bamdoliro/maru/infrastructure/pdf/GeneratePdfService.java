@@ -6,7 +6,6 @@ import com.itextpdf.html2pdf.resolver.font.DefaultFontProvider;
 import com.itextpdf.io.font.FontProgram;
 import com.itextpdf.io.font.FontProgramFactory;
 import com.itextpdf.layout.font.FontProvider;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-@Slf4j
 @Service
 public class GeneratePdfService {
 
@@ -26,11 +24,11 @@ public class GeneratePdfService {
             "/SUIT-Regular.ttf",
             "/SUIT-Light.ttf"
     );
-    private final ConverterProperties properties = createConverterProperties();
+    private final ConverterProperties converterProperties = createConverterProperties();
 
     public ByteArrayOutputStream execute(String html) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        HtmlConverter.convertToPdf(html, outputStream, properties);
+        HtmlConverter.convertToPdf(html, outputStream, converterProperties);
         return outputStream;
     }
 

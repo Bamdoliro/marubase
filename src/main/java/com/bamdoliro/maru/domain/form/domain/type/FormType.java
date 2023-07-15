@@ -59,6 +59,14 @@ public enum FormType implements EnumProperty {
         return mainCategory == Category.SPECIAL;
     }
 
+    public boolean isMeister() {
+        return this == MEISTER_TALENT;
+    }
+
+    public boolean isSocial() {
+        return middleCategory == Category.SOCIAL_INTEGRATION;
+    }
+
     public boolean isSupernumerary() {
         return mainCategory == Category.SUPERNUMERARY;
     }

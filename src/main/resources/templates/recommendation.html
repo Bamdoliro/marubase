@@ -110,17 +110,17 @@
                     <th scope="row" class="ba">
                         부산광역시교육청 관내
                     </th>
-                    <td class="ba"></td>
-                    <td class="ba"></td>
-                    <td class="ba"></td>
+                    <td class="ba" th:text="${form.education.school.isBusan() && form.type.isMeister() ? 'O' : null}"></td>
+                    <td class="ba" th:text="${form.education.school.isBusan() && form.type.isSocial() ? 'O' : null}"></td>
+                    <td class="ba" th:text="${form.education.school.isBusan() && form.type.isSupernumerary() ? 'O' : null}"></td>
                 </tr>
                 <tr>
                     <th scope="row" class="ba">
                         부산광역시교육청 관외
                     </th>
-                    <td class="ba"></td>
-                    <td class="ba">O</td>
-                    <td class="ba"></td>
+                    <td class="ba" th:text="${!form.education.school.isBusan() && form.type.isMeister() ? 'O' : null}"></td>
+                    <td class="ba" th:text="${!form.education.school.isBusan() && form.type.isSocial() ? 'O' : null}"></td>
+                    <td class="ba" th:text="${!form.education.school.isBusan() && form.type.isSupernumerary() ? 'O' : null}"></td>
                 </tr>
             </table>
             <div style="height: 64px;"></div>
