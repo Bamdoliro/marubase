@@ -44,7 +44,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.apache.commons:commons-lang3:3.0'
-	implementation 'org.xhtmlrenderer:flying-saucer-pdf:9.1.22'
+
+	implementation 'com.itextpdf:itext7-core:8.0.0'
+	implementation 'com.itextpdf:html2pdf:5.0.0'
 
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'

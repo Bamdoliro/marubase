@@ -1,16 +1,14 @@
 package com.bamdoliro.maru.infrastructure.pdf;
 
 import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
-import com.lowagie.text.DocumentException;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.ClassPathResource;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Disabled
 @SpringBootTest
@@ -23,11 +21,15 @@ class GeneratePdfServiceTest {
     private ProcessTemplateService processTemplateService;
 
     @Test
-    void 파일을_저장한다() throws DocumentException, IOException {
-        // given
-        String html = processTemplateService.execute("no-smoking", null);
+    void 파일을_저장한다() throws IOException {
+        // given√
+        String html = processTemplateService.execute("document", null);
 
         // when
-        generatePdfService.execute(html);
+        ByteArrayOutputStream stream = generatePdfService.execute(html);
+        FileOutputStream fileOutputStream = new FileOutputStream("src/test/resources/test.pdf");
+        stream.writeTo(fileOutputStream);
+        stream.close();
+        fileOutputStream.close();
     }
 }

@@ -1,60 +1,52 @@
 package com.bamdoliro.maru.infrastructure.pdf;
 
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.pdf.BaseFont;
+import com.itextpdf.html2pdf.ConverterProperties;
+import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.html2pdf.resolver.font.DefaultFontProvider;
+import com.itextpdf.io.font.FontProgram;
+import com.itextpdf.io.font.FontProgramFactory;
+import com.itextpdf.layout.font.FontProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.xhtmlrenderer.pdf.ITextRenderer;
 
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
 public class GeneratePdfService {
 
-    public void execute(String html) throws IOException, DocumentException {
-        String outputFolder = "src/test/resources/test.pdf";
-        OutputStream outputStream = new FileOutputStream(outputFolder);
+    private final String fontPath = new ClassPathResource("/static/fonts").getPath();
+    private final List<String> fonts = List.of(
+            "/SUIT-Bold.ttf",
+            "/SUIT-SemiBold.ttf",
+            "/SUIT-Medium.ttf",
+            "/SUIT-Regular.ttf",
+            "/SUIT-Light.ttf"
+    );
 
-        ITextRenderer renderer = new ITextRenderer();
-        renderer.getFontResolver()
-                .addFont(new ClassPathResource("/static/fonts/SUIT-Bold.ttf")
-                                .getURL()
-                                .toString(),
-                        BaseFont.IDENTITY_H,
-                        BaseFont.EMBEDDED);
-        renderer.getFontResolver()
-                .addFont(new ClassPathResource("/static/fonts/SUIT-SemiBold.ttf")
-                                .getURL()
-                                .toString(),
-                        BaseFont.IDENTITY_H,
-                        BaseFont.EMBEDDED);
-        renderer.getFontResolver()
-                .addFont(new ClassPathResource("/static/fonts/SUIT-Medium.ttf")
-                                .getURL()
-                                .toString(),
-                        BaseFont.IDENTITY_H,
-                        BaseFont.EMBEDDED);
-        renderer.getFontResolver()
-                .addFont(new ClassPathResource("/static/fonts/SUIT-Regular.ttf")
-                                .getURL()
-                                .toString(),
-                        BaseFont.IDENTITY_H,
-                        BaseFont.EMBEDDED);
-        renderer.getFontResolver()
-                .addFont(new ClassPathResource("/static/fonts/SUIT-Light.ttf")
-                                .getURL()
-                                .toString(),
-                        BaseFont.IDENTITY_H,
-                        BaseFont.EMBEDDED);
+    public ByteArrayOutputStream execute(String html) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        HtmlConverter.convertToPdf(html, outputStream, createConverterProperties());
+        return outputStream;
+    }
 
-        renderer.setDocumentFromString(html);
-        renderer.layout();
-        renderer.createPDF(outputStream);
+    public ConverterProperties createConverterProperties() {
+        ConverterProperties properties = new ConverterProperties();
+        FontProvider fontProvider = new DefaultFontProvider(false, false, false);
 
-        outputStream.close();
+        fonts.forEach(font -> {
+            try {
+                FontProgram fontProgram = FontProgramFactory.createFont(fontPath + font);
+                fontProvider.addFont(fontProgram);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        properties.setFontProvider(fontProvider);
+        return properties;
     }
 }
