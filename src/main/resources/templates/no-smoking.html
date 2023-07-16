@@ -37,12 +37,12 @@
             font-weight: 500;
             padding: 8px 0;
         }
-        
+
         .ba {
             border: #000000 1px solid;
         }
 
-        .title {
+        caption {
             font-weight: bold;
             font-size: 28px;
             line-height: 48px;
@@ -90,9 +90,7 @@
 </head>
 <body>
 <table>
-    <tr class="title">
-        <td colspan="4">금연 동의서</td>
-    </tr>
+    <caption>금연 동의서</caption>
     <tr>
         <th scope="row" class="ba" style="width:15%;">성명</th>
         <td class="ba" style="width:35%;" th:text="${form.applicant.name}"></td>
@@ -103,7 +101,9 @@
         <th scope="row" class="ba">출신중학교</th>
         <td class="ba" colspan="3" th:text="${form.education.school.name}"></td>
     </tr>
-    <tr><td style="height: 24px"></td></tr>
+    <tr>
+        <td style="height: 24px"></td>
+    </tr>
     <tr>
         <td class="ba text-box middle left" colspan="4">
             <p>하나. 나 자신의 건강을 위해서 흡연을 하지 않겠습니다.</p>
@@ -127,7 +127,8 @@
                 </tr>
                 <tr>
                     <td class="left" colspan="3">※ 개인정보 수집·이용에 대한 동의를 거부할 권리가 있습니다.<br/>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;그러나 동의를 거부할 경우 최종입학에 제한을 받을 수 있습니다.</td>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;그러나 동의를 거부할 경우 최종입학에 제한을 받을 수 있습니다.
+                    </td>
                 </tr>
                 <tr>
                     <th scope="row" class="ba">개인정보 수집·이용 동의</th>

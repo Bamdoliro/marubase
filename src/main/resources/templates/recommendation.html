@@ -31,7 +31,7 @@
             padding: 8px 0;
         }
 
-        .title {
+        caption {
             font-weight: bold;
             font-size: 28px;
             line-height: 48px;
@@ -47,7 +47,7 @@
         .ba {
             border: #000000 1px solid;
         }
-        
+
         .left {
             text-align: left;
         }
@@ -80,9 +80,7 @@
 </head>
 <body>
 <table>
-    <tr class="title">
-        <td colspan="4">학교장 추천서</td>
-    </tr>
+    <caption>학교장 추천서</caption>
     <tr>
         <th scope="row" class="ba" style="width:15%;">성명</th>
         <td class="ba" style="width:35%;" th:text="${form.applicant.name}"></td>
@@ -93,7 +91,9 @@
         <th scope="row" class="ba">출신중학교</th>
         <td class="ba" colspan="3" th:text="${form.education.school.name}"></td>
     </tr>
-    <tr><td style="height: 24px"></td></tr>
+    <tr>
+        <td style="height: 24px"></td>
+    </tr>
     <tr>
         <td class="ba text-box" colspan="4">
             <table>
@@ -110,17 +110,23 @@
                     <th scope="row" class="ba">
                         부산광역시교육청 관내
                     </th>
-                    <td class="ba" th:text="${form.education.school.isBusan() && form.type.isMeister() ? 'O' : null}"></td>
-                    <td class="ba" th:text="${form.education.school.isBusan() && form.type.isSocial() ? 'O' : null}"></td>
-                    <td class="ba" th:text="${form.education.school.isBusan() && form.type.isSupernumerary() ? 'O' : null}"></td>
+                    <td class="ba"
+                        th:text="${form.education.school.isBusan() && form.type.isMeister() ? 'O' : null}"></td>
+                    <td class="ba"
+                        th:text="${form.education.school.isBusan() && form.type.isSocial() ? 'O' : null}"></td>
+                    <td class="ba"
+                        th:text="${form.education.school.isBusan() && form.type.isSupernumerary() ? 'O' : null}"></td>
                 </tr>
                 <tr>
                     <th scope="row" class="ba">
                         부산광역시교육청 관외
                     </th>
-                    <td class="ba" th:text="${!form.education.school.isBusan() && form.type.isMeister() ? 'O' : null}"></td>
-                    <td class="ba" th:text="${!form.education.school.isBusan() && form.type.isSocial() ? 'O' : null}"></td>
-                    <td class="ba" th:text="${!form.education.school.isBusan() && form.type.isSupernumerary() ? 'O' : null}"></td>
+                    <td class="ba"
+                        th:text="${!form.education.school.isBusan() && form.type.isMeister() ? 'O' : null}"></td>
+                    <td class="ba"
+                        th:text="${!form.education.school.isBusan() && form.type.isSocial() ? 'O' : null}"></td>
+                    <td class="ba"
+                        th:text="${!form.education.school.isBusan() && form.type.isSupernumerary() ? 'O' : null}"></td>
                 </tr>
             </table>
             <div style="height: 64px;"></div>

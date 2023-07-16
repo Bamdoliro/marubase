@@ -31,7 +31,7 @@
             padding: 8px 0;
         }
 
-        .title {
+        caption {
             font-weight: bold;
             font-size: 28px;
             line-height: 48px;
@@ -65,9 +65,7 @@
 </head>
 <body>
 <table>
-    <tr class="title">
-        <td colspan="4">자기소개서 및 학업계획서</td>
-    </tr>
+    <caption>자기소개서 및 학업계획서</caption>
     <tr>
         <th scope="row" class="ba" style="width:15%;">성명</th>
         <td class="ba" style="width:35%;" th:text="${form.applicant.name}"></td>
@@ -78,15 +76,21 @@
         <th scope="row" class="ba">출신중학교</th>
         <td class="ba" colspan="3" th:text="${form.education.school.name}"></td>
     </tr>
-    <tr><td style="height: 24px;"></td></tr>
+    <tr>
+        <td style="height: 24px;"></td>
+    </tr>
     <tr>
         <th scope="col" class="ba middle">자기소개서</th>
-        <td class="ba left text-box" colspan="3">자유롭게 자신의 특성 및 성장과정, 취미·특기, 학교생활, 가족안에서의 역할, 장점과 보완·발전시켜야할 단점에 대하여 서술하십시오.(1000자 이내)</td>
+        <td class="ba left text-box" colspan="3">자유롭게 자신의 특성 및 성장과정, 취미·특기, 학교생활, 가족안에서의 역할, 장점과 보완·발전시켜야할 단점에 대하여
+            서술하십시오.(1000자 이내)
+        </td>
     </tr>
     <tr>
         <td class="ba left text-box" style="height: 340px" colspan="4" th:text="${form.document.coverLetter}"></td>
     </tr>
-    <tr><td style="height: 24px;"></td></tr>
+    <tr>
+        <td style="height: 24px;"></td>
+    </tr>
     <tr>
         <th scope="col" class="ba middle">학업계획서</th>
         <td class="ba left text-box" colspan="3">
@@ -94,7 +98,8 @@
         </td>
     </tr>
     <tr>
-        <td class="ba left text-box" style="height: 340px" colspan="4" th:text="${form.document.statementOfPurpose}"></td>
+        <td class="ba left text-box" style="height: 340px" colspan="4"
+            th:text="${form.document.statementOfPurpose}"></td>
     </tr>
 </table>
 </body>

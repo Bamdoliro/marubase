@@ -41,6 +41,7 @@ class GeneratePdfServiceTest {
         // given
         Form form = FormFixture.createForm(FormType.MEISTER_TALENT);
         calculateFormScoreService.execute(form);
+        form.assignExaminationNumber(3004L);
         Map<String, Object> formMap = Map.of("form", form);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
