@@ -3,9 +3,8 @@ package com.bamdoliro.maru.application.form;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
-import com.bamdoliro.maru.domain.form.service.FormService;
+import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.domain.user.service.UserFacade;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
@@ -34,7 +33,7 @@ class SubmitFormUseCaseTest {
     private FormRepository formRepository;
 
     @Mock
-    private FormService formService;
+    private CalculateFormScoreService calculateFormScoreService;
 
     @Test
     void 원서를_접수한다() {
@@ -43,7 +42,7 @@ class SubmitFormUseCaseTest {
         User user = UserFixture.createUser();
         
         given(formRepository.existsByUserId(user.getId())).willReturn(false);
-        willDoNothing().given(formService).calculateScore(any(Form.class));
+        willDoNothing().given(calculateFormScoreService).execute(any(Form.class));
 
         // when
         submitFormUseCase.execute(user, request);
@@ -51,7 +50,7 @@ class SubmitFormUseCaseTest {
         // then
         
         verify(formRepository, times(1)).existsByUserId(user.getId());
-        verify(formService, times(1)).calculateScore(any(Form.class));
+        verify(calculateFormScoreService, times(1)).execute(any(Form.class));
         verify(formRepository, times(1)).save(any(Form.class));
     }
 
@@ -67,7 +66,7 @@ class SubmitFormUseCaseTest {
         assertThrows(FormAlreadySubmittedException.class, () -> submitFormUseCase.execute(user, request));
         
         verify(formRepository, times(1)).existsByUserId(user.getId());
-        verify(formService, never()).calculateScore(any(Form.class));
+        verify(calculateFormScoreService, never()).execute(any(Form.class));
         verify(formRepository, never()).save(any(Form.class));
     }
 

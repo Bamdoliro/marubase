@@ -35,7 +35,7 @@ public enum FormType implements EnumProperty {
 
     @Getter
     @RequiredArgsConstructor
-    enum Category implements EnumProperty {
+    public enum Category implements EnumProperty {
         // Main Category
         REGULAR("일반전형"),
         SPECIAL("특별전형"),
