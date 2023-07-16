@@ -2,6 +2,7 @@ package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
+import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.pdf.GeneratePdfService;
@@ -30,8 +31,9 @@ public class ExportFormUseCase {
 
     public ByteArrayResource execute(User user) {
         Form form = formFacade.getForm(user);
-        Map<String, Object> formMap = Map.of("form", form);
+        validateFormStatus(form);
 
+        Map<String, Object> formMap = Map.of("form", form);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PdfDocument mergedDocument = new PdfDocument(new PdfWriter(outputStream));
         PdfMerger pdfMerger = new PdfMerger(mergedDocument);
@@ -46,6 +48,12 @@ public class ExportFormUseCase {
         pdfMerger.close();
 
         return new ByteArrayResource(outputStream.toByteArray());
+    }
+
+    private void validateFormStatus(Form form) {
+        if (!(form.isDraft() || form.isRejected())) {
+            throw new FormAlreadySubmittedException();
+        }
     }
 
     private List<String> getRequiredTemplates(FormType formType) {
