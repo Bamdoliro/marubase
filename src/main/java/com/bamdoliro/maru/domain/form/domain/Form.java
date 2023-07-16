@@ -40,6 +40,9 @@ public class Form extends BaseTimeEntity {
     @Id
     private Long id;
 
+    @Column(nullable = true, unique = true)
+    private Long examinationNumber;
+
     private UUID uuid;
 
     @Embedded
@@ -126,6 +129,10 @@ public class Form extends BaseTimeEntity {
         this.formUrl = formUrl;
         this.type = type;
         this.status = FormStatus.SUBMITTED;
+    }
+
+    public void assignExaminationNumber(Long examinationNumber) {
+        this.examinationNumber = examinationNumber;
     }
 }
 
