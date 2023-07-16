@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.infrastructure.pdf;
 
+import com.bamdoliro.maru.infrastructure.pdf.exception.FailedToExportPdfException;
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.html2pdf.resolver.font.DefaultFontProvider;
@@ -41,7 +42,7 @@ public class GeneratePdfService {
                 FontProgram fontProgram = FontProgramFactory.createFont(fontPath + font);
                 fontProvider.addFont(fontProgram);
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new FailedToExportPdfException();
             }
         });
 
