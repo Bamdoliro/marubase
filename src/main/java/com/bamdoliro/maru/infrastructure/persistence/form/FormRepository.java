@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface FormRepository extends CrudRepository<Form, Long> {
 
@@ -23,4 +24,9 @@ public interface FormRepository extends CrudRepository<Form, Long> {
             "WHERE f.examinationNumber BETWEEN :minValue AND :maxValue")
     Optional<Long> findMaxExaminationNumber(
             @Param("minValue") Long minValue, @Param("maxValue") Long maxValue);
+
+    @Query("SELECT f.uuid " +
+            "FROM Form f " +
+            "WHERE f.user = :user")
+    Optional<UUID> findFormUuidByUser(@Param("user") User user);
 }

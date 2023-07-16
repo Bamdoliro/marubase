@@ -7,6 +7,8 @@ import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @Component
 public class FormFacade {
@@ -20,6 +22,11 @@ public class FormFacade {
 
     public Form getForm(User user) {
         return formRepository.findByUser(user)
+                .orElseThrow(FormNotFoundException::new);
+    }
+
+    public UUID getFormUuid(User user) {
+        return formRepository.findFormUuidByUser(user)
                 .orElseThrow(FormNotFoundException::new);
     }
 }

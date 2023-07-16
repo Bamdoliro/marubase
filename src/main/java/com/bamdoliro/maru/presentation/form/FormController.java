@@ -132,7 +132,7 @@ public class FormController {
             @RequestPart(value = "image") MultipartFile image
     ) {
         return SingleCommonResponse.ok(
-                uploadIdentificationPictureUseCase.execute(image)
+                uploadIdentificationPictureUseCase.execute(user, image)
         );
     }
 
@@ -143,7 +143,7 @@ public class FormController {
             @RequestPart(value = "file") MultipartFile file
     ) {
         return SingleCommonResponse.ok(
-                uploadFormUseCase.execute(file)
+                uploadFormUseCase.execute(user, file)
         );
     }
 

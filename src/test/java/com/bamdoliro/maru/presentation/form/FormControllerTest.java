@@ -798,7 +798,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(uploadIdentificationPictureUseCase.execute(image)).willReturn(new UploadResponse("https://example.com/image.png"));
+        given(uploadIdentificationPictureUseCase.execute(user, image)).willReturn(new UploadResponse("https://example.com/image.png"));
 
         mockMvc.perform(multipart("/form/identification-picture")
                         .file(image)
@@ -820,7 +820,7 @@ class FormControllerTest extends RestDocsTestSupport {
                         )
                 ));
 
-        verify(uploadIdentificationPictureUseCase, times(1)).execute(image);
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(user, image);
     }
 
     @Test
@@ -835,7 +835,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FailedToSaveException()).when(uploadIdentificationPictureUseCase).execute(image);
+        doThrow(new FailedToSaveException()).when(uploadIdentificationPictureUseCase).execute(user, image);
 
         mockMvc.perform(multipart("/form/identification-picture")
                         .file(image)
@@ -848,7 +848,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(uploadIdentificationPictureUseCase, times(1)).execute(image);
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(user, image);
     }
 
     @Test
@@ -863,7 +863,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new ImageSizeMismatchException()).when(uploadIdentificationPictureUseCase).execute(image);
+        doThrow(new ImageSizeMismatchException()).when(uploadIdentificationPictureUseCase).execute(user, image);
 
         mockMvc.perform(multipart("/form/identification-picture")
                         .file(image)
@@ -876,7 +876,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(uploadIdentificationPictureUseCase, times(1)).execute(image);
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(user, image);
     }
 
     @Test
@@ -891,7 +891,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new InvalidFileNameException()).when(uploadIdentificationPictureUseCase).execute(image);
+        doThrow(new InvalidFileNameException()).when(uploadIdentificationPictureUseCase).execute(user, image);
 
         mockMvc.perform(multipart("/form/identification-picture")
                         .file(image)
@@ -904,7 +904,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(uploadIdentificationPictureUseCase, times(1)).execute(image);
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(user, image);
     }
 
     @Test
@@ -919,7 +919,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new EmptyFileException()).when(uploadIdentificationPictureUseCase).execute(image);
+        doThrow(new EmptyFileException()).when(uploadIdentificationPictureUseCase).execute(user, image);
 
         mockMvc.perform(multipart("/form/identification-picture")
                         .file(image)
@@ -932,7 +932,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(uploadIdentificationPictureUseCase, times(1)).execute(image);
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(user, image);
     }
 
     @Test
@@ -947,7 +947,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FileSizeLimitExceededException()).when(uploadIdentificationPictureUseCase).execute(image);
+        doThrow(new FileSizeLimitExceededException()).when(uploadIdentificationPictureUseCase).execute(user, image);
 
         mockMvc.perform(multipart("/form/identification-picture")
                         .file(image)
@@ -960,7 +960,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(uploadIdentificationPictureUseCase, times(1)).execute(image);
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(user, image);
     }
 
     @Test
@@ -975,7 +975,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new MediaTypeMismatchException()).when(uploadIdentificationPictureUseCase).execute(image);
+        doThrow(new MediaTypeMismatchException()).when(uploadIdentificationPictureUseCase).execute(user, image);
 
         mockMvc.perform(multipart("/form/identification-picture")
                         .file(image)
@@ -988,7 +988,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(uploadIdentificationPictureUseCase, times(1)).execute(image);
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(user, image);
     }
 
     @Test
@@ -1003,7 +1003,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(uploadFormUseCase.execute(file)).willReturn(new UploadResponse("https://example.com/file.pdf"));
+        given(uploadFormUseCase.execute(user, file)).willReturn(new UploadResponse("https://example.com/file.pdf"));
 
         mockMvc.perform(multipart("/form/form-document")
                         .file(file)
@@ -1025,7 +1025,7 @@ class FormControllerTest extends RestDocsTestSupport {
                         )
                 ));
 
-        verify(uploadFormUseCase, times(1)).execute(file);
+        verify(uploadFormUseCase, times(1)).execute(user, file);
     }
 
     @Test
@@ -1040,7 +1040,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FailedToSaveException()).when(uploadFormUseCase).execute(file);
+        doThrow(new FailedToSaveException()).when(uploadFormUseCase).execute(user, file);
 
         mockMvc.perform(multipart("/form/form-document")
                         .file(file)
@@ -1053,7 +1053,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(uploadFormUseCase, times(1)).execute(file);
+        verify(uploadFormUseCase, times(1)).execute(user, file);
     }
 
     @Test
@@ -1068,7 +1068,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new InvalidFileNameException()).when(uploadFormUseCase).execute(file);
+        doThrow(new InvalidFileNameException()).when(uploadFormUseCase).execute(user, file);
 
         mockMvc.perform(multipart("/form/form-document")
                         .file(file)
@@ -1081,7 +1081,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(uploadFormUseCase, times(1)).execute(file);
+        verify(uploadFormUseCase, times(1)).execute(user, file);
     }
 
     @Test
@@ -1096,7 +1096,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new EmptyFileException()).when(uploadFormUseCase).execute(file);
+        doThrow(new EmptyFileException()).when(uploadFormUseCase).execute(user, file);
 
         mockMvc.perform(multipart("/form/form-document")
                         .file(file)
@@ -1109,7 +1109,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(uploadFormUseCase, times(1)).execute(file);
+        verify(uploadFormUseCase, times(1)).execute(user, file);
     }
 
     @Test
@@ -1124,7 +1124,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FileSizeLimitExceededException()).when(uploadFormUseCase).execute(file);
+        doThrow(new FileSizeLimitExceededException()).when(uploadFormUseCase).execute(user, file);
 
         mockMvc.perform(multipart("/form/form-document")
                         .file(file)
@@ -1137,7 +1137,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(uploadFormUseCase, times(1)).execute(file);
+        verify(uploadFormUseCase, times(1)).execute(user, file);
     }
 
     @Test
@@ -1152,7 +1152,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new MediaTypeMismatchException()).when(uploadFormUseCase).execute(file);
+        doThrow(new MediaTypeMismatchException()).when(uploadFormUseCase).execute(user, file);
 
         mockMvc.perform(multipart("/form/form-document")
                         .file(file)
@@ -1165,6 +1165,6 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(uploadFormUseCase, times(1)).execute(file);
+        verify(uploadFormUseCase, times(1)).execute(user, file);
     }
 }
