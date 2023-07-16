@@ -28,6 +28,7 @@ class SubmitFormUseCaseTest {
     @Mock
     private FormFacade formFacade;
 
+
     @Test
     void 원서를_제출한다() {
         // given

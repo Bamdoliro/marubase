@@ -3,7 +3,7 @@ package com.bamdoliro.maru.application.form;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
-import com.bamdoliro.maru.domain.form.service.FormService;
+import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormDraftRequest;
@@ -15,7 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -33,24 +33,24 @@ class SubmitFormDraftUseCaseTest {
     private FormRepository formRepository;
 
     @Mock
-    private FormService formService;
+    private CalculateFormScoreService calculateFormScoreService;
 
     @Test
     void 원서_초안을_제출한다() {
         // given
         SubmitFormDraftRequest request = FormFixture.createFormRequest(FormType.REGULAR);
         User user = UserFixture.createUser();
-        
+
         given(formRepository.existsByUserId(user.getId())).willReturn(false);
-        willDoNothing().given(formService).calculateScore(any(Form.class));
+        willDoNothing().given(calculateFormScoreService).execute(any(Form.class));
 
         // when
         submitFormDraftUseCase.execute(user, request);
 
         // then
-        
+
         verify(formRepository, times(1)).existsByUserId(user.getId());
-        verify(formService, times(1)).calculateScore(any(Form.class));
+        verify(calculateFormScoreService, times(1)).execute(any(Form.class));
         verify(formRepository, times(1)).save(any(Form.class));
     }
 
@@ -59,14 +59,14 @@ class SubmitFormDraftUseCaseTest {
         // given
         SubmitFormDraftRequest request = FormFixture.createFormRequest(FormType.REGULAR);
         User user = UserFixture.createUser();
-        
+
         given(formRepository.existsByUserId(user.getId())).willReturn(true);
 
         // when and then
         assertThrows(FormAlreadySubmittedException.class, () -> submitFormDraftUseCase.execute(user, request));
-        
+
         verify(formRepository, times(1)).existsByUserId(user.getId());
-        verify(formService, never()).calculateScore(any(Form.class));
+        verify(calculateFormScoreService, never()).execute(any(Form.class));
         verify(formRepository, never()).save(any(Form.class));
     }
 
