@@ -24,9 +24,9 @@ import static com.bamdoliro.maru.domain.form.constant.FormConstant.SPECIAL_TYPE_
 
 @RequiredArgsConstructor
 @Service
-public class FormService {
+public class CalculateFormScoreService {
 
-    public void calculateScore(Form form) {
+    public void execute(Form form) {
         Double subjectGradeScore = calculateSubjectGradeScore(form);
         Integer attendanceScore = calculateAttendanceScore(form);
         Integer volunteerScore = calculateVolunteerScore(form);
