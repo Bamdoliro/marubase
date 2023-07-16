@@ -3,6 +3,7 @@ package com.bamdoliro.maru.application.form;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
+import com.bamdoliro.maru.domain.form.service.AssignExaminationNumberService;
 import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
@@ -35,6 +36,9 @@ class SubmitFormDraftUseCaseTest {
     @Mock
     private CalculateFormScoreService calculateFormScoreService;
 
+    @Mock
+    private AssignExaminationNumberService assignExaminationNumberService;
+
     @Test
     void 원서_초안을_제출한다() {
         // given
@@ -42,6 +46,7 @@ class SubmitFormDraftUseCaseTest {
         User user = UserFixture.createUser();
 
         given(formRepository.existsByUserId(user.getId())).willReturn(false);
+        willDoNothing().given(assignExaminationNumberService).execute(any(Form.class));
         willDoNothing().given(calculateFormScoreService).execute(any(Form.class));
 
         // when
@@ -51,6 +56,7 @@ class SubmitFormDraftUseCaseTest {
 
         verify(formRepository, times(1)).existsByUserId(user.getId());
         verify(calculateFormScoreService, times(1)).execute(any(Form.class));
+        verify(assignExaminationNumberService, times(1)).execute(any(Form.class));
         verify(formRepository, times(1)).save(any(Form.class));
     }
 
@@ -67,6 +73,7 @@ class SubmitFormDraftUseCaseTest {
 
         verify(formRepository, times(1)).existsByUserId(user.getId());
         verify(calculateFormScoreService, never()).execute(any(Form.class));
+        verify(assignExaminationNumberService, never()).execute(any(Form.class));
         verify(formRepository, never()).save(any(Form.class));
     }
 

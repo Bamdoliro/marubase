@@ -5,7 +5,6 @@ import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -13,7 +12,6 @@ public class AssignExaminationNumberService {
 
     private final FormRepository formRepository;
 
-    @Transactional
     public void execute(Form form) {
         Long examinationNumber = getNextExaminationNumber(form.getType());
         form.assignExaminationNumber(examinationNumber);

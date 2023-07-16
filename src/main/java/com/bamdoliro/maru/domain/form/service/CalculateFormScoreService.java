@@ -8,7 +8,6 @@ import com.bamdoliro.maru.domain.form.domain.value.SubjectMap;
 import com.bamdoliro.maru.shared.util.MathUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.DEFAULT_ATTENDANCE_SCORE;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.DEFAULT_VOLUNTEER_SCORE;
@@ -27,7 +26,6 @@ import static com.bamdoliro.maru.domain.form.constant.FormConstant.SPECIAL_TYPE_
 @Service
 public class CalculateFormScoreService {
 
-    @Transactional
     public void execute(Form form) {
         Double subjectGradeScore = calculateSubjectGradeScore(form);
         Integer attendanceScore = calculateAttendanceScore(form);

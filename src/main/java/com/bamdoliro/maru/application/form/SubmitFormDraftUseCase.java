@@ -2,6 +2,7 @@ package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
+import com.bamdoliro.maru.domain.form.service.AssignExaminationNumberService;
 import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
@@ -16,6 +17,7 @@ public class SubmitFormDraftUseCase {
 
     private final FormRepository formRepository;
     private final CalculateFormScoreService calculateFormScoreService;
+    private final AssignExaminationNumberService assignExaminationNumberService;
 
     @Transactional
     public void execute(User user, SubmitFormDraftRequest request) {
@@ -32,7 +34,7 @@ public class SubmitFormDraftUseCase {
                 .build();
 
         calculateFormScoreService.execute(form);
-
+        assignExaminationNumberService.execute(form);
         formRepository.save(form);
     }
 
