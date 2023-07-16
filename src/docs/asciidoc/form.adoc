@@ -1,32 +1,54 @@
 == 원서 Form
 
-=== 원서 접수
-원서 정보를 입력해 원서를 접수할 수 있습니다.
+=== 원서 초안 제출
+원서 정보를 입력해 원서를 제출할 수 있습니다.
 
 ==== 요청 형식
 
 ===== Request Header
-include::{snippets}/form-controller-test/원서를_접수한다/request-headers.adoc[]
+include::{snippets}/form-controller-test/원서_초안을_제출한다/request-headers.adoc[]
 
 ===== Request Body
-include::{snippets}/form-controller-test/원서를_접수한다/request-fields.adoc[]
+include::{snippets}/form-controller-test/원서_초안을_제출한다/request-fields.adoc[]
 
 ==== 요청
 ===== 졸업 예정 / 졸업 예시
-include::{snippets}/form-controller-test/원서를_접수한다/http-request.adoc[]
+include::{snippets}/form-controller-test/원서_초안을_제출한다/http-request.adoc[]
 
 ===== 중졸 검정고시 합격자 예시
-include::{snippets}/form-controller-test/중졸_껌정고시_합격자가_원서를_접수한다/http-request.adoc[]
+include::{snippets}/form-controller-test/중졸_껌정고시_합격자가_원서_초안을_제출한다/http-request.adoc[]
 
 ==== 응답
 ===== 정상 응답
-include::{snippets}/form-controller-test/원서를_접수한다/http-response.adoc[]
+include::{snippets}/form-controller-test/원서_초안을_제출한다/http-response.adoc[]
 
-===== 이미 원서를 접수한 경우
-include::{snippets}/form-controller-test/원서를_접수할_때_이미_접수한_원서가_있으면_에러가_발생한다/http-response.adoc[]
+===== 이미 원서를 제출한 경우
+include::{snippets}/form-controller-test/원서_초안을_제출할_때_이미_제출한_원서가_있으면_에러가_발생한다/http-response.adoc[]
 
 ===== 요청 형식이 틀린 경우
-include::{snippets}/form-controller-test/원서를_접수할_때_잘못된_형식의_요청을_보내면_에러가_발생한다/http-response.adoc[]
+include::{snippets}/form-controller-test/원서_초안을_제출할_때_잘못된_형식의_요청을_보내면_에러가_발생한다/http-response.adoc[]
+
+=== 원서 최종 제출
+원서 초안을 제출한 후에는 원서를 최종 제출할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/원서를_최종_제출한다/request-headers.adoc[]
+
+===== Request Body
+include::{snippets}/form-controller-test/원서를_최종_제출한다/request-fields.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/원서를_최종_제출한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/원서를_최종_제출한다/http-response.adoc[]
+
+===== 이미 원서를 제출한 경우
+include::{snippets}/form-controller-test/원서를_최종_제출할_때_이미_제출한_원서라면_에러가_발생한다/http-response.adoc[]
 
 === 원서 승인
 어드민은 원서를 승인할 수 있습니다.
@@ -221,3 +243,28 @@ include::{snippets}/form-controller-test/원서_서류를_업로드할_때_파�
 
 ===== pdf 파일이 아닌 경우
 include::{snippets}/form-controller-test/원서_서류를_업로드할_때_콘텐츠_타입이_다르다면_에러가_발생한다/http-response.adoc[]
+
+=== 원서 다운로드
+원서가 제출하기 전 원서를 다운로드 받을 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/원서를_pdf로_다운받는다/request-headers.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/원서를_pdf로_다운받는다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/원서를_pdf로_다운받는다/http-response.adoc[]
+
+===== 원서가 없는 경우
+include::{snippets}/form-controller-test/원서를_pdf로_다운받을_때_원서를_작성하지_않았다면_에러가_발생한다/http-response.adoc[]
+
+===== 원서를 이미 제출한 경우
+include::{snippets}/form-controller-test/원서를_pdf로_다운받을_때_원서를_이미_제출했다면_에러가_발생한다/http-response.adoc[]
+
+===== pdf 파일로 변환에 실패한 경우
+include::{snippets}/form-controller-test/원서를_pdf로_다운받을_때_pdf변환에_실패했다면_에러가_발생한다/http-response.adoc[]

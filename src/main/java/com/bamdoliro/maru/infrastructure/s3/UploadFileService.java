@@ -23,14 +23,14 @@ public class UploadFileService {
     private final S3Properties s3Properties;
     private final AmazonS3Client amazonS3Client;
 
-    public UploadResponse execute(MultipartFile file, String folder, FileValidator validator) {
+    public UploadResponse execute(MultipartFile file, String folder, String fileName, FileValidator validator) {
         validator.validate(file);
-        String fileName = createFileName(folder, file.getOriginalFilename());
+        String fullFileName = createFileName(folder, fileName);
 
         try {
             PutObjectRequest request = new PutObjectRequest(
                     s3Properties.getBucket(),
-                    fileName,
+                    fullFileName,
                     file.getInputStream(),
                     getObjectMetadata(file)
             );
@@ -44,8 +44,8 @@ public class UploadFileService {
         );
     }
 
-    private String createFileName(String folder, String originalName) {
-        return folder + "/" + UUID.randomUUID() + "-" + originalName;
+    private String createFileName(String folder, String fileName) {
+        return folder + "/" + fileName;
     }
 
     private ObjectMetadata getObjectMetadata(MultipartFile file) {

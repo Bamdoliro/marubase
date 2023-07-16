@@ -28,4 +28,9 @@ public class SubjectMap {
         String key = String.format("%d%d", grade, semester);
         return SubjectList.of(value.get(key)).getAverageScore();
     }
+
+    public SubjectList getSubjectListOf(int grade, int semester) {
+        String key = String.format("%d%d", grade, semester);
+        return SubjectList.of(value.get(key));
+    }
 }

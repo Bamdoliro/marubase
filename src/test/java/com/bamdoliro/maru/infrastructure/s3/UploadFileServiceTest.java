@@ -59,7 +59,7 @@ class UploadFileServiceTest {
         given(amazonS3Client.getUrl(any(String.class), any(String.class))).willReturn(new URL(url));
 
         // when
-        UploadResponse response = uploadFileService.execute(image, "folder", file -> {
+        UploadResponse response = uploadFileService.execute(image, "folder", "form-uuid", file -> {
         });
 
         // then
@@ -75,7 +75,7 @@ class UploadFileServiceTest {
         MockMultipartFile image = new MockMultipartFile("image", "image.png", MediaType.IMAGE_PNG_VALUE, "".getBytes(StandardCharsets.UTF_8));
 
         // when and then
-        assertThrows(EmptyFileException.class, () -> uploadFileService.execute(image, "folder", file -> {
+        assertThrows(EmptyFileException.class, () -> uploadFileService.execute(image, "folder", "form-uuid", file -> {
         }));
 
         verify(s3Properties, never()).getBucket();
@@ -91,7 +91,7 @@ class UploadFileServiceTest {
         willThrow(AmazonServiceException.class).given(amazonS3Client).putObject(any(PutObjectRequest.class));
 
         // when and then
-        assertThrows(FailedToSaveException.class, () -> uploadFileService.execute(image, "folder", file -> {
+        assertThrows(FailedToSaveException.class, () -> uploadFileService.execute(image, "folder", "form-uuid", file -> {
         }));
 
         verify(s3Properties, times(1)).getBucket();
@@ -105,7 +105,7 @@ class UploadFileServiceTest {
         MockMultipartFile image = new MockMultipartFile("image", null, MediaType.IMAGE_PNG_VALUE, "<<image>>".getBytes(StandardCharsets.UTF_8));
 
         // when and then
-        assertThrows(InvalidFileNameException.class, () -> uploadFileService.execute(image, "folder", file -> {
+        assertThrows(InvalidFileNameException.class, () -> uploadFileService.execute(image, "folder", "form--uuid", file -> {
         }));
 
         verify(s3Properties, never()).getBucket();
@@ -119,7 +119,7 @@ class UploadFileServiceTest {
         MockMultipartFile image = new MockMultipartFile("image", "  ", MediaType.IMAGE_PNG_VALUE, "<<image>>".getBytes(StandardCharsets.UTF_8));
 
         // when and then
-        assertThrows(InvalidFileNameException.class, () -> uploadFileService.execute(image, "folder", file -> {
+        assertThrows(InvalidFileNameException.class, () -> uploadFileService.execute(image, "folder", "form-uuid", file -> {
         }));
 
         verify(s3Properties, never()).getBucket();
@@ -133,7 +133,7 @@ class UploadFileServiceTest {
         MockMultipartFile image = new MockMultipartFile("image", "itisjonnalonglongtoolonglonglongnamenamelonglong.png", MediaType.IMAGE_PNG_VALUE, "<<image>>".getBytes(StandardCharsets.UTF_8));
 
         // when and then
-        assertThrows(InvalidFileNameException.class, () -> uploadFileService.execute(image, "folder", file -> {
+        assertThrows(InvalidFileNameException.class, () -> uploadFileService.execute(image, "folder", "form-uuid", file -> {
         }));
 
         verify(s3Properties, never()).getBucket();
@@ -154,7 +154,7 @@ class UploadFileServiceTest {
         // when and then
         assertThrows(
                 FileSizeLimitExceededException.class,
-                () -> uploadFileService.execute(image, "folder", file -> {
+                () -> uploadFileService.execute(image, "folder", "form-uuid", file -> {
                     if (file.getSize() > 2 * MB) {
                         throw new FileSizeLimitExceededException();
                     }
@@ -184,7 +184,7 @@ class UploadFileServiceTest {
         given(amazonS3Client.getUrl(any(String.class), any(String.class))).willReturn(new URL(url));
 
         // when
-        UploadResponse response = uploadFileService.execute(image, "folder", file -> {
+        UploadResponse response = uploadFileService.execute(image, "folder", "form-uuid", file -> {
             try {
                 BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
                 if (!(bufferedImage.getWidth() == 117 && bufferedImage.getHeight() == 156)) {
@@ -216,7 +216,7 @@ class UploadFileServiceTest {
         // when and then
         assertThrows(
                 ImageSizeMismatchException.class,
-                () -> uploadFileService.execute(image, "folder", file -> {
+                () -> uploadFileService.execute(image, "folder", "form-uuid", file -> {
                     try {
                         BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
                         if (!(bufferedImage.getWidth() == 117 && bufferedImage.getHeight() == 156)) {

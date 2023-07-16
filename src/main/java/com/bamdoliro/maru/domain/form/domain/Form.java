@@ -63,7 +63,7 @@ public class Form extends BaseTimeEntity {
     @Embedded
     private Score score;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = true, length = 150)
     private String formUrl;
 
     @Enumerated(EnumType.STRING)
@@ -79,16 +79,20 @@ public class Form extends BaseTimeEntity {
     private User user;
 
     @Builder
-    public Form(Applicant applicant, Parent parent, Education education, Grade grade, Document document, String formUrl, FormType type, User user) {
+    public Form(Applicant applicant, Parent parent, Education education, Grade grade, Document document, FormType type, User user) {
         this.applicant = applicant;
         this.parent = parent;
         this.education = education;
         this.grade = grade;
         this.document = document;
-        this.formUrl = formUrl;
         this.type = type;
         this.user = user;
         this.uuid = UUID.randomUUID();
+        this.status = FormStatus.DRAFT;
+    }
+
+    public void submit(String formUrl) {
+        this.formUrl = formUrl;
         this.status = FormStatus.SUBMITTED;
     }
 
@@ -120,13 +124,16 @@ public class Form extends BaseTimeEntity {
         return status.equals(FormStatus.REJECTED);
     }
 
-    public void update(Applicant applicant, Parent parent, Education education, Grade grade, Document document, String formUrl, FormType type) {
+    public boolean isDraft() {
+        return status.equals(FormStatus.DRAFT);
+    }
+
+    public void update(Applicant applicant, Parent parent, Education education, Grade grade, Document document, FormType type) {
         this.applicant = applicant;
         this.parent = parent;
         this.education = education;
         this.grade = grade;
         this.document = document;
-        this.formUrl = formUrl;
         this.type = type;
         this.status = FormStatus.SUBMITTED;
     }

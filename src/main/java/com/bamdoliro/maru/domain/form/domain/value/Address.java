@@ -21,4 +21,9 @@ public class Address {
 
     @Column(nullable = false, length = 100)
     private String detailAddress;
+
+    @Override
+    public String toString() {
+        return String.format("(우 %s) %s %s", zoneCode, address, detailAddress);
+    }
 }

@@ -45,12 +45,16 @@ public class EducationRequest {
     @Size(max = 11, message = "11자 이하여야 합니다.")
     private String teacherPhoneNumber;
 
+    @Nullable
+    @Size(max = 11, message = "11자 이하여야 합니다.")
+    private String teacherMobilePhoneNumber;
+
     public Education toValue() {
         return new Education(
                 graduationType,
                 graduationYear,
                 new School(schoolName, schoolLocation, schoolCode),
-                new Teacher(teacherName, teacherPhoneNumber)
+                new Teacher(teacherName, teacherPhoneNumber, teacherMobilePhoneNumber)
         );
     }
 }

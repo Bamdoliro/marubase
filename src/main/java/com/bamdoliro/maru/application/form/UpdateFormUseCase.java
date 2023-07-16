@@ -4,7 +4,7 @@ import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.exception.CannotUpdateNotRejectedFormException;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.UpdateFormRequest;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ public class UpdateFormUseCase {
     private final FormFacade formFacade;
 
     @Transactional
-    public void execute(User user, Long id, FormRequest request) {
+    public void execute(User user, Long id, UpdateFormRequest request) {
         Form form = formFacade.getForm(id);
         form.isApplicant(user);
         validateFormStatus(form);
@@ -27,7 +27,6 @@ public class UpdateFormUseCase {
                 request.getEducation().toValue(),
                 request.getGrade().toValue(),
                 request.getDocument().toValue(),
-                request.getFormUrl(),
                 request.getType()
         );
     }

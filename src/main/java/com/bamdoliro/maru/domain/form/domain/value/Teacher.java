@@ -18,4 +18,7 @@ public class Teacher {
 
     @Column(name = "teacher_phone_number", nullable = true, length = 11)
     private String phoneNumber;
+
+    @Column(name = "teacher_mobile_phone_number", nullable = true, length = 11)
+    private String mobilePhoneNumber;
 }
