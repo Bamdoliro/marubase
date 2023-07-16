@@ -234,8 +234,8 @@
     <tr>
         <th scope="row" class="ba" rowspan="2">2</th>
         <td class="ba" colspan="2">1</td>
-        <td class="ba" colspan="3">+</td>
-        <td class="ba" colspan="1">+</td>
+        <td class="ba" colspan="3" th:text="${grade21.size()}"></td>
+        <td class="ba" colspan="1" th:text="${grade21.totalScore()}"></td>
         <td class="ba" rowspan="2" colspan="1" th:text="${form.grade.attendance2.absenceCount}"></td>
         <td class="ba" rowspan="2" colspan="2" th:text="${form.grade.attendance2.latenessCount}"></td>
         <td class="ba" rowspan="2" colspan="1" th:text="${form.grade.attendance2.earlyLeaveCount}"></td>
@@ -244,14 +244,14 @@
     </tr>
     <tr>
         <td class="ba" colspan="2">2</td>
-        <td class="ba" colspan="3">+</td>
-        <td class="ba" colspan="1">+</td>
+        <td class="ba" colspan="3" th:text="${grade22.size()}"></td>
+        <td class="ba" colspan="1" th:text="${grade22.totalScore()}"></td>
     </tr>
     <tr>
         <th scope="row" class="ba" rowspan="2">3</th>
         <td class="ba" colspan="2">1</td>
-        <td class="ba" colspan="3">+</td>
-        <td class="ba" colspan="1">+</td>
+        <td class="ba" colspan="3" th:text="${grade31.size()}"></td>
+        <td class="ba" colspan="1" th:text="${grade31.totalScore()}"></td>
         <td class="ba" rowspan="2" colspan="1" th:text="${form.grade.attendance3.absenceCount}"></td>
         <td class="ba" rowspan="2" colspan="2" th:text="${form.grade.attendance3.latenessCount}"></td>
         <td class="ba" rowspan="2" colspan="1" th:text="${form.grade.attendance3.earlyLeaveCount}"></td>
@@ -259,15 +259,15 @@
         <td class="ba" rowspan="2" colspan="1" th:text="${form.grade.volunteerTime3}"></td>
     </tr>
     <tr>
-        <td class="ba" colspan="2">2</td>
-        <td class="ba" colspan="3">+</td>
-        <td class="ba" colspan="1">+</td>
+        <td class="ba disabled" colspan="2">-</td>
+        <td class="ba disabled" colspan="3"></td>
+        <td class="ba disabled" colspan="1"></td>
     </tr>
     <tr>
         <th scope="row" class="ba">계</th>
         <td class="ba disabled" colspan="2"></td>
-        <td class="ba" colspan="3">+</td>
-        <td class="ba disabled" colspan="1"></td>
+        <td class="ba" colspan="3" th:text="${grade21.size() + grade22.size() + grade31.size()}"></td>
+        <td class="ba" colspan="1" th:text="${grade21.totalScore() + grade22.totalScore() + grade31.totalScore()}"></td>
         <td class="ba" colspan="1" th:text="${form.grade.getTotalAbsenceCount()}"></td>
         <td class="ba" colspan="2" th:text="${form.grade.getTotalLatenessCount()}"></td>
         <td class="ba" colspan="1" th:text="${form.grade.getTotalEarlyLeaveCount()}"></td>

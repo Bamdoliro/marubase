@@ -20,7 +20,7 @@ import static com.bamdoliro.maru.domain.form.constant.FormConstant.MIN_ATTENDANC
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.MIN_VOLUNTEER_SCORE;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.MIN_VOLUNTEER_TIME;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.REGULAR_TYPE_DEFAULT_SCORE;
-import static com.bamdoliro.maru.domain.form.constant.FormConstant.SPECIAL_TYPE_DEFAULT_SCORE;
+import static com.bamdoliro.maru.domain.form.constant.FormConstant.SPECIAL_TYPE_DEFAULT_SCORE ;
 
 @RequiredArgsConstructor
 @Service

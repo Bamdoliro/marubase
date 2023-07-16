@@ -39,10 +39,15 @@ class GeneratePdfServiceTest {
     @Test
     void 파일을_저장한다() throws IOException {
         // given
-        Form form = FormFixture.createForm(FormType.MEISTER_TALENT);
+        Form form = FormFixture.createForm(FormType.REGULAR);
         calculateFormScoreService.execute(form);
-        form.assignExaminationNumber(3004L);
-        Map<String, Object> formMap = Map.of("form", form);
+        form.assignExaminationNumber(2004L);
+        Map<String, Object> formMap = Map.of(
+                "form", form,
+                "grade21", form.getGrade().getSubjectList().getSubjectMap().getSubjectListOf(2, 1),
+                "grade22", form.getGrade().getSubjectList().getSubjectMap().getSubjectListOf(2, 2),
+                "grade31", form.getGrade().getSubjectList().getSubjectMap().getSubjectListOf(3, 1)
+        );
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PdfDocument mergedDocument = new PdfDocument(new PdfWriter(outputStream));
