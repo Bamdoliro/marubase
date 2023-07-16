@@ -147,12 +147,12 @@ public class FormController {
         );
     }
 
-    @GetMapping("/export")
+    @GetMapping(value = "/export")
     public ResponseEntity<Resource> exportForm(
-            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+            @AuthenticationPrincipal(authority = Authority.USER) User user
     ) {
         return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .contentType(MediaType.APPLICATION_PDF)
                 .body(exportFormUseCase.execute(user));
     }
 }

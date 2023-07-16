@@ -7,6 +7,7 @@ import com.bamdoliro.maru.domain.form.exception.CannotUpdateNotRejectedFormExcep
 import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
 import com.bamdoliro.maru.domain.form.exception.FormNotFoundException;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.infrastructure.pdf.exception.FailedToExportPdfException;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
 import com.bamdoliro.maru.infrastructure.s3.exception.EmptyFileException;
 import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
@@ -23,6 +24,7 @@ import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -1166,5 +1168,96 @@ class FormControllerTest extends RestDocsTestSupport {
                 .andDo(restDocs.document());
 
         verify(uploadFormUseCase, times(1)).execute(user, file);
+    }
+
+    @Test
+    void 원서를_pdf로_다운받는다() throws Exception {
+        User user = UserFixture.createUser();
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "file.pdf",
+                MediaType.APPLICATION_PDF_VALUE,
+                "<<file>>".getBytes()
+        );
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(exportFormUseCase.execute(user)).willReturn(new ByteArrayResource(file.getBytes()));
+
+        mockMvc.perform(get("/form/export")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_PDF)
+                )
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        )
+                ));
+
+        verify(exportFormUseCase, times(1)).execute(user);
+    }
+
+    @Test
+    void 원서를_pdf로_다운받을_때_원서를_작성하지_않았다면_에러가_발생한다() throws Exception {
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        doThrow(new FormNotFoundException()).when(exportFormUseCase).execute(user);
+
+        mockMvc.perform(get("/form/export")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isNotFound())
+
+                .andDo(restDocs.document());
+
+        verify(exportFormUseCase, times(1)).execute(user);
+    }
+
+    @Test
+    void 원서를_pdf로_다운받을_때_원서를_이미_제출했다면_에러가_발생한다() throws Exception {
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        doThrow(new FormAlreadySubmittedException()).when(exportFormUseCase).execute(user);
+
+        mockMvc.perform(get("/form/export")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isConflict())
+
+                .andDo(restDocs.document());
+
+        verify(exportFormUseCase, times(1)).execute(user);
+    }
+
+    @Test
+    void 원서를_pdf로_다운받을_때_pdf변환에_실패했다면_에러가_발생한다() throws Exception {
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        doThrow(new FailedToExportPdfException()).when(exportFormUseCase).execute(user);
+
+        mockMvc.perform(get("/form/export")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isInternalServerError())
+
+                .andDo(restDocs.document());
+
+        verify(exportFormUseCase, times(1)).execute(user);
     }
 }

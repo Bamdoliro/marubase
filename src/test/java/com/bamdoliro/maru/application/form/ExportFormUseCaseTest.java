@@ -51,7 +51,7 @@ class ExportFormUseCaseTest {
     private MergePdfService mergePdfService;
 
     @Test
-    void 일반전형_원서를_PDF로_다운받는다() {
+    void 일반전형_원서를_pdf로_다운받는다() {
         // given
         User user = UserFixture.createUser();
         Form form = FormFixture.createForm(FormType.REGULAR);
@@ -71,7 +71,7 @@ class ExportFormUseCaseTest {
     }
 
     @Test
-    void 일반전형이_아닌_원서를_PDF로_다운받는다() {
+    void 일반전형이_아닌_원서를_pdf로_다운받는다() {
         // given
         User user = UserFixture.createUser();
         Form form = FormFixture.createForm(FormType.FROM_NORTH_KOREA);
@@ -91,7 +91,7 @@ class ExportFormUseCaseTest {
     }
 
     @Test
-    void 원서를_PDF로_다운받을_때_이미_제출한_원서라면_에러가_발생한다() {
+    void 원서를_pdf로_다운받을_때_이미_제출한_원서라면_에러가_발생한다() {
         // given
         User user = UserFixture.createUser();
         Form form = FormFixture.createForm(FormType.REGULAR);
@@ -108,7 +108,7 @@ class ExportFormUseCaseTest {
     }
 
     @Test
-    void 원서를_PDF로_다운받을_때_모종의_이유로_변환_과정에서_실패하면_에러가_발생한다() {
+    void 원서를_pdf로_다운받을_때_모종의_이유로_변환_과정에서_실패하면_에러가_발생한다() {
         // given
         User user = UserFixture.createUser();
         Form form = FormFixture.createForm(FormType.REGULAR);

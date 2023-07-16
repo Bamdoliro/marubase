@@ -243,3 +243,28 @@ include::{snippets}/form-controller-test/원서_서류를_업로드할_때_파�
 
 ===== pdf 파일이 아닌 경우
 include::{snippets}/form-controller-test/원서_서류를_업로드할_때_콘텐츠_타입이_다르다면_에러가_발생한다/http-response.adoc[]
+
+=== 원서 다운로드
+원서가 제출하기 전 원서를 다운로드 받을 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/원서를_pdf로_다운받는다/request-headers.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/원서를_pdf로_다운받는다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/원서를_pdf로_다운받는다/http-response.adoc[]
+
+===== 원서가 없는 경우
+include::{snippets}/form-controller-test/원서를_pdf로_다운받을_때_원서를_작성하지_않았다면_에러가_발생한다/http-response.adoc[]
+
+===== 원서를 이미 제출한 경우
+include::{snippets}/form-controller-test/원서를_pdf로_다운받을_때_원서를_이미_제출했다면_에러가_발생한다/http-response.adoc[]
+
+===== pdf 파일로 변환에 실패한 경우
+include::{snippets}/form-controller-test/원서를_pdf로_다운받을_때_pdf변환에_실패했다면_에러가_발생한다/http-response.adoc[]
