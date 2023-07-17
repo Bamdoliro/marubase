@@ -194,9 +194,6 @@ include::{snippets}/form-controller-test/증명_사진_업로드가_실패한다
 ===== 사진 크기가 규격과 다른 경우
 include::{snippets}/form-controller-test/증명_사진을_업로드할_때_사진_크기가_다르면_에러가_발생한다/http-response.adoc[]
 
-===== 파일 이름이 잘못된 경우
-include::{snippets}/form-controller-test/증명_사진을_업로드할_때_파일_이름이_잘못됐으면_에러가_발생한다/http-response.adoc[]
-
 ===== 빈 파일인 경우
 include::{snippets}/form-controller-test/증명_사진을_업로드할_때_파일이_비었으면_에러가_발생한다/http-response.adoc[]
 
@@ -232,13 +229,10 @@ include::{snippets}/form-controller-test/원서_서류를_업로드한다/http-r
 ===== 서버 문제로 업로드에 실패한 경우
 include::{snippets}/form-controller-test/원서_서류_업로드가_실패한다/http-response.adoc[]
 
-===== 파일 이름이 잘못된 경우
-include::{snippets}/form-controller-test/원서_서류를_업로드할_때_파일_이름이_잘못됐으면_에러가_발생한다/http-response.adoc[]
-
 ===== 빈 파일인 경우
 include::{snippets}/form-controller-test/원서_서류를_업로드할_때_파일이_비었으면_에러가_발생한다/http-response.adoc[]
 
-===== 용량이 10MB를 초과한 경우
+===== 용량이 20MB를 초과한 경우
 include::{snippets}/form-controller-test/원서_서류를_업로드할_때_파일이_용량_제한을_넘으면_에러가_발생한다/http-response.adoc[]
 
 ===== pdf 파일이 아닌 경우

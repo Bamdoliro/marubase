@@ -32,7 +32,7 @@ public class UploadFormUseCase {
                 throw new MediaTypeMismatchException();
             }
 
-            if (file.getSize() > 10 * MB) {
+            if (file.getSize() > 20 * MB) {
                 throw new FileSizeLimitExceededException();
             }
         });

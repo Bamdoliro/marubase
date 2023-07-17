@@ -13,7 +13,6 @@ import com.bamdoliro.maru.infrastructure.s3.exception.EmptyFileException;
 import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
 import com.bamdoliro.maru.infrastructure.s3.exception.FileSizeLimitExceededException;
 import com.bamdoliro.maru.infrastructure.s3.exception.ImageSizeMismatchException;
-import com.bamdoliro.maru.infrastructure.s3.exception.InvalidFileNameException;
 import com.bamdoliro.maru.infrastructure.s3.exception.MediaTypeMismatchException;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormDraftRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
@@ -882,34 +881,6 @@ class FormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 증명_사진을_업로드할_때_파일_이름이_잘못됐으면_에러가_발생한다() throws Exception {
-        MockMultipartFile image = new MockMultipartFile(
-                "image",
-                "toolonglonglongreallylong.png",
-                MediaType.IMAGE_PNG_VALUE,
-                "<<image>>".getBytes()
-        );
-        User user = UserFixture.createUser();
-
-        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
-        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new InvalidFileNameException()).when(uploadIdentificationPictureUseCase).execute(user, image);
-
-        mockMvc.perform(multipart("/form/identification-picture")
-                        .file(image)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                )
-
-                .andExpect(status().isBadRequest())
-
-                .andDo(restDocs.document());
-
-        verify(uploadIdentificationPictureUseCase, times(1)).execute(user, image);
-    }
-
-    @Test
     void 증명_사진을_업로드할_때_파일이_비었으면_에러가_발생한다() throws Exception {
         MockMultipartFile image = new MockMultipartFile(
                 "image",
@@ -943,7 +914,7 @@ class FormControllerTest extends RestDocsTestSupport {
                 "image",
                 "image.png",
                 MediaType.IMAGE_PNG_VALUE,
-                new byte[(int) (10 * MB + 1)]
+                new byte[(int) (20 * MB + 1)]
         );
         User user = UserFixture.createUser();
 
@@ -1052,34 +1023,6 @@ class FormControllerTest extends RestDocsTestSupport {
                 )
 
                 .andExpect(status().isInternalServerError())
-
-                .andDo(restDocs.document());
-
-        verify(uploadFormUseCase, times(1)).execute(user, file);
-    }
-
-    @Test
-    void 원서_서류를_업로드할_때_파일_이름이_잘못됐으면_에러가_발생한다() throws Exception {
-        MockMultipartFile file = new MockMultipartFile(
-                "file",
-                "toolonglonglonglonglonglonglnoglongonglnognog.pdf",
-                MediaType.APPLICATION_PDF_VALUE,
-                "<<file>>".getBytes()
-        );
-        User user = UserFixture.createUser();
-
-        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
-        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new InvalidFileNameException()).when(uploadFormUseCase).execute(user, file);
-
-        mockMvc.perform(multipart("/form/form-document")
-                        .file(file)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                )
-
-                .andExpect(status().isBadRequest())
 
                 .andDo(restDocs.document());
 
