@@ -70,4 +70,10 @@ public enum FormType implements EnumProperty {
     public boolean isSupernumerary() {
         return mainCategory == Category.SUPERNUMERARY;
     }
+
+    public boolean categoryEquals(Category category) {
+        return mainCategory.equals(category)
+                || middleCategory.equals(category)
+                || subCategory.equals(category);
+    }
 }

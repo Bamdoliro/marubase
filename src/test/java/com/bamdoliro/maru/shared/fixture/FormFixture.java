@@ -286,7 +286,8 @@ public class FormFixture {
         return new FormSimpleResponse(
                 1L,
                 "김밤돌",
-                status
+                status,
+                FormType.REGULAR
         );
     }
 
