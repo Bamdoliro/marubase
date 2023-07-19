@@ -19,7 +19,7 @@ public class QueryAllFormUseCase {
 
     public List<FormSimpleResponse> execute(FormStatus status, FormType.Category category) {
         return formRepository.findByStatus(status).stream()
-                .filter(form -> Objects.nonNull(category) && form.getType().categoryEquals(category))
+                .filter(form -> Objects.isNull(category) || form.getType().categoryEquals(category))
                 .map(FormSimpleResponse::new)
                 .collect(Collectors.toList());
     }

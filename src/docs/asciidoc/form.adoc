@@ -109,30 +109,30 @@ include::{snippets}/form-controller-test/검토해야_하는_원서를_조회한
 ===== 검토해야 하는 원서가 없는 경우
 include::{snippets}/form-controller-test/검토해야_하는_원서가_없으면_빈_리스트를_반환한다/http-response.adoc[]
 
-=== 원서 조회
+=== 원서 상세 조회
 원서 아이디로 원서를 조회할 수 있습니다.
 
 ==== 요청 형식
 
 ===== Request Header
-include::{snippets}/form-controller-test/원서를_조회한다/request-headers.adoc[]
+include::{snippets}/form-controller-test/원서를_상세_조회한다/request-headers.adoc[]
 
 ===== Path Parameter
-include::{snippets}/form-controller-test/원서를_조회한다/path-parameters.adoc[]
+include::{snippets}/form-controller-test/원서를_상세_조회한다/path-parameters.adoc[]
 
 ==== 요청
-include::{snippets}/form-controller-test/원서를_조회한다/http-request.adoc[]
+include::{snippets}/form-controller-test/원서를_상세_조회한다/http-request.adoc[]
 
 ==== 응답
 
 ===== 정상 응답
-include::{snippets}/form-controller-test/원서를_조회한다/http-response.adoc[]
+include::{snippets}/form-controller-test/원서를_상세_조회한다/http-response.adoc[]
 
 ===== 해당하는 원서가 없는 경우
-include::{snippets}/form-controller-test/원서를_조회할_때_원서가_없으면_에러가_발생한다/http-response.adoc[]
+include::{snippets}/form-controller-test/원서를_상세_조회할_때_원서가_없으면_에러가_발생한다/http-response.adoc[]
 
 ===== 본인의 원서가 아닌 경우
-include::{snippets}/form-controller-test/원서를_조회할_때_본인의_원서가_아니면_에러가_발생한다/http-response.adoc[]
+include::{snippets}/form-controller-test/원서를_상세_조회할_때_본인의_원서가_아니면_에러가_발생한다/http-response.adoc[]
 
 === 원서 수정
 원서가 반려된 경우에만 원서를 수정할 수 있습니다.
@@ -262,3 +262,20 @@ include::{snippets}/form-controller-test/원서를_pdf로_다운받을_때_원�
 
 ===== pdf 파일로 변환에 실패한 경우
 include::{snippets}/form-controller-test/원서를_pdf로_다운받을_때_pdf변환에_실패했다면_에러가_발생한다/http-response.adoc[]
+
+=== 원서 조회
+어드민은 원서를 조회할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/원서를_전체_조회한다/request-headers.adoc[]
+
+===== Query Parameter
+include::{snippets}/form-controller-test/원서를_전체_조회한다/query-parameters.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/원서를_전체_조회한다/http-request.adoc[]
+
+==== 응답
+include::{snippets}/form-controller-test/원서를_전체_조회한다/http-response.adoc[]

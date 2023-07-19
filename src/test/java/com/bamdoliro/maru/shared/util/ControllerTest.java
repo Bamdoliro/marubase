@@ -4,6 +4,7 @@ import com.bamdoliro.maru.application.auth.LogInUseCase;
 import com.bamdoliro.maru.application.auth.RefreshTokenUseCase;
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
 import com.bamdoliro.maru.application.form.ExportFormUseCase;
+import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
 import com.bamdoliro.maru.application.form.QueryFormUseCase;
 import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
@@ -105,6 +106,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected ExportFormUseCase exportFormUseCase;
+
+    @MockBean
+    protected QueryAllFormUseCase queryAllFormUseCase;
 
 
     @MockBean

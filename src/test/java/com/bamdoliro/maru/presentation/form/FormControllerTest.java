@@ -17,6 +17,7 @@ import com.bamdoliro.maru.infrastructure.s3.exception.MediaTypeMismatchException
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormDraftRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.UpdateFormRequest;
+import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
@@ -52,6 +53,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -486,7 +488,7 @@ class FormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 원서를_조회한다() throws Exception {
+    void 원서를_상세_조회한다() throws Exception {
         Long formId = 1L;
         User user = UserFixture.createAdminUser();
 
@@ -517,7 +519,7 @@ class FormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 원서를_조회할_때_원서가_없으면_에러가_발생한다() throws Exception {
+    void 원서를_상세_조회할_때_원서가_없으면_에러가_발생한다() throws Exception {
         Long formId = 1L;
         User user = UserFixture.createAdminUser();
 
@@ -537,7 +539,7 @@ class FormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 원서를_조회할_때_본인의_원서가_아니면_에러가_발생한다() throws Exception {
+    void 원서를_상세_조회할_때_본인의_원서가_아니면_에러가_발생한다() throws Exception {
         Long formId = 1L;
         User user = UserFixture.createAdminUser();
 
@@ -1202,5 +1204,47 @@ class FormControllerTest extends RestDocsTestSupport {
                 .andDo(restDocs.document());
 
         verify(exportFormUseCase, times(1)).execute(user);
+    }
+
+    @Test
+    void 원서를_전체_조회한다() throws Exception {
+        User user = UserFixture.createUser();
+        List<FormSimpleResponse> responseList = List.of(
+                FormFixture.createFormSimpleResponse(FormStatus.DRAFT),
+                FormFixture.createFormSimpleResponse(FormStatus.DRAFT),
+                FormFixture.createFormSimpleResponse(FormStatus.DRAFT),
+                FormFixture.createFormSimpleResponse(FormStatus.DRAFT),
+                FormFixture.createFormSimpleResponse(FormStatus.DRAFT)
+        );
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(queryAllFormUseCase.execute(FormStatus.DRAFT, FormType.Category.REGULAR)).willReturn(responseList);
+
+        mockMvc.perform(get("/form")
+                        .param("status", FormStatus.DRAFT.name())
+                        .param("type", FormType.Category.REGULAR.name())
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        ),
+                        queryParameters(
+                                parameterWithName("status")
+                                        .description("원서 상태 (null인 경우 전체 조회)")
+                                        .optional(),
+                                parameterWithName("type")
+                                        .description("원서 카테고리 (null인 경우 전체 조회)")
+                                        .optional()
+                        )
+                ));
+
+        verify(queryAllFormUseCase, times(1)).execute(FormStatus.DRAFT, FormType.Category.REGULAR);
     }
 }
