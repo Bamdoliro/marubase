@@ -2,6 +2,7 @@ package com.bamdoliro.maru.presentation.form;
 
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
 import com.bamdoliro.maru.application.form.ExportFormUseCase;
+import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
 import com.bamdoliro.maru.application.form.QueryFormUseCase;
 import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
@@ -10,6 +11,8 @@ import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.application.form.UpdateFormUseCase;
 import com.bamdoliro.maru.application.form.UploadFormUseCase;
 import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
+import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
+import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormDraftRequest;
@@ -34,6 +37,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,6 +58,7 @@ public class FormController {
     private final UploadIdentificationPictureUseCase uploadIdentificationPictureUseCase;
     private final UploadFormUseCase uploadFormUseCase;
     private final ExportFormUseCase exportFormUseCase;
+    private final QueryAllFormUseCase queryAllFormUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -152,5 +157,16 @@ public class FormController {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(exportFormUseCase.execute(user));
+    }
+
+    @GetMapping
+    public ListCommonResponse<FormSimpleResponse> getFormList(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
+            @RequestParam(name = "status", required = false) FormStatus status,
+            @RequestParam(name = "type", required = false) FormType.Category type
+    ) {
+        return ListCommonResponse.ok(
+                queryAllFormUseCase.execute(status, type)
+        );
     }
 }

@@ -4,6 +4,8 @@ import com.bamdoliro.maru.shared.property.EnumProperty;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Objects;
+
 @Getter
 @RequiredArgsConstructor
 public enum FormType implements EnumProperty {
@@ -69,5 +71,11 @@ public enum FormType implements EnumProperty {
 
     public boolean isSupernumerary() {
         return mainCategory == Category.SUPERNUMERARY;
+    }
+
+    public boolean categoryEquals(Category category) {
+        return mainCategory.equals(category)
+                || (Objects.nonNull(middleCategory) && middleCategory.equals(category))
+                || (Objects.nonNull(subCategory) && subCategory.equals(category));
     }
 }

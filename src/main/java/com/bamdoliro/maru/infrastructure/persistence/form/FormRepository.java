@@ -11,11 +11,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface FormRepository extends CrudRepository<Form, Long> {
+public interface FormRepository extends CrudRepository<Form, Long>, FormRepositoryCustom {
 
     boolean existsByUserId(Long userId);
-
-    List<Form> findByStatus(FormStatus status);
 
     Optional<Form> findByUser(User user);
 
