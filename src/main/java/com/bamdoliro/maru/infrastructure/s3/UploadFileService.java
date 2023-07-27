@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +39,7 @@ public class UploadFileService {
         }
 
         return new UploadResponse(
-                amazonS3Client.getUrl(s3Properties.getBucket(), fileName).toString()
+                amazonS3Client.getUrl(s3Properties.getBucket(), fullFileName).toString()
         );
     }
 
