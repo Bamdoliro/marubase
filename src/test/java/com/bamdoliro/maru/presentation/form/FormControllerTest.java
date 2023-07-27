@@ -141,18 +141,21 @@ class FormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("education.teacherMobilePhoneNumber")
                                         .type(JsonFieldType.STRING)
                                         .description("작성 교사 휴대전화번호 (없는 경우 null)"),
-                                fieldWithPath("grade.subjectList[].grade")
-                                        .type(JsonFieldType.NUMBER)
-                                        .description("학년 (검정고시는 1로 통일)"),
-                                fieldWithPath("grade.subjectList[].semester")
-                                        .type(JsonFieldType.NUMBER)
-                                        .description("학기 (검정고시는 1로 통일)"),
                                 fieldWithPath("grade.subjectList[].subjectName")
                                         .type(JsonFieldType.STRING)
                                         .description("과목명"),
-                                fieldWithPath("grade.subjectList[].achievementLevel")
+                                fieldWithPath("grade.subjectList[].achievementLevel21")
                                         .type(JsonFieldType.STRING)
-                                        .description("성취도 (A-E)"),
+                                        .description("2학년 1학기 성취도 (성적이 없는 경우 null)")
+                                        .optional(),
+                                fieldWithPath("grade.subjectList[].achievementLevel22")
+                                        .type(JsonFieldType.STRING)
+                                        .description("2학년 2학기 성취도 (성적이 없는 경우 null)")
+                                        .optional(),
+                                fieldWithPath("grade.subjectList[].achievementLevel31")
+                                        .type(JsonFieldType.STRING)
+                                        .description("3학년 1학기 성취도 (성적이 없는 경우 null)")
+                                        .optional(),
                                 fieldWithPath("grade.certificateList[]")
                                         .type(JsonFieldType.ARRAY)
                                         .description("자격증 리스트"),
@@ -645,18 +648,21 @@ class FormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("education.teacherMobilePhoneNumber")
                                         .type(JsonFieldType.STRING)
                                         .description("작성 교사 휴대전화번호 (없는 경우 null)"),
-                                fieldWithPath("grade.subjectList[].grade")
-                                        .type(JsonFieldType.NUMBER)
-                                        .description("학년 (검정고시는 1로 통일)"),
-                                fieldWithPath("grade.subjectList[].semester")
-                                        .type(JsonFieldType.NUMBER)
-                                        .description("학기 (검정고시는 1로 통일)"),
                                 fieldWithPath("grade.subjectList[].subjectName")
                                         .type(JsonFieldType.STRING)
                                         .description("과목명"),
-                                fieldWithPath("grade.subjectList[].achievementLevel")
+                                fieldWithPath("grade.subjectList[].achievementLevel21")
                                         .type(JsonFieldType.STRING)
-                                        .description("성취도 (A-E)"),
+                                        .description("2학년 1학기 성취도 (성적이 없는 경우 null)")
+                                        .optional(),
+                                fieldWithPath("grade.subjectList[].achievementLevel22")
+                                        .type(JsonFieldType.STRING)
+                                        .description("2학년 2학기 성취도 (성적이 없는 경우 null)")
+                                        .optional(),
+                                fieldWithPath("grade.subjectList[].achievementLevel31")
+                                        .type(JsonFieldType.STRING)
+                                        .description("3학년 1학기 성취도 (성적이 없는 경우 null)")
+                                        .optional(),
                                 fieldWithPath("grade.certificateList[]")
                                         .type(JsonFieldType.ARRAY)
                                         .description("자격증 리스트"),
