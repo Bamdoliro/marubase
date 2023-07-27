@@ -43,8 +43,6 @@ public class Form extends BaseTimeEntity {
     @Column(nullable = true, unique = true)
     private Long examinationNumber;
 
-    private UUID uuid;
-
     @Embedded
     private Applicant applicant;
 
@@ -87,7 +85,6 @@ public class Form extends BaseTimeEntity {
         this.document = document;
         this.type = type;
         this.user = user;
-        this.uuid = UUID.randomUUID();
         this.status = FormStatus.DRAFT;
     }
 

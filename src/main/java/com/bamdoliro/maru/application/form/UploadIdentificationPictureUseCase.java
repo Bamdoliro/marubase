@@ -1,6 +1,5 @@
 package com.bamdoliro.maru.application.form;
 
-import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.s3.UploadFileService;
 import com.bamdoliro.maru.infrastructure.s3.constants.FolderConstant;
@@ -17,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.UUID;
 
 import static com.bamdoliro.maru.shared.constants.FileConstants.MB;
 
@@ -25,13 +23,10 @@ import static com.bamdoliro.maru.shared.constants.FileConstants.MB;
 @UseCase
 public class UploadIdentificationPictureUseCase {
 
-    private final FormFacade formFacade;
     private final UploadFileService uploadFileService;
 
     public UploadResponse execute(User user, MultipartFile image) {
-        UUID uuid = formFacade.getFormUuid(user);
-
-        return uploadFileService.execute(image, FolderConstant.IDENTIFICATION_PICTURE, uuid.toString(), file -> {
+        return uploadFileService.execute(image, FolderConstant.IDENTIFICATION_PICTURE, user.getUuid().toString(), file -> {
             if (file.getContentType() != null && !(
                     file.getContentType().equals(MediaType.IMAGE_JPEG_VALUE) ||
                             file.getContentType().equals(MediaType.IMAGE_PNG_VALUE)
