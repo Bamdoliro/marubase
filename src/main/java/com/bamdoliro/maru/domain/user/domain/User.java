@@ -18,6 +18,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tbl_user")
@@ -28,6 +30,9 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
+
+    @Column(unique = true, nullable = false)
+    private UUID uuid;
 
     @Column(unique = true, nullable = false, length = 100)
     private String email;
@@ -41,6 +46,7 @@ public class User extends BaseTimeEntity {
 
     @Builder
     public User(String email, String password, Authority authority) {
+        this.uuid = UUID.randomUUID();
         this.email = email;
         this.password = new Password(PasswordUtil.encode(password));
         this.authority = authority;

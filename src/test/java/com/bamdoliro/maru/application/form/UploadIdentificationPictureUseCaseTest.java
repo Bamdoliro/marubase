@@ -2,7 +2,6 @@ package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
-import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.s3.UploadFileService;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
@@ -23,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.times;
@@ -34,9 +32,6 @@ class UploadIdentificationPictureUseCaseTest {
 
     @InjectMocks
     private UploadIdentificationPictureUseCase uploadIdentificationPictureUseCase;
-
-    @Mock
-    private FormFacade formFacade;
 
     @Mock
     private UploadFileService uploadFileService;
@@ -53,14 +48,12 @@ class UploadIdentificationPictureUseCaseTest {
                 MediaType.IMAGE_PNG_VALUE,
                 "<<image>>".getBytes(StandardCharsets.UTF_8)
         );
-        given(formFacade.getFormUuid(user)).willReturn(form.getUuid());
         given(uploadFileService.execute(any(MultipartFile.class), any(String.class), any(String.class), any(FileValidator.class))).willReturn(new UploadResponse("https://host.com/image.png"));
 
         // when
         uploadIdentificationPictureUseCase.execute(user, image);
 
         // then
-        verify(formFacade, times(1)).getFormUuid(user);
         verify(uploadFileService, times(1)).execute(any(MultipartFile.class), any(String.class), any(String.class), any(FileValidator.class));
     }
 
@@ -76,14 +69,12 @@ class UploadIdentificationPictureUseCaseTest {
                 MediaType.IMAGE_PNG_VALUE,
                 "<<image>>".getBytes(StandardCharsets.UTF_8)
         );
-        given(formFacade.getFormUuid(user)).willReturn(form.getUuid());
         willThrow(ImageSizeMismatchException.class).given(uploadFileService).execute(any(MultipartFile.class), any(String.class), any(String.class), any(FileValidator.class));
 
         // when and then
         assertThrows(ImageSizeMismatchException.class,
                 () -> uploadIdentificationPictureUseCase.execute(user, image));
 
-        verify(formFacade, times(1)).getFormUuid(user);
         verify(uploadFileService, times(1)).execute(any(MultipartFile.class), any(String.class), any(String.class), any(FileValidator.class));
     }
 }

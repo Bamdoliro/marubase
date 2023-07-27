@@ -24,9 +24,4 @@ public class FormFacade {
         return formRepository.findByUser(user)
                 .orElseThrow(FormNotFoundException::new);
     }
-
-    public UUID getFormUuid(User user) {
-        return formRepository.findFormUuidByUser(user)
-                .orElseThrow(FormNotFoundException::new);
-    }
 }
