@@ -2,6 +2,7 @@ package com.bamdoliro.maru.presentation.form.dto.request;
 
 import com.bamdoliro.maru.domain.form.domain.type.Certificate;
 import com.bamdoliro.maru.domain.form.domain.value.Grade;
+import com.bamdoliro.maru.domain.form.domain.value.Subject;
 import com.bamdoliro.maru.domain.form.domain.value.SubjectList;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
@@ -10,7 +11,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -48,12 +51,13 @@ public class GradeRequest {
     private List<Certificate> certificateList;
 
     public Grade toValue() {
+        List<Subject> subjectList = new ArrayList<>();
+        this.subjectList.stream()
+                .map(SubjectRequest::toValue)
+                .forEach(subjectList::addAll);
+
         return new Grade(
-                new SubjectList(
-                        subjectList.stream()
-                                .map(SubjectRequest::toValue)
-                                .toList()
-                ),
+                new SubjectList(subjectList),
                 attendance1 == null ? null : attendance1.toValue(),
                 attendance2 == null ? null : attendance2.toValue(),
                 attendance3 == null ? null : attendance3.toValue(),

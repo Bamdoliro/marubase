@@ -22,10 +22,10 @@ import com.bamdoliro.maru.presentation.form.dto.request.ApplicantRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.AttendanceRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.DocumentRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.EducationRequest;
-import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormDraftRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.GradeRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.ParentRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubjectRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormDraftRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.UpdateFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.response.ApplicantResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.AttendanceResponse;
@@ -67,7 +67,8 @@ public class FormFixture {
                         new Teacher("나교사", "0519701234", "01012344321")
                 ),
                 new Grade(
-                        new SubjectList(List.of(
+                        new SubjectList(
+                                List.of(
                                 new Subject(2, 1, "국어", AchievementLevel.A),
                                 new Subject(2, 1, "수학", AchievementLevel.A),
                                 new Subject(2, 1, "사회", AchievementLevel.A),
@@ -169,24 +170,13 @@ public class FormFixture {
                         "01012344321"
                 ),
                 new GradeRequest(
-                        List.of(new SubjectRequest(2, 1, "국어", AchievementLevel.A),
-                                new SubjectRequest(2, 1, "수학", AchievementLevel.A),
-                                new SubjectRequest(2, 1, "사회", AchievementLevel.A),
-                                new SubjectRequest(2, 1, "과학", AchievementLevel.A),
-                                new SubjectRequest(2, 1, "영어", AchievementLevel.A),
-                                new SubjectRequest(2, 1, "체육", AchievementLevel.A),
-                                new SubjectRequest(2, 2, "국어", AchievementLevel.A),
-                                new SubjectRequest(2, 2, "수학", AchievementLevel.A),
-                                new SubjectRequest(2, 2, "사회", AchievementLevel.A),
-                                new SubjectRequest(2, 2, "과학", AchievementLevel.A),
-                                new SubjectRequest(2, 2, "영어", AchievementLevel.A),
-                                new SubjectRequest(2, 2, "체육", AchievementLevel.A),
-                                new SubjectRequest(3, 1, "국어", AchievementLevel.A),
-                                new SubjectRequest(3, 1, "수학", AchievementLevel.B),
-                                new SubjectRequest(3, 1, "사회", AchievementLevel.A),
-                                new SubjectRequest(3, 1, "과학", AchievementLevel.A),
-                                new SubjectRequest(3, 1, "영어", AchievementLevel.A),
-                                new SubjectRequest(3, 1, "체육", AchievementLevel.A)
+                        List.of(new SubjectRequest("국어", AchievementLevel.A, AchievementLevel.A, AchievementLevel.A),
+                                new SubjectRequest("수학", AchievementLevel.A, AchievementLevel.A, AchievementLevel.A),
+                                new SubjectRequest("사회", AchievementLevel.A, AchievementLevel.A, AchievementLevel.A),
+                                new SubjectRequest("과학", AchievementLevel.A, AchievementLevel.A, AchievementLevel.A),
+                                new SubjectRequest("영어", AchievementLevel.A, AchievementLevel.A, AchievementLevel.A),
+                                new SubjectRequest("체육", AchievementLevel.A, AchievementLevel.A, AchievementLevel.A),
+                                new SubjectRequest("한문", null, AchievementLevel.A, null)
                         ),
                         new AttendanceRequest(0, 0, 0, 2),
                         new AttendanceRequest(2, 1, 0, 0),
@@ -216,11 +206,12 @@ public class FormFixture {
                         null
                 ),
                 new GradeRequest(
-                        List.of(new SubjectRequest(1, 1, "국어", AchievementLevel.A),
-                                new SubjectRequest(1, 1, "수학", AchievementLevel.E),
-                                new SubjectRequest(1, 1, "사회", AchievementLevel.A),
-                                new SubjectRequest(1, 1, "과학", AchievementLevel.D),
-                                new SubjectRequest(1, 1, "영어", AchievementLevel.A)
+                        List.of(new SubjectRequest("국어", AchievementLevel.A, null, null),
+                                new SubjectRequest("수학", AchievementLevel.A, null, null),
+                                new SubjectRequest("사회", AchievementLevel.A, null, null),
+                                new SubjectRequest("과학", AchievementLevel.A, null, null),
+                                new SubjectRequest("영어", AchievementLevel.A, null, null),
+                                new SubjectRequest("도덕", AchievementLevel.A, null, null)
                         ),
                         null,
                         null,
@@ -250,24 +241,13 @@ public class FormFixture {
                         "01012344321"
                 ),
                 new GradeRequest(
-                        List.of(new SubjectRequest(2, 1, "국어", AchievementLevel.A),
-                                new SubjectRequest(2, 1, "수학", AchievementLevel.A),
-                                new SubjectRequest(2, 1, "사회", AchievementLevel.A),
-                                new SubjectRequest(2, 1, "과학", AchievementLevel.A),
-                                new SubjectRequest(2, 1, "영어", AchievementLevel.A),
-                                new SubjectRequest(2, 1, "체육", AchievementLevel.A),
-                                new SubjectRequest(2, 2, "국어", AchievementLevel.A),
-                                new SubjectRequest(2, 2, "수학", AchievementLevel.A),
-                                new SubjectRequest(2, 2, "사회", AchievementLevel.A),
-                                new SubjectRequest(2, 2, "과학", AchievementLevel.A),
-                                new SubjectRequest(2, 2, "영어", AchievementLevel.A),
-                                new SubjectRequest(2, 2, "체육", AchievementLevel.A),
-                                new SubjectRequest(3, 1, "국어", AchievementLevel.A),
-                                new SubjectRequest(3, 1, "수학", AchievementLevel.B),
-                                new SubjectRequest(3, 1, "사회", AchievementLevel.A),
-                                new SubjectRequest(3, 1, "과학", AchievementLevel.A),
-                                new SubjectRequest(3, 1, "영어", AchievementLevel.A),
-                                new SubjectRequest(3, 1, "체육", AchievementLevel.A)
+                        List.of(new SubjectRequest("국어", AchievementLevel.A, AchievementLevel.A, AchievementLevel.A),
+                                new SubjectRequest("수학", AchievementLevel.A, AchievementLevel.A, AchievementLevel.A),
+                                new SubjectRequest("사회", AchievementLevel.A, AchievementLevel.A, AchievementLevel.A),
+                                new SubjectRequest("과학", AchievementLevel.A, AchievementLevel.A, AchievementLevel.A),
+                                new SubjectRequest("영어", AchievementLevel.A, AchievementLevel.A, AchievementLevel.A),
+                                new SubjectRequest("체육", AchievementLevel.A, AchievementLevel.A, AchievementLevel.A),
+                                new SubjectRequest("한문", null, AchievementLevel.A, null)
                         ),
                         new AttendanceRequest(0, 0, 0, 2),
                         new AttendanceRequest(2, 1, 0, 0),
