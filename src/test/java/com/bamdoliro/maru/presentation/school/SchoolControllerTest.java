@@ -25,13 +25,12 @@ class SchoolControllerTest extends RestDocsTestSupport {
     @Test
     void 학교를_검색한다() throws Exception {
         User user = UserFixture.createUser();
-        given(searchSchoolUseCase.execute(anyString())).willReturn(SchoolFixture.createSchoolListResponse());
+        given(searchSchoolUseCase.execute()).willReturn(SchoolFixture.createSchoolListResponse());
         given(jwtProperties.getPrefix()).willReturn("Bearer");
         given(tokenService.getUser(anyString())).willReturn(user);
 
 
         mockMvc.perform(get("/school")
-                        .param("q", "부산소프트")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON))
 
@@ -41,10 +40,6 @@ class SchoolControllerTest extends RestDocsTestSupport {
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION)
                                         .description("Bearer token")
-                        ),
-                        queryParameters(
-                                parameterWithName("q")
-                                        .description("검색할 학교 이름")
                         )
                 ));
     }
@@ -52,13 +47,12 @@ class SchoolControllerTest extends RestDocsTestSupport {
     @Test
     void 학교를_검색할_때_결과가_10개_이상이라면_상위_10개만_반환한다() throws Exception {
         User user = UserFixture.createUser();
-        given(searchSchoolUseCase.execute(anyString())).willReturn(SchoolFixture.createSchoolMaxListResponse());
+        given(searchSchoolUseCase.execute()).willReturn(SchoolFixture.createSchoolMaxListResponse());
         given(jwtProperties.getPrefix()).willReturn("Bearer");
         given(tokenService.getUser(anyString())).willReturn(user);
 
 
         mockMvc.perform(get("/school")
-                        .param("q", "비전")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON))
 
@@ -70,13 +64,12 @@ class SchoolControllerTest extends RestDocsTestSupport {
     @Test
     void 학교를_검색할_때_결과가_없다면_빈_리스트를_반환한다() throws Exception {
         User user = UserFixture.createUser();
-        given(searchSchoolUseCase.execute(anyString())).willReturn(List.of());
+        given(searchSchoolUseCase.execute()).willReturn(List.of());
         given(jwtProperties.getPrefix()).willReturn("Bearer");
         given(tokenService.getUser(anyString())).willReturn(user);
 
 
         mockMvc.perform(get("/school")
-                        .param("q", "누가봐도없을것같은검색어")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON))
 

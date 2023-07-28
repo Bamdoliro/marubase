@@ -68,8 +68,8 @@ jwt:
   prefix: Bearer
   secret-key: ${JWT_SECRET}
 
-neis:
-  key: ${NEIS_KEY}
+school-info:
+  key: ${SCHOOL_INFO_KEY}
 ---
 spring:
   config:

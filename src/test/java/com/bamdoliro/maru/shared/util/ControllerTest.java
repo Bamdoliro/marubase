@@ -20,7 +20,7 @@ import com.bamdoliro.maru.application.user.SendEmailVerificationUseCase;
 import com.bamdoliro.maru.application.user.SignUpUserUseCase;
 import com.bamdoliro.maru.domain.auth.service.TokenService;
 import com.bamdoliro.maru.infrastructure.mail.SendEmailService;
-import com.bamdoliro.maru.infrastructure.neis.SearchSchoolService;
+import com.bamdoliro.maru.infrastructure.school.QueryAllMiddleSchoolService;
 import com.bamdoliro.maru.presentation.auth.AuthController;
 import com.bamdoliro.maru.presentation.form.FormController;
 import com.bamdoliro.maru.presentation.question.QuestionController;
@@ -115,7 +115,7 @@ public abstract class ControllerTest {
     protected TokenService tokenService;
 
     @MockBean
-    protected SearchSchoolService searchSchoolService;
+    protected QueryAllMiddleSchoolService queryAllMiddleSchoolService;
 
     @MockBean
     protected SendEmailService sendEmailService;

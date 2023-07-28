@@ -6,8 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Setter
 @Getter
-@ConfigurationProperties("neis")
-public class NeisProperties {
+@ConfigurationProperties("school-info")
+public class SchoolInfoProperties {
 
     private String key;
 }
