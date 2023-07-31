@@ -1,3 +1,4 @@
+generated/
 HELP.md
 .gradle
 build/
@@ -7,6 +8,7 @@ build/
 .DS_Store
 src/main/resources/static/docs/**
 .env
+test.pdf
 
 ### STS ###
 .apt_generated

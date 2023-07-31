@@ -41,6 +41,27 @@ spring:
             enable: true
             required: true
 
+  cloud:
+    aws:
+      s3:
+        bucket: ${BUCKET_NAME}
+      stack:
+        auto: false
+      region:
+        static: ${S3_REGION}
+      credentials:
+        instance-profile: true
+        access-key: ${S3_ACCESS_KEY}
+        secret-key: ${S3_SECRET_KEY}
+
+  logging:
+    level:
+      com.amazonaws.util.EC2MetadataUtils: error
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
 jwt:
   refresh-expiration-time: 1296000000 # 15일
   access-expiration-time: 3600000 # 1시간
@@ -53,14 +74,18 @@ neis:
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: prod
 
-debug: true
+  web:
+    resources:
+      add-mappings: false
 ---
 spring:
   config:
     activate:
-      on-profile: prod
+      on-profile: dev
+
+debug: true
 ---
 spring:
   config:

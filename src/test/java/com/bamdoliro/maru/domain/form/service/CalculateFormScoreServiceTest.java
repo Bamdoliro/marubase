@@ -8,13 +8,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
-class FormServiceTest {
+class CalculateFormScoreServiceTest {
 
     @InjectMocks
-    private FormService formService;
+    private CalculateFormScoreService calculateFormScoreService;
 
     @Test
     void 일반전형_1차_점수를_계산한다() {
@@ -22,7 +22,7 @@ class FormServiceTest {
         Form form = FormFixture.createForm(FormType.REGULAR);
 
         // when
-        formService.calculateScore(form);
+        calculateFormScoreService.execute(form);
 
         // then
         assertEquals(195.886, form.getScore().getSubjectGradeScore());
@@ -37,7 +37,7 @@ class FormServiceTest {
         Form form = FormFixture.createForm(FormType.MEISTER_TALENT);
 
         // when
-        formService.calculateScore(form);
+        calculateFormScoreService.execute(form);
 
         // then
         assertEquals(117.531, form.getScore().getSubjectGradeScore());
@@ -52,7 +52,7 @@ class FormServiceTest {
         Form form = FormFixture.createQualificationExaminationForm(FormType.REGULAR);
 
         // when
-        formService.calculateScore(form);
+        calculateFormScoreService.execute(form);
 
         // then
         assertEquals(156.000, form.getScore().getSubjectGradeScore());
@@ -67,7 +67,7 @@ class FormServiceTest {
         Form form = FormFixture.createQualificationExaminationForm(FormType.MEISTER_TALENT);
 
         // when
-        formService.calculateScore(form);
+        calculateFormScoreService.execute(form);
 
         // then
         assertEquals(93.6, form.getScore().getSubjectGradeScore());

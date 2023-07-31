@@ -9,14 +9,11 @@ import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import static com.bamdoliro.maru.domain.question.domain.type.Category.Top_Question;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -38,7 +35,7 @@ class QuestionControllerTest extends RestDocsTestSupport {
     @Test
     void 자주묻는질문을_생성한다() throws Exception {
         willDoNothing().given(createQuestionUseCase).execute(any(CreateQuestionRequest.class));
-        CreateQuestionRequest request = new CreateQuestionRequest("오늘 급식 맛있엇나용?", "토요일인데요", Top_Question);
+        CreateQuestionRequest request = new CreateQuestionRequest("오늘 급식 맛있엇나용?", "토요일인데요", Category.TOP_QUESTION);
 
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
@@ -73,7 +70,7 @@ class QuestionControllerTest extends RestDocsTestSupport {
     @Test
     void 자주묻는질문을_수정한다() throws Exception {
         willDoNothing().given(createQuestionUseCase).execute(any(CreateQuestionRequest.class));
-        UpdateQuestionRequest request = new UpdateQuestionRequest("이거 맞나", "아님 말고...", Top_Question);
+        UpdateQuestionRequest request = new UpdateQuestionRequest("이거 맞나", "아님 말고...", Category.TOP_QUESTION);
 
         User user = UserFixture.createAdminUser();
         given(jwtProperties.getPrefix()).willReturn("Bearer");
@@ -108,7 +105,7 @@ class QuestionControllerTest extends RestDocsTestSupport {
     @Test
     void 자주묻는질문을_수정할_때_자주묻는질문이_없으면_에러가_발생한다() throws Exception {
         Long id = 1L;
-        UpdateQuestionRequest request = new UpdateQuestionRequest("이거 맞나", "아님 말고...", Top_Question);
+        UpdateQuestionRequest request = new UpdateQuestionRequest("이거 맞나", "아님 말고...", Category.TOP_QUESTION);
         willThrow(new QuestionNotFoundException()).given(updateQuestionUseCase).execute(eq(1L), any(UpdateQuestionRequest.class));
 
         User user = UserFixture.createAdminUser();

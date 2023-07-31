@@ -29,7 +29,7 @@ jobs:
 
             options:
               ports: 8080
-              dockerfile: Dockerfile
+              dockerfile: Dockerfile.dev
               env:
                 - name: DB_NAME
                   value: ${{ secrets.DEV_DB_NAME }}
@@ -59,6 +59,14 @@ jobs:
                   value: ${{ secrets.DEV_REDIS_PASSWORD }}
                 - name: NEIS_KEY
                   value: ${{ secrets.DEV_NEIS_KEY }}
+                - name: BUCKET_NAME 
+                  value: ${{ secrets.BUCKET_NAME }}
+                - name: S3_REGION
+                  value: ${{ secrets.S3_REGION }}
+                - name: S3_ACCESS_KEY
+                  value: ${{ secrets.S3_ACCESS_KEY }}
+                - name: S3_SECRET_KEY
+                  value: ${{ secrets.S3_SECRET_KEY }}
                 - name: TZ
                   value: Asia/Seoul
             context:

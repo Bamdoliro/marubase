@@ -3,13 +3,10 @@ package com.bamdoliro.maru.application.form;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
-import com.bamdoliro.maru.domain.form.service.FormService;
+import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.domain.user.service.UserFacade;
-import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
-import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
-import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,8 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -31,44 +26,38 @@ class SubmitFormUseCaseTest {
     private SubmitFormUseCase submitFormUseCase;
 
     @Mock
-    private FormRepository formRepository;
+    private FormFacade formFacade;
 
-    @Mock
-    private FormService formService;
 
     @Test
-    void 원서를_접수한다() {
+    void 원서를_제출한다() {
         // given
-        FormRequest request = FormFixture.createFormRequest(FormType.REGULAR);
-        User user = UserFixture.createUser();
-        
-        given(formRepository.existsByUserId(user.getId())).willReturn(false);
-        willDoNothing().given(formService).calculateScore(any(Form.class));
+        Form form = FormFixture.createForm(FormType.REGULAR);
+        SubmitFormRequest request = new SubmitFormRequest("https://maru.bamdoliro.com/form.pdf");
+
+        given(formFacade.getForm(any(User.class))).willReturn(form);
 
         // when
-        submitFormUseCase.execute(user, request);
+        submitFormUseCase.execute(form.getUser(), request);
 
         // then
-        
-        verify(formRepository, times(1)).existsByUserId(user.getId());
-        verify(formService, times(1)).calculateScore(any(Form.class));
-        verify(formRepository, times(1)).save(any(Form.class));
+        assertEquals(form.getFormUrl(), request.getFormUrl());
+        verify(formFacade, times(1)).getForm(any(User.class));
     }
 
     @Test
-    void 원서를_접수할_때_이미_접수한_원서가_있으면_에러가_발생한다() {
+    void 원서를_제출할_때_이미_제출했다면_에러가_발생한다() {
         // given
-        FormRequest request = FormFixture.createFormRequest(FormType.REGULAR);
-        User user = UserFixture.createUser();
-        
-        given(formRepository.existsByUserId(user.getId())).willReturn(true);
+        Form form = FormFixture.createForm(FormType.REGULAR);
+        form.approve();
+        SubmitFormRequest request = new SubmitFormRequest("https://maru.bamdoliro.com/form.pdf");
+
+        given(formFacade.getForm(any(User.class))).willReturn(form);
 
         // when and then
-        assertThrows(FormAlreadySubmittedException.class, () -> submitFormUseCase.execute(user, request));
-        
-        verify(formRepository, times(1)).existsByUserId(user.getId());
-        verify(formService, never()).calculateScore(any(Form.class));
-        verify(formRepository, never()).save(any(Form.class));
-    }
+        assertThrows(FormAlreadySubmittedException.class, () -> submitFormUseCase.execute(form.getUser(), request));
 
+        assertNull(form.getFormUrl());
+        verify(formFacade, times(1)).getForm(any(User.class));
+    }
 }

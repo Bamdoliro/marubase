@@ -20,13 +20,13 @@ import static com.bamdoliro.maru.domain.form.constant.FormConstant.MIN_ATTENDANC
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.MIN_VOLUNTEER_SCORE;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.MIN_VOLUNTEER_TIME;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.REGULAR_TYPE_DEFAULT_SCORE;
-import static com.bamdoliro.maru.domain.form.constant.FormConstant.SPECIAL_TYPE_DEFAULT_SCORE;
+import static com.bamdoliro.maru.domain.form.constant.FormConstant.SPECIAL_TYPE_DEFAULT_SCORE ;
 
 @RequiredArgsConstructor
 @Service
-public class FormService {
+public class CalculateFormScoreService {
 
-    public void calculateScore(Form form) {
+    public void execute(Form form) {
         Double subjectGradeScore = calculateSubjectGradeScore(form);
         Integer attendanceScore = calculateAttendanceScore(form);
         Integer volunteerScore = calculateVolunteerScore(form);

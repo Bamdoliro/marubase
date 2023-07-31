@@ -3,13 +3,18 @@ package com.bamdoliro.maru.shared.util;
 import com.bamdoliro.maru.application.auth.LogInUseCase;
 import com.bamdoliro.maru.application.auth.RefreshTokenUseCase;
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
+import com.bamdoliro.maru.application.form.ExportFormUseCase;
+import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
 import com.bamdoliro.maru.application.form.QueryFormUseCase;
 import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
+import com.bamdoliro.maru.application.form.SubmitFormDraftUseCase;
 import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.application.form.UpdateFormUseCase;
+import com.bamdoliro.maru.application.form.UploadFormUseCase;
+import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
 import com.bamdoliro.maru.application.question.CreateQuestionUseCase;
-import com.bamdoliro.maru.application.question.GetAllQuestionUseCase;
+import com.bamdoliro.maru.application.question.QueryAllQuestionUseCase;
 import com.bamdoliro.maru.application.question.UpdateQuestionUseCase;
 import com.bamdoliro.maru.application.school.SearchSchoolUseCase;
 import com.bamdoliro.maru.application.user.SendEmailVerificationUseCase;
@@ -74,10 +79,13 @@ public abstract class ControllerTest {
     protected UpdateQuestionUseCase updateQuestionUseCase;
 
     @MockBean
-    protected GetAllQuestionUseCase getAllQuestionUseCase;
+    protected QueryAllQuestionUseCase queryAllQuestionUseCase;
 
     @MockBean
     protected SubmitFormUseCase submitFormUseCase;
+
+    @MockBean
+    protected SubmitFormDraftUseCase submitFormDraftUseCase;
 
     @MockBean
     protected ApproveFormUseCase approveFormUseCase;
@@ -93,6 +101,18 @@ public abstract class ControllerTest {
 
     @MockBean
     protected UpdateFormUseCase updateFormUseCase;
+
+    @MockBean
+    protected UploadIdentificationPictureUseCase uploadIdentificationPictureUseCase;
+
+    @MockBean
+    protected UploadFormUseCase uploadFormUseCase;
+
+    @MockBean
+    protected ExportFormUseCase exportFormUseCase;
+
+    @MockBean
+    protected QueryAllFormUseCase queryAllFormUseCase;
 
 
     @MockBean

@@ -4,6 +4,8 @@ import com.bamdoliro.maru.shared.property.EnumProperty;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Objects;
+
 @Getter
 @RequiredArgsConstructor
 public enum FormType implements EnumProperty {
@@ -35,7 +37,7 @@ public enum FormType implements EnumProperty {
 
     @Getter
     @RequiredArgsConstructor
-    enum Category implements EnumProperty {
+    public enum Category implements EnumProperty {
         // Main Category
         REGULAR("일반전형"),
         SPECIAL("특별전형"),
@@ -59,7 +61,21 @@ public enum FormType implements EnumProperty {
         return mainCategory == Category.SPECIAL;
     }
 
+    public boolean isMeister() {
+        return this == MEISTER_TALENT;
+    }
+
+    public boolean isSocial() {
+        return middleCategory == Category.SOCIAL_INTEGRATION;
+    }
+
     public boolean isSupernumerary() {
         return mainCategory == Category.SUPERNUMERARY;
+    }
+
+    public boolean categoryEquals(Category category) {
+        return mainCategory.equals(category)
+                || (Objects.nonNull(middleCategory) && middleCategory.equals(category))
+                || (Objects.nonNull(subCategory) && subCategory.equals(category));
     }
 }

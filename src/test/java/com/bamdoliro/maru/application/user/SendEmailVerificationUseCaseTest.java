@@ -4,6 +4,7 @@ import com.bamdoliro.maru.domain.user.domain.EmailVerification;
 import com.bamdoliro.maru.infrastructure.mail.SendEmailService;
 import com.bamdoliro.maru.infrastructure.mail.exception.FailedToSendMailException;
 import com.bamdoliro.maru.infrastructure.persistence.user.EmailVerificationRepository;
+import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.Context;
+
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -32,7 +35,7 @@ class SendEmailVerificationUseCaseTest {
     private SendEmailVerificationUseCase sendEmailVerificationUseCase;
 
     @Mock
-    private ITemplateEngine templateEngine;
+    private ProcessTemplateService processTemplateService;
 
     @Mock
     private SendEmailService sendEmailService;
@@ -45,7 +48,7 @@ class SendEmailVerificationUseCaseTest {
     void 유저가_이메일_인증을_요청한다() {
         // given
         EmailVerification verification = UserFixture.createVerification();
-        given(templateEngine.process(anyString(), any(Context.class))).willReturn("context");
+        given(processTemplateService.execute(anyString(), any(Map.class))).willReturn("context");
         willDoNothing().given(sendEmailService).execute(anyString(), anyString(), anyString());
         given(emailVerificationRepository.save(any(EmailVerification.class))).willReturn(verification);
 
@@ -53,7 +56,7 @@ class SendEmailVerificationUseCaseTest {
         sendEmailVerificationUseCase.execute(verification.getEmail());
 
         // then
-        verify(templateEngine, times(1)).process(anyString(), any(Context.class));
+        verify(processTemplateService, times(1)).execute(anyString(), any(Map.class));
         verify(sendEmailService, times(1)).execute(anyString(), anyString(), anyString());
         verify(emailVerificationRepository, times(1)).save(any(EmailVerification.class));
 
@@ -64,14 +67,14 @@ class SendEmailVerificationUseCaseTest {
     void 이메일_전송이_실패한다() {
         // given
         EmailVerification verification = UserFixture.createVerification();
-        given(templateEngine.process(anyString(), any(Context.class))).willReturn("context");
+        given(processTemplateService.execute(anyString(), any(Map.class))).willReturn("context");
         doThrow(new FailedToSendMailException()).when(sendEmailService).execute(anyString(), anyString(), anyString());
 
         // when and then
         assertThrows(FailedToSendMailException.class,
                 () -> sendEmailVerificationUseCase.execute(verification.getEmail()));
 
-        verify(templateEngine, times(1)).process(anyString(), any(Context.class));
+        verify(processTemplateService, times(1)).execute(anyString(), any(Map.class));
         verify(sendEmailService, times(1)).execute(anyString(), anyString(), anyString());
         verify(emailVerificationRepository, never()).save(any(EmailVerification.class));
     }

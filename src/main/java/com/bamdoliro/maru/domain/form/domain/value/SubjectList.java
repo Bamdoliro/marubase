@@ -10,9 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -37,13 +35,13 @@ public class SubjectList {
         return (double) totalScore() / (double) size();
     }
 
-    private Integer totalScore() {
+    public Integer totalScore() {
         return value.stream()
                 .mapToInt(Subject::getScore)
                 .sum();
     }
 
-    private Integer size() {
+    public Integer size() {
         return value.stream()
                 .mapToInt(Subject::getCount)
                 .sum();

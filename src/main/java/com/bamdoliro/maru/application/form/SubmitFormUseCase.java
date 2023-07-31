@@ -2,10 +2,9 @@ package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
-import com.bamdoliro.maru.domain.form.service.FormService;
+import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
-import com.bamdoliro.maru.presentation.form.dto.request.FormRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,30 +13,18 @@ import org.springframework.transaction.annotation.Transactional;
 @UseCase
 public class SubmitFormUseCase {
 
-    private final FormRepository formRepository;
-    private final FormService formService;
+    private final FormFacade formFacade;
 
     @Transactional
-    public void execute(User user, FormRequest request) {
-        validateOnlyOneFormPerUser(user);
+    public void execute(User user, SubmitFormRequest request) {
+        Form form = formFacade.getForm(user);
+        validateFormStatus(form);
 
-        Form form = Form.builder()
-                .applicant(request.getApplicant().toValue())
-                .parent(request.getParent().toValue())
-                .education(request.getEducation().toValue())
-                .grade(request.getGrade().toValue())
-                .document(request.getDocument().toValue())
-                .type(request.getType())
-                .user(user)
-                .build();
-
-        formService.calculateScore(form);
-
-        formRepository.save(form);
+        form.submit(request.getFormUrl());
     }
 
-    private void validateOnlyOneFormPerUser(User user) {
-        if (formRepository.existsByUserId(user.getId())) {
+    private void validateFormStatus(Form form) {
+        if (!(form.isDraft() || form.isRejected())) {
             throw new FormAlreadySubmittedException();
         }
     }
