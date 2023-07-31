@@ -1,6 +1,6 @@
 package com.bamdoliro.maru.presentation.question.dto.request;
 
-import com.bamdoliro.maru.domain.question.domain.type.Category;
+import com.bamdoliro.maru.domain.question.domain.type.QuestionCategory;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -26,7 +26,7 @@ public class QueryQuestionRequest {
     private String content;
 
     @NotNull(message = "카테고리를 선택해야합니다.")
-    private Category category;
+    private QuestionCategory category;
     public Pageable getPageable() {
         return PageRequest.of(page, size);
     }

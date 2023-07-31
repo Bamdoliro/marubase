@@ -1,6 +1,6 @@
 package com.bamdoliro.maru.domain.question.domain;
 
-import com.bamdoliro.maru.domain.question.domain.type.Category;
+import com.bamdoliro.maru.domain.question.domain.type.QuestionCategory;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -33,17 +33,16 @@ public class Question {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
-    private Category category;
+    private QuestionCategory category;
 
     @Builder
-    public Question(String title, String content, Category category) {
+    public Question(String title, String content, QuestionCategory category) {
         this.title = title;
         this.content = content;
         this.category = category;
     }
 
-
-    public void update(String title, String content, Category category){
+    public void update(String title, String content, QuestionCategory category) {
         this.title = title;
         this.content = content;
         this.category = category;

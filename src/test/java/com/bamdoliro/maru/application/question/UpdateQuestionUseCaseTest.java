@@ -10,7 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.bamdoliro.maru.domain.question.domain.type.Category.ADMISSION_PROCESS;
+import static com.bamdoliro.maru.domain.question.domain.type.QuestionCategory.ADMISSION_PROCESS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
