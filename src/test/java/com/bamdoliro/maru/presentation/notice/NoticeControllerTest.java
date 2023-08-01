@@ -1,13 +1,12 @@
-package com.bamdoliro.maru.presentation.question;
+package com.bamdoliro.maru.presentation.notice;
 
-import com.bamdoliro.maru.domain.question.domain.type.QuestionCategory;
-import com.bamdoliro.maru.domain.question.exception.QuestionNotFoundException;
+import com.bamdoliro.maru.domain.notice.exception.NoticeNotFoundException;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.presentation.question.dto.request.CreateQuestionRequest;
-import com.bamdoliro.maru.presentation.question.dto.request.UpdateQuestionRequest;
-import com.bamdoliro.maru.presentation.question.dto.response.QuestionResponse;
+import com.bamdoliro.maru.presentation.notice.dto.request.NoticeRequest;
+import com.bamdoliro.maru.presentation.notice.dto.response.NoticeResponse;
+import com.bamdoliro.maru.presentation.notice.dto.response.NoticeSimpleResponse;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
-import com.bamdoliro.maru.shared.fixture.QuestionFixture;
+import com.bamdoliro.maru.shared.fixture.NoticeFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
@@ -34,21 +33,20 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class QuestionControllerTest extends RestDocsTestSupport {
+class NoticeControllerTest extends RestDocsTestSupport {
 
     @Test
-    void 자주묻는질문을_생성한다() throws Exception {
-        willDoNothing().given(createQuestionUseCase).execute(any(CreateQuestionRequest.class));
-        CreateQuestionRequest request = new CreateQuestionRequest("오늘 급식 맛있엇나용?", "토요일인데요", QuestionCategory.TOP_QUESTION);
+    void 공지사항을_생성한다() throws Exception {
+        NoticeRequest request = new NoticeRequest("오늘 급식 맛있엇나용?", "토요일인데요");
+        willDoNothing().given(createNoticeUseCase).execute(request);
 
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        mockMvc.perform(post("/question")
+        mockMvc.perform(post("/notice")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -68,25 +66,24 @@ class QuestionControllerTest extends RestDocsTestSupport {
                                         .description("64글자 이내의 제목"),
                                 fieldWithPath("content")
                                         .type(JsonFieldType.STRING)
-                                        .description("1024글자 이내의 내용"),
-                                fieldWithPath("category")
-                                        .type(JsonFieldType.STRING)
-                                        .description("카테고리")
+                                        .description("1024글자 이내의 내용")
                         )
                 ));
+
+        verify(createNoticeUseCase, times(1)).execute(any(NoticeRequest.class));
     }
 
     @Test
-    void 자주묻는질문을_수정한다() throws Exception {
+    void 공지사항을_수정한다() throws Exception {
         Long id = 1L;
-        UpdateQuestionRequest request = new UpdateQuestionRequest("이거 맞나", "아님 말고...", QuestionCategory.TOP_QUESTION);
-        willDoNothing().given(updateQuestionUseCase).execute(id, request);
+        NoticeRequest request = new NoticeRequest("이거 맞나", "아님 말고...");
+        willDoNothing().given(updateNoticeUseCase).execute(id, request);
 
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        mockMvc.perform(put("/question/{id}", id)
+        mockMvc.perform(put("/notice/{id}", id)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -99,32 +96,29 @@ class QuestionControllerTest extends RestDocsTestSupport {
                                 headerWithName(HttpHeaders.AUTHORIZATION)
                                         .description("Bearer token")
                         ),
-                        pathParameters(parameterWithName("id").description("자주 묻는 질문 id")),
+                        pathParameters(parameterWithName("id").description("공지사항 id")),
                         requestFields(
                                 fieldWithPath("title")
                                         .type(JsonFieldType.STRING)
                                         .description("64글자 이내의 제목"),
                                 fieldWithPath("content")
                                         .type(JsonFieldType.STRING)
-                                        .description("1024글자 이내의 내용"),
-                                fieldWithPath("category")
-                                        .type(JsonFieldType.STRING)
-                                        .description("카테고리")
+                                        .description("1024글자 이내의 내용")
                         )
                 ));
     }
 
     @Test
-    void 자주묻는질문을_수정할_때_자주묻는질문이_없으면_에러가_발생한다() throws Exception {
+    void 공지사항을_수정할_때_공지사항이_없으면_에러가_발생한다() throws Exception {
         Long id = 1L;
-        UpdateQuestionRequest request = new UpdateQuestionRequest("이거 맞나", "아님 말고...", QuestionCategory.TOP_QUESTION);
-        willThrow(new QuestionNotFoundException()).given(updateQuestionUseCase).execute(eq(1L), any(UpdateQuestionRequest.class));
+        NoticeRequest request = new NoticeRequest("이거 맞나", "아님 말고...");
+        willThrow(new NoticeNotFoundException()).given(updateNoticeUseCase).execute(eq(1L), any(NoticeRequest.class));
 
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        mockMvc.perform(put("/question/{id}", id)
+        mockMvc.perform(put("/notice/{id}", id)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -136,28 +130,60 @@ class QuestionControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 자주묻는질문을_불러온다() throws Exception {
-        List<QuestionResponse> response = List.of(
-                QuestionFixture.createQuestionResponse(),
-                QuestionFixture.createQuestionResponse(),
-                QuestionFixture.createQuestionResponse()
+    void 전체_공지사항을_불러온다() throws Exception {
+        List<NoticeSimpleResponse> response = List.of(
+                NoticeFixture.createNoticeSimpleResponse(),
+                NoticeFixture.createNoticeSimpleResponse(),
+                NoticeFixture.createNoticeSimpleResponse()
         );
-        given(queryQuestionListUseCase.execute(QuestionCategory.TOP_QUESTION)).willReturn(response);
+        given(queryNoticeListUseCase.execute()).willReturn(response);
 
-        mockMvc.perform(get("/question")
-                        .param("category", QuestionCategory.TOP_QUESTION.name())
+        mockMvc.perform(get("/notice")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document());
+
+        verify(queryNoticeListUseCase, times(1)).execute();
+    }
+
+    @Test
+    void 공지사항을_불러온다() throws Exception {
+        Long id = 1L;
+        NoticeResponse response = new NoticeResponse(NoticeFixture.createNotice());
+        given(queryNoticeUseCase.execute(id)).willReturn(response);
+
+        mockMvc.perform(get("/notice/{id}", id)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk())
 
                 .andDo(restDocs.document(
-                        queryParameters(
-                                parameterWithName("category")
-                                        .description("카테고리")
+                        pathParameters(
+                                parameterWithName("id")
+                                        .description("공지사항 id")
                         )
                 ));
 
-        verify(queryQuestionListUseCase, times(1)).execute(QuestionCategory.TOP_QUESTION);
+        verify(queryNoticeUseCase, times(1)).execute(id);
+    }
+
+    @Test
+    void 공지사항을_불러올_때_공지사항이_없으면_에러가_발생한다() throws Exception {
+        Long id = 1L;
+        willThrow(new NoticeNotFoundException()).given(queryNoticeUseCase).execute(id);
+
+        mockMvc.perform(get("/notice/{id}", id)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isNotFound())
+
+                .andDo(restDocs.document());
+
+        verify(queryNoticeUseCase, times(1)).execute(id);
     }
 }

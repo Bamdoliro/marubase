@@ -13,6 +13,10 @@ import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.application.form.UpdateFormUseCase;
 import com.bamdoliro.maru.application.form.UploadFormUseCase;
 import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
+import com.bamdoliro.maru.application.notice.CreateNoticeUseCase;
+import com.bamdoliro.maru.application.notice.QueryNoticeListUseCase;
+import com.bamdoliro.maru.application.notice.QueryNoticeUseCase;
+import com.bamdoliro.maru.application.notice.UpdateNoticeUseCase;
 import com.bamdoliro.maru.application.question.CreateQuestionUseCase;
 import com.bamdoliro.maru.application.question.QueryQuestionListUseCase;
 import com.bamdoliro.maru.application.question.UpdateQuestionUseCase;
@@ -24,6 +28,7 @@ import com.bamdoliro.maru.infrastructure.mail.SendEmailService;
 import com.bamdoliro.maru.infrastructure.neis.SearchSchoolService;
 import com.bamdoliro.maru.presentation.auth.AuthController;
 import com.bamdoliro.maru.presentation.form.FormController;
+import com.bamdoliro.maru.presentation.notice.NoticeController;
 import com.bamdoliro.maru.presentation.question.QuestionController;
 import com.bamdoliro.maru.presentation.school.SchoolController;
 import com.bamdoliro.maru.presentation.user.UserController;
@@ -46,7 +51,8 @@ import org.springframework.test.web.servlet.MockMvc;
         SharedController.class,
         SchoolController.class,
         QuestionController.class,
-        FormController.class
+        FormController.class,
+        NoticeController.class
 })
 public abstract class ControllerTest {
 
@@ -113,6 +119,18 @@ public abstract class ControllerTest {
 
     @MockBean
     protected QueryAllFormUseCase queryAllFormUseCase;
+
+    @MockBean
+    protected QueryNoticeUseCase queryNoticeUseCase;
+
+    @MockBean
+    protected QueryNoticeListUseCase queryNoticeListUseCase;
+
+    @MockBean
+    protected CreateNoticeUseCase createNoticeUseCase;
+
+    @MockBean
+    protected UpdateNoticeUseCase updateNoticeUseCase;
 
 
     @MockBean
