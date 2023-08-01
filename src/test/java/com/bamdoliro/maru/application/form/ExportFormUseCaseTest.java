@@ -19,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -54,7 +53,7 @@ class ExportFormUseCaseTest {
         User user = UserFixture.createUser();
         Form form = FormFixture.createForm(FormType.REGULAR);
         given(formFacade.getForm(user)).willReturn(form);
-        given(processTemplateService.execute(any(String.class), any(Map.class))).willReturn("html");
+        given(processTemplateService.execute(any(String.class), any())).willReturn("html");
         given(generatePdfService.execute(any(String.class))).willReturn(new ByteArrayOutputStream());
         willDoNothing().given(mergePdfService).execute(any(PdfMerger.class), any(ByteArrayOutputStream.class));
 
@@ -63,7 +62,7 @@ class ExportFormUseCaseTest {
 
         // then
         verify(formFacade, times(1)).getForm(user);
-        verify(processTemplateService, times(3)).execute(any(String.class), any(Map.class));
+        verify(processTemplateService, times(3)).execute(any(String.class), any());
         verify(generatePdfService, times(3)).execute(any(String.class));
         verify(mergePdfService, times(3)).execute(any(PdfMerger.class), any(ByteArrayOutputStream.class));
     }
@@ -74,7 +73,7 @@ class ExportFormUseCaseTest {
         User user = UserFixture.createUser();
         Form form = FormFixture.createForm(FormType.FROM_NORTH_KOREA);
         given(formFacade.getForm(user)).willReturn(form);
-        given(processTemplateService.execute(any(String.class), any(Map.class))).willReturn("html");
+        given(processTemplateService.execute(any(String.class), any())).willReturn("html");
         given(generatePdfService.execute(any(String.class))).willReturn(new ByteArrayOutputStream());
         willDoNothing().given(mergePdfService).execute(any(PdfMerger.class), any(ByteArrayOutputStream.class));
 
@@ -83,7 +82,7 @@ class ExportFormUseCaseTest {
 
         // then
         verify(formFacade, times(1)).getForm(user);
-        verify(processTemplateService, times(4)).execute(any(String.class), any(Map.class));
+        verify(processTemplateService, times(4)).execute(any(String.class), any());
         verify(generatePdfService, times(4)).execute(any(String.class));
         verify(mergePdfService, times(4)).execute(any(PdfMerger.class), any(ByteArrayOutputStream.class));
     }
@@ -100,7 +99,7 @@ class ExportFormUseCaseTest {
         assertThrows(FormAlreadySubmittedException.class, () -> exportFormUseCase.execute(user));
 
         verify(formFacade, times(1)).getForm(user);
-        verify(processTemplateService, never()).execute(any(String.class), any(Map.class));
+        verify(processTemplateService, never()).execute(any(String.class), any());
         verify(generatePdfService, never()).execute(any(String.class));
         verify(mergePdfService, never()).execute(any(PdfMerger.class), any(ByteArrayOutputStream.class));
     }
@@ -111,7 +110,7 @@ class ExportFormUseCaseTest {
         User user = UserFixture.createUser();
         Form form = FormFixture.createForm(FormType.REGULAR);
         given(formFacade.getForm(user)).willReturn(form);
-        given(processTemplateService.execute(any(String.class), any(Map.class))).willReturn("html");
+        given(processTemplateService.execute(any(String.class), any())).willReturn("html");
         doThrow(FailedToExportPdfException.class).when(generatePdfService).execute(any(String.class));
 
         // when and then
@@ -119,7 +118,7 @@ class ExportFormUseCaseTest {
 
         // then
         verify(formFacade, times(1)).getForm(user);
-        verify(processTemplateService, times(1)).execute(any(String.class), any(Map.class));
+        verify(processTemplateService, times(1)).execute(any(String.class), any());
         verify(generatePdfService, times(1)).execute(any(String.class));
         verify(mergePdfService, never()).execute(any(PdfMerger.class), any(ByteArrayOutputStream.class));
     }
