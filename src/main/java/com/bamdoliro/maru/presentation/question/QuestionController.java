@@ -10,11 +10,10 @@ import com.bamdoliro.maru.presentation.question.dto.request.UpdateQuestionReques
 import com.bamdoliro.maru.presentation.question.dto.response.QuestionResponse;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.auth.Authority;
+import com.bamdoliro.maru.shared.response.CommonResponse;
 import com.bamdoliro.maru.shared.response.ListCommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,9 +55,10 @@ public class QuestionController {
 
     @GetMapping
     public ListCommonResponse<QuestionResponse> queryQuestionList(
-            @RequestParam QuestionCategory category,
-            @PageableDefault(size = 10) Pageable pageable
+            @RequestParam QuestionCategory category
     ) {
-        queryQuestionListUseCase.execute(category, pageable);
+        return CommonResponse.ok(
+                queryQuestionListUseCase.execute(category)
+        );
     }
 }
