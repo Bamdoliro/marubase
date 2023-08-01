@@ -1,0 +1,68 @@
+== 공지사항 Notice
+
+=== 공지사항 생성
+어드민 권한을 가진 사용자가 제목과 내용을 입력해 공지사항을 생성할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/notice-controller-test/공지사항을_생성한다/request-headers.adoc[]
+
+===== Request Body
+include::{snippets}/notice-controller-test/공지사항을_생성한다/request-fields.adoc[]
+
+==== 요청
+include::{snippets}/notice-controller-test/공지사항을_생성한다/http-request.adoc[]
+
+==== 응답
+===== 정상 응답
+include::{snippets}/notice-controller-test/공지사항을_생성한다/http-response.adoc[]
+
+=== 공지사항 수정
+어드민 권한을 가진 사용자가 제목과 내용을 입력해 공지사항을 수정할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/notice-controller-test/공지사항을_수정한다/request-headers.adoc[]
+
+===== Request Body
+include::{snippets}/notice-controller-test/공지사항을_수정한다/request-fields.adoc[]
+
+==== 요청
+include::{snippets}/notice-controller-test/공지사항을_수정한다/http-request.adoc[]
+
+==== 응답
+===== 정상 응답
+include::{snippets}/notice-controller-test/공지사항을_수정한다/http-response.adoc[]
+
+===== 공지사항을 찾을수 없는 경우
+include::{snippets}/notice-controller-test/공지사항을_수정할_때_공지사항이_없으면_에러가_발생한다/http-response.adoc[]
+
+=== 공지사항 전체 조회
+공지사항을 전체 조회할 수 있습니다.
+
+==== 요청
+include::{snippets}/notice-controller-test/전체_공지사항을_불러온다/http-request.adoc[]
+
+==== 응답
+===== 정상 응답
+include::{snippets}/notice-controller-test/전체_공지사항을_불러온다/http-response.adoc[]
+
+=== 공지사항 조회
+id로 공지사항을 조회할 수 있습니다.
+
+==== 요청 형식
+
+===== Path Parameter
+include::{snippets}/notice-controller-test/공지사항을_불러온다/path-parameters.adoc[]
+
+==== 요청
+include::{snippets}/notice-controller-test/공지사항을_불러온다/http-request.adoc[]
+
+==== 응답
+===== 정상 응답
+include::{snippets}/notice-controller-test/공지사항을_불러온다/http-response.adoc[]
+
+===== 공지사항을 찾을수 없는 경우
+include::{snippets}/notice-controller-test/공지사항을_불러올_때_공지사항이_없으면_에러가_발생한다/http-response.adoc[]

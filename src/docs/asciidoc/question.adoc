@@ -32,6 +32,7 @@ include::{snippets}/question-controller-test/자주묻는질문을_수정한다/
 ==== 요청
 include::{snippets}/question-controller-test/자주묻는질문을_수정한다/http-request.adoc[]
 
+==== 응답
 ===== 정상 응답
 include::{snippets}/question-controller-test/자주묻는질문을_수정한다/http-response.adoc[]
 
@@ -50,6 +51,5 @@ include::{snippets}/question-controller-test/자주묻는질문을_불러온다/
 include::{snippets}/question-controller-test/자주묻는질문을_불러온다/http-request.adoc[]
 
 ==== 응답
-
 ===== 정상 응답
 include::{snippets}/question-controller-test/자주묻는질문을_불러온다/http-response.adoc[]
