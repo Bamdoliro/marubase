@@ -2,7 +2,7 @@ package com.bamdoliro.maru.application.notice;
 
 import com.bamdoliro.maru.domain.notice.domain.Notice;
 import com.bamdoliro.maru.infrastructure.persistence.notice.NoticeRepository;
-import com.bamdoliro.maru.presentation.question.dto.request.CreateQuestionRequest;
+import com.bamdoliro.maru.presentation.notice.dto.request.NoticeRequest;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
 
@@ -12,9 +12,9 @@ public class CreateNoticeUseCase {
 
     private final NoticeRepository noticeRepository;
 
-    public void execute(CreateQuestionRequest request) {
+    public void execute(NoticeRequest request) {
         noticeRepository.save(
-                new Notice(request.getTitle(), request.getContent(), request.getCategory()));
+                new Notice(request.getTitle(), request.getContent())
+        );
     }
-
 }

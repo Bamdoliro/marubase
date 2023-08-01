@@ -44,13 +44,13 @@ public class QuestionController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("/{id}")
+    @PutMapping("/{question-id}")
     public void updateQuestion(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
-            @PathVariable Long id,
+            @PathVariable(name = "question-id") Long questionId,
             @RequestBody @Valid UpdateQuestionRequest request
     ) {
-        updateQuestionUseCase.execute(id, request);
+        updateQuestionUseCase.execute(questionId, request);
     }
 
     @GetMapping

@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.domain.question.domain;
 
 import com.bamdoliro.maru.domain.question.domain.type.QuestionCategory;
+import com.bamdoliro.maru.shared.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tbl_question")
 @Entity
-public class Question {
+public class Question extends BaseTimeEntity {
 
     @Column(name = "question_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
