@@ -25,7 +25,7 @@ public class DraftFormController {
     private final DraftFormUseCase draftFormUseCase;
     private final QueryDraftFormUseCase queryDraftFormUseCase;
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void draftForm(
             @AuthenticationPrincipal(authority = Authority.USER) User user,

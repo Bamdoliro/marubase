@@ -4,8 +4,10 @@ import com.bamdoliro.maru.application.auth.LogInUseCase;
 import com.bamdoliro.maru.application.auth.LogOutUseCase;
 import com.bamdoliro.maru.application.auth.RefreshTokenUseCase;
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
+import com.bamdoliro.maru.application.form.DraftFormUseCase;
 import com.bamdoliro.maru.application.form.ExportFormUseCase;
 import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
+import com.bamdoliro.maru.application.form.QueryDraftFormUseCase;
 import com.bamdoliro.maru.application.form.QueryFormUseCase;
 import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
@@ -28,6 +30,7 @@ import com.bamdoliro.maru.domain.auth.service.TokenService;
 import com.bamdoliro.maru.infrastructure.mail.SendEmailService;
 import com.bamdoliro.maru.infrastructure.neis.SearchSchoolService;
 import com.bamdoliro.maru.presentation.auth.AuthController;
+import com.bamdoliro.maru.presentation.form.DraftFormController;
 import com.bamdoliro.maru.presentation.form.FormController;
 import com.bamdoliro.maru.presentation.notice.NoticeController;
 import com.bamdoliro.maru.presentation.question.QuestionController;
@@ -53,7 +56,8 @@ import org.springframework.test.web.servlet.MockMvc;
         SchoolController.class,
         QuestionController.class,
         FormController.class,
-        NoticeController.class
+        NoticeController.class,
+        DraftFormController.class
 })
 public abstract class ControllerTest {
 
@@ -135,6 +139,12 @@ public abstract class ControllerTest {
 
     @MockBean
     protected LogOutUseCase logOutUseCase;
+
+    @MockBean
+    protected DraftFormUseCase draftFormUseCase;
+
+    @MockBean
+    protected QueryDraftFormUseCase queryDraftFormUseCase;
 
 
     @MockBean

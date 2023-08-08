@@ -336,7 +336,7 @@ public class FormFixture {
         );
     }
 
-    private static ApplicantRequest createApplicantRequest() {
+    public static ApplicantRequest createApplicantRequest() {
         return new ApplicantRequest(
                 "https://maru.com/photo.png",
                 "김밤돌",
@@ -346,7 +346,7 @@ public class FormFixture {
         );
     }
 
-    private static ParentRequest createParentRequest() {
+    public static ParentRequest createParentRequest() {
         return new ParentRequest(
                 "김이로",
                 "01012345678",
