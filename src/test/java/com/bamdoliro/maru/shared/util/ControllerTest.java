@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.shared.util;
 
 import com.bamdoliro.maru.application.auth.LogInUseCase;
+import com.bamdoliro.maru.application.auth.LogOutUseCase;
 import com.bamdoliro.maru.application.auth.RefreshTokenUseCase;
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
 import com.bamdoliro.maru.application.form.ExportFormUseCase;
@@ -131,6 +132,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected UpdateNoticeUseCase updateNoticeUseCase;
+
+    @MockBean
+    protected LogOutUseCase logOutUseCase;
 
 
     @MockBean
