@@ -98,7 +98,7 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("지원자 전화번호"),
                                 fieldWithPath("applicant.birthday")
                                         .type(JsonFieldType.STRING)
-                                        .description("지원자 생년월일"),
+                                        .description("지원자 생년월일 (yyyy-MM-dd)"),
                                 fieldWithPath("applicant.gender")
                                         .type(JsonFieldType.STRING)
                                         .description("지원자 성별"),

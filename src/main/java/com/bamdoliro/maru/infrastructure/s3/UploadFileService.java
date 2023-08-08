@@ -32,8 +32,9 @@ public class UploadFileService {
                     fullFileName,
                     file.getInputStream(),
                     getObjectMetadata(file)
-            );
-            amazonS3Client.putObject(request.withCannedAcl(CannedAccessControlList.PublicRead));
+            ).withCannedAcl(CannedAccessControlList.PublicRead);
+
+            amazonS3Client.putObject(request);
         } catch (SdkClientException | IOException e) {
             throw new FailedToSaveException();
         }
