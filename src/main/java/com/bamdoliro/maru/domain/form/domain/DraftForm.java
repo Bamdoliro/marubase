@@ -1,11 +1,11 @@
 package com.bamdoliro.maru.domain.form.domain;
 
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
-import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 @Getter
