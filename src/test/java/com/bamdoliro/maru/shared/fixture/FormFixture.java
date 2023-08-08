@@ -25,7 +25,7 @@ import com.bamdoliro.maru.presentation.form.dto.request.EducationRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.GradeRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.ParentRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubjectRequest;
-import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormDraftRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.UpdateFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.response.ApplicantResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.AttendanceResponse;
@@ -155,8 +155,8 @@ public class FormFixture {
     }
 
 
-    public static SubmitFormDraftRequest createFormRequest(FormType type) {
-        return new SubmitFormDraftRequest(
+    public static SubmitFormRequest createFormRequest(FormType type) {
+        return new SubmitFormRequest(
                 createApplicantRequest(),
                 createParentRequest(),
                 new EducationRequest(
@@ -191,8 +191,8 @@ public class FormFixture {
         );
     }
 
-    public static SubmitFormDraftRequest createQualificationExaminationFormRequest(FormType type) {
-        return new SubmitFormDraftRequest(
+    public static SubmitFormRequest createQualificationExaminationFormRequest(FormType type) {
+        return new SubmitFormRequest(
                 createApplicantRequest(),
                 createParentRequest(),
                 new EducationRequest(
@@ -332,7 +332,7 @@ public class FormFixture {
                 ),
                 "https://maru.bamdoliro.com/form.pdf",
                 FormType.REGULAR,
-                FormStatus.SUBMITTED
+                FormStatus.FINAL_SUBMITTED
         );
     }
 

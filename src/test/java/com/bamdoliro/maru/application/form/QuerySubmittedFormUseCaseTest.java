@@ -36,13 +36,13 @@ class QuerySubmittedFormUseCaseTest {
                 FormFixture.createForm(FormType.REGULAR),
                 FormFixture.createForm(FormType.REGULAR)
         );
-        given(formRepository.findByStatus(FormStatus.SUBMITTED)).willReturn(formList);
+        given(formRepository.findByStatus(FormStatus.FINAL_SUBMITTED)).willReturn(formList);
 
         // when
         List<FormSimpleResponse> formSimpleResponseList = querySubmittedFormUseCase.execute();
 
         // then
-        verify(formRepository, times(1)).findByStatus(FormStatus.SUBMITTED);
+        verify(formRepository, times(1)).findByStatus(FormStatus.FINAL_SUBMITTED);
         assertEquals(formSimpleResponseList.size(), formList.size());
         assertEquals(formSimpleResponseList.get(0).getId(), formList.get(0).getId());
         assertEquals(formSimpleResponseList.get(1).getId(), formList.get(1).getId());
@@ -52,13 +52,13 @@ class QuerySubmittedFormUseCaseTest {
     @Test
     void 검토해야_하는_원서가_없으면_빈_리스트를_반환한다() {
         // given
-        given(formRepository.findByStatus(FormStatus.SUBMITTED)).willReturn(List.of());
+        given(formRepository.findByStatus(FormStatus.FINAL_SUBMITTED)).willReturn(List.of());
 
         // when
         List<FormSimpleResponse> formSimpleResponseList = querySubmittedFormUseCase.execute();
 
         // then
-        verify(formRepository, times(1)).findByStatus(FormStatus.SUBMITTED);
+        verify(formRepository, times(1)).findByStatus(FormStatus.FINAL_SUBMITTED);
         assertEquals(formSimpleResponseList.size(), 0);
     }
 

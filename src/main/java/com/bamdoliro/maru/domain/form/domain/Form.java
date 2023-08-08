@@ -27,8 +27,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tbl_form")
@@ -85,12 +83,12 @@ public class Form extends BaseTimeEntity {
         this.document = document;
         this.type = type;
         this.user = user;
-        this.status = FormStatus.DRAFT;
+        this.status = FormStatus.SUBMITTED;
     }
 
     public void submit(String formUrl) {
         this.formUrl = formUrl;
-        this.status = FormStatus.SUBMITTED;
+        this.status = FormStatus.FINAL_SUBMITTED;
     }
 
     public void updateScore(Score score) {
@@ -121,8 +119,8 @@ public class Form extends BaseTimeEntity {
         return status.equals(FormStatus.REJECTED);
     }
 
-    public boolean isDraft() {
-        return status.equals(FormStatus.DRAFT);
+    public boolean isSubmitted() {
+        return status.equals(FormStatus.SUBMITTED);
     }
 
     public void update(Applicant applicant, Parent parent, Education education, Grade grade, Document document, FormType type) {
@@ -132,7 +130,7 @@ public class Form extends BaseTimeEntity {
         this.grade = grade;
         this.document = document;
         this.type = type;
-        this.status = FormStatus.SUBMITTED;
+        this.status = FormStatus.FINAL_SUBMITTED;
     }
 
     public void assignExaminationNumber(Long examinationNumber) {

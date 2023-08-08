@@ -50,6 +50,6 @@ class ApproveFormUseCaseTest {
         
         // when and then
         assertThrows(FormNotFoundException.class, () -> approveFormUseCase.execute(form.getId()));
-        assertEquals(form.getStatus(), FormStatus.SUBMITTED);
+        assertEquals(form.getStatus(), FormStatus.FINAL_SUBMITTED);
     }
 }

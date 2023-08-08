@@ -14,8 +14,8 @@ import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
 import com.bamdoliro.maru.infrastructure.s3.exception.FileSizeLimitExceededException;
 import com.bamdoliro.maru.infrastructure.s3.exception.ImageSizeMismatchException;
 import com.bamdoliro.maru.infrastructure.s3.exception.MediaTypeMismatchException;
-import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormDraftRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.SubmitFinalFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.UpdateFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
@@ -60,13 +60,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class FormControllerTest extends RestDocsTestSupport {
 
     @Test
-    void 원서_초안을_제출한다() throws Exception {
-        SubmitFormDraftRequest request = FormFixture.createFormRequest(FormType.REGULAR);
+    void 원서를_제출한다() throws Exception {
+        SubmitFormRequest request = FormFixture.createFormRequest(FormType.REGULAR);
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        willDoNothing().given(submitFormDraftUseCase).execute(user, request);
+        willDoNothing().given(submitFormUseCase).execute(user, request);
 
 
         mockMvc.perform(post("/form")
@@ -215,13 +215,13 @@ class FormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 중졸_껌정고시_합격자가_원서_초안을_제출한다() throws Exception {
-        SubmitFormDraftRequest request = FormFixture.createQualificationExaminationFormRequest(FormType.MEISTER_TALENT);
+    void 중졸_껌정고시_합격자가_원서를_제출한다() throws Exception {
+        SubmitFormRequest request = FormFixture.createQualificationExaminationFormRequest(FormType.MEISTER_TALENT);
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        willDoNothing().given(submitFormDraftUseCase).execute(user, request);
+        willDoNothing().given(submitFormUseCase).execute(user, request);
 
 
         mockMvc.perform(post("/form")
@@ -237,13 +237,13 @@ class FormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 원서_초안을_제출할_때_이미_제출한_원서가_있으면_에러가_발생한다() throws Exception {
-        SubmitFormDraftRequest request = FormFixture.createFormRequest(FormType.REGULAR);
+    void 원서를_제출할_때_이미_제출한_원서가_있으면_에러가_발생한다() throws Exception {
+        SubmitFormRequest request = FormFixture.createFormRequest(FormType.REGULAR);
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FormAlreadySubmittedException()).when(submitFormDraftUseCase).execute(any(User.class), any(SubmitFormDraftRequest.class));
+        doThrow(new FormAlreadySubmittedException()).when(submitFormUseCase).execute(any(User.class), any(SubmitFormRequest.class));
 
 
         mockMvc.perform(post("/form")
@@ -259,8 +259,8 @@ class FormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 원서_초안을_제출할_때_잘못된_형식의_요청을_보내면_에러가_발생한다() throws Exception {
-        SubmitFormDraftRequest request = new SubmitFormDraftRequest();
+    void 원서를_제출할_때_잘못된_형식의_요청을_보내면_에러가_발생한다() throws Exception {
+        SubmitFormRequest request = new SubmitFormRequest();
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
@@ -278,17 +278,17 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(submitFormDraftUseCase, never()).execute(any(User.class), any(SubmitFormDraftRequest.class));
+        verify(submitFormUseCase, never()).execute(any(User.class), any(SubmitFormRequest.class));
     }
 
     @Test
     void 원서를_최종_제출한다() throws Exception {
-        SubmitFormRequest request = new SubmitFormRequest("https://maru.bamdoliro.com/form.pdf");
+        SubmitFinalFormRequest request = new SubmitFinalFormRequest("https://maru.bamdoliro.com/form.pdf");
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        willDoNothing().given(submitFormUseCase).execute(any(User.class), any(SubmitFormRequest.class));
+        willDoNothing().given(submitFinalFormUseCase).execute(any(User.class), any(SubmitFinalFormRequest.class));
 
         mockMvc.perform(patch("/form")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
@@ -311,17 +311,17 @@ class FormControllerTest extends RestDocsTestSupport {
                         )
                 ));
 
-        verify(submitFormUseCase, times(1)).execute(any(User.class), any(SubmitFormRequest.class));
+        verify(submitFinalFormUseCase, times(1)).execute(any(User.class), any(SubmitFinalFormRequest.class));
     }
 
     @Test
     void 원서를_최종_제출할_때_이미_제출한_원서라면_에러가_발생한다() throws Exception {
-        SubmitFormRequest request = new SubmitFormRequest("https://maru.bamdoliro.com/form.pdf");
+        SubmitFinalFormRequest request = new SubmitFinalFormRequest("https://maru.bamdoliro.com/form.pdf");
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FormAlreadySubmittedException()).when(submitFormUseCase).execute(any(User.class), any(SubmitFormRequest.class));
+        doThrow(new FormAlreadySubmittedException()).when(submitFinalFormUseCase).execute(any(User.class), any(SubmitFinalFormRequest.class));
 
         mockMvc.perform(patch("/form")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
@@ -334,7 +334,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(submitFormUseCase, times(1)).execute(any(User.class), any(SubmitFormRequest.class));
+        verify(submitFinalFormUseCase, times(1)).execute(any(User.class), any(SubmitFinalFormRequest.class));
     }
 
     @Test
@@ -450,9 +450,9 @@ class FormControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
         given(querySubmittedFormUseCase.execute()).willReturn(List.of(
-                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
+                FormFixture.createFormSimpleResponse(FormStatus.FINAL_SUBMITTED),
                 FormFixture.createFormSimpleResponse(FormStatus.REJECTED),
-                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED)
+                FormFixture.createFormSimpleResponse(FormStatus.FINAL_SUBMITTED)
         ));
 
 
@@ -1216,19 +1216,19 @@ class FormControllerTest extends RestDocsTestSupport {
     void 원서를_전체_조회한다() throws Exception {
         User user = UserFixture.createUser();
         List<FormSimpleResponse> responseList = List.of(
-                FormFixture.createFormSimpleResponse(FormStatus.DRAFT),
-                FormFixture.createFormSimpleResponse(FormStatus.DRAFT),
-                FormFixture.createFormSimpleResponse(FormStatus.DRAFT),
-                FormFixture.createFormSimpleResponse(FormStatus.DRAFT),
-                FormFixture.createFormSimpleResponse(FormStatus.DRAFT)
+                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
+                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
+                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
+                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
+                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED)
         );
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(queryAllFormUseCase.execute(FormStatus.DRAFT, FormType.Category.REGULAR)).willReturn(responseList);
+        given(queryAllFormUseCase.execute(FormStatus.SUBMITTED, FormType.Category.REGULAR)).willReturn(responseList);
 
         mockMvc.perform(get("/form")
-                        .param("status", FormStatus.DRAFT.name())
+                        .param("status", FormStatus.SUBMITTED.name())
                         .param("type", FormType.Category.REGULAR.name())
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
@@ -1251,6 +1251,6 @@ class FormControllerTest extends RestDocsTestSupport {
                         )
                 ));
 
-        verify(queryAllFormUseCase, times(1)).execute(FormStatus.DRAFT, FormType.Category.REGULAR);
+        verify(queryAllFormUseCase, times(1)).execute(FormStatus.SUBMITTED, FormType.Category.REGULAR);
     }
 }

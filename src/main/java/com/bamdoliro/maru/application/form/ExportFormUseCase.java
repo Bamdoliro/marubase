@@ -51,7 +51,7 @@ public class ExportFormUseCase {
     }
 
     private void validateFormStatus(Form form) {
-        if (!(form.isDraft() || form.isRejected())) {
+        if (!(form.isSubmitted() || form.isRejected())) {
             throw new FormAlreadySubmittedException();
         }
     }

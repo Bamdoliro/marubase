@@ -17,7 +17,7 @@ public class QuerySubmittedFormUseCase {
 
     @Transactional(readOnly = true)
     public List<FormSimpleResponse> execute() {
-        return formRepository.findByStatus(FormStatus.SUBMITTED)
+        return formRepository.findByStatus(FormStatus.FINAL_SUBMITTED)
                 .stream()
                 .map(FormSimpleResponse::new)
                 .toList();
