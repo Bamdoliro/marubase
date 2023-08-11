@@ -1,20 +1,29 @@
 package com.bamdoliro.maru.presentation.user;
 
+import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.exception.UserAlreadyExistsException;
 import com.bamdoliro.maru.domain.user.exception.VerificationCodeMismatchException;
 import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
 import com.bamdoliro.maru.domain.user.exception.error.UserErrorProperty;
 import com.bamdoliro.maru.infrastructure.mail.exception.FailedToSendMailException;
 import com.bamdoliro.maru.presentation.user.dto.request.SignUpUserRequest;
+import com.bamdoliro.maru.shared.fixture.AuthFixture;
+import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -159,5 +168,26 @@ class UserControllerTest extends RestDocsTestSupport {
                 .andExpect(status().isInternalServerError())
 
                 .andDo(restDocs.document());
+    }
+
+    @Test
+    void 로그인한_유저를_불러온다() throws Exception {
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+
+        mockMvc.perform(get("/user")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        )
+                ));
     }
 }
