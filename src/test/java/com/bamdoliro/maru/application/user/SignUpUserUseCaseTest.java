@@ -43,7 +43,7 @@ class SignUpUserUseCaseTest {
         // given
         User user = UserFixture.createUser();
         EmailVerification verification = UserFixture.createVerification();
-        SignUpUserRequest request = new SignUpUserRequest(user.getEmail(), verification.getCode(), "비밀번호");
+        SignUpUserRequest request = new SignUpUserRequest(user.getEmail(), user.getName(), verification.getCode(), "비밀번호");
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
 
         given(emailVerificationRepository.findById(request.getEmail())).willReturn(Optional.of(verification));
@@ -63,7 +63,7 @@ class SignUpUserUseCaseTest {
     @Test
     void 이메일_인증을_요청하지_않았거나_만료되었다면_에러가_발생한다() {
         // given
-        SignUpUserRequest request = new SignUpUserRequest("이메일", "ABC123", "비밀번호");
+        SignUpUserRequest request = new SignUpUserRequest("이메일", "김밤돌", "ABC123", "비밀번호");
 
         given(emailVerificationRepository.findById(request.getEmail())).willReturn(Optional.empty());
 
@@ -80,7 +80,7 @@ class SignUpUserUseCaseTest {
         // given
         User user = UserFixture.createUser();
         EmailVerification verification = UserFixture.createVerification();
-        SignUpUserRequest request = new SignUpUserRequest(user.getEmail(), "다른코드같을수가없는코드", "비밀번호");
+        SignUpUserRequest request = new SignUpUserRequest(user.getEmail(), user.getName(), "다른코드같을수가없는코드", "비밀번호");
 
         given(emailVerificationRepository.findById(request.getEmail())).willReturn(Optional.of(verification));
 
@@ -97,7 +97,7 @@ class SignUpUserUseCaseTest {
         // given
         User user = UserFixture.createUser();
         EmailVerification verification = UserFixture.createVerification();
-        SignUpUserRequest request = new SignUpUserRequest(user.getEmail(), verification.getCode(), "비밀번호");
+        SignUpUserRequest request = new SignUpUserRequest(user.getEmail(), user.getName(), verification.getCode(), "비밀번호");
 
         given(emailVerificationRepository.findById(request.getEmail())).willReturn(Optional.of(verification));
         given(userRepository.existsByEmail(request.getEmail())).willReturn(true);

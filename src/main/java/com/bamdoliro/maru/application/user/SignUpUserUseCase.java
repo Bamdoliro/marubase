@@ -27,6 +27,7 @@ public class SignUpUserUseCase {
         userRepository.save(
                 User.builder()
                         .email(request.getEmail())
+                        .name(request.getName())
                         .password(request.getPassword())
                         .authority(Authority.USER)
                         .build()

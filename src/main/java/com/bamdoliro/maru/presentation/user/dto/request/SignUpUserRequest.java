@@ -19,6 +19,10 @@ public class SignUpUserRequest {
     private String email;
 
     @NotBlank(message = "필수값입니다.")
+    @Size(max = 50, message = "50자 이하여야 합니다.")
+    private String name;
+
+    @NotBlank(message = "필수값입니다.")
     @Size(min = 6, max = 6, message = "6자여야 합니다.")
     private String code;
 
