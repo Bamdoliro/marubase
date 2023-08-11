@@ -52,3 +52,19 @@ include::{snippets}/user-controller-test/이메일_인증을_요청할_때_잘�
 
 ===== 이메일 전송이 실패한 경우
 include::{snippets}/user-controller-test/이메일_인증을_요청할_때_이메일_전송이_실패하면_에러가_발생한다/http-response.adoc[]
+
+=== 로그인한 유저 조회
+현재 로그인한 유저의 정보를 조회할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/user-controller-test/로그인한_유저를_불러온다/request-headers.adoc[]
+
+==== 요청
+include::{snippets}/user-controller-test/로그인한_유저를_불러온다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/user-controller-test/로그인한_유저를_불러온다/http-response.adoc[]
