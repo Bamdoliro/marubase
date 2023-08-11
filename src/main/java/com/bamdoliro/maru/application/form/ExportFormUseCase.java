@@ -2,6 +2,7 @@ package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
+import com.bamdoliro.maru.domain.form.domain.value.SubjectMap;
 import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
@@ -33,7 +34,13 @@ public class ExportFormUseCase {
         Form form = formFacade.getForm(user);
         validateFormStatus(form);
 
-        Map<String, Object> formMap = Map.of("form", form);
+        SubjectMap subjectMap = form.getGrade().getSubjectList().getSubjectMap();
+        Map<String, Object> formMap = Map.of(
+                "form", form,
+                "grade21", subjectMap.getSubjectListOf(2, 1),
+                "grade22", subjectMap.getSubjectListOf(2, 2),
+                "grade31", subjectMap.getSubjectListOf(3, 1)
+        );
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PdfDocument mergedDocument = new PdfDocument(new PdfWriter(outputStream));
         PdfMerger pdfMerger = new PdfMerger(mergedDocument);
