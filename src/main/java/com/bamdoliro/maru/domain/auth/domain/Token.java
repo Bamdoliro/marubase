@@ -13,13 +13,13 @@ import org.springframework.data.redis.core.RedisHash;
 public class Token {
 
     @Id
-    private String token;
-
     private String email;
 
+    private String token;
+
     @Builder
-    public Token(String token, String email) {
-        this.token = token;
+    public Token(String email, String token) {
         this.email = email;
+        this.token = token;
     }
 }

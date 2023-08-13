@@ -36,8 +36,8 @@ public class TokenService {
         String token = generateToken(email, TokenType.REFRESH_TOKEN, jwtProperties.getRefreshExpirationTime());
         tokenRepository.save(
                 Token.builder()
-                        .token(token)
                         .email(email)
+                        .token(token)
                         .build());
 
         return token;
@@ -61,7 +61,7 @@ public class TokenService {
         return userFacade.getUser(getEmail(token));
     }
 
-    private String getEmail(String token) {
+    public String getEmail(String token) {
         return extractAllClaims(token).get("email", String.class);
     }
 

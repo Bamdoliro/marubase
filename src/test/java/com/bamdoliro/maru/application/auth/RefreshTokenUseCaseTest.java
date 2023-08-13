@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -42,7 +43,8 @@ class RefreshTokenUseCaseTest {
         Token refreshToken = AuthFixture.createRefreshToken();
         String accessToken = AuthFixture.createAccessTokenString();
         given(tokenService.getType(refreshToken.getToken())).willReturn(TokenType.REFRESH_TOKEN.name());
-        given(tokenRepository.findByToken(refreshToken.getToken())).willReturn(Optional.of(refreshToken));
+        given(tokenService.getEmail(refreshToken.getToken())).willReturn(refreshToken.getEmail());
+        given(tokenRepository.findById(refreshToken.getEmail())).willReturn(Optional.of(refreshToken));
         given(tokenService.generateAccessToken(refreshToken.getEmail())).willReturn(accessToken);
 
         // when
@@ -50,7 +52,8 @@ class RefreshTokenUseCaseTest {
 
         // then
         verify(tokenService, times(1)).getType(refreshToken.getToken());
-        verify(tokenRepository, times(1)).findByToken(refreshToken.getToken());
+        verify(tokenService, times(1)).getEmail(refreshToken.getToken());
+        verify(tokenRepository, times(1)).findById(refreshToken.getEmail());
         verify(tokenService, times(1)).generateAccessToken(refreshToken.getEmail());
         assertEquals(accessToken, response.getAccessToken());
     }
@@ -59,13 +62,25 @@ class RefreshTokenUseCaseTest {
     void 리프레시_토큰이_만료되었으면_에러가_발생한다() {
         // given
         String expiredRefreshToken = "만료.리프레시.토큰";
-        given(tokenService.getType(expiredRefreshToken)).willReturn(TokenType.REFRESH_TOKEN.name());
-        given(tokenRepository.findByToken(expiredRefreshToken)).willReturn(Optional.empty());
+        doThrow(new ExpiredTokenException()).when(tokenService).getType(expiredRefreshToken);
 
         // when and then
         assertThrows(ExpiredTokenException.class, () -> refreshTokenUseCase.execute(expiredRefreshToken));
         verify(tokenService, times(1)).getType(expiredRefreshToken);
         verify(tokenService, never()).generateAccessToken(anyString());
+    }
+
+    @Test
+    void 로그아웃_했으면_에러가_발생한다() {
+        // given
+        String loggedOutRefreshToken = "로그아웃.리프레시.토큰";
+        Token refreshToken = AuthFixture.createRefreshToken();
+        given(tokenService.getType(loggedOutRefreshToken)).willReturn(TokenType.REFRESH_TOKEN.name());
+        given(tokenService.getEmail(loggedOutRefreshToken)).willReturn(refreshToken.getEmail());
+        given(tokenRepository.findById(refreshToken.getEmail())).willReturn(Optional.of(refreshToken));
+
+        // when and then
+        assertThrows(ExpiredTokenException.class, () -> refreshTokenUseCase.execute(loggedOutRefreshToken));
     }
 
     @Test
@@ -77,7 +92,7 @@ class RefreshTokenUseCaseTest {
         // when and then
         assertThrows(InvalidTokenException.class, () -> refreshTokenUseCase.execute(accessToken));
         verify(tokenService, times(1)).getType(accessToken);
-        verify(tokenRepository, never()).findByToken(anyString());
+        verify(tokenRepository, never()).findById(anyString());
         verify(tokenService, never()).generateAccessToken(anyString());
     }
 }

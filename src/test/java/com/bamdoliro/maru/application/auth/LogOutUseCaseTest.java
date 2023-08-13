@@ -26,12 +26,12 @@ class LogOutUseCaseTest {
     void 로그아웃_한다() {
         // given
         User user = UserFixture.createUser();
-        willDoNothing().given(tokenRepository).deleteByEmail(user.getEmail());
+        willDoNothing().given(tokenRepository).deleteById(user.getEmail());
 
         // when
         logOutUseCase.execute(user);
 
         // then
-        verify(tokenRepository, times(1)).deleteByEmail(user.getEmail());
+        verify(tokenRepository, times(1)).deleteById(user.getEmail());
     }
 }
