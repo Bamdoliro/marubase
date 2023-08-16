@@ -131,6 +131,28 @@ include::{snippets}/form-controller-test/원서를_반려한다/http-response.ad
 ===== 해당하는 원서가 없는 경우
 include::{snippets}/form-controller-test/원서를_반려할_때_원서가_없으면_에러가_발생한다/http-response.adoc[]
 
+=== 원서 접수
+어드민은 서류 원본을 받은 후 원서를 검토해 최종 접수할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/원서를_접수한다/request-headers.adoc[]
+
+====== Path Parameter
+include::{snippets}/form-controller-test/원서를_접수한다/path-parameters.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/원서를_접수한다/http-request.adoc[]
+
+==== 응답
+===== 정상 응답
+include::{snippets}/form-controller-test/원서를_접수한다/http-response.adoc[]
+
+===== 해당하는 원서가 없는 경우
+include::{snippets}/form-controller-test/원서를_접수할_때_원서가_없으면_에러가_발생한다/http-response.adoc[]
+
+
 === 검토해야 하는 원서 조회
 어드민은 검토해야 하는 원서를 조회할 수 있습니다.
 
