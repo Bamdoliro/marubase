@@ -11,6 +11,7 @@ public enum FormStatus implements EnumProperty {
     FINAL_SUBMITTED("최종 제출됨"),
     APPROVED("승인됨"),
     REJECTED("반려됨"),
+    RECEIVED("접수됨"),
     FIRST_PASSED("1차 합격"),
     FIRST_FAILED("1차 불합격"),
     PASSED("최종 합격"),

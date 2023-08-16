@@ -5,6 +5,7 @@ import com.bamdoliro.maru.application.form.ExportFormUseCase;
 import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
 import com.bamdoliro.maru.application.form.QueryFormUseCase;
 import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
+import com.bamdoliro.maru.application.form.ReceiveFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFinalFormUseCase;
@@ -52,6 +53,7 @@ public class FormController {
     private final SubmitFinalFormUseCase submitFinalFormUseCase;
     private final ApproveFormUseCase approveFormUseCase;
     private final RejectFormUseCase rejectFormUseCase;
+    private final ReceiveFormUseCase receiveFormUseCase;
     private final QuerySubmittedFormUseCase querySubmittedFormUseCase;
     private final QueryFormUseCase queryFormUseCase;
     private final UpdateFormUseCase updateFormUseCase;
@@ -94,6 +96,15 @@ public class FormController {
             @PathVariable(name = "form-id") Long formId
     ) {
         rejectFormUseCase.execute(formId);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/{form-id}/receive")
+    public void receiveForm(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
+            @PathVariable(name = "form-id") Long formId
+    ) {
+        receiveFormUseCase.execute(formId);
     }
 
     @GetMapping("/review")
