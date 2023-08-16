@@ -8,6 +8,7 @@ import com.bamdoliro.maru.application.form.DraftFormUseCase;
 import com.bamdoliro.maru.application.form.ExportFormUseCase;
 import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
 import com.bamdoliro.maru.application.form.QueryDraftFormUseCase;
+import com.bamdoliro.maru.application.form.QueryFormStatusUseCase;
 import com.bamdoliro.maru.application.form.QueryFormUseCase;
 import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.ReceiveFormUseCase;
@@ -47,6 +48,7 @@ import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBeans;
 import org.springframework.test.web.servlet.MockMvc;
 
 @Disabled
@@ -113,6 +115,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected QueryFormUseCase queryFormUseCase;
+
+    @MockBean
+    protected QueryFormStatusUseCase queryFormStatusUseCase;
 
     @MockBean
     protected UpdateFormUseCase updateFormUseCase;

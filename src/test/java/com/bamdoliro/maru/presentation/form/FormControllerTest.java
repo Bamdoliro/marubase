@@ -615,6 +615,51 @@ class FormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
+    void 원서_상태를_조회한다() throws Exception {
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(queryFormStatusUseCase.execute(user)).willReturn(FormFixture.createFormSimpleResponse(FormStatus.APPROVED));
+
+
+        mockMvc.perform(get("/form/status")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        )
+                ));
+
+        verify(queryFormStatusUseCase, times(1)).execute(user);
+    }
+
+    @Test
+    void 원서_상태를_조회할_때_원서가_없으면_에러가_발생한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(queryFormStatusUseCase.execute(user)).willThrow(new FormNotFoundException());
+
+
+        mockMvc.perform(get("/form/status")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isNotFound())
+
+                .andDo(restDocs.document());
+    }
+
+    @Test
     void 원서를_수정한다() throws Exception {
         Long formId = 1L;
         UpdateFormRequest request = FormFixture.createUpdateFormRequest(FormType.REGULAR);
