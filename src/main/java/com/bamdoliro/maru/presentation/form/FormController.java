@@ -3,6 +3,7 @@ package com.bamdoliro.maru.presentation.form;
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
 import com.bamdoliro.maru.application.form.ExportFormUseCase;
 import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
+import com.bamdoliro.maru.application.form.QueryFormStatusUseCase;
 import com.bamdoliro.maru.application.form.QueryFormUseCase;
 import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.ReceiveFormUseCase;
@@ -56,6 +57,7 @@ public class FormController {
     private final ReceiveFormUseCase receiveFormUseCase;
     private final QuerySubmittedFormUseCase querySubmittedFormUseCase;
     private final QueryFormUseCase queryFormUseCase;
+    private final QueryFormStatusUseCase queryFormStatusUseCase;
     private final UpdateFormUseCase updateFormUseCase;
     private final UploadIdentificationPictureUseCase uploadIdentificationPictureUseCase;
     private final UploadFormUseCase uploadFormUseCase;
@@ -123,6 +125,15 @@ public class FormController {
     ) {
         return SingleCommonResponse.ok(
                 queryFormUseCase.execute(user, formId)
+        );
+    }
+
+    @GetMapping("/status")
+    public SingleCommonResponse<FormSimpleResponse> getForm(
+            @AuthenticationPrincipal(authority = Authority.USER) User user
+    ) {
+        return SingleCommonResponse.ok(
+                queryFormStatusUseCase.execute(user)
         );
     }
 
