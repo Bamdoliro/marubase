@@ -444,6 +444,59 @@ class FormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
+    void 원서를_접수한다() throws Exception {
+        Long formId = 1L;
+        User user = UserFixture.createAdminUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        willDoNothing().given(receiveFormUseCase).execute(formId);
+
+
+        mockMvc.perform(patch("/form/{form-id}/receive", formId)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isNoContent())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        ),
+                        pathParameters(
+                                parameterWithName("form-id")
+                                        .description("접수할 원서의 id")
+                        )
+                ));
+
+        verify(receiveFormUseCase, times(1)).execute(formId);
+    }
+
+    @Test
+    void 원서를_접수할_때_원서가_없으면_에러가_발생한다() throws Exception {
+        Long formId = 1L;
+        User user = UserFixture.createAdminUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        doThrow(new FormNotFoundException()).when(receiveFormUseCase).execute(formId);
+
+
+        mockMvc.perform(patch("/form/{form-id}/receive", formId)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isNotFound())
+
+                .andDo(restDocs.document());
+
+        verify(receiveFormUseCase, times(1)).execute(formId);
+    }
+
+    @Test
     void 검토해야_하는_원서를_조회한다() throws Exception {
         User user = UserFixture.createAdminUser();
 

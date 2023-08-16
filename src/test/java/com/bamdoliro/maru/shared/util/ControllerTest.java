@@ -10,6 +10,7 @@ import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
 import com.bamdoliro.maru.application.form.QueryDraftFormUseCase;
 import com.bamdoliro.maru.application.form.QueryFormUseCase;
 import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
+import com.bamdoliro.maru.application.form.ReceiveFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFinalFormUseCase;
@@ -103,6 +104,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected RejectFormUseCase rejectFormUseCase;
+
+    @MockBean
+    protected ReceiveFormUseCase receiveFormUseCase;
 
     @MockBean
     protected QuerySubmittedFormUseCase querySubmittedFormUseCase;
