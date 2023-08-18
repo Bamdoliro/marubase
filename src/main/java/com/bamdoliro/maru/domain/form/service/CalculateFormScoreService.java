@@ -9,6 +9,8 @@ import com.bamdoliro.maru.shared.util.MathUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.DEFAULT_ATTENDANCE_SCORE;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.DEFAULT_VOLUNTEER_SCORE;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.MAX_ABSENCE_COUNT;
@@ -40,7 +42,7 @@ public class CalculateFormScoreService {
         ));
     }
 
-    private Double calculateSubjectGradeScore(Form form) {
+    public Double calculateSubjectGradeScore(Form form) {
         if (form.getType().isRegular() || form.getType().isSupernumerary()) {
             return calculateRegularScore(form);
         } else if (form.getType().isSpecial()) {
@@ -116,6 +118,10 @@ public class CalculateFormScoreService {
     }
 
     private Integer calculateBonusScore(Form form) {
+        if (Objects.isNull(form.getGrade().getCertificateList())) {
+            return 0;
+        }
+
         int bonusScore = form.getGrade().getCertificateList().stream()
                 .mapToInt(Certificate::getScore)
                 .sum();
