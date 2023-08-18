@@ -9,6 +9,7 @@ import com.bamdoliro.maru.domain.form.domain.value.Education;
 import com.bamdoliro.maru.domain.form.domain.value.Grade;
 import com.bamdoliro.maru.domain.form.domain.value.Parent;
 import com.bamdoliro.maru.domain.form.domain.value.Score;
+import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.shared.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -16,6 +17,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -70,7 +72,7 @@ public class Form extends BaseTimeEntity {
     @Column(nullable = false, length = 30)
     private FormStatus status;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
@@ -107,6 +109,14 @@ public class Form extends BaseTimeEntity {
         this.status = FormStatus.RECEIVED;
     }
 
+    public void firstPass() {
+        this.status = FormStatus.FIRST_PASSED;
+    }
+
+    public void firstFail() {
+        this.status = FormStatus.FIRST_FAILED;
+    }
+
     public void isApplicant(User user) {
         if (!this.user.equals(user)) {
             throw new AuthorityMismatchException();
@@ -125,6 +135,14 @@ public class Form extends BaseTimeEntity {
 
     public boolean isSubmitted() {
         return status.equals(FormStatus.SUBMITTED);
+    }
+
+    public boolean isFirstPassed() {
+        return status.equals(FormStatus.FIRST_PASSED);
+    }
+
+    public void changeToRegular() {
+        this.type = FormType.REGULAR;
     }
 
     public void update(Applicant applicant, Parent parent, Education education, Grade grade, Document document, FormType type) {

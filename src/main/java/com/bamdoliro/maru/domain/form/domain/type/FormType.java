@@ -57,6 +57,10 @@ public enum FormType implements EnumProperty {
         return mainCategory == Category.REGULAR;
     }
 
+    public boolean isRegularOrSupernumerary() {
+        return isRegular() || isSupernumerary();
+    }
+
     public boolean isSpecial() {
         return mainCategory == Category.SPECIAL;
     }
@@ -69,8 +73,24 @@ public enum FormType implements EnumProperty {
         return middleCategory == Category.SOCIAL_INTEGRATION;
     }
 
+    public boolean isEqualOpportunity() {
+        return subCategory == Category.EQUAL_OPPORTUNITY;
+    }
+
+    public boolean isSocietyDiversity() {
+        return subCategory == Category.SOCIETY_DIVERSITY;
+    }
+
     public boolean isSupernumerary() {
         return mainCategory == Category.SUPERNUMERARY;
+    }
+
+    public boolean isNationalVeteransEducation() {
+        return this == NATIONAL_VETERANS_EDUCATION;
+    }
+
+    public boolean isSpecialAdmission() {
+        return this == SPECIAL_ADMISSION;
     }
 
     public boolean categoryEquals(Category category) {

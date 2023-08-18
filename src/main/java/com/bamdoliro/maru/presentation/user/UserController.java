@@ -36,6 +36,7 @@ public class UserController {
         signUpUserUseCase.execute(request);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/verification")
     public void sendEmailVerification(
             @Email(message = "올바른 형식의 이메일이어야 합니다.")
