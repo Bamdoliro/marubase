@@ -33,6 +33,7 @@ import com.bamdoliro.maru.presentation.form.dto.response.AttendanceResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.DocumentResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.EducationResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.FormResultResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.GradeResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.ParentResponse;
@@ -450,5 +451,9 @@ public class FormFixture {
         return userList.stream()
                 .map(FormFixture::createRandomForm)
                 .collect(Collectors.toList());
+    }
+
+    public static FormResultResponse createFormResultResponse(boolean isPassed) {
+        return new FormResultResponse(isPassed);
     }
 }

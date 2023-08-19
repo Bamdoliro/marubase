@@ -17,6 +17,7 @@ import com.bamdoliro.maru.infrastructure.s3.exception.MediaTypeMismatchException
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFinalFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.UpdateFormRequest;
+import com.bamdoliro.maru.presentation.form.dto.response.FormResultResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
@@ -37,6 +38,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -1350,5 +1352,95 @@ class FormControllerTest extends RestDocsTestSupport {
                 ));
 
         verify(queryAllFormUseCase, times(1)).execute(FormStatus.SUBMITTED, FormType.Category.REGULAR);
+    }
+
+    @Test
+    void 원서의_1차_결과를_확인한다() throws Exception {
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(queryFirstFormResultUseCase.execute(user)).willReturn(new FormResultResponse(true));
+
+        mockMvc.perform(get("/form/result/first")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        )
+                ));
+
+        verify(queryFirstFormResultUseCase, times(1)).execute(user);
+    }
+
+    @Test
+    void 원서의_1차_결과를_확인할_때_원서를_접수하지_않았다면_에러가_발생한다() throws Exception {
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        willThrow(new FormNotFoundException()).given(queryFirstFormResultUseCase).execute(user);
+
+        mockMvc.perform(get("/form/result/first")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isNotFound())
+
+                .andDo(restDocs.document());
+
+        verify(queryFirstFormResultUseCase, times(1)).execute(user);
+    }
+
+    @Test
+    void 원서의_최종_결과를_확인한다() throws Exception {
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(queryFinalFormResultUseCase.execute(user)).willReturn(new FormResultResponse(false));
+
+        mockMvc.perform(get("/form/result/final")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        )
+                ));
+
+        verify(queryFinalFormResultUseCase, times(1)).execute(user);
+    }
+
+    @Test
+    void 원서의_최종_결과를_확인할_때_원서를_접수하지_않았다면_에러가_발생한다() throws Exception {
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        willThrow(new FormNotFoundException()).given(queryFinalFormResultUseCase).execute(user);
+
+        mockMvc.perform(get("/form/result/final")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isNotFound())
+
+                .andDo(restDocs.document());
+
+        verify(queryFinalFormResultUseCase, times(1)).execute(user);
     }
 }
