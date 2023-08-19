@@ -362,3 +362,42 @@ include::{snippets}/form-controller-test/원서를_전체_조회한다/http-requ
 
 ==== 응답
 include::{snippets}/form-controller-test/원서를_전체_조회한다/http-response.adoc[]
+
+=== 원서 1차전형 결과 조회
+유저는 본인의 원서 1차전형 결과를 조회할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/원서의_1차_결과를_확인한다/request-headers.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/원서의_1차_결과를_확인한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/원서의_1차_결과를_확인한다/http-response.adoc[]
+
+===== 원서를 접수하지 않은 경우
+include::{snippets}/form-controller-test/원서의_1차_결과를_확인할_때_원서를_접수하지_않았다면_에러가_발생한다/http-response.adoc[]
+
+
+=== 원서 최종 결과 조회
+유저는 본인의 원서 최종 결과를 조회할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/원서의_최종_결과를_확인한다/request-headers.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/원서의_최종_결과를_확인한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/원서의_최종_결과를_확인한다/http-response.adoc[]
+
+===== 원서를 접수하지 않은 경우
+include::{snippets}/form-controller-test/원서의_최종_결과를_확인할_때_원서를_접수하지_않았다면_에러가_발생한다/http-response.adoc[]
