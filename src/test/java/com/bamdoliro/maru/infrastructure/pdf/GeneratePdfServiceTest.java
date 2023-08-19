@@ -37,6 +37,25 @@ class GeneratePdfServiceTest {
     private MergePdfService mergePdfService;
 
     @Test
+    void 수험표를_저장한다() throws IOException {
+        // given
+        Form form = FormFixture.createForm(FormType.MULTI_CHILDREN);
+        calculateFormScoreService.execute(form);
+        form.assignExaminationNumber(2004L);
+        Map<String, Object> formMap = Map.of(
+                "form", form
+        );
+        String template = processTemplateService.execute("admission-ticket", formMap);
+        ByteArrayOutputStream outputStream = generatePdfService.execute(template);
+
+
+        FileOutputStream fileOutputStream = new FileOutputStream("src/test/resources/test.pdf");
+        outputStream.writeTo(fileOutputStream);
+        outputStream.close();
+        fileOutputStream.close();
+    }
+
+    @Test
     void 파일을_저장한다() throws IOException {
         // given
         Form form = FormFixture.createForm(FormType.REGULAR);

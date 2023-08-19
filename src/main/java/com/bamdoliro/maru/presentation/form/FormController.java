@@ -2,6 +2,7 @@ package com.bamdoliro.maru.presentation.form;
 
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
 import com.bamdoliro.maru.application.form.ExportFormUseCase;
+import com.bamdoliro.maru.application.form.GenerateAdmissionTicketUseCase;
 import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
 import com.bamdoliro.maru.application.form.QueryFinalFormResultUseCase;
 import com.bamdoliro.maru.application.form.QueryFirstFormResultUseCase;
@@ -68,6 +69,7 @@ public class FormController {
     private final QueryAllFormUseCase queryAllFormUseCase;
     private final QueryFirstFormResultUseCase queryFirstFormResultUseCase;
     private final QueryFinalFormResultUseCase queryFinalFormResultUseCase;
+    private final GenerateAdmissionTicketUseCase generateAdmissionTicketUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -213,5 +215,14 @@ public class FormController {
         return SingleCommonResponse.ok(
                 queryFinalFormResultUseCase.execute(user)
         );
+    }
+
+    @GetMapping(value = "/admission-ticket")
+    public ResponseEntity<Resource> generateAdmissionTicket(
+            @AuthenticationPrincipal(authority = Authority.USER) User user
+    ) {
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(generateAdmissionTicketUseCase.execute(user));
     }
 }

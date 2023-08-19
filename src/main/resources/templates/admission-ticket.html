@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        @page {
+            size: A4;
+            margin: 50px;
+        }
+
+        * {
+            font-family: SUIT, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        table {
+            border: none;
+            border-collapse: collapse;
+            width: 60%;
+            font-size: 14px;
+            text-align: center;
+            line-height: normal;
+        }
+
+        tr {
+            vertical-align: middle;
+        }
+
+        td {
+            padding: 8px 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #ECF2FA;
+            font-weight: 500;
+            padding: 8px 0;
+            letter-spacing: 6px;
+            text-indent: 6px;
+        }
+
+        .ba {
+            border: #000000 1px solid;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .big {
+            font-weight: 500;
+            font-size: 20px;
+        }
+
+        .letter-spacing-10 {
+            letter-spacing: 10px;
+            text-indent: 10px;
+        }
+
+        .letter-spacing-30 {
+            letter-spacing: 30px;
+            text-indent: 30px;
+        }
+
+        .padding-top {
+            padding-top: 5px;
+        }
+    </style>
+    <title>수험표</title>
+</head>
+<body>
+<table>
+    <tr class="ba">
+        <td colspan="3" class="ba center" style="height: 48px;">
+            <p>2023학년도</p>
+            <p>부산소프트웨어마이스터고등학교 입학전형</p>
+            <p class="padding-top">
+                - <span th:text="${form.type.mainCategory.description}"></span> -
+            </p>
+            <p class="big letter-spacing-10">수험표</p>
+        </td>
+    </tr>
+    <tr>
+        <td class="ba center" style="width: 33%" rowspan="5">
+            <img src="https://s3.ap-northeast-2.amazonaws.com/maru.bamdoliro/identification-picture/8f9301ce-2f25-47c3-89ee-0c72aaf6d240" alt="identification-picture"/>
+        </td>
+        <th scope="row" class="ba" style="width:28%;">수험번호</th>
+        <td class="ba" style="width:39%;" th:text="${form.examinationNumber}">0024</td>
+    </tr>
+    <tr>
+        <th scope="row" class="ba">생년월일</th>
+        <td class="ba" th:text="${#temporals.format(form.applicant.birthday, 'YYYY년 MM월 dd일')}"></td>
+    </tr>
+    <tr>
+        <th scope="row" class="ba letter-spacing-30">성명</th>
+        <td class="ba" th:text="${form.applicant.name}"></td>
+    </tr>
+    <tr>
+        <th scope="row" class="ba">출신학교</th>
+        <td class="ba" th:text="${form.education.school.name}"></td>
+    </tr>
+    <tr>
+        <th scope="row" class="ba">접수번호</th>
+        <td class="ba" th:text="${form.id}">1001</td>
+    </tr>
+    <tr>
+        <td colspan="3" class="ba center big">
+            <p>부산소프트웨어마이스터고등학교장</p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
