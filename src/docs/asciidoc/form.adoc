@@ -401,3 +401,26 @@ include::{snippets}/form-controller-test/원서의_최종_결과를_확인한다
 
 ===== 원서를 접수하지 않은 경우
 include::{snippets}/form-controller-test/원서의_최종_결과를_확인할_때_원서를_접수하지_않았다면_에러가_발생한다/http-response.adoc[]
+
+
+=== 수험표 발급
+1차 전형에서 합격한 유저는 수험표를 발급받을 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/수험표를_발급받는다/request-headers.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/수험표를_발급받는다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/수험표를_발급받는다/http-response.adoc[]
+
+===== 원서를 접수하지 않은 경우
+include::{snippets}/form-controller-test/수험표를_발급받을_때_원서를_접수하지_않았다면_에러가_발생한다/http-response.adoc[]
+
+===== 불합격한 경우
+include::{snippets}/form-controller-test/수험표를_발급받을_때_불합격자라면_에러가_발생한다/http-response.adoc[]
