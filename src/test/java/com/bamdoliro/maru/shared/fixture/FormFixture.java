@@ -452,8 +452,4 @@ public class FormFixture {
                 .map(FormFixture::createRandomForm)
                 .collect(Collectors.toList());
     }
-
-    public static FormResultResponse createFormResultResponse(boolean isPassed) {
-        return new FormResultResponse(isPassed);
-    }
 }

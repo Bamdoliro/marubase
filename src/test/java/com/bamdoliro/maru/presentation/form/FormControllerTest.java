@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.presentation.form;
 
 import com.bamdoliro.maru.domain.auth.exception.AuthorityMismatchException;
+import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.CannotUpdateNotRejectedFormException;
@@ -1357,11 +1358,12 @@ class FormControllerTest extends RestDocsTestSupport {
 
     @Test
     void 원서의_1차_결과를_확인한다() throws Exception {
+        Form form = FormFixture.createForm(FormType.REGULAR);
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(queryFirstFormResultUseCase.execute(user)).willReturn(new FormResultResponse(true));
+        given(queryFirstFormResultUseCase.execute(user)).willReturn(new FormResultResponse(form, true));
 
         mockMvc.perform(get("/form/result/first")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
@@ -1402,11 +1404,12 @@ class FormControllerTest extends RestDocsTestSupport {
 
     @Test
     void 원서의_최종_결과를_확인한다() throws Exception {
+        Form form = FormFixture.createForm(FormType.MULTI_CHILDREN);
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(queryFinalFormResultUseCase.execute(user)).willReturn(new FormResultResponse(false));
+        given(queryFinalFormResultUseCase.execute(user)).willReturn(new FormResultResponse(form, false));
 
         mockMvc.perform(get("/form/result/final")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())

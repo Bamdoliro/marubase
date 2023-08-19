@@ -15,6 +15,6 @@ public class QueryFirstFormResultUseCase {
 
     public FormResultResponse execute(User user) {
         Form form = formFacade.getForm(user);
-        return new FormResultResponse(form.isFirstPassed());
+        return new FormResultResponse(form, form.isFirstPassed());
     }
 }
