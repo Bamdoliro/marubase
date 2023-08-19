@@ -141,6 +141,10 @@ public class Form extends BaseTimeEntity {
         return status.equals(FormStatus.FIRST_PASSED);
     }
 
+    public boolean isPassed() {
+        return status.equals(FormStatus.PASSED);
+    }
+
     public void changeToRegular() {
         this.type = FormType.REGULAR;
     }

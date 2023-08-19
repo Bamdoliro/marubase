@@ -3,6 +3,8 @@ package com.bamdoliro.maru.presentation.form;
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
 import com.bamdoliro.maru.application.form.ExportFormUseCase;
 import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
+import com.bamdoliro.maru.application.form.QueryFinalFormResultUseCase;
+import com.bamdoliro.maru.application.form.QueryFirstFormResultUseCase;
 import com.bamdoliro.maru.application.form.QueryFormStatusUseCase;
 import com.bamdoliro.maru.application.form.QueryFormUseCase;
 import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
@@ -21,6 +23,7 @@ import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFinalFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.UpdateFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.FormResultResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.auth.Authority;
@@ -63,6 +66,8 @@ public class FormController {
     private final UploadFormUseCase uploadFormUseCase;
     private final ExportFormUseCase exportFormUseCase;
     private final QueryAllFormUseCase queryAllFormUseCase;
+    private final QueryFirstFormResultUseCase queryFirstFormResultUseCase;
+    private final QueryFinalFormResultUseCase queryFinalFormResultUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -189,6 +194,24 @@ public class FormController {
     ) {
         return ListCommonResponse.ok(
                 queryAllFormUseCase.execute(status, type)
+        );
+    }
+
+    @GetMapping("/result/first")
+    public SingleCommonResponse<FormResultResponse> getFirstFormResult(
+            @AuthenticationPrincipal(authority = Authority.USER) User user
+    ) {
+        return SingleCommonResponse.ok(
+                queryFirstFormResultUseCase.execute(user)
+        );
+    }
+
+    @GetMapping("/result/final")
+    public SingleCommonResponse<FormResultResponse> getFinalFormResult(
+            @AuthenticationPrincipal(authority = Authority.USER) User user
+    ) {
+        return SingleCommonResponse.ok(
+                queryFinalFormResultUseCase.execute(user)
         );
     }
 }
