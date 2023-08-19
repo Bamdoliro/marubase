@@ -6,6 +6,7 @@ import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.pdf.GeneratePdfService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
+import com.bamdoliro.maru.infrastructure.thymeleaf.Templates;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
@@ -28,8 +29,8 @@ public class GenerateAdmissionTicketUseCase {
         Map<String, Object> formMap = Map.of(
                 "form", form
         );
-        String template = processTemplateService.execute("admission-ticket", formMap);
-        ByteArrayOutputStream outputStream = generatePdfService.execute(template);
+        String html = processTemplateService.execute(Templates.ADMISSION_TICKET, formMap);
+        ByteArrayOutputStream outputStream = generatePdfService.execute(html);
 
         return new ByteArrayResource(outputStream.toByteArray());
     }

@@ -10,4 +10,5 @@ public class Templates {
     public static final String DOCUMENT = "document";
     public static final String RECOMMENDATION = "recommendation";
     public static final String NO_SMOKING = "no-smoking";
+    public static final String ADMISSION_TICKET = "admission-ticket";
 }
