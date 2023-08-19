@@ -18,4 +18,10 @@ public enum Certificate implements EnumProperty {
 
     private final String description;
     private final int score;
+
+    public boolean isComputerSpecialist() {
+        return this == COMPUTER_SPECIALIST_LEVEL_1
+                || this == COMPUTER_SPECIALIST_LEVEL_2
+                || this == COMPUTER_SPECIALIST_LEVEL_3;
+    }
 }

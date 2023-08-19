@@ -13,15 +13,17 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Embeddable
 public class Grade {
 
@@ -70,6 +72,37 @@ public class Grade {
     @Column(nullable = false, name = "certificate")
     @Enumerated(EnumType.STRING)
     private List<Certificate> certificateList;
+
+    public Grade(SubjectList subjectList, Attendance attendance1, Attendance attendance2, Attendance attendance3, Integer volunteerTime1, Integer volunteerTime2, Integer volunteerTime3, List<Certificate> certificateList) {
+        this.subjectList = subjectList;
+        this.attendance1 = attendance1;
+        this.attendance2 = attendance2;
+        this.attendance3 = attendance3;
+        this.volunteerTime1 = volunteerTime1;
+        this.volunteerTime2 = volunteerTime2;
+        this.volunteerTime3 = volunteerTime3;
+        this.certificateList = validate(certificateList);
+    }
+
+    private List<Certificate> validate(List<Certificate> certificateList) {
+        if (Objects.nonNull(certificateList) && !certificateList.isEmpty()) {
+            Optional<Certificate> highestScoreComputerSpecialistCertificate = certificateList.stream()
+                    .filter(Certificate::isComputerSpecialist)
+                    .max(Comparator.comparingInt(Certificate::getScore));
+
+            if (highestScoreComputerSpecialistCertificate.isPresent()) {
+                List<Certificate> validatedCertificateList = new ArrayList<>(
+                        certificateList.stream()
+                                .filter((c) -> !c.isComputerSpecialist())
+                                .toList());
+
+                validatedCertificateList.add(highestScoreComputerSpecialistCertificate.get());
+                return validatedCertificateList;
+            }
+        }
+
+        return certificateList;
+    }
 
     public Attendance getTotalAttendance() {
         return new Attendance(
