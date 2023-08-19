@@ -85,6 +85,11 @@
         .indent {
             text-indent: 24px;
         }
+
+        .red {
+            color: #F44336;
+            font-weight: 600;
+        }
     </style>
     <title>원서</title>
 </head>
@@ -110,7 +115,7 @@
             <p>하나. 흡연의 유혹에 절대로 흔들리지 않겠습니다.</p>
             <p>하나. 흡연을 하는 친구가 있으면 충고하여 금연을 할 수 있도록 돕겠습니다.</p>
             <div style="height: 48px;"></div>
-            <p class="indent">나 김한울은(는) 이 시대를 이끌어갈 SW 분야 영 마이스터가 되기 위해 흡연을 하지 않겠습니다.</p>
+            <p class="indent">나 김한울은(는) 이 시대를 이끌어갈 SW 분야 영 마이스터가 되기 위해 <span class="red">흡연을 하지 않겠습니다.</span></p>
             <p class="indent">보호자는 지원자의 건강한 성장과 발전을 위해 용기와 도움을 줄 것을 약속합니다.</p>
             <div style="height: 48px;"></div>
             <p id="security">■ 개인 정보 수집·이용 동의</p>
@@ -126,8 +131,10 @@
                     <td class="ba">1년</td>
                 </tr>
                 <tr>
-                    <td class="left" colspan="3">※ 개인정보 수집·이용에 대한 동의를 거부할 권리가 있습니다.<br/>
+                    <td class="left" colspan="3">
+                        ※ 개인정보 수집·이용에 대한 동의를 거부할 권리가 있습니다.<br/>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;그러나 동의를 거부할 경우 최종입학에 제한을 받을 수 있습니다.
+                        <div style="height: 24px;"></div>
                     </td>
                 </tr>
                 <tr>
@@ -135,9 +142,9 @@
                     <td class="ba" colspan="2">□ 예&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;□ 아니오</td>
                 </tr>
             </table>
-            <div style="height: 36px;"></div>
+            <div style="height: 48px;"></div>
             <p class="middle center" th:text="${#dates.format(#dates.createNow(),'YYYY년 MM월 dd일')}"></p>
-            <div style="height: 36px;"></div>
+            <div style="height: 54px;"></div>
             <p class="right">
                 지원자&nbsp;&nbsp;
                 <span th:text="${form.applicant.name}"></span>&nbsp;&nbsp;&nbsp;
@@ -148,7 +155,7 @@
                 <span th:text="${form.parent.name}"></span>&nbsp;&nbsp;&nbsp;
                 <span class="guide">(서명)</span>
             </p>
-            <div style="height: 36px;"></div>
+            <div style="height: 54px;"></div>
             <p class="school left">부산소프트웨어마이스터고등학교장 귀하</p>
         </td>
     </tr>
