@@ -27,7 +27,9 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                         "http://localhost:3000",
                         "http://localhost:3001",
-                        "http://localhost:3002"
+                        "http://localhost:3002",
+                        "https://maru.bamdoliro.com",
+                        "https://admin.maru.bamdoliro.com"
                 )
                 .allowedMethods(
                         HttpMethod.GET.name(),
