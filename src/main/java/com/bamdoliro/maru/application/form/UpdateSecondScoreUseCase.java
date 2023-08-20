@@ -44,7 +44,7 @@ public class UpdateSecondScoreUseCase {
         int formIndex = 0;
         for (SecondScoreVo secondScoreVo : secondScoreVoList) {
             Form form = formList.get(formIndex);
-            
+
             while (form.getExaminationNumber() <= secondScoreVo.getExaminationNumber()) {
                 if (form.getExaminationNumber().equals(secondScoreVo.getExaminationNumber())) {
                     updateFormSecondRoundScore(form, secondScoreVo);
@@ -60,8 +60,8 @@ public class UpdateSecondScoreUseCase {
         if (secondScoreVo.getType().equals(FormType.Category.MEISTER_TALENT)) {
             form.getScore().updateSecondRoundMeisterScore(
                     secondScoreVo.getDepthInterviewScore(),
-                    secondScoreVo.getCodingTestScore(),
-                    secondScoreVo.getNcsScore()
+                    secondScoreVo.getNcsScore(),
+                    secondScoreVo.getCodingTestScore()
             );
         } else {
             form.getScore().updateSecondRoundScore(
@@ -72,30 +72,39 @@ public class UpdateSecondScoreUseCase {
     }
 
     private SecondScoreVo getSecondScoreFrom(Row row) {
+        validateRow(row);
+
+        FormType.Category type = getFormType(row.getCell(2).getStringCellValue());
+        return new SecondScoreVo(
+                (long) row.getCell(0).getNumericCellValue(),
+                type,
+                row.getCell(3).getNumericCellValue(),
+                row.getCell(4).getNumericCellValue(),
+                type == FormType.Category.MEISTER_TALENT ? row.getCell(5).getNumericCellValue() : null
+        );
+    }
+
+    private void validateRow(Row row) {
+        // 수험번호 | 이름 | 전형 구분 | 심층면접 | NCS | 코딩테스트
         if (
-                !(row.getCell(0).getCellType() == CellType.NUMERIC &&
-                        row.getCell(1).getCellType() == CellType.NUMERIC &&
-                        row.getCell(2).getCellType() == CellType.NUMERIC &&
+                row.getCell(0).getCellType() == CellType.NUMERIC &&
+                        row.getCell(1).getCellType() == CellType.STRING &&
+                        row.getCell(2).getCellType() == CellType.STRING &&
                         row.getCell(3).getCellType() == CellType.NUMERIC &&
-                        row.getCell(4).getCellType() == CellType.STRING)
+                        row.getCell(4).getCellType() == CellType.NUMERIC &&
+                        (row.getCell(5).getCellType() == CellType.NUMERIC ||
+                                row.getCell(5).getCellType() == CellType.BLANK)
         ) {
             throw new InvalidFileException();
         }
+    }
 
-        FormType.Category type;
+    private FormType.Category getFormType(String description) {
         try {
-            type = FormType.Category.valueOfDescription(row.getCell(4).getStringCellValue());
+            return FormType.Category.valueOfDescription(description);
         } catch (IllegalArgumentException e) {
             throw new InvalidFileException();
         }
-
-        return new SecondScoreVo(
-                (long) row.getCell(0).getNumericCellValue(),
-                row.getCell(1).getNumericCellValue(),
-                row.getCell(2).getNumericCellValue(),
-                row.getCell(3).getNumericCellValue(),
-                type
-        );
     }
 }
 
@@ -103,8 +112,8 @@ public class UpdateSecondScoreUseCase {
 @AllArgsConstructor
 class SecondScoreVo {
     private Long examinationNumber;
-    private Double depthInterviewScore;
-    private Double codingTestScore;
-    private Double ncsScore;
     private FormType.Category type;
+    private Double depthInterviewScore;
+    private Double ncsScore;
+    private Double codingTestScore;
 }

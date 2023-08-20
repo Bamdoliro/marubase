@@ -53,10 +53,10 @@ public class Score {
         this.firstRoundScore = subjectGradeScore + attendanceScore + volunteerScore + bonusScore;
     }
 
-    public void updateSecondRoundMeisterScore(Double depthInterviewScore, Double codingTestScore, Double ncsScore) {
+    public void updateSecondRoundMeisterScore(Double depthInterviewScore, Double ncsScore, Double codingTestScore) {
         this.depthInterviewScore = depthInterviewScore;
-        this.codingTestScore = codingTestScore;
         this.ncsScore = ncsScore;
+        this.codingTestScore = codingTestScore;
         this.totalScore = firstRoundScore + depthInterviewScore + codingTestScore + ncsScore;
     }
 
