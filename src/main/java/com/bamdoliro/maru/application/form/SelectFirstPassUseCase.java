@@ -59,8 +59,7 @@ public class SelectFirstPassUseCase {
                 form.firstPass();
                 societyDiversityCount--;
             } else {
-                form.changeToRegular();
-                calculateFormScoreService.execute(form);
+                changeToRegularAndCalculateGradeAgain(form);
             }
         }
 
@@ -69,8 +68,7 @@ public class SelectFirstPassUseCase {
                 form.firstPass();
                 meisterTalentCount--;
             } else {
-                form.changeToRegular();
-                calculateFormScoreService.execute(form);
+                changeToRegularAndCalculateGradeAgain(form);
             }
         }
 
@@ -99,6 +97,13 @@ public class SelectFirstPassUseCase {
                 form.firstFail();
             }
         }
+    }
+
+    private void changeToRegularAndCalculateGradeAgain(Form form) {
+        form.changeToRegular();
+        form.getScore().updateSubjectScore(
+                calculateFormScoreService.calculateSubjectGradeScore(form)
+        );
     }
 
     private List<Form> classifyFormsByType(List<Form> formList, FormTypeFilter filter) {

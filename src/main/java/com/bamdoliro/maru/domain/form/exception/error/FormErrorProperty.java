@@ -14,6 +14,7 @@ public enum FormErrorProperty implements ErrorProperty {
     FORM_ALREADY_SUBMITTED(HttpStatus.CONFLICT, "원서는 한 번만 제출할 수 있습니다."),
     CANNOT_UPDATE_NOT_REJECTED_FORM(HttpStatus.CONFLICT, "반려된 원서만 수정할 수 있습니다."),
     INVALID_FORM_STATUS(HttpStatus.CONFLICT, "원서 상태가 유효하지 않습니다."),
+    INVALID_FILE(HttpStatus.BAD_REQUEST, "잘못된 파일입니다."),
     ;
 
     private final HttpStatus status;

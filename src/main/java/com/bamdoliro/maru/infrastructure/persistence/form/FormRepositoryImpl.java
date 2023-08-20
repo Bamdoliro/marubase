@@ -24,6 +24,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
         return queryFactory
                 .selectFrom(form)
                 .where(eqStatus(status))
+                .orderBy(form.id.asc())
                 .fetch();
     }
 

@@ -45,12 +45,22 @@ public enum FormType implements EnumProperty {
 
         // Middle Category
         SOCIAL_INTEGRATION("사회통합전형"),
+        MEISTER_TALENT("마이스터인재전형"),
 
         // Sub Category
         EQUAL_OPPORTUNITY("기회균등전형"),
         SOCIETY_DIVERSITY("사회다양성전형");
 
         private final String description;
+
+        public static Category valueOfDescription(String description) {
+            for (Category category : Category.values()) {
+                if (Objects.equals(category.getDescription(), description)) {
+                    return category;
+                }
+            }
+            throw new IllegalArgumentException("No matching constant for [" + description + "]");
+        }
     }
 
     public boolean isRegular() {

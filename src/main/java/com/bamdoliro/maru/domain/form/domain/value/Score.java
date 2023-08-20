@@ -26,13 +26,13 @@ public class Score {
     private Integer bonusScore;
 
     @Column(nullable = true)
-    private Integer depthInterviewScore;
+    private Double depthInterviewScore;
 
     @Column(nullable = true)
-    private Integer codingTestScore;
+    private Double codingTestScore;
 
     @Column(nullable = true)
-    private Integer ncsScore;
+    private Double ncsScore;
 
     @Column(nullable = false)
     private Double firstRoundScore;
@@ -53,14 +53,14 @@ public class Score {
         this.firstRoundScore = subjectGradeScore + attendanceScore + volunteerScore + bonusScore;
     }
 
-    public void updateSecondRoundMeisterScore(Integer depthInterviewScore, Integer codingTestScore, Integer ncsScore) {
+    public void updateSecondRoundMeisterScore(Double depthInterviewScore, Double codingTestScore, Double ncsScore) {
         this.depthInterviewScore = depthInterviewScore;
         this.codingTestScore = codingTestScore;
         this.ncsScore = ncsScore;
         this.totalScore = firstRoundScore + depthInterviewScore + codingTestScore + ncsScore;
     }
 
-    public void updateSecondRoundScore(Integer depthInterviewScore, Integer ncsScore) {
+    public void updateSecondRoundScore(Double depthInterviewScore, Double ncsScore) {
         this.depthInterviewScore = depthInterviewScore;
         this.ncsScore = ncsScore;
         this.totalScore = firstRoundScore + depthInterviewScore + ncsScore;

@@ -125,6 +125,10 @@ public class Form extends BaseTimeEntity {
         this.status = FormStatus.FAILED;
     }
 
+    public void noShow() {
+        this.status = FormStatus.NO_SHOW;
+    }
+
     public void isApplicant(User user) {
         if (!this.user.equals(user)) {
             throw new AuthorityMismatchException();
