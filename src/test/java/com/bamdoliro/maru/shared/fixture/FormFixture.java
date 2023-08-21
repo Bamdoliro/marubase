@@ -347,11 +347,15 @@ public class FormFixture {
     }
 
     public static FormSimpleResponse createFormSimpleResponse(FormStatus status) {
+        Form form = FormFixture.createForm(FormType.REGULAR);
         return new FormSimpleResponse(
-                1L,
-                "김밤돌",
-                status,
-                FormType.REGULAR
+                form.getId(),
+                form.getApplicant().getName(),
+                form.getApplicant().getBirthday(),
+                form.getEducation().getGraduationType(),
+                form.getEducation().getSchool().getName(),
+                status.getDescription(),
+                form.getType()
         );
     }
 
