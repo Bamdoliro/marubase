@@ -88,6 +88,10 @@ class DraftFormControllerTest extends RestDocsTestSupport {
                                         .type(JsonFieldType.STRING)
                                         .optional()
                                         .description("보호자 전화번호"),
+                                fieldWithPath("parent.relation")
+                                        .type(JsonFieldType.STRING)
+                                        .optional()
+                                        .description("보호자 관계"),
                                 fieldWithPath("parent.zoneCode")
                                         .type(JsonFieldType.STRING)
                                         .optional()

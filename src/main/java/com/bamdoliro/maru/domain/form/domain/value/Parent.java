@@ -20,6 +20,9 @@ public class Parent {
     @Column(name = "parent_phone_number", nullable = false, length = 11)
     private String phoneNumber;
 
+    @Column(name = "parent_relation", nullable = false, length = 20)
+    private String relation;
+
     @Embedded
     private Address address;
 }

@@ -46,7 +46,7 @@ class QueryFormStatusUseCaseTest {
         // then
 
         verify(formFacade, times(1)).getForm(user);
-        assertEquals(form.getStatus(), response.getStatus());
+        assertEquals(form.getStatus().getDescription(), response.getStatus());
         assertEquals(form.getType(), response.getType());
     }
 

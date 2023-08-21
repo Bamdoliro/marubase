@@ -10,6 +10,7 @@ public class ParentResponse {
 
     private String name;
     private String phoneNumber;
+    private String relation;
     private String zoneCode;
     private String address;
     private String detailAddress;
@@ -17,6 +18,7 @@ public class ParentResponse {
     public ParentResponse(Parent parent) {
         this.name = parent.getName();
         this.phoneNumber = parent.getPhoneNumber();
+        this.relation = parent.getRelation();
         this.zoneCode = parent.getAddress().getZoneCode();
         this.address = parent.getAddress().getAddress();
         this.detailAddress = parent.getAddress().getDetailAddress();

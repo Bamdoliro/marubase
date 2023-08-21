@@ -60,6 +60,7 @@ public class FormFixture {
                 new Parent(
                         "김이로",
                         "01012345678",
+                        "엄마",
                         new Address(
                                 "18071",
                                 "부산광역시 가락대로1393",
@@ -123,6 +124,7 @@ public class FormFixture {
                 new Parent(
                         "김이로",
                         "01012345678",
+                        "엄마",
                         new Address(
                                 "18071",
                                 "부산광역시 가락대로1393",
@@ -201,6 +203,7 @@ public class FormFixture {
                 new Parent(
                         "김이로",
                         "01012345678",
+                        "엄마",
                         new Address(
                                 "18071",
                                 "부산광역시 가락대로1393",
@@ -372,6 +375,7 @@ public class FormFixture {
                 new ParentResponse(
                         "김이로",
                         "01012345678",
+                        "엄마",
                         "18071",
                         "부산광역시 가락대로1393",
                         "부산소프트웨어마이스터고"
@@ -438,6 +442,7 @@ public class FormFixture {
         return new ParentRequest(
                 "김이로",
                 "01012345678",
+                "엄마",
                 "18071",
                 "부산광역시 가락대로1393",
                 "부산소프트웨어마이스터고"

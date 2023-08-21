@@ -112,6 +112,9 @@ class FormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("parent.phoneNumber")
                                         .type(JsonFieldType.STRING)
                                         .description("보호자 전화번호"),
+                                fieldWithPath("parent.relation")
+                                        .type(JsonFieldType.STRING)
+                                        .description("보호자 관계"),
                                 fieldWithPath("parent.zoneCode")
                                         .type(JsonFieldType.STRING)
                                         .description("보호자 주소지 우편번호"),
@@ -717,6 +720,9 @@ class FormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("parent.phoneNumber")
                                         .type(JsonFieldType.STRING)
                                         .description("보호자 전화번호"),
+                                fieldWithPath("parent.relation")
+                                        .type(JsonFieldType.STRING)
+                                        .description("보호자 관계"),
                                 fieldWithPath("parent.zoneCode")
                                         .type(JsonFieldType.STRING)
                                         .description("보호자 주소지 우편번호"),

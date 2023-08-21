@@ -22,6 +22,10 @@ public class ParentRequest {
     private String phoneNumber;
 
     @NotBlank(message = "필수값입니다.")
+    @Size(max = 20, message = "20자 이하여야 합니다.")
+    private String relation;
+
+    @NotBlank(message = "필수값입니다.")
     @Size(min = 5, max = 5, message = "5자여야 합니다.")
     private String zoneCode;
 
@@ -37,6 +41,7 @@ public class ParentRequest {
         return new Parent(
                 name,
                 phoneNumber,
+                relation,
                 new Address(
                         zoneCode,
                         address,
