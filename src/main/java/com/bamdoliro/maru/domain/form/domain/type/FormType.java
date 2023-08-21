@@ -108,4 +108,12 @@ public enum FormType implements EnumProperty {
                 || (Objects.nonNull(middleCategory) && middleCategory.equals(category))
                 || (Objects.nonNull(subCategory) && subCategory.equals(category));
     }
+
+    public FormType.Category getCategory() {
+        if (isSpecial()) {
+            return middleCategory;
+        }
+
+        return mainCategory;
+    }
 }
