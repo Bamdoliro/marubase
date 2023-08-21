@@ -124,8 +124,9 @@
             </tr>
             <tr>
                 <td class="ba center" style="width: 33%" rowspan="6">
-                    <img src="https://s3.ap-northeast-2.amazonaws.com/maru.bamdoliro/identification-picture/8f9301ce-2f25-47c3-89ee-0c72aaf6d240"
-                         alt="identification-picture"/>
+                    <img
+                            th:src="${form.applicant.identificationPictureUri}"
+                            alt="증명사진"/>
                 </td>
                 <th scope="row" class="ba" style="width:28%;">수험번호</th>
                 <td class="ba" style="width:39%;" th:text="${form.examinationNumber}"></td>

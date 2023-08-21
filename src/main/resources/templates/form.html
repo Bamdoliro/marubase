@@ -289,7 +289,7 @@
             <p class="middle" th:text="${#dates.format(#dates.createNow(),'YYYY년 MM월 dd일')}"></p>
             <div class="space"></div>
             <div class="right">
-                <div class="left space-right middle inline">
+                <div class="left middle inline">
                     <p>
                         지원자&nbsp;&nbsp;
                         <span th:text="${form.applicant.name}"></span>&nbsp;&nbsp;&nbsp;
@@ -299,7 +299,7 @@
                         보호자&nbsp;&nbsp;
                         <span th:text="${form.parent.name}"></span>&nbsp;&nbsp;&nbsp;
                         <span class="guide">(인)</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                        관계:
+                        관계:&nbsp;&nbsp;<span th:text="${form.parent.relation}"></span>&nbsp;&nbsp;
                     </p>
                 </div>
             </div>
