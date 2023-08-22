@@ -44,6 +44,8 @@ public class UpdateSecondScoreUseCase {
 
             updateFormOrNoShow(form, secondScoreVo);
         }
+
+        workbook.close();
     }
 
     private List<SecondScoreVo> getSecondScoreVoList(Sheet sheet) {

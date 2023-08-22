@@ -12,7 +12,7 @@ public enum FormType implements EnumProperty {
 
     REGULAR("일반전형", Category.REGULAR, null, null),
 
-    MEISTER_TALENT("마이스터인재전형", Category.SPECIAL, null, null),
+    MEISTER_TALENT("마이스터인재전형", Category.SPECIAL, Category.MEISTER_TALENT, null),
 
     NATIONAL_BASIC_LIVING("국가기초생활수급권자", Category.SPECIAL, Category.SOCIAL_INTEGRATION, Category.EQUAL_OPPORTUNITY),
     NEAR_POVERTY("차상위계층", Category.SPECIAL, Category.SOCIAL_INTEGRATION, Category.EQUAL_OPPORTUNITY),
