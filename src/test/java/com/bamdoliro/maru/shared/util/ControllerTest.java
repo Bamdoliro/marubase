@@ -4,6 +4,7 @@ import com.bamdoliro.maru.application.auth.LogInUseCase;
 import com.bamdoliro.maru.application.auth.LogOutUseCase;
 import com.bamdoliro.maru.application.auth.RefreshTokenUseCase;
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
+import com.bamdoliro.maru.application.form.DownloadSecondRoundScoreFormatUseCase;
 import com.bamdoliro.maru.application.form.DraftFormUseCase;
 import com.bamdoliro.maru.application.form.ExportFormUseCase;
 import com.bamdoliro.maru.application.form.GenerateAdmissionTicketUseCase;
@@ -19,6 +20,7 @@ import com.bamdoliro.maru.application.form.RejectFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFinalFormUseCase;
 import com.bamdoliro.maru.application.form.UpdateFormUseCase;
+import com.bamdoliro.maru.application.form.UpdateSecondRoundScoreUseCase;
 import com.bamdoliro.maru.application.form.UploadFormUseCase;
 import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
 import com.bamdoliro.maru.application.notice.CreateNoticeUseCase;
@@ -166,6 +168,12 @@ public abstract class ControllerTest {
 
     @MockBean
     protected GenerateAdmissionTicketUseCase generateAdmissionTicketUseCase;
+
+    @MockBean
+    protected DownloadSecondRoundScoreFormatUseCase downloadSecondRoundScoreFormatUseCase;
+
+    @MockBean
+    protected UpdateSecondRoundScoreUseCase updateSecondRoundScoreUseCase;
 
 
     @MockBean

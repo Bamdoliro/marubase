@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.presentation.form;
 
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
+import com.bamdoliro.maru.application.form.DownloadSecondRoundScoreFormatUseCase;
 import com.bamdoliro.maru.application.form.ExportFormUseCase;
 import com.bamdoliro.maru.application.form.GenerateAdmissionTicketUseCase;
 import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
@@ -14,6 +15,7 @@ import com.bamdoliro.maru.application.form.RejectFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFinalFormUseCase;
 import com.bamdoliro.maru.application.form.UpdateFormUseCase;
+import com.bamdoliro.maru.application.form.UpdateSecondRoundScoreUseCase;
 import com.bamdoliro.maru.application.form.UploadFormUseCase;
 import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
@@ -49,6 +51,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RequiredArgsConstructor
 @RequestMapping("/form")
 @RestController
@@ -70,6 +74,8 @@ public class FormController {
     private final QueryFirstFormResultUseCase queryFirstFormResultUseCase;
     private final QueryFinalFormResultUseCase queryFinalFormResultUseCase;
     private final GenerateAdmissionTicketUseCase generateAdmissionTicketUseCase;
+    private final DownloadSecondRoundScoreFormatUseCase downloadSecondRoundScoreFormatUseCase;
+    private final UpdateSecondRoundScoreUseCase updateSecondRoundScoreUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -217,12 +223,30 @@ public class FormController {
         );
     }
 
-    @GetMapping(value = "/admission-ticket")
+    @GetMapping("/admission-ticket")
     public ResponseEntity<Resource> generateAdmissionTicket(
             @AuthenticationPrincipal(authority = Authority.USER) User user
     ) {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(generateAdmissionTicketUseCase.execute(user));
+    }
+
+    @GetMapping("/second-round/format")
+    public ResponseEntity<Resource> downloadSecondRoundScoreFormatUseCase(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+    ) throws IOException {
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(downloadSecondRoundScoreFormatUseCase.execute());
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/second-round")
+    public void updateSecondRoundScore(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
+            @RequestPart(value = "xlsx") MultipartFile file
+    ) throws IOException {
+        updateSecondRoundScoreUseCase.execute(file);
     }
 }

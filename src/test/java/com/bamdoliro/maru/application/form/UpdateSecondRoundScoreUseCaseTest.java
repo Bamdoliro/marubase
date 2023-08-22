@@ -29,10 +29,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @Disabled
 @ActiveProfiles("test")
 @SpringBootTest
-class UpdateSecondScoreUseCaseTest {
+class UpdateSecondRoundScoreUseCaseTest {
 
     @Autowired
-    private UpdateSecondScoreUseCase updateSecondScoreUseCase;
+    private UpdateSecondRoundScoreUseCase updateSecondRoundScoreUseCase;
 
     @Autowired
     private FormRepository formRepository;
@@ -77,7 +77,7 @@ class UpdateSecondScoreUseCaseTest {
         MockMultipartFile multipartFile = new MockMultipartFile("test.xlsx", new FileInputStream(file));
 
         // when
-        updateSecondScoreUseCase.execute(multipartFile);
+        updateSecondRoundScoreUseCase.execute(multipartFile);
 
         // then
         List<Form> formList = formRepository.findByStatus(FormStatus.FIRST_PASSED);

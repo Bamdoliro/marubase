@@ -24,7 +24,7 @@ import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 @UseCase
-public class UpdateSecondScoreUseCase {
+public class UpdateSecondRoundScoreUseCase {
 
     private final FormRepository formRepository;
 
