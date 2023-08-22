@@ -43,4 +43,10 @@ public class SubmitFormUseCase {
             throw new FormAlreadySubmittedException();
         }
     }
+
+    private void validate(Form form) {
+        if (form.getEducation().isQualificationExamination()) {
+
+        }
+    }
 }

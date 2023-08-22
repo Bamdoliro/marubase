@@ -38,13 +38,11 @@ import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.GradeResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.ParentResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.SubjectResponse;
-import com.bamdoliro.maru.shared.constants.FixedNumber;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class FormFixture {
 

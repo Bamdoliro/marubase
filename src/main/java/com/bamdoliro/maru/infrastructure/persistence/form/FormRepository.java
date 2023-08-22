@@ -19,4 +19,6 @@ public interface FormRepository extends JpaRepository<Form, Long>, FormRepositor
             "WHERE f.examinationNumber BETWEEN :minValue AND :maxValue")
     Optional<Long> findMaxExaminationNumber(
             @Param("minValue") Long minValue, @Param("maxValue") Long maxValue);
+
+    Optional<Form> findByExaminationNumber(Long examinationNumber);
 }

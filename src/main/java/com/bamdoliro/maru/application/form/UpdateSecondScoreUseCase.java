@@ -34,25 +34,86 @@ public class UpdateSecondScoreUseCase {
         Sheet sheet = workbook.getSheetAt(0);
 
         List<Form> formList = formRepository.findByStatus(FormStatus.FIRST_PASSED);
+        List<SecondScoreVo> secondScoreVoList = getSecondScoreVoList(sheet);
+        validateList(formList, secondScoreVoList);
 
-        List<SecondScoreVo> secondScoreVoList = IntStream.range(1, sheet.getPhysicalNumberOfRows())
+        for (int index = 0; index < formList.size(); index++) {
+            Form form = formList.get(index);
+            SecondScoreVo secondScoreVo = secondScoreVoList.get(index);
+            validate(form, secondScoreVo);
+
+            updateFormOrNoShow(form, secondScoreVo);
+        }
+    }
+
+    private List<SecondScoreVo> getSecondScoreVoList(Sheet sheet) {
+        return IntStream.range(1, sheet.getPhysicalNumberOfRows())
                 .mapToObj(sheet::getRow)
                 .map(this::getSecondScoreFrom)
                 .sorted(Comparator.comparingLong(SecondScoreVo::getExaminationNumber))
                 .toList();
+    }
 
-        int formIndex = 0;
-        for (SecondScoreVo secondScoreVo : secondScoreVoList) {
-            Form form = formList.get(formIndex);
+    private SecondScoreVo getSecondScoreFrom(Row row) {
+        validateRow(row);
 
-            while (form.getExaminationNumber() <= secondScoreVo.getExaminationNumber()) {
-                if (form.getExaminationNumber().equals(secondScoreVo.getExaminationNumber())) {
-                    updateFormSecondRoundScore(form, secondScoreVo);
-                    formIndex++;
-                } else {
-                    form.noShow();
-                }
-            }
+        boolean isShow = row.getCell(6).getBooleanCellValue();
+        FormType.Category type = getFormType(row.getCell(2).getStringCellValue());
+
+        return new SecondScoreVo(
+                (long) row.getCell(0).getNumericCellValue(),
+                type,
+                isShow ? row.getCell(3).getNumericCellValue() : null,
+                isShow ? row.getCell(4).getNumericCellValue() : null,
+                isShow && type == FormType.Category.MEISTER_TALENT ? row.getCell(5).getNumericCellValue() : null,
+                isShow
+        );
+    }
+
+    private void validateRow(Row row) {
+        // 수험번호 | 이름 | 전형 구분 | 심층면접 | NCS | 코딩테스트 | 응시 여부
+        boolean isShow = row.getCell(6).getBooleanCellValue();
+
+        if (!(
+                row.getCell(0).getCellType() == CellType.NUMERIC &&
+                        row.getCell(1).getCellType() == CellType.STRING &&
+                        row.getCell(2).getCellType() == CellType.STRING &&
+                        !isShow || (row.getCell(3).getCellType() == CellType.NUMERIC &&
+                        row.getCell(4).getCellType() == CellType.NUMERIC &&
+                        (row.getCell(5) == null ||
+                                row.getCell(5).getCellType() == CellType.NUMERIC ||
+                                row.getCell(5).getCellType() == CellType.BLANK))
+
+        )) {
+            throw new InvalidFileException();
+        }
+    }
+
+    private FormType.Category getFormType(String description) {
+        try {
+            return FormType.Category.valueOfDescription(description);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidFileException();
+        }
+    }
+
+    private static void validateList(List<Form> formList, List<SecondScoreVo> secondScoreVoList) {
+        if (formList.size() != secondScoreVoList.size()) {
+            throw new InvalidFileException();
+        }
+    }
+
+    private void validate(Form form, SecondScoreVo secondScoreVo) {
+        if (!form.getExaminationNumber().equals(secondScoreVo.getExaminationNumber())) {
+            throw new InvalidFileException();
+        }
+    }
+
+    private void updateFormOrNoShow(Form form, SecondScoreVo secondScoreVo) {
+        if (secondScoreVo.isShow()) {
+            updateFormSecondRoundScore(form, secondScoreVo);
+        } else {
+            form.noShow();
         }
     }
 
@@ -70,42 +131,6 @@ public class UpdateSecondScoreUseCase {
             );
         }
     }
-
-    private SecondScoreVo getSecondScoreFrom(Row row) {
-        validateRow(row);
-
-        FormType.Category type = getFormType(row.getCell(2).getStringCellValue());
-        return new SecondScoreVo(
-                (long) row.getCell(0).getNumericCellValue(),
-                type,
-                row.getCell(3).getNumericCellValue(),
-                row.getCell(4).getNumericCellValue(),
-                type == FormType.Category.MEISTER_TALENT ? row.getCell(5).getNumericCellValue() : null
-        );
-    }
-
-    private void validateRow(Row row) {
-        // 수험번호 | 이름 | 전형 구분 | 심층면접 | NCS | 코딩테스트
-        if (
-                row.getCell(0).getCellType() == CellType.NUMERIC &&
-                        row.getCell(1).getCellType() == CellType.STRING &&
-                        row.getCell(2).getCellType() == CellType.STRING &&
-                        row.getCell(3).getCellType() == CellType.NUMERIC &&
-                        row.getCell(4).getCellType() == CellType.NUMERIC &&
-                        (row.getCell(5).getCellType() == CellType.NUMERIC ||
-                                row.getCell(5).getCellType() == CellType.BLANK)
-        ) {
-            throw new InvalidFileException();
-        }
-    }
-
-    private FormType.Category getFormType(String description) {
-        try {
-            return FormType.Category.valueOfDescription(description);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFileException();
-        }
-    }
 }
 
 @Getter
@@ -116,4 +141,5 @@ class SecondScoreVo {
     private Double depthInterviewScore;
     private Double ncsScore;
     private Double codingTestScore;
+    private boolean isShow;
 }

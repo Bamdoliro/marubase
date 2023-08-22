@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
+import com.bamdoliro.maru.domain.form.service.AssignExaminationNumberService;
 import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
@@ -39,6 +40,9 @@ class SelectFirstPassUseCaseTest {
     @Autowired
     private CalculateFormScoreService calculateFormScoreService;
 
+    @Autowired
+    private AssignExaminationNumberService assignExaminationNumberService;
+
     @BeforeEach
     void setUp() {
         List<User> userList = userRepository.saveAll(
@@ -46,20 +50,17 @@ class SelectFirstPassUseCaseTest {
         );
         List<Form> formList = FormFixture.generateFormList(userList);
         formList.forEach(form -> {
+            assignExaminationNumberService.execute(form);
             form.receive();
             calculateFormScoreService.execute(form);
+            formRepository.save(form);
         });
-        formRepository.saveAll(formList);
     }
 
     @Test
     void 정상적으로_1차전형_합격자를_선발한다() {
-        // given
-
-        // when
         selectFirstPassUseCase.execute();
 
-        // then
         Comparator<Form> compare = Comparator
                 .comparing(Form::getType)
                 .thenComparing(f -> f.getScore().getFirstRoundScore());
@@ -71,6 +72,8 @@ class SelectFirstPassUseCaseTest {
 
         formList.forEach(form -> {
             log.info("====================");
+            log.info("id: {}", form.getId());
+            log.info("examinationNumber: {}", form.getExaminationNumber());
             log.info("type: {}", form.getType());
             log.info("score: {}", form.getScore().getFirstRoundScore());
             log.info("status: {}", form.getStatus());
