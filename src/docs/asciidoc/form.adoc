@@ -424,3 +424,44 @@ include::{snippets}/form-controller-test/수험표를_발급받을_때_원서를
 
 ===== 불합격한 경우
 include::{snippets}/form-controller-test/수험표를_발급받을_때_불합격자라면_에러가_발생한다/http-response.adoc[]
+
+
+=== 2차 전형 점수 양식 다운로드
+어드민은 2차 전형 점수 양식을 다운로드 받을 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/정상적으로_2차_전형_점수_양식을_다운로드한다/request-headers.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/정상적으로_2차_전형_점수_양식을_다운로드한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/정상적으로_2차_전형_점수_양식을_다운로드한다/http-response.adoc[]
+
+
+=== 2차 전형 점수 입력
+어드민은 2차 전형 점수를 입력할 수 있습니다.
+이떄, 파일은 [2차 전형 점수 양식 다운로드] API를 통해 다운로드 받은 양식을 사용해야 합니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/정상적으로_2차_전형_점수를_입력한다/request-headers.adoc[]
+
+===== Request Part
+include::{snippets}/form-controller-test/정상적으로_2차_전형_점수를_입력한다/request-parts.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/정상적으로_2차_전형_점수를_입력한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/정상적으로_2차_전형_점수를_입력한다/http-response.adoc[]
+
+===== 파일 양식이 잘못된 경우
+include::{snippets}/form-controller-test/잘못된_양식의_2차_전형_점수를_입력하면_에러가_발생한다/http-response.adoc[]
