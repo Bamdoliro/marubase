@@ -68,6 +68,9 @@ public class Form extends BaseTimeEntity {
     @Column(nullable = false, length = 30)
     private FormType type;
 
+    @Column(nullable = false)
+    private Boolean changedToRegular;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private FormStatus status;
@@ -85,6 +88,7 @@ public class Form extends BaseTimeEntity {
         this.document = document;
         this.type = type;
         this.user = user;
+        this.changedToRegular = false;
         this.status = FormStatus.SUBMITTED;
     }
 
@@ -157,8 +161,11 @@ public class Form extends BaseTimeEntity {
         return status.equals(FormStatus.PASSED);
     }
 
-    public void changeToRegular() {
-        this.type = FormType.REGULAR;
+    public void changeToRegular(CalculateFormScoreService calculateFormScoreService) {
+        this.changedToRegular = true;
+
+        Double subjectGradeScore = calculateFormScoreService.calculateSubjectGradeScore(this);
+        this.score.updateSubjectScore(subjectGradeScore);
     }
 
     public void update(Applicant applicant, Parent parent, Education education, Grade grade, Document document, FormType type) {
@@ -173,6 +180,14 @@ public class Form extends BaseTimeEntity {
 
     public void assignExaminationNumber(Long examinationNumber) {
         this.examinationNumber = examinationNumber;
+    }
+
+    public FormType getType() {
+        if (changedToRegular) {
+            return FormType.REGULAR;
+        }
+
+        return type;
     }
 }
 

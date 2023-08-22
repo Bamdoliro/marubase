@@ -64,6 +64,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                                         form.type.eq(FormType.REGULAR)
                                                 .or(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION))
                                                 .or(form.type.eq(FormType.SPECIAL_ADMISSION))
+                                                .or(form.changedToRegular.isTrue())
                                 )
                 )
                 .orderBy(
