@@ -9,6 +9,8 @@ build/
 src/main/resources/static/docs/**
 .env
 test.pdf
+test.xlsx
+
 
 ### STS ###
 .apt_generated

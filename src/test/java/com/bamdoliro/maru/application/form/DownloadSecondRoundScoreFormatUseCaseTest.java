@@ -1,7 +1,6 @@
 package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
-import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.service.AssignExaminationNumberService;
 import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.domain.user.domain.User;
@@ -14,25 +13,22 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.core.io.Resource;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @Disabled
 @ActiveProfiles("test")
 @SpringBootTest
-class UpdateSecondScoreUseCaseTest {
+class DownloadSecondRoundScoreFormatUseCaseTest {
 
     @Autowired
-    private UpdateSecondScoreUseCase updateSecondScoreUseCase;
+    private DownloadSecondRoundScoreFormatUseCase downloadSecondRoundScoreFormatUseCase;
 
     @Autowired
     private FormRepository formRepository;
@@ -59,31 +55,25 @@ class UpdateSecondScoreUseCaseTest {
             assignExaminationNumberService.execute(form);
             form.receive();
             calculateFormScoreService.execute(form);
-            if (form.getExaminationNumber() == 3001 ||
-                    form.getExaminationNumber() == 3002 ||
-                    form.getExaminationNumber() == 2001 ||
-                    form.getExaminationNumber() == 2002
-            ) {
-                formRepository.save(form);
-            }
+            formRepository.save(form);
         });
         selectFirstPassUseCase.execute();
     }
 
     @Test
-    void 정상적으로_2차전형_점수를_입력한다() throws IOException {
-        // given
-        File file = new ClassPathResource("xlsx/2차전형점수.xlsx").getFile();
-        MockMultipartFile multipartFile = new MockMultipartFile("test.xlsx", new FileInputStream(file));
+    void 정상적으로_2차전형_양식을_다운받는다() throws IOException {
+        Resource resource = downloadSecondRoundScoreFormatUseCase.execute();
+        String filePath = "src/test/resources/test.xlsx";
 
-        // when
-        updateSecondScoreUseCase.execute(multipartFile);
-
-        // then
-        List<Form> formList = formRepository.findByStatus(FormStatus.FIRST_PASSED);
-        assertEquals(3, formList.size());
-        assertNull(formList.get(0).getScore().getCodingTestScore());
-        assertEquals(133.2, formList.get(1).getScore().getCodingTestScore());
-        assertNull(formList.get(2).getScore().getCodingTestScore());
+        try (
+                InputStream inputStream = resource.getInputStream();
+                OutputStream outputStream = new FileOutputStream(filePath)
+        ) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+        }
     }
 }
