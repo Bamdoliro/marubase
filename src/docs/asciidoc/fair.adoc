@@ -1,0 +1,20 @@
+== 입학설명회 Fair
+
+=== 입학설명회 일정 생성
+어드민은 입학설명회 일정을 생성할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/fair-controller-test/입학설명회_일정을_만든다/request-headers.adoc[]
+
+===== Request Body
+include::{snippets}/fair-controller-test/입학설명회_일정을_만든다/request-fields.adoc[]
+
+===== 요청
+include::{snippets}/fair-controller-test/입학설명회_일정을_만든다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/fair-controller-test/입학설명회_일정을_만든다/http-response.adoc[]

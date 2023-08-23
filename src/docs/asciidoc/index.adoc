@@ -22,3 +22,5 @@ include::question.adoc[]
 include::notice.adoc[]
 
 include::form.adoc[]
+
+include::fair.adoc[]
