@@ -59,3 +59,23 @@ include::{snippets}/question-controller-test/자주묻는질문을_불러온다/
 
 ===== 정상 응답
 include::{snippets}/question-controller-test/자주묻는질문을_불러온다/http-response.adoc[]
+
+
+=== 자주 묻는 질문 상세 조회
+자주 묻는 질문을 id로 상세 조회할 수 있습니다.
+
+==== 요청 형식
+
+===== Path Parameter
+include::{snippets}/question-controller-test/자주묻는질문을_id로_불러온다/path-parameters.adoc[]
+
+==== 요청
+include::{snippets}/question-controller-test/자주묻는질문을_id로_불러온다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/question-controller-test/자주묻는질문을_id로_불러온다/http-response.adoc[]
+
+===== 자주 묻는 질문을 찾을 수 없는 경우
+include::{snippets}/question-controller-test/자주묻는질문을_id로_불러올_때_자주묻는질문이_없으면_에러가_발생한다/http-response.adoc[]
