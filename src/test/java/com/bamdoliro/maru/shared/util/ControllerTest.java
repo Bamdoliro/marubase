@@ -3,6 +3,7 @@ package com.bamdoliro.maru.shared.util;
 import com.bamdoliro.maru.application.auth.LogInUseCase;
 import com.bamdoliro.maru.application.auth.LogOutUseCase;
 import com.bamdoliro.maru.application.auth.RefreshTokenUseCase;
+import com.bamdoliro.maru.application.fair.CreateAdmissionFairUseCase;
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
 import com.bamdoliro.maru.application.form.DownloadSecondRoundScoreFormatUseCase;
 import com.bamdoliro.maru.application.form.DraftFormUseCase;
@@ -37,6 +38,7 @@ import com.bamdoliro.maru.domain.auth.service.TokenService;
 import com.bamdoliro.maru.infrastructure.mail.SendEmailService;
 import com.bamdoliro.maru.infrastructure.neis.SearchSchoolService;
 import com.bamdoliro.maru.presentation.auth.AuthController;
+import com.bamdoliro.maru.presentation.fair.FairController;
 import com.bamdoliro.maru.presentation.form.DraftFormController;
 import com.bamdoliro.maru.presentation.form.FormController;
 import com.bamdoliro.maru.presentation.notice.NoticeController;
@@ -65,7 +67,8 @@ import org.springframework.test.web.servlet.MockMvc;
         QuestionController.class,
         FormController.class,
         NoticeController.class,
-        DraftFormController.class
+        DraftFormController.class,
+        FairController.class
 })
 public abstract class ControllerTest {
 
@@ -174,6 +177,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected UpdateSecondRoundScoreUseCase updateSecondRoundScoreUseCase;
+
+    @MockBean
+    protected CreateAdmissionFairUseCase createAdmissionFairUseCase;
 
 
     @MockBean
