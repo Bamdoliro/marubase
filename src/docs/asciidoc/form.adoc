@@ -97,7 +97,7 @@ include::{snippets}/draft-form-controller-test/임시저장된_원서를_조회�
 ===== Request Header
 include::{snippets}/form-controller-test/원서를_승인한다/request-headers.adoc[]
 
-====== Path Parameter
+===== Path Parameter
 include::{snippets}/form-controller-test/원서를_승인한다/path-parameters.adoc[]
 
 ==== 요청
@@ -118,7 +118,7 @@ include::{snippets}/form-controller-test/원서를_승인할_때_원서가_없�
 ===== Request Header
 include::{snippets}/form-controller-test/원서를_반려한다/request-headers.adoc[]
 
-====== Path Parameter
+===== Path Parameter
 include::{snippets}/form-controller-test/원서를_반려한다/path-parameters.adoc[]
 
 ==== 요청
@@ -139,7 +139,7 @@ include::{snippets}/form-controller-test/원서를_반려할_때_원서가_없�
 ===== Request Header
 include::{snippets}/form-controller-test/원서를_접수한다/request-headers.adoc[]
 
-====== Path Parameter
+===== Path Parameter
 include::{snippets}/form-controller-test/원서를_접수한다/path-parameters.adoc[]
 
 ==== 요청
