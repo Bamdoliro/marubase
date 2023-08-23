@@ -83,7 +83,7 @@ class NoticeControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        mockMvc.perform(put("/notice/{id}", id)
+        mockMvc.perform(put("/notice/{notice-id}", id)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -96,7 +96,10 @@ class NoticeControllerTest extends RestDocsTestSupport {
                                 headerWithName(HttpHeaders.AUTHORIZATION)
                                         .description("Bearer token")
                         ),
-                        pathParameters(parameterWithName("id").description("공지사항 id")),
+                        pathParameters(
+                                parameterWithName("notice-id")
+                                        .description("공지사항 id")
+                        ),
                         requestFields(
                                 fieldWithPath("title")
                                         .type(JsonFieldType.STRING)
@@ -118,7 +121,7 @@ class NoticeControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        mockMvc.perform(put("/notice/{id}", id)
+        mockMvc.perform(put("/notice/{notice-id}", id)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -155,7 +158,7 @@ class NoticeControllerTest extends RestDocsTestSupport {
         NoticeResponse response = new NoticeResponse(NoticeFixture.createNotice());
         given(queryNoticeUseCase.execute(id)).willReturn(response);
 
-        mockMvc.perform(get("/notice/{id}", id)
+        mockMvc.perform(get("/notice/{notice-id}", id)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
 
@@ -163,7 +166,7 @@ class NoticeControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document(
                         pathParameters(
-                                parameterWithName("id")
+                                parameterWithName("notice-id")
                                         .description("공지사항 id")
                         )
                 ));
@@ -176,7 +179,7 @@ class NoticeControllerTest extends RestDocsTestSupport {
         Long id = 1L;
         willThrow(new NoticeNotFoundException()).given(queryNoticeUseCase).execute(id);
 
-        mockMvc.perform(get("/notice/{id}", id)
+        mockMvc.perform(get("/notice/{notice-id}", id)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
 

@@ -86,7 +86,7 @@ class QuestionControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        mockMvc.perform(put("/question/{id}", id)
+        mockMvc.perform(put("/question/{question-id}", id)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -99,7 +99,10 @@ class QuestionControllerTest extends RestDocsTestSupport {
                                 headerWithName(HttpHeaders.AUTHORIZATION)
                                         .description("Bearer token")
                         ),
-                        pathParameters(parameterWithName("id").description("자주 묻는 질문 id")),
+                        pathParameters(
+                                parameterWithName("question-id")
+                                        .description("자주 묻는 질문 id")
+                        ),
                         requestFields(
                                 fieldWithPath("title")
                                         .type(JsonFieldType.STRING)
@@ -124,7 +127,7 @@ class QuestionControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        mockMvc.perform(put("/question/{id}", id)
+        mockMvc.perform(put("/question/{question-id}", id)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)

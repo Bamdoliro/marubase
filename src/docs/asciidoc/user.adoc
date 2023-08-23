@@ -12,6 +12,7 @@ include::{snippets}/user-controller-test/유저를_생성한다/request-fields.a
 include::{snippets}/user-controller-test/유저를_생성한다/http-request.adoc[]
 
 ==== 응답
+
 ===== 정상 응답
 include::{snippets}/user-controller-test/유저를_생성한다/http-response.adoc[]
 
@@ -44,6 +45,7 @@ include::{snippets}/user-controller-test/이메일_인증을_요청한다/query-
 include::{snippets}/user-controller-test/이메일_인증을_요청한다/http-request.adoc[]
 
 ==== 응답
+
 ===== 정상 응답
 include::{snippets}/user-controller-test/이메일_인증을_요청한다/http-response.adoc[]
 

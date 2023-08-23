@@ -19,6 +19,7 @@ include::{snippets}/form-controller-test/원서를_제출한다/http-request.ado
 include::{snippets}/form-controller-test/중졸_껌정고시_합격자가_원서를_제출한다/http-request.adoc[]
 
 ==== 응답
+
 ===== 정상 응답
 include::{snippets}/form-controller-test/원서를_제출한다/http-response.adoc[]
 
@@ -104,6 +105,7 @@ include::{snippets}/form-controller-test/원서를_승인한다/path-parameters.
 include::{snippets}/form-controller-test/원서를_승인한다/http-request.adoc[]
 
 ==== 응답
+
 ===== 정상 응답
 include::{snippets}/form-controller-test/원서를_승인한다/http-response.adoc[]
 
@@ -125,6 +127,7 @@ include::{snippets}/form-controller-test/원서를_반려한다/path-parameters.
 include::{snippets}/form-controller-test/원서를_반려한다/http-request.adoc[]
 
 ==== 응답
+
 ===== 정상 응답
 include::{snippets}/form-controller-test/원서를_반려한다/http-response.adoc[]
 
@@ -146,6 +149,7 @@ include::{snippets}/form-controller-test/원서를_접수한다/path-parameters.
 include::{snippets}/form-controller-test/원서를_접수한다/http-request.adoc[]
 
 ==== 응답
+
 ===== 정상 응답
 include::{snippets}/form-controller-test/원서를_접수한다/http-response.adoc[]
 

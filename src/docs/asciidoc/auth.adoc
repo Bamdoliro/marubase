@@ -12,6 +12,7 @@ include::{snippets}/auth-controller-test/유저가_로그인한다/request-field
 include::{snippets}/auth-controller-test/유저가_로그인한다/http-request.adoc[]
 
 ==== 응답
+
 ===== 정상 응답
 include::{snippets}/auth-controller-test/유저가_로그인한다/http-response.adoc[]
 
@@ -36,6 +37,7 @@ include::{snippets}/auth-controller-test/리프레시_토큰으로_액세스_토
 include::{snippets}/auth-controller-test/리프레시_토큰으로_액세스_토큰을_재발급한다/http-request.adoc[]
 
 ==== 응답
+
 ===== 정상 응답
 include::{snippets}/auth-controller-test/리프레시_토큰으로_액세스_토큰을_재발급한다/http-response.adoc[]
 
@@ -60,5 +62,6 @@ include::{snippets}/auth-controller-test/유저가_로그아웃한다/request-he
 include::{snippets}/auth-controller-test/유저가_로그아웃한다/http-request.adoc[]
 
 ==== 응답
+
 ===== 정상 응답
 include::{snippets}/auth-controller-test/유저가_로그아웃한다/http-response.adoc[]

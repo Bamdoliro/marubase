@@ -15,6 +15,7 @@ include::{snippets}/school-controller-test/학교를_검색한다/query-paramete
 include::{snippets}/school-controller-test/학교를_검색한다/http-request.adoc[]
 
 ==== 응답
+
 ===== 정상 응답
 include::{snippets}/school-controller-test/학교를_검색한다/http-response.adoc[]
 

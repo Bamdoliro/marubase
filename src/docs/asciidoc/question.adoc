@@ -15,6 +15,7 @@ include::{snippets}/question-controller-test/자주묻는질문을_생성한다/
 include::{snippets}/question-controller-test/자주묻는질문을_생성한다/http-request.adoc[]
 
 ==== 응답
+
 ===== 정상 응답
 include::{snippets}/question-controller-test/자주묻는질문을_생성한다/http-response.adoc[]
 
@@ -26,6 +27,9 @@ include::{snippets}/question-controller-test/자주묻는질문을_생성한다/
 ===== Request Header
 include::{snippets}/question-controller-test/자주묻는질문을_수정한다/request-headers.adoc[]
 
+===== Path Parameter
+include::{snippets}/question-controller-test/자주묻는질문을_수정한다/path-parameters.adoc[]
+
 ===== Request Body
 include::{snippets}/question-controller-test/자주묻는질문을_수정한다/request-fields.adoc[]
 
@@ -33,10 +37,11 @@ include::{snippets}/question-controller-test/자주묻는질문을_수정한다/
 include::{snippets}/question-controller-test/자주묻는질문을_수정한다/http-request.adoc[]
 
 ==== 응답
+
 ===== 정상 응답
 include::{snippets}/question-controller-test/자주묻는질문을_수정한다/http-response.adoc[]
 
-===== 자주 묻는 질문을 찾을수 없는 경우
+===== 자주 묻는 질문을 찾을 수 없는 경우
 include::{snippets}/question-controller-test/자주묻는질문을_수정할_때_자주묻는질문이_없으면_에러가_발생한다/http-response.adoc[]
 
 === 자주 묻는 질문 조회
@@ -51,5 +56,6 @@ include::{snippets}/question-controller-test/자주묻는질문을_불러온다/
 include::{snippets}/question-controller-test/자주묻는질문을_불러온다/http-request.adoc[]
 
 ==== 응답
+
 ===== 정상 응답
 include::{snippets}/question-controller-test/자주묻는질문을_불러온다/http-response.adoc[]
