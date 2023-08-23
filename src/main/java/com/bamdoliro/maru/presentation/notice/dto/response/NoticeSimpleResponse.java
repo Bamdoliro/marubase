@@ -15,6 +15,6 @@ public class NoticeSimpleResponse {
     public NoticeSimpleResponse(Notice notice) {
         this.id = notice.getId();
         this.title = notice.getTitle();
-        this.createdAt = notice.getCreatedAt();
+        this.createdAt = notice.getUpdatedAt();
     }
 }
