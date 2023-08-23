@@ -31,6 +31,7 @@ import com.bamdoliro.maru.application.notice.QueryNoticeUseCase;
 import com.bamdoliro.maru.application.notice.UpdateNoticeUseCase;
 import com.bamdoliro.maru.application.question.CreateQuestionUseCase;
 import com.bamdoliro.maru.application.question.QueryQuestionListUseCase;
+import com.bamdoliro.maru.application.question.QueryQuestionUseCase;
 import com.bamdoliro.maru.application.question.UpdateQuestionUseCase;
 import com.bamdoliro.maru.application.school.SearchSchoolUseCase;
 import com.bamdoliro.maru.application.user.SendEmailVerificationUseCase;
@@ -183,6 +184,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected AttendAdmissionFairUseCase attendAdmissionFairUseCase;
+
+    @MockBean
+    protected QueryQuestionUseCase queryQuestionUseCase;
 
 
     @MockBean
