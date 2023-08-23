@@ -2,6 +2,7 @@ package com.bamdoliro.maru.presentation.question;
 
 import com.bamdoliro.maru.application.question.CreateQuestionUseCase;
 import com.bamdoliro.maru.application.question.QueryQuestionListUseCase;
+import com.bamdoliro.maru.application.question.QueryQuestionUseCase;
 import com.bamdoliro.maru.application.question.UpdateQuestionUseCase;
 import com.bamdoliro.maru.domain.question.domain.type.QuestionCategory;
 import com.bamdoliro.maru.domain.user.domain.User;
@@ -12,6 +13,7 @@ import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.auth.Authority;
 import com.bamdoliro.maru.shared.response.CommonResponse;
 import com.bamdoliro.maru.shared.response.ListCommonResponse;
+import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,6 +35,7 @@ public class QuestionController {
     private final CreateQuestionUseCase createQuestionUseCase;
     private final UpdateQuestionUseCase updateQuestionUseCase;
     private final QueryQuestionListUseCase queryQuestionListUseCase;
+    private final QueryQuestionUseCase queryQuestionUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -59,6 +62,15 @@ public class QuestionController {
     ) {
         return CommonResponse.ok(
                 queryQuestionListUseCase.execute(category)
+        );
+    }
+
+    @GetMapping("/{question-id}")
+    public SingleCommonResponse<QuestionResponse> queryQuestion(
+            @PathVariable(name = "question-id") Long questionId
+    ) {
+        return CommonResponse.ok(
+                queryQuestionUseCase.execute(questionId)
         );
     }
 }
