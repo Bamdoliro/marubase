@@ -41,7 +41,7 @@ public class Attendee extends BaseTimeEntity {
     @Column(nullable = false)
     private Integer headcount;
 
-    @Column(nullable = false)
+    @Column(nullable = true, length = 255)
     private String question;
 
     @ManyToOne(fetch = FetchType.LAZY)
