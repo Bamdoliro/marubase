@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -41,11 +42,19 @@ public class Fair extends BaseTimeEntity {
     @Column(nullable = false, length = 10)
     private FairType type;
 
+    @Column(nullable = false)
+    private LocalDate applicationStartDate;
+
+    @Column(nullable = false)
+    private LocalDate applicationEndDate;
+
     @Builder
-    public Fair(LocalDateTime start, Integer capacity, String place, FairType type) {
+    public Fair(LocalDateTime start, Integer capacity, String place, FairType type, LocalDate applicationStartDate, LocalDate applicationEndDate) {
         this.start = start;
         this.capacity = capacity;
         this.place = place;
         this.type = type;
+        this.applicationStartDate = applicationStartDate == null ? LocalDate.now() : applicationStartDate;
+        this.applicationEndDate = applicationEndDate == null ? start.minusDays(3).toLocalDate() : applicationEndDate;
     }
 }

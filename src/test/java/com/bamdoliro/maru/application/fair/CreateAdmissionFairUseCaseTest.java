@@ -1,7 +1,6 @@
 package com.bamdoliro.maru.application.fair;
 
 import com.bamdoliro.maru.domain.fair.domain.Fair;
-import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.persistence.fair.FairRepository;
 import com.bamdoliro.maru.presentation.fair.dto.request.CreateFairRequest;
 import com.bamdoliro.maru.shared.fixture.FairFixture;
@@ -43,5 +42,6 @@ class CreateAdmissionFairUseCaseTest {
         Fair savedFair = captor.getValue();
         assertEquals(fair.getStart(), savedFair.getStart());
         assertEquals(fair.getPlace(), savedFair.getPlace());
+        assertEquals(fair.getStart().minusDays(3).toLocalDate(), savedFair.getApplicationEndDate());
     }
 }

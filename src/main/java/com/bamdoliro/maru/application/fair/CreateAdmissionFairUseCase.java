@@ -21,6 +21,8 @@ public class CreateAdmissionFairUseCase {
                         .capacity(request.getCapacity())
                         .place(request.getPlace())
                         .type(request.getType())
+                        .applicationStartDate(request.getApplicationStartDate())
+                        .applicationEndDate(request.getApplicationEndDate())
                         .build()
         );
     }
