@@ -28,19 +28,6 @@ spring:
       port: ${REDIS_PORT}
       password: ${REDIS_PASSWORD}
 
-  mail:
-    host: ${MAIL_HOST}
-    port: ${MAIL_PORT}
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
-
   cloud:
     aws:
       s3:
@@ -70,6 +57,12 @@ jwt:
 
 neis:
   key: ${NEIS_KEY}
+
+message:
+  api-key: ${MESSAGE_API_KEY}
+  api-secret: ${MESSAGE_API_SECRET}
+  api-domain: ${MESSAGE_API_DOMAIN}
+  from: ${MESSAGE_FROM}
 ---
 spring:
   config:

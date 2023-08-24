@@ -40,8 +40,7 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-    implementation 'com.sun.mail:jakarta.mail:2.0.1'
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'net.nurigo:sdk:4.3.0'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.apache.commons:commons-lang3:3.0'
 
