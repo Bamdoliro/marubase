@@ -53,7 +53,7 @@ public class FairController {
 
     @GetMapping
     public ListCommonResponse<FairResponse> getAdmissionFairList(
-            @RequestParam(name = "category", required = false) FairType type
+            @RequestParam(name = "type", required = false) FairType type
     ) {
         return CommonResponse.ok(
                 queryFairListUseCase.execute(type)

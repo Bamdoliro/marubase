@@ -5,8 +5,11 @@ import com.bamdoliro.maru.domain.fair.domain.Fair;
 import com.bamdoliro.maru.domain.fair.domain.type.FairType;
 import com.bamdoliro.maru.presentation.fair.dto.request.AttendAdmissionFairRequest;
 import com.bamdoliro.maru.presentation.fair.dto.request.CreateFairRequest;
+import com.bamdoliro.maru.presentation.fair.dto.response.FairResponse;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class FairFixture {
 
@@ -15,7 +18,9 @@ public class FairFixture {
                 LocalDateTime.of(2005, 4, 15, 10, 39),
                 120,
                 "서울시 강남구",
-                FairType.STUDENT_AND_PARENT
+                FairType.STUDENT_AND_PARENT,
+                LocalDate.now(),
+                LocalDate.now().plusDays(3)
         );
     }
     public static CreateFairRequest createFairRequest() {
@@ -23,7 +28,9 @@ public class FairFixture {
                 LocalDateTime.of(2005, 4, 15, 10, 39),
                 120,
                 "서울시 강남구",
-                FairType.STUDENT_AND_PARENT
+                FairType.STUDENT_AND_PARENT,
+                LocalDate.now(),
+                null
         );
     }
 
@@ -47,6 +54,22 @@ public class FairFixture {
                 2,
                 "내신 커트라인 몇인가요?",
                 fair
+        );
+    }
+
+    public static List<Fair> createFairList() {
+        return List.of(
+                createFair(),
+                createFair(),
+                createFair()
+        );
+    }
+
+    public static List<FairResponse> createFairResponseList() {
+        return List.of(
+                new FairResponse(createFair()),
+                new FairResponse(createFair()),
+                new FairResponse(createFair())
         );
     }
 }

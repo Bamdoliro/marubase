@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.presentation.fair;
 
+import com.bamdoliro.maru.domain.fair.domain.type.FairType;
 import com.bamdoliro.maru.domain.fair.exception.FairNotFoundException;
 import com.bamdoliro.maru.domain.fair.exception.HeadcountExceededException;
 import com.bamdoliro.maru.domain.user.domain.User;
@@ -23,11 +24,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class FairControllerTest extends RestDocsTestSupport {
@@ -155,5 +158,27 @@ class FairControllerTest extends RestDocsTestSupport {
                 .andDo(restDocs.document());
 
         verify(attendAdmissionFairUseCase, times(1)).execute(any(Long.class), any(AttendAdmissionFairRequest.class));
+    }
+
+    @Test
+    void 입학설명회_일정을_불러온다() throws Exception {
+        given(queryFairListUseCase.execute(any(FairType.class))).willReturn(FairFixture.createFairResponseList());
+
+        mockMvc.perform(get("/fair")
+                        .param("type", FairType.STUDENT_AND_PARENT.name())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document(
+                        queryParameters(
+                                parameterWithName("type")
+                                        .optional()
+                                        .description("입학설명회 유형 (STUDENT_AND_PARENT, TEACHER), 미지정시 전체 조회")
+                        )
+                ));
+
+        verify(queryFairListUseCase, times(1)).execute(any(FairType.class));
     }
 }
