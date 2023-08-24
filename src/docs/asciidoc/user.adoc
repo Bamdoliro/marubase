@@ -38,8 +38,8 @@ include::{snippets}/user-controller-test/유저를_생성할_때_잘못된_형�
 
 ==== 요청 형식
 
-===== Query Parameter
-include::{snippets}/user-controller-test/전화번호_인증을_요청한다/query-parameters.adoc[]
+===== Request Body
+include::{snippets}/user-controller-test/전화번호_인증을_요청한다/request-fields.adoc[]
 
 ==== 요청
 include::{snippets}/user-controller-test/전화번호_인증을_요청한다/http-request.adoc[]

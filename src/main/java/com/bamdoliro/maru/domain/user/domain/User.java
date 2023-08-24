@@ -34,7 +34,7 @@ public class User extends BaseTimeEntity {
     @Column(unique = true, nullable = false)
     private UUID uuid;
 
-    @Column(unique = true, nullable = false, length = 100)
+    @Column(unique = true, nullable = false, length = 11)
     private String phoneNumber;
 
     @Column(nullable = false, length = 50)
