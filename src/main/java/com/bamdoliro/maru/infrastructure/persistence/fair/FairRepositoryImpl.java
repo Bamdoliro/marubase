@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.bamdoliro.maru.domain.fair.domain.QFair.fair;
 
@@ -40,5 +41,16 @@ public class FairRepositoryImpl implements FairRepositoryCustom {
         }
 
         return fair.type.eq(type);
+    }
+
+    @Override
+    public Optional<Fair> findFairAndAttendeeById(Long fairId) {
+        return Optional.ofNullable(
+                queryFactory
+                        .selectFrom(fair)
+                        .join(fair.attendeeList).fetchJoin()
+                        .where(fair.id.eq(fairId))
+                        .fetchOne()
+        );
     }
 }
