@@ -63,3 +63,23 @@ include::{snippets}/fair-controller-test/입학설명회_일정을_불러온다/
 
 ===== 정상 응답
 include::{snippets}/fair-controller-test/입학설명회_일정을_불러온다/http-response.adoc[]
+
+
+=== 입학설명회 상세 조회
+어드민은 입학설명회 참석자까지 상세히 조회할 수 있습니다.
+
+==== 요청 형식
+
+===== Path Parameter
+include::{snippets}/fair-controller-test/입학설명회를_상세히_불러온다/path-parameters.adoc[]
+
+===== 요청
+include::{snippets}/fair-controller-test/입학설명회를_상세히_불러온다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/fair-controller-test/입학설명회를_상세히_불러온다/http-response.adoc[]
+
+===== 입학설명회가 없는 경우
+include::{snippets}/fair-controller-test/입학설명회를_상세히_불러올_때_해당_입학설명회가_없으면_에러가_발생한다/http-response.adoc[]

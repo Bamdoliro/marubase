@@ -66,6 +66,7 @@ public class FairController {
 
     @GetMapping("/{fair-id}")
     public SingleCommonResponse<FairDetailResponse> getFairDetail(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @PathVariable(name = "fair-id") Long fairId
     ) {
         return CommonResponse.ok(
