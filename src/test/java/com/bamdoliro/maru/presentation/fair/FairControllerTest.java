@@ -1,6 +1,5 @@
 package com.bamdoliro.maru.presentation.fair;
 
-import com.bamdoliro.maru.domain.fair.domain.Fair;
 import com.bamdoliro.maru.domain.fair.domain.type.FairType;
 import com.bamdoliro.maru.domain.fair.exception.FairNotFoundException;
 import com.bamdoliro.maru.domain.fair.exception.HeadcountExceededException;
@@ -215,15 +214,24 @@ class FairControllerTest extends RestDocsTestSupport {
     @Test
     void 입학설명회를_상세히_불러온다() throws Exception {
         Long fairId = 1L;
+        User user = UserFixture.createAdminUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
         given(queryFairDetailUseCase.execute(fairId)).willReturn(FairFixture.createFairDetailResponse());
 
         mockMvc.perform(get("/fair/{fair-id}", fairId)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                 )
 
                 .andExpect(status().isOk())
 
                 .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        ),
                         pathParameters(
                                 parameterWithName("fair-id")
                                         .description("입학설명회 id")
@@ -236,9 +244,14 @@ class FairControllerTest extends RestDocsTestSupport {
     @Test
     void 입학설명회를_상세히_불러올_때_해당_입학설명회가_없으면_에러가_발생한다() throws Exception {
         Long fairId = -1L;
+        User user = UserFixture.createAdminUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
         willThrow(new FairNotFoundException()).given(queryFairDetailUseCase).execute(fairId);
 
         mockMvc.perform(get("/fair/{fair-id}", fairId)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                 )
 

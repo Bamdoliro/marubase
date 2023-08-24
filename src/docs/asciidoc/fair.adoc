@@ -70,6 +70,9 @@ include::{snippets}/fair-controller-test/입학설명회_일정을_불러온다/
 
 ==== 요청 형식
 
+===== Request Header
+include::{snippets}/fair-controller-test/입학설명회를_상세히_불러온다/request-headers.adoc[]
+
 ===== Path Parameter
 include::{snippets}/fair-controller-test/입학설명회를_상세히_불러온다/path-parameters.adoc[]
 
