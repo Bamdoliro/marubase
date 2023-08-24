@@ -4,6 +4,7 @@ import com.bamdoliro.maru.domain.fair.domain.Attendee;
 import com.bamdoliro.maru.domain.fair.domain.Fair;
 import com.bamdoliro.maru.domain.fair.exception.FairNotFoundException;
 import com.bamdoliro.maru.domain.fair.exception.HeadcountExceededException;
+import com.bamdoliro.maru.domain.fair.exception.NotApplicationPeriodException;
 import com.bamdoliro.maru.infrastructure.persistence.fair.AttendeeRepository;
 import com.bamdoliro.maru.presentation.fair.dto.request.AttendAdmissionFairRequest;
 import com.bamdoliro.maru.shared.fixture.FairFixture;
@@ -93,5 +94,19 @@ class AttendAdmissionFairUseCaseTest {
         verify(attendeeRepository, never()).save(any());
     }
 
-    // TODO :: duration validation test case
+    @Test
+    void 입학설명회에_참가_신청을_할_때_신청_기간이_아니라면_에러가_발생한다() {
+        Fair fair = FairFixture.createClosedFair();
+        AttendAdmissionFairRequest request = FairFixture.createAttendAdmissionFairRequest();
+
+        given(fairFacade.getFair(fair.getId())).willReturn(fair);
+
+        // when and then
+        assertThrows(NotApplicationPeriodException.class,
+                () -> attendAdmissionFairUseCase.execute(fair.getId(), request));
+
+        verify(fairFacade, times(1)).getFair(fair.getId());
+        verify(attendeeRepository, never()).countByFair(fair);
+        verify(attendeeRepository, never()).save(any());
+    }
 }

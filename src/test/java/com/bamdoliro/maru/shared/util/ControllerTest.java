@@ -40,6 +40,7 @@ import com.bamdoliro.maru.application.user.SignUpUserUseCase;
 import com.bamdoliro.maru.domain.auth.service.TokenService;
 import com.bamdoliro.maru.infrastructure.mail.SendEmailService;
 import com.bamdoliro.maru.infrastructure.neis.SearchSchoolService;
+import com.bamdoliro.maru.infrastructure.persistence.fair.AttendeeRepository;
 import com.bamdoliro.maru.presentation.auth.AuthController;
 import com.bamdoliro.maru.presentation.fair.FairController;
 import com.bamdoliro.maru.presentation.form.DraftFormController;
@@ -211,7 +212,6 @@ public abstract class ControllerTest {
 
     @MockBean
     protected AuthenticationExtractor authenticationExtractor;
-
 
     protected String toJson(Object object) throws JsonProcessingException {
         return objectMapper.writeValueAsString(object);

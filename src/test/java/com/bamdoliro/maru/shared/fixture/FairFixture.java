@@ -3,6 +3,7 @@ package com.bamdoliro.maru.shared.fixture;
 import com.bamdoliro.maru.domain.fair.domain.Attendee;
 import com.bamdoliro.maru.domain.fair.domain.Fair;
 import com.bamdoliro.maru.domain.fair.domain.type.FairType;
+import com.bamdoliro.maru.infrastructure.persistence.fair.AttendeeRepository;
 import com.bamdoliro.maru.presentation.fair.dto.request.AttendAdmissionFairRequest;
 import com.bamdoliro.maru.presentation.fair.dto.request.CreateFairRequest;
 import com.bamdoliro.maru.presentation.fair.dto.response.FairResponse;
@@ -15,7 +16,7 @@ public class FairFixture {
 
     public static Fair createFair() {
         return new Fair(
-                LocalDateTime.of(2005, 4, 15, 10, 39),
+                LocalDateTime.of(2025, 4, 15, 10, 39),
                 120,
                 "서울시 강남구",
                 FairType.STUDENT_AND_PARENT,
@@ -25,12 +26,23 @@ public class FairFixture {
     }
     public static CreateFairRequest createFairRequest() {
         return new CreateFairRequest(
-                LocalDateTime.of(2005, 4, 15, 10, 39),
+                LocalDateTime.of(2025, 4, 15, 10, 39),
                 120,
                 "서울시 강남구",
                 FairType.STUDENT_AND_PARENT,
                 LocalDate.now(),
                 null
+        );
+    }
+
+    public static Fair createClosedFair() {
+        return new Fair(
+                LocalDateTime.of(2005, 4, 15, 10, 39),
+                120,
+                "서울시 강남구",
+                FairType.STUDENT_AND_PARENT,
+                LocalDate.now(),
+                LocalDate.now().plusDays(3)
         );
     }
 
@@ -65,11 +77,11 @@ public class FairFixture {
         );
     }
 
-    public static List<FairResponse> createFairResponseList() {
+    public static List<FairResponse> createFairResponseList(AttendeeRepository attendeeRepository) {
         return List.of(
-                new FairResponse(createFair()),
-                new FairResponse(createFair()),
-                new FairResponse(createFair())
+                new FairResponse(createClosedFair(), attendeeRepository),
+                new FairResponse(createClosedFair(), attendeeRepository),
+                new FairResponse(createClosedFair(), attendeeRepository)
         );
     }
 }

@@ -1,8 +1,10 @@
 package com.bamdoliro.maru.presentation.fair;
 
+import com.bamdoliro.maru.domain.fair.domain.Fair;
 import com.bamdoliro.maru.domain.fair.domain.type.FairType;
 import com.bamdoliro.maru.domain.fair.exception.FairNotFoundException;
 import com.bamdoliro.maru.domain.fair.exception.HeadcountExceededException;
+import com.bamdoliro.maru.domain.fair.exception.NotApplicationPeriodException;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.fair.dto.request.AttendAdmissionFairRequest;
 import com.bamdoliro.maru.presentation.fair.dto.request.CreateFairRequest;
@@ -70,7 +72,15 @@ class FairControllerTest extends RestDocsTestSupport {
                                         .description("입학설명회 장소"),
                                 fieldWithPath("type")
                                         .type(JsonFieldType.STRING)
-                                        .description("입학설명회 유형 (STUDENT_AND_PARENT, TEACHER)")
+                                        .description("입학설명회 유형 (STUDENT_AND_PARENT, TEACHER)"),
+                                fieldWithPath("applicationStartDate")
+                                        .type(JsonFieldType.STRING)
+                                        .optional()
+                                        .description("입학설명회 신청 시작일 (yyyy-MM-dd), null이면 당일 시작"),
+                                fieldWithPath("applicationEndDate")
+                                        .type(JsonFieldType.STRING)
+                                        .optional()
+                                        .description("입학설명회 신청 종료일 (yyyy-MM-dd), null이면 입학설명회 3일 전 종료")
                         )
                 ));
 
@@ -161,8 +171,27 @@ class FairControllerTest extends RestDocsTestSupport {
     }
 
     @Test
+    void 입학설명회에_참가_신청을_할_때_신청_기간이_아니라면_에러가_발생한다() throws Exception {
+        Long fairId = 1L;
+        AttendAdmissionFairRequest request = FairFixture.createAttendAdmissionFairRequest();
+        doThrow(new NotApplicationPeriodException()).when(attendAdmissionFairUseCase).execute(any(Long.class), any(AttendAdmissionFairRequest.class));
+
+        mockMvc.perform(post("/fair/{fair-id}", fairId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+                )
+
+                .andExpect(status().isConflict())
+
+                .andDo(restDocs.document());
+
+        verify(attendAdmissionFairUseCase, times(1)).execute(any(Long.class), any(AttendAdmissionFairRequest.class));
+    }
+
+    @Test
     void 입학설명회_일정을_불러온다() throws Exception {
-        given(queryFairListUseCase.execute(any(FairType.class))).willReturn(FairFixture.createFairResponseList());
+        given(queryFairListUseCase.execute(any(FairType.class))).willReturn(FairFixture.createFairResponseList(null));
 
         mockMvc.perform(get("/fair")
                         .param("type", FairType.STUDENT_AND_PARENT.name())
