@@ -21,6 +21,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -191,7 +192,7 @@ class FairControllerTest extends RestDocsTestSupport {
 
     @Test
     void 입학설명회_일정을_불러온다() throws Exception {
-        given(queryFairListUseCase.execute(any(FairType.class))).willReturn(FairFixture.createFairResponseList(null));
+        given(queryFairListUseCase.execute(any(FairType.class))).willReturn(FairFixture.createFairResponseList());
 
         mockMvc.perform(get("/fair")
                         .param("type", FairType.STUDENT_AND_PARENT.name())
@@ -209,5 +210,42 @@ class FairControllerTest extends RestDocsTestSupport {
                 ));
 
         verify(queryFairListUseCase, times(1)).execute(any(FairType.class));
+    }
+
+    @Test
+    void 입학설명회를_상세히_불러온다() throws Exception {
+        Long fairId = 1L;
+        given(queryFairDetailUseCase.execute(fairId)).willReturn(FairFixture.createFairDetailResponse());
+
+        mockMvc.perform(get("/fair/{fair-id}", fairId)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document(
+                        pathParameters(
+                                parameterWithName("fair-id")
+                                        .description("입학설명회 id")
+                        )
+                ));
+
+        verify(queryFairDetailUseCase, times(1)).execute(fairId);
+    }
+
+    @Test
+    void 입학설명회를_상세히_불러올_때_해당_입학설명회가_없으면_에러가_발생한다() throws Exception {
+        Long fairId = -1L;
+        willThrow(new FairNotFoundException()).given(queryFairDetailUseCase).execute(fairId);
+
+        mockMvc.perform(get("/fair/{fair-id}", fairId)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isNotFound())
+
+                .andDo(restDocs.document());
+
+        verify(queryFairDetailUseCase, times(1)).execute(fairId);
     }
 }

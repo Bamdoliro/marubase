@@ -5,6 +5,7 @@ import com.bamdoliro.maru.application.auth.LogOutUseCase;
 import com.bamdoliro.maru.application.auth.RefreshTokenUseCase;
 import com.bamdoliro.maru.application.fair.AttendAdmissionFairUseCase;
 import com.bamdoliro.maru.application.fair.CreateAdmissionFairUseCase;
+import com.bamdoliro.maru.application.fair.QueryFairDetailUseCase;
 import com.bamdoliro.maru.application.fair.QueryFairListUseCase;
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
 import com.bamdoliro.maru.application.form.DownloadSecondRoundScoreFormatUseCase;
@@ -192,6 +193,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected QueryFairListUseCase queryFairListUseCase;
+
+    @MockBean
+    protected QueryFairDetailUseCase queryFairDetailUseCase;
 
 
     @MockBean

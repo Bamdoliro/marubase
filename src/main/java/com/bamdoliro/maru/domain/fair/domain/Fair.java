@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -44,7 +45,7 @@ public class Fair extends BaseTimeEntity {
     private String place;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 20)
     private FairType type;
 
     @Column(nullable = false)
@@ -54,7 +55,7 @@ public class Fair extends BaseTimeEntity {
     private LocalDate applicationEndDate;
 
     @OneToMany(mappedBy = "fair", fetch = FetchType.LAZY)
-    private List<Attendee> attendeeList;
+    private final List<Attendee> attendeeList = new ArrayList<>();
 
     @Builder
     public Fair(LocalDateTime start, Integer capacity, String place, FairType type, LocalDate applicationStartDate, LocalDate applicationEndDate) {

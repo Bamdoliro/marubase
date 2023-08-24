@@ -6,6 +6,7 @@ import com.bamdoliro.maru.domain.fair.domain.type.FairType;
 import com.bamdoliro.maru.infrastructure.persistence.fair.AttendeeRepository;
 import com.bamdoliro.maru.presentation.fair.dto.request.AttendAdmissionFairRequest;
 import com.bamdoliro.maru.presentation.fair.dto.request.CreateFairRequest;
+import com.bamdoliro.maru.presentation.fair.dto.response.FairDetailResponse;
 import com.bamdoliro.maru.presentation.fair.dto.response.FairResponse;
 
 import java.time.LocalDate;
@@ -77,11 +78,27 @@ public class FairFixture {
         );
     }
 
-    public static List<FairResponse> createFairResponseList(AttendeeRepository attendeeRepository) {
+    public static List<FairResponse> createFairResponseList() {
         return List.of(
-                new FairResponse(createClosedFair(), attendeeRepository),
-                new FairResponse(createClosedFair(), attendeeRepository),
-                new FairResponse(createClosedFair(), attendeeRepository)
+                new FairResponse(createClosedFair(), null),
+                new FairResponse(createClosedFair(), null),
+                new FairResponse(createClosedFair(), null)
         );
+    }
+
+    public static Fair createFairDetail() {
+        Fair fair = createClosedFair();
+        List<Attendee> attendeeList = List.of(
+                createAttendee(fair),
+                createAttendee(fair),
+                createAttendee(fair)
+        );
+        fair.getAttendeeList().addAll(attendeeList);
+
+        return fair;
+    }
+
+    public static FairDetailResponse createFairDetailResponse() {
+        return new FairDetailResponse(createFairDetail(), null);
     }
 }
