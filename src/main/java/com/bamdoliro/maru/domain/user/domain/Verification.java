@@ -9,16 +9,16 @@ import org.springframework.data.redis.core.RedisHash;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@RedisHash(value = "emailVerification", timeToLive = 60 * 5)
-public class EmailVerification {
+@RedisHash(value = "verification", timeToLive = 60 * 5)
+public class Verification {
 
     @Id
-    private String email;
+    private String phoneNumber;
 
     private String code;
 
-    public EmailVerification(String email) {
-        this.email = email;
+    public Verification(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
         this.code = RandomCodeUtil.generate(6);
     }
 }

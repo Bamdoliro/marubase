@@ -26,7 +26,7 @@ public class RefreshTokenUseCase {
         Token token = getToken(refreshToken);
 
         return TokenResponse.builder()
-                .accessToken(tokenService.generateAccessToken(token.getEmail()))
+                .accessToken(tokenService.generateAccessToken(token.getUuid()))
                 .build();
     }
 
@@ -37,8 +37,8 @@ public class RefreshTokenUseCase {
     }
 
     private Token getToken(String refreshToken) {
-        String email = tokenService.getEmail(refreshToken);
-        Token token = tokenRepository.findById(email)
+        String uuid = tokenService.getUuid(refreshToken);
+        Token token = tokenRepository.findById(uuid)
                 .orElseThrow(ExpiredTokenException::new);
 
         validate(refreshToken, token.getToken());

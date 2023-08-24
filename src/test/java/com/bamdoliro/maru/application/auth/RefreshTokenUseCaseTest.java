@@ -43,18 +43,18 @@ class RefreshTokenUseCaseTest {
         Token refreshToken = AuthFixture.createRefreshToken();
         String accessToken = AuthFixture.createAccessTokenString();
         given(tokenService.getType(refreshToken.getToken())).willReturn(TokenType.REFRESH_TOKEN.name());
-        given(tokenService.getEmail(refreshToken.getToken())).willReturn(refreshToken.getEmail());
-        given(tokenRepository.findById(refreshToken.getEmail())).willReturn(Optional.of(refreshToken));
-        given(tokenService.generateAccessToken(refreshToken.getEmail())).willReturn(accessToken);
+        given(tokenService.getUuid(refreshToken.getToken())).willReturn(refreshToken.getUuid());
+        given(tokenRepository.findById(refreshToken.getUuid())).willReturn(Optional.of(refreshToken));
+        given(tokenService.generateAccessToken(refreshToken.getUuid())).willReturn(accessToken);
 
         // when
         TokenResponse response = refreshTokenUseCase.execute(refreshToken.getToken());
 
         // then
         verify(tokenService, times(1)).getType(refreshToken.getToken());
-        verify(tokenService, times(1)).getEmail(refreshToken.getToken());
-        verify(tokenRepository, times(1)).findById(refreshToken.getEmail());
-        verify(tokenService, times(1)).generateAccessToken(refreshToken.getEmail());
+        verify(tokenService, times(1)).getUuid(refreshToken.getToken());
+        verify(tokenRepository, times(1)).findById(refreshToken.getUuid());
+        verify(tokenService, times(1)).generateAccessToken(refreshToken.getUuid());
         assertEquals(accessToken, response.getAccessToken());
     }
 
@@ -76,8 +76,8 @@ class RefreshTokenUseCaseTest {
         String loggedOutRefreshToken = "로그아웃.리프레시.토큰";
         Token refreshToken = AuthFixture.createRefreshToken();
         given(tokenService.getType(loggedOutRefreshToken)).willReturn(TokenType.REFRESH_TOKEN.name());
-        given(tokenService.getEmail(loggedOutRefreshToken)).willReturn(refreshToken.getEmail());
-        given(tokenRepository.findById(refreshToken.getEmail())).willReturn(Optional.of(refreshToken));
+        given(tokenService.getUuid(loggedOutRefreshToken)).willReturn(refreshToken.getUuid());
+        given(tokenRepository.findById(refreshToken.getUuid())).willReturn(Optional.of(refreshToken));
 
         // when and then
         assertThrows(ExpiredTokenException.class, () -> refreshTokenUseCase.execute(loggedOutRefreshToken));

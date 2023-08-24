@@ -34,26 +34,26 @@ class QueryDraftFormUseCaseTest {
         // given
         User user = UserFixture.createUser();
         DraftForm draftForm = DraftFormFixture.createDraftForm();
-        given(draftFormRepository.findById(user.getEmail())).willReturn(Optional.of(draftForm));
+        given(draftFormRepository.findById(user.getPhoneNumber())).willReturn(Optional.of(draftForm));
 
         // when
         SubmitFormRequest response = queryDraftFormUseCase.execute(user);
 
         // then
         assertEquals(draftForm.getSubmitFormRequest(), response);
-        verify(draftFormRepository, times(1)).findById(user.getEmail());
+        verify(draftFormRepository, times(1)).findById(user.getPhoneNumber());
     }
 
     @Test
     void 임시저장된_원서를_조회할_때_임시저장된_원서가_없으면_에러가_발생한다() {
         // given
         User user = UserFixture.createUser();
-        given(draftFormRepository.findById(user.getEmail())).willReturn(Optional.empty());
+        given(draftFormRepository.findById(user.getPhoneNumber())).willReturn(Optional.empty());
 
         // when and then
         assertThrows(DraftFormNotFoundException.class,
                 () -> queryDraftFormUseCase.execute(user));
 
-        verify(draftFormRepository, times(1)).findById(user.getEmail());
+        verify(draftFormRepository, times(1)).findById(user.getPhoneNumber());
     }
 }

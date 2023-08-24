@@ -36,12 +36,11 @@ import com.bamdoliro.maru.application.question.QueryQuestionListUseCase;
 import com.bamdoliro.maru.application.question.QueryQuestionUseCase;
 import com.bamdoliro.maru.application.question.UpdateQuestionUseCase;
 import com.bamdoliro.maru.application.school.SearchSchoolUseCase;
-import com.bamdoliro.maru.application.user.SendEmailVerificationUseCase;
+import com.bamdoliro.maru.application.user.SendVerificationUseCase;
 import com.bamdoliro.maru.application.user.SignUpUserUseCase;
 import com.bamdoliro.maru.domain.auth.service.TokenService;
-import com.bamdoliro.maru.infrastructure.mail.SendEmailService;
+import com.bamdoliro.maru.infrastructure.message.SendMessageService;
 import com.bamdoliro.maru.infrastructure.neis.SearchSchoolService;
-import com.bamdoliro.maru.infrastructure.persistence.fair.AttendeeRepository;
 import com.bamdoliro.maru.presentation.auth.AuthController;
 import com.bamdoliro.maru.presentation.fair.FairController;
 import com.bamdoliro.maru.presentation.form.DraftFormController;
@@ -93,7 +92,7 @@ public abstract class ControllerTest {
     protected RefreshTokenUseCase refreshTokenUseCase;
 
     @MockBean
-    protected SendEmailVerificationUseCase sendEmailVerificationUseCase;
+    protected SendVerificationUseCase sendVerificationUseCase;
 
     @MockBean
     protected SearchSchoolUseCase searchSchoolUseCase;
@@ -205,7 +204,7 @@ public abstract class ControllerTest {
     protected SearchSchoolService searchSchoolService;
 
     @MockBean
-    protected SendEmailService sendEmailService;
+    protected SendMessageService sendMessageService;
 
 
     @MockBean

@@ -16,7 +16,7 @@ public class DraftFormUseCase {
     public void execute(User user, SubmitFormRequest request) {
         draftFormRepository.save(
                 DraftForm.builder()
-                        .email(user.getEmail())
+                        .phoneNumber(user.getPhoneNumber())
                         .submitFormRequest(request)
                         .build()
         );

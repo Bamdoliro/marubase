@@ -25,8 +25,8 @@ body:
       label: 🙏🏻 요구사항
       description: 개발시 유의해야 할 요구사항을 정리해 주세요.
       placeholder: |
-        - [ ] 하나의 이메일로 한 번만 가입할 수 있다.
-        - [ ] 이메일은 반드시 @bssm.hs.k로 끝나야 한다.
+        - [ ] 하나의 전화번호로 한 번만 가입할 수 있다.
+        - [ ] 전화번호는 반드시 11글자여야 한다.
     validations:
       required: true
   - type: textarea

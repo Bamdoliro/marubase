@@ -35,7 +35,7 @@ public class User extends BaseTimeEntity {
     private UUID uuid;
 
     @Column(unique = true, nullable = false, length = 100)
-    private String email;
+    private String phoneNumber;
 
     @Column(nullable = false, length = 50)
     private String name;
@@ -48,9 +48,9 @@ public class User extends BaseTimeEntity {
     private Authority authority;
 
     @Builder
-    public User(String email, String name, String password, Authority authority) {
+    public User(String phoneNumber, String name, String password, Authority authority) {
         this.uuid = UUID.randomUUID();
-        this.email = email;
+        this.phoneNumber = phoneNumber;
         this.name = name;
         this.password = new Password(PasswordUtil.encode(password));
         this.authority = authority;

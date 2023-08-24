@@ -8,7 +8,7 @@ public class DraftFormFixture {
 
     public static DraftForm createDraftForm() {
         return new DraftForm(
-                "maru@bamdoliro.com",
+                "01085852525",
                 FormFixture.createFormRequest(FormType.REGULAR)
         );
     }

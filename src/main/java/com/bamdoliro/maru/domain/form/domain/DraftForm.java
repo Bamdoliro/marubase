@@ -14,13 +14,13 @@ import org.springframework.data.redis.core.RedisHash;
 public class DraftForm {
 
     @Id
-    private String email;
+    private String phoneNumber;
 
     private SubmitFormRequest submitFormRequest;
 
     @Builder
-    public DraftForm(String email, SubmitFormRequest submitFormRequest) {
-        this.email = email;
+    public DraftForm(String phoneNumber, SubmitFormRequest submitFormRequest) {
+        this.phoneNumber = phoneNumber;
         this.submitFormRequest = submitFormRequest;
     }
 }

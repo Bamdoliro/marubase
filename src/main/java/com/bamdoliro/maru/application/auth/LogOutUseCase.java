@@ -12,6 +12,6 @@ public class LogOutUseCase {
     private final TokenRepository tokenRepository;
 
     public void execute(User user) {
-        tokenRepository.deleteById(user.getEmail());
+        tokenRepository.deleteById(user.getPhoneNumber());
     }
 }

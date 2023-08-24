@@ -38,21 +38,21 @@ class LogInUseCaseTest {
     void 유저가_로그인한다() {
         // given
         User user = UserFixture.createUser();
-        LogInRequest request = new LogInRequest(user.getEmail(), "비밀번호");
+        LogInRequest request = new LogInRequest(user.getPhoneNumber(), "비밀번호");
         String accessToken = AuthFixture.createAccessTokenString();
         String refreshToken = AuthFixture.createRefreshTokenString();
 
-        given(userFacade.getUser(request.getEmail())).willReturn(user);
-        given(tokenService.generateAccessToken(user.getEmail())).willReturn(accessToken);
-        given(tokenService.generateRefreshToken(user.getEmail())).willReturn(refreshToken);
+        given(userFacade.getUser(request.getPhoneNumber())).willReturn(user);
+        given(tokenService.generateAccessToken(user.getPhoneNumber())).willReturn(accessToken);
+        given(tokenService.generateRefreshToken(user.getPhoneNumber())).willReturn(refreshToken);
 
         // when
         TokenResponse response = logInUseCase.execute(request);
 
         // then
-        verify(userFacade, times(1)).getUser(request.getEmail());
-        verify(tokenService, times(1)).generateAccessToken(user.getEmail());
-        verify(tokenService, times(1)).generateRefreshToken(user.getEmail());
+        verify(userFacade, times(1)).getUser(request.getPhoneNumber());
+        verify(tokenService, times(1)).generateAccessToken(user.getPhoneNumber());
+        verify(tokenService, times(1)).generateRefreshToken(user.getPhoneNumber());
         assertEquals(accessToken, response.getAccessToken());
         assertEquals(refreshToken, response.getRefreshToken());
     }
@@ -61,31 +61,31 @@ class LogInUseCaseTest {
     void 유저가_없으면_에러가_발생한다() {
         // given
         User user = UserFixture.createUser();
-        LogInRequest request = new LogInRequest(user.getEmail(), "비밀번호");
+        LogInRequest request = new LogInRequest(user.getPhoneNumber(), "비밀번호");
 
-        given(userFacade.getUser(request.getEmail())).willThrow(UserNotFoundException.class);
+        given(userFacade.getUser(request.getPhoneNumber())).willThrow(UserNotFoundException.class);
 
         // when and then
         assertThrows(UserNotFoundException.class, () -> logInUseCase.execute(request));
 
-        verify(userFacade, times(1)).getUser(request.getEmail());
-        verify(tokenService, never()).generateAccessToken(user.getEmail());
-        verify(tokenService, never()).generateRefreshToken(user.getEmail());
+        verify(userFacade, times(1)).getUser(request.getPhoneNumber());
+        verify(tokenService, never()).generateAccessToken(user.getPhoneNumber());
+        verify(tokenService, never()).generateRefreshToken(user.getPhoneNumber());
     }
 
     @Test
     void 비밀번호가_틀리면_에러가_발생한다() {
         // given
         User user = UserFixture.createUser();
-        LogInRequest request = new LogInRequest(user.getEmail(), "틀린비밀번호");
+        LogInRequest request = new LogInRequest(user.getPhoneNumber(), "틀린비밀번호");
 
-        given(userFacade.getUser(request.getEmail())).willReturn(user);
+        given(userFacade.getUser(request.getPhoneNumber())).willReturn(user);
 
         // when and then
         assertThrows(PasswordMismatchException.class, () -> logInUseCase.execute(request));
 
-        verify(userFacade, times(1)).getUser(request.getEmail());
-        verify(tokenService, never()).generateAccessToken(user.getEmail());
-        verify(tokenService, never()).generateRefreshToken(user.getEmail());
+        verify(userFacade, times(1)).getUser(request.getPhoneNumber());
+        verify(tokenService, never()).generateAccessToken(user.getPhoneNumber());
+        verify(tokenService, never()).generateRefreshToken(user.getPhoneNumber());
     }
 }

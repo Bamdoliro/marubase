@@ -7,12 +7,12 @@ import lombok.Getter;
 @Getter
 public class UserResponse {
 
-    private final String email;
+    private final String phoneNumber;
     private final String name;
     private final Authority authority;
 
     public UserResponse(User user) {
-        this.email = user.getEmail();
+        this.phoneNumber = user.getPhoneNumber();
         this.name = user.getName();
         this.authority = user.getAuthority();
     }

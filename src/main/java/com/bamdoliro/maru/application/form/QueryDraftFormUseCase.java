@@ -20,7 +20,7 @@ public class QueryDraftFormUseCase {
     }
 
     private DraftForm getDraftForm(User user) {
-        return draftFormRepository.findById(user.getEmail())
+        return draftFormRepository.findById(user.getPhoneNumber())
                 .orElseThrow(DraftFormNotFoundException::new);
     }
 }

@@ -38,7 +38,7 @@ class TokenServiceTest {
         given(jwtProperties.getSecretKey()).willReturn("탑시크릿정말정말탑시크릿진짜옝용찐찐찐찐찐이야");
 
         // when
-        String accessToken = tokenService.generateAccessToken(user.getEmail());
+        String accessToken = tokenService.generateAccessToken(user.getPhoneNumber());
 
         // then
         verify(jwtProperties, times(1)).getAccessExpirationTime();
@@ -55,7 +55,7 @@ class TokenServiceTest {
         given(tokenRepository.save(any(Token.class))).willReturn(AuthFixture.createRefreshToken());
 
         // when
-        String refreshToken = tokenService.generateRefreshToken(user.getEmail());
+        String refreshToken = tokenService.generateRefreshToken(user.getPhoneNumber());
 
         // then
         verify(jwtProperties, times(1)).getRefreshExpirationTime();

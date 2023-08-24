@@ -14,14 +14,14 @@ public class AuthFixture {
 
     public static Token createAccessToken() {
         return Token.builder()
-                .email("maru@bamdoliro.com")
+                .uuid("01085852525")
                 .token("new.access.token")
                 .build();
     }
 
     public static Token createRefreshToken() {
         return Token.builder()
-                .email("maru@bamdoliro.com")
+                .uuid("01085852525")
                 .token("new.refresh.token")
                 .build();
     }

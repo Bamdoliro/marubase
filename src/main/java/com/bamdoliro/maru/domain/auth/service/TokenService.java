@@ -28,24 +28,24 @@ public class TokenService {
     private final TokenRepository tokenRepository;
     private final UserFacade userFacade;
 
-    public String generateAccessToken(String email) {
-        return generateToken(email, TokenType.ACCESS_TOKEN, jwtProperties.getAccessExpirationTime());
+    public String generateAccessToken(String uuid) {
+        return generateToken(uuid, TokenType.ACCESS_TOKEN, jwtProperties.getAccessExpirationTime());
     }
 
-    public String generateRefreshToken(String email) {
-        String token = generateToken(email, TokenType.REFRESH_TOKEN, jwtProperties.getRefreshExpirationTime());
+    public String generateRefreshToken(String uuid) {
+        String token = generateToken(uuid, TokenType.REFRESH_TOKEN, jwtProperties.getRefreshExpirationTime());
         tokenRepository.save(
                 Token.builder()
-                        .email(email)
+                        .uuid(uuid)
                         .token(token)
                         .build());
 
         return token;
     }
 
-    private String generateToken(String email, TokenType type, Long time) {
+    private String generateToken(String uuid, TokenType type, Long time) {
         Claims claims = Jwts.claims();
-        claims.put("email", email);
+        claims.put("uuid", uuid);
         claims.put("type", type.name());
         Date now = new Date();
 
@@ -58,11 +58,11 @@ public class TokenService {
     }
 
     public User getUser(String token) {
-        return userFacade.getUser(getEmail(token));
+        return userFacade.getUser(getUuid(token));
     }
 
-    public String getEmail(String token) {
-        return extractAllClaims(token).get("email", String.class);
+    public String getUuid(String uuid) {
+        return extractAllClaims(uuid).get("uuid", String.class);
     }
 
     public String getType(String token) {

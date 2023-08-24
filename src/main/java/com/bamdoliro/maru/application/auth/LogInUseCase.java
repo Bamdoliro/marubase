@@ -17,14 +17,14 @@ public class LogInUseCase {
     private final UserFacade userFacade;
 
     public TokenResponse execute(LogInRequest request) {
-        User user = userFacade.getUser(request.getEmail());
+        User user = userFacade.getUser(request.getPhoneNumber());
         if (!user.getPassword().match(request.getPassword())) {
             throw new PasswordMismatchException();
         }
 
         return TokenResponse.builder()
-                .accessToken(tokenService.generateAccessToken(user.getEmail()))
-                .refreshToken(tokenService.generateRefreshToken(user.getEmail()))
+                .accessToken(tokenService.generateAccessToken(user.getPhoneNumber()))
+                .refreshToken(tokenService.generateRefreshToken(user.getPhoneNumber()))
                 .build();
     }
 }

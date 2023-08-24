@@ -29,19 +29,19 @@ class UserFacadeTest {
     void 유저를_가져온다() {
         // given
         User user = UserFixture.createUser();
-        given(userRepository.findByEmail(user.getEmail())).willReturn(Optional.of(user));
+        given(userRepository.findByPhoneNumber(user.getPhoneNumber())).willReturn(Optional.of(user));
 
         // when
-        User foundUser = userFacade.getUser(user.getEmail());
+        User foundUser = userFacade.getUser(user.getPhoneNumber());
 
         // then
-        assertEquals(user.getEmail(), foundUser.getEmail());
+        assertEquals(user.getPhoneNumber(), foundUser.getPhoneNumber());
     }
 
     @Test
     void 존재하지_않는_유저일_때_에러가_발생한다() {
         // given
-        given(userRepository.findByEmail(anyString())).willReturn(Optional.empty());
+        given(userRepository.findByPhoneNumber(anyString())).willReturn(Optional.empty());
 
         // when and then
         assertThrows(UserNotFoundException.class, () -> userFacade.getUser("저는없는데요"));

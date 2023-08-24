@@ -38,7 +38,7 @@ class AuthControllerTest extends RestDocsTestSupport {
     @Test
     void 유저가_로그인한다() throws Exception {
         User user = UserFixture.createUser();
-        LogInRequest request = new LogInRequest(user.getEmail(), "비밀번호");
+        LogInRequest request = new LogInRequest(user.getPhoneNumber(), "비밀번호");
         TokenResponse response = new TokenResponse(AuthFixture.createAccessTokenString(), AuthFixture.createRefreshTokenString());
 
         given(logInUseCase.execute(any(LogInRequest.class))).willReturn(response);
@@ -53,9 +53,9 @@ class AuthControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document(
                         requestFields(
-                                fieldWithPath("email")
+                                fieldWithPath("phoneNumber")
                                         .type(JsonFieldType.STRING)
-                                        .description("이메일"),
+                                        .description("전화번호"),
                                 fieldWithPath("password")
                                         .type(JsonFieldType.STRING)
                                         .description("비밀번호")
@@ -66,7 +66,7 @@ class AuthControllerTest extends RestDocsTestSupport {
     @Test
     void 유저가_로그인할_때_유저가_없으면_에러가_발생한다() throws Exception {
         User user = UserFixture.createUser();
-        LogInRequest request = new LogInRequest(user.getEmail(), "비밀번호");
+        LogInRequest request = new LogInRequest(user.getPhoneNumber(), "비밀번호");
         doThrow(new UserNotFoundException()).when(logInUseCase).execute(any(LogInRequest.class));
 
         mockMvc.perform(post("/auth")
@@ -83,7 +83,7 @@ class AuthControllerTest extends RestDocsTestSupport {
     @Test
     void 유저가_로그인할_때_비밀번호가_틀리면_에러가_발생한다() throws Exception {
         User user = UserFixture.createUser();
-        LogInRequest request = new LogInRequest(user.getEmail(), "비밀번호");
+        LogInRequest request = new LogInRequest(user.getPhoneNumber(), "비밀번호");
         doThrow(new PasswordMismatchException()).when(logInUseCase).execute(any(LogInRequest.class));
 
         mockMvc.perform(post("/auth")
