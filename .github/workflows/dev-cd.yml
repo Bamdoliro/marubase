@@ -43,14 +43,14 @@ jobs:
                   value: ${{ secrets.DEV_DB_PASSWORD }}
                 - name: JWT_SECRET
                   value: ${{ secrets.DEV_JWT_SECRET }}
-                - name: MAIL_HOST
-                  value: ${{ secrets.DEV_MAIL_HOST }}
-                - name: MAIL_PORT
-                  value: ${{ secrets.DEV_MAIL_PORT }}
-                - name: MAIL_USERNAME
-                  value: ${{ secrets.DEV_MAIL_USERNAME }}
-                - name: MAIL_PASSWORD
-                  value: ${{ secrets.DEV_MAIL_PASSWORD }}
+                - name: MESSAGE_API_KEY
+                  value: ${{ secrets.MESSAGE_API_KEY }}
+                - name: MESSAGE_API_SECRET
+                  value: ${{ secrets.MESSAGE_API_SECRET }}
+                - name: MESSAGE_API_DOMAIN
+                  value: ${{ secrets.MESSAGE_API_DOMAIN }}
+                - name: MESSAGE_FROM
+                  value: ${{ secrets.MESSAGE_FROM }}
                 - name: REDIS_HOST
                   value: ${{ secrets.DEV_REDIS_HOST }}
                 - name: REDIS_PORT
