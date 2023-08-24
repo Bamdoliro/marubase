@@ -34,7 +34,7 @@ public class EducationRequest {
     private String schoolLocation;
 
     @Nullable
-    @Size(max = 10, message = "10자 이하여야 합니다.")
+    @Size(min = 7, max = 7, message = "7자여야 합니다.")
     private String schoolCode;
 
     @Nullable
