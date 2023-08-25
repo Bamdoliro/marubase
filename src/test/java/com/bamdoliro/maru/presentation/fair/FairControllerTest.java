@@ -13,8 +13,10 @@ import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -260,5 +262,59 @@ class FairControllerTest extends RestDocsTestSupport {
                 .andDo(restDocs.document());
 
         verify(queryFairDetailUseCase, times(1)).execute(fairId);
+    }
+
+    @Test
+    void 입학설명회_신청자_명단을_엑셀로_다운받는다() throws Exception {
+        Long fairId = 1L;
+        User user = UserFixture.createAdminUser();
+        MockMultipartFile file = new MockMultipartFile(
+                "입학설명회참가자명단",
+                "입학설명회참가자명단.xlsx",
+                String.valueOf(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")),
+                "<<file>>".getBytes()
+        );
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(exportAttendeeListUseCase.execute(fairId)).willReturn(new ByteArrayResource(file.getBytes()));
+
+        mockMvc.perform(get("/fair/{fair-id}/export", fairId)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        ),
+                        pathParameters(
+                                parameterWithName("fair-id")
+                                        .description("입학설명회 id")
+                        )
+                ));
+
+        verify(exportAttendeeListUseCase, times(1)).execute(fairId);
+    }
+
+    @Test
+    void 입학설명회_신청자_명단을_엑셀로_다운받을_때_입학설명회가_없으면_에러가_발생한다() throws Exception {
+        Long fairId = -1L;
+        User user = UserFixture.createAdminUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        willThrow(new FairNotFoundException()).given(exportAttendeeListUseCase).execute(fairId);
+
+        mockMvc.perform(get("/fair/{fair-id}/export", fairId)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader()))
+
+                .andExpect(status().isNotFound())
+
+                .andDo(restDocs.document());
+
+        verify(exportAttendeeListUseCase, times(1)).execute(fairId);
     }
 }
