@@ -16,7 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -59,7 +60,7 @@ class AttendAdmissionFairUseCaseTest {
         verify(fairFacade, times(1)).getFair(fair.getId());
         verify(attendeeRepository, times(1)).countByFair(fair);
         verify(attendeeRepository, times(1)).save(captor.capture());
-        verify(sendMessageService, times(1)).execute(anyString(), anyString());
+        verify(sendMessageService, times(1)).execute(anyString(), anyString(), anyString());
 
         Attendee savedAttendee = captor.getValue();
         assertEquals(attendee.getName(), savedAttendee.getName());
@@ -81,7 +82,7 @@ class AttendAdmissionFairUseCaseTest {
         verify(fairFacade, times(1)).getFair(fair.getId());
         verify(attendeeRepository, never()).countByFair(any());
         verify(attendeeRepository, never()).save(any());
-        verify(sendMessageService, never()).execute(anyString(), anyString());
+        verify(sendMessageService, never()).execute(anyString(), anyString(), anyString());
     }
 
     @Test
@@ -100,7 +101,7 @@ class AttendAdmissionFairUseCaseTest {
         verify(fairFacade, times(1)).getFair(fair.getId());
         verify(attendeeRepository, times(1)).countByFair(fair);
         verify(attendeeRepository, never()).save(any());
-        verify(sendMessageService, never()).execute(anyString(), anyString());
+        verify(sendMessageService, never()).execute(anyString(), anyString(), anyString());
     }
 
     @Test
