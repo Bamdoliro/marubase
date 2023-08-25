@@ -1,4 +1,4 @@
-![image](https://github.com/Bamdoliro/marururu/assets/102217654/0631f8e5-a1ba-4e4c-b63f-46b88aabdd5d)
+![image](https://github.com/Bamdoliro/marururu/assets/102123549/07bb8be6-a90d-48c2-a282-ba05dec78ec3)
 
 
 ### 마루 백엔드 레포지토리입니다.
