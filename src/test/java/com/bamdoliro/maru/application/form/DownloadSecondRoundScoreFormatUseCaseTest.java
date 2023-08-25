@@ -8,6 +8,7 @@ import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.infrastructure.persistence.user.UserRepository;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
+import com.bamdoliro.maru.shared.util.SaveFileUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -63,17 +64,7 @@ class DownloadSecondRoundScoreFormatUseCaseTest {
     @Test
     void 정상적으로_2차전형_양식을_다운받는다() throws IOException {
         Resource resource = downloadSecondRoundScoreFormatUseCase.execute();
-        String filePath = "src/test/resources/test.xlsx";
 
-        try (
-                InputStream inputStream = resource.getInputStream();
-                OutputStream outputStream = new FileOutputStream(filePath)
-        ) {
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
-        }
+        SaveFileUtil.execute(resource, SaveFileUtil.XLSX);
     }
 }

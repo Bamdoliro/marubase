@@ -8,10 +8,12 @@ import com.bamdoliro.maru.presentation.fair.dto.request.AttendAdmissionFairReque
 import com.bamdoliro.maru.presentation.fair.dto.request.CreateFairRequest;
 import com.bamdoliro.maru.presentation.fair.dto.response.FairDetailResponse;
 import com.bamdoliro.maru.presentation.fair.dto.response.FairResponse;
+import com.bamdoliro.maru.shared.util.RandomCodeUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 
 public class FairFixture {
 
@@ -63,7 +65,7 @@ public class FairFixture {
                 "비전중학교",
                 "곰밤돌",
                 "학생",
-                "01012344321",
+                "010" + RandomCodeUtil.generate(8),
                 2,
                 "내신 커트라인 몇인가요?",
                 fair
@@ -88,14 +90,18 @@ public class FairFixture {
 
     public static Fair createFairDetail() {
         Fair fair = createClosedFair();
-        List<Attendee> attendeeList = List.of(
+        List<Attendee> attendeeList = createAttendeeList(fair);
+        fair.getAttendeeList().addAll(attendeeList);
+
+        return fair;
+    }
+
+    public static List<Attendee> createAttendeeList(Fair fair) {
+        return List.of(
                 createAttendee(fair),
                 createAttendee(fair),
                 createAttendee(fair)
         );
-        fair.getAttendeeList().addAll(attendeeList);
-
-        return fair;
     }
 
     public static FairDetailResponse createFairDetailResponse() {

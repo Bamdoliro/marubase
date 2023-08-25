@@ -6,6 +6,7 @@ import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.Templates;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
+import com.bamdoliro.maru.shared.util.SaveFileUtil;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.utils.PdfMerger;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -48,11 +48,7 @@ class GeneratePdfServiceTest {
         String template = processTemplateService.execute("admission-ticket", formMap);
         ByteArrayOutputStream outputStream = generatePdfService.execute(template);
 
-
-        FileOutputStream fileOutputStream = new FileOutputStream("src/test/resources/test.pdf");
-        outputStream.writeTo(fileOutputStream);
-        outputStream.close();
-        fileOutputStream.close();
+        SaveFileUtil.execute(outputStream, SaveFileUtil.PDF);
     }
 
     @Test
@@ -82,10 +78,7 @@ class GeneratePdfServiceTest {
         pdfMerger.close();
 
         // when
-        FileOutputStream fileOutputStream = new FileOutputStream("src/test/resources/test.pdf");
-        outputStream.writeTo(fileOutputStream);
-        outputStream.close();
-        fileOutputStream.close();
+        SaveFileUtil.execute(outputStream, SaveFileUtil.PDF);
     }
 
     private List<String> getRequiredTemplates(FormType formType) {
