@@ -16,6 +16,6 @@ class SendMessageServiceTest {
 
     @Test
     void 메시지를_보낸다() {
-        sendMessageService.execute("01094564523", "0_0v");
+        sendMessageService.execute("01012345678", "0_0v");
     }
 }

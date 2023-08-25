@@ -5,6 +5,7 @@ import com.bamdoliro.maru.domain.fair.domain.Fair;
 import com.bamdoliro.maru.domain.fair.exception.FairNotFoundException;
 import com.bamdoliro.maru.domain.fair.exception.HeadcountExceededException;
 import com.bamdoliro.maru.domain.fair.exception.NotApplicationPeriodException;
+import com.bamdoliro.maru.infrastructure.message.SendMessageService;
 import com.bamdoliro.maru.infrastructure.persistence.fair.AttendeeRepository;
 import com.bamdoliro.maru.presentation.fair.dto.request.AttendAdmissionFairRequest;
 import com.bamdoliro.maru.shared.fixture.FairFixture;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.never;
@@ -34,6 +36,9 @@ class AttendAdmissionFairUseCaseTest {
 
     @Mock
     private AttendeeRepository attendeeRepository;
+
+    @Mock
+    private SendMessageService sendMessageService;
 
     @Test
     void 입학설명회에_참가_신청을_한다() {
@@ -54,6 +59,8 @@ class AttendAdmissionFairUseCaseTest {
         verify(fairFacade, times(1)).getFair(fair.getId());
         verify(attendeeRepository, times(1)).countByFair(fair);
         verify(attendeeRepository, times(1)).save(captor.capture());
+        verify(sendMessageService, times(1)).execute(anyString(), anyString());
+
         Attendee savedAttendee = captor.getValue();
         assertEquals(attendee.getName(), savedAttendee.getName());
         assertEquals(attendee.getQuestion(), savedAttendee.getQuestion());
@@ -74,6 +81,7 @@ class AttendAdmissionFairUseCaseTest {
         verify(fairFacade, times(1)).getFair(fair.getId());
         verify(attendeeRepository, never()).countByFair(any());
         verify(attendeeRepository, never()).save(any());
+        verify(sendMessageService, never()).execute(anyString(), anyString());
     }
 
     @Test
@@ -92,6 +100,7 @@ class AttendAdmissionFairUseCaseTest {
         verify(fairFacade, times(1)).getFair(fair.getId());
         verify(attendeeRepository, times(1)).countByFair(fair);
         verify(attendeeRepository, never()).save(any());
+        verify(sendMessageService, never()).execute(anyString(), anyString());
     }
 
     @Test
@@ -108,5 +117,6 @@ class AttendAdmissionFairUseCaseTest {
         verify(fairFacade, times(1)).getFair(fair.getId());
         verify(attendeeRepository, never()).countByFair(fair);
         verify(attendeeRepository, never()).save(any());
+        verify(sendMessageService, never()).execute(anyString(), anyString());
     }
 }

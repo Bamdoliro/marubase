@@ -18,11 +18,25 @@ public class SendMessageService {
     private final DefaultMessageService messageService;
 
     public void execute(String to, String text) {
+        Message message = createMessage(to, text);
+        sendOneMessage(message);
+    }
+
+    public void execute(String to, String text, String title) {
+        Message message = createMessage(to, text);
+        message.setSubject(title);
+        sendOneMessage(message);
+    }
+
+    private Message createMessage(String to, String text) {
         Message message = new Message();
         message.setFrom(messageProperties.getFrom());
         message.setTo(to);
         message.setText(text);
+        return message;
+    }
 
+    private void sendOneMessage(Message message) {
         try {
             messageService.sendOne(
                     new SingleMessageSendingRequest(message)
