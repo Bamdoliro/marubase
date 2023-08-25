@@ -7,7 +7,6 @@ import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.infrastructure.xlsx.XlsxService;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -20,9 +19,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import static com.bamdoliro.maru.shared.constants.XlsxConstant.DEFAULT_FIRST_ROW_INDEX;
+import static com.bamdoliro.maru.infrastructure.xlsx.constant.XlsxConstant.FIRST_ROW_INDEX_WITH_NO_TITLE;
 
-@Slf4j
 @RequiredArgsConstructor
 @UseCase
 public class DownloadSecondRoundScoreFormatUseCase {
@@ -39,15 +37,15 @@ public class DownloadSecondRoundScoreFormatUseCase {
                         .thenComparing(Form::getExaminationNumber))
                 .toList();
 
-        Workbook workbook = xlsxService.openTemplate("2차전형점수양식.xlsx");
+        Workbook workbook = xlsxService.openTemplate("2차전형점수양식");
         Sheet sheet = workbook.getSheetAt(0);
         CellStyle cellStyle = xlsxService.createDefaultCellStyle(workbook);
         sheet.setColumnHidden(6, true);
 
         for (int index = 0; index < formList.size(); index++) {
             Form form = formList.get(index);
-            Row row = sheet.createRow(index + DEFAULT_FIRST_ROW_INDEX);
-            int xlsxIndex = index + DEFAULT_FIRST_ROW_INDEX + 1;
+            Row row = sheet.createRow(index + FIRST_ROW_INDEX_WITH_NO_TITLE);
+            int xlsxIndex = index + FIRST_ROW_INDEX_WITH_NO_TITLE + 1;
 
             Cell examinationNumberCell = row.createCell(0);
             examinationNumberCell.setCellValue(form.getExaminationNumber());
@@ -79,7 +77,6 @@ public class DownloadSecondRoundScoreFormatUseCase {
     }
 
     private Integer getOrder(Form form) {
-        log.error(form.getType().toString());
         return getOrderMap().get(form.getType().getCategory());
     }
 

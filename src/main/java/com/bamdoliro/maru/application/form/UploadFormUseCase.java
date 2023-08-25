@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
-import static com.bamdoliro.maru.shared.constants.FileConstants.MB;
+import static com.bamdoliro.maru.shared.constants.FileConstant.MB;
 
 @RequiredArgsConstructor
 @UseCase

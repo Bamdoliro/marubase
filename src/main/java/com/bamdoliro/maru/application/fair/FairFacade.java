@@ -16,4 +16,9 @@ public class FairFacade {
         return fairRepository.findById(id)
                 .orElseThrow(FairNotFoundException::new);
     }
+
+    public Fair getFairDetail(Long id) {
+        return fairRepository.findFairAndAttendeeById(id)
+                .orElseThrow(FairNotFoundException::new);
+    }
 }

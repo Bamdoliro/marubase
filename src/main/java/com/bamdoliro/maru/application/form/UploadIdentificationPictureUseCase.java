@@ -17,7 +17,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import static com.bamdoliro.maru.shared.constants.FileConstants.MB;
+import static com.bamdoliro.maru.shared.constants.FileConstant.MB;
 
 @RequiredArgsConstructor
 @UseCase
