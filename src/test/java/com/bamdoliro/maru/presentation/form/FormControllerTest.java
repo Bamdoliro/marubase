@@ -92,7 +92,7 @@ class FormControllerTest extends RestDocsTestSupport {
                         requestFields(
                                 fieldWithPath("type")
                                         .type(JsonFieldType.STRING)
-                                        .description("원서 유형"),
+                                        .description("<<form-type,원서 유형>>"),
                                 fieldWithPath("applicant.identificationPictureUri")
                                         .type(JsonFieldType.STRING)
                                         .description("증명사진 URI"),
@@ -107,7 +107,7 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("지원자 생년월일 (yyyy-MM-dd)"),
                                 fieldWithPath("applicant.gender")
                                         .type(JsonFieldType.STRING)
-                                        .description("지원자 성별"),
+                                        .description("<<gender,지원자 성별>>"),
                                 fieldWithPath("parent.name")
                                         .type(JsonFieldType.STRING)
                                         .description("보호자 이름"),
@@ -128,7 +128,7 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("보호자 상세주소"),
                                 fieldWithPath("education.graduationType")
                                         .type(JsonFieldType.STRING)
-                                        .description("졸업 유형"),
+                                        .description("<<graduation-type,졸업 유형>>"),
                                 fieldWithPath("education.graduationYear")
                                         .type(JsonFieldType.STRING)
                                         .description("졸업 연도"),
@@ -155,19 +155,19 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("과목명"),
                                 fieldWithPath("grade.subjectList[].achievementLevel21")
                                         .type(JsonFieldType.STRING)
-                                        .description("2학년 1학기 성취도 (성적이 없는 경우 null)")
+                                        .description("<<achievement-level,2학년 1학기 성취도 (성적이 없는 경우 null)>>")
                                         .optional(),
                                 fieldWithPath("grade.subjectList[].achievementLevel22")
                                         .type(JsonFieldType.STRING)
-                                        .description("2학년 2학기 성취도 (성적이 없는 경우 null)")
+                                        .description("<<achievement-level,2학년 2학기 성취도 (성적이 없는 경우 null)>>")
                                         .optional(),
                                 fieldWithPath("grade.subjectList[].achievementLevel31")
                                         .type(JsonFieldType.STRING)
-                                        .description("3학년 1학기 성취도 (성적이 없는 경우 null)")
+                                        .description("<<achievement-level,3학년 1학기 성취도 (성적이 없는 경우 null)>>")
                                         .optional(),
                                 fieldWithPath("grade.certificateList[]")
                                         .type(JsonFieldType.ARRAY)
-                                        .description("자격증 리스트"),
+                                        .description("<<certificate,자격증 리스트>>"),
                                 fieldWithPath("grade.attendance1.absenceCount")
                                         .type(JsonFieldType.NUMBER)
                                         .description("1학년 미인정 결석 횟수 (출결 성적이 없는 경우 null)"),
@@ -700,7 +700,7 @@ class FormControllerTest extends RestDocsTestSupport {
                         requestFields(
                                 fieldWithPath("type")
                                         .type(JsonFieldType.STRING)
-                                        .description("원서 유형"),
+                                        .description("<<form-type,원서 유형>>"),
                                 fieldWithPath("applicant.identificationPictureUri")
                                         .type(JsonFieldType.STRING)
                                         .description("증명사진 URI"),
@@ -715,7 +715,7 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("지원자 생년월일"),
                                 fieldWithPath("applicant.gender")
                                         .type(JsonFieldType.STRING)
-                                        .description("지원자 성별"),
+                                        .description("<<gender,지원자 성별>>"),
                                 fieldWithPath("parent.name")
                                         .type(JsonFieldType.STRING)
                                         .description("보호자 이름"),
@@ -736,7 +736,7 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("보호자 상세주소"),
                                 fieldWithPath("education.graduationType")
                                         .type(JsonFieldType.STRING)
-                                        .description("졸업 유형"),
+                                        .description("<<graduation-type,졸업 유형>>"),
                                 fieldWithPath("education.graduationYear")
                                         .type(JsonFieldType.STRING)
                                         .description("졸업 연도"),
@@ -763,19 +763,19 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("과목명"),
                                 fieldWithPath("grade.subjectList[].achievementLevel21")
                                         .type(JsonFieldType.STRING)
-                                        .description("2학년 1학기 성취도 (성적이 없는 경우 null)")
+                                        .description("<<achievement-level,2학년 1학기 성취도 (성적이 없는 경우 null)>>")
                                         .optional(),
                                 fieldWithPath("grade.subjectList[].achievementLevel22")
                                         .type(JsonFieldType.STRING)
-                                        .description("2학년 2학기 성취도 (성적이 없는 경우 null)")
+                                        .description("<<achievement-level,2학년 2학기 성취도 (성적이 없는 경우 null)>>")
                                         .optional(),
                                 fieldWithPath("grade.subjectList[].achievementLevel31")
                                         .type(JsonFieldType.STRING)
-                                        .description("3학년 1학기 성취도 (성적이 없는 경우 null)")
+                                        .description("<<achievement-level,3학년 1학기 성취도 (성적이 없는 경우 null)>>")
                                         .optional(),
                                 fieldWithPath("grade.certificateList[]")
                                         .type(JsonFieldType.ARRAY)
-                                        .description("자격증 리스트"),
+                                        .description("<<certificate,자격증 리스트>>"),
                                 fieldWithPath("grade.attendance1.absenceCount")
                                         .type(JsonFieldType.NUMBER)
                                         .description("1학년 미인정 결석 횟수 (출결 성적이 없는 경우 null)"),
@@ -1353,10 +1353,10 @@ class FormControllerTest extends RestDocsTestSupport {
                         ),
                         queryParameters(
                                 parameterWithName("status")
-                                        .description("원서 상태 (null인 경우 전체 조회)")
+                                        .description("<<form-status,원서 상태 (null인 경우 전체 조회)>>")
                                         .optional(),
                                 parameterWithName("type")
-                                        .description("원서 카테고리 (null인 경우 전체 조회)")
+                                        .description("<<form-type,원서 유형 (null인 경우 전체 조회)>>")
                                         .optional()
                         )
                 ));

@@ -21,4 +21,7 @@ public class EnumDocs {
     Map<String, String> formType;
     Map<String, String> gender;
     Map<String, String> graduationType;
+    Map<String, String> fairStatus;
+    Map<String, String> fairType;
+    Map<String, String> questionCategory;
 }

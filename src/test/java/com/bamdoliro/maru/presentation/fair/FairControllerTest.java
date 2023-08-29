@@ -74,7 +74,7 @@ class FairControllerTest extends RestDocsTestSupport {
                                         .description("입학설명회 장소"),
                                 fieldWithPath("type")
                                         .type(JsonFieldType.STRING)
-                                        .description("입학설명회 유형 (STUDENT_AND_PARENT, TEACHER)"),
+                                        .description("<<fair-type,입학설명회 유형>>"),
                                 fieldWithPath("applicationStartDate")
                                         .type(JsonFieldType.STRING)
                                         .optional()
@@ -206,7 +206,7 @@ class FairControllerTest extends RestDocsTestSupport {
                         queryParameters(
                                 parameterWithName("type")
                                         .optional()
-                                        .description("입학설명회 유형 (STUDENT_AND_PARENT, TEACHER), 미지정시 전체 조회")
+                                        .description("<<fair-type,입학설명회 유형 (미지정시 전체 조회)>>")
                         )
                 ));
 

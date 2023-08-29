@@ -70,8 +70,22 @@ public class EnumControllerTest extends RestDocsTestSupport {
                                 beneathPath("graduationType").withSubsectionId("graduationType"),
                                 attributes(key("title").value("GraduationType")),
                                 enumConvertFieldDescriptor((enumDocs.getGraduationType()))
+                        ),
+                        customResponseFields("custom-response",
+                                beneathPath("fairStatus").withSubsectionId("fairStatus"),
+                                attributes(key("title").value("FairStatus")),
+                                enumConvertFieldDescriptor((enumDocs.getFairStatus()))
+                        ),
+                        customResponseFields("custom-response",
+                                beneathPath("fairType").withSubsectionId("fairType"),
+                                attributes(key("title").value("FairType")),
+                                enumConvertFieldDescriptor((enumDocs.getFairType()))
+                        ),
+                        customResponseFields("custom-response",
+                                beneathPath("questionCategory").withSubsectionId("questionCategory"),
+                                attributes(key("title").value("QuestionCategory")),
+                                enumConvertFieldDescriptor((enumDocs.getQuestionCategory()))
                         )
-
                 ));
     }
 

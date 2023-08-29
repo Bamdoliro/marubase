@@ -72,7 +72,7 @@ class QuestionControllerTest extends RestDocsTestSupport {
                                         .description("1024글자 이내의 내용"),
                                 fieldWithPath("category")
                                         .type(JsonFieldType.STRING)
-                                        .description("카테고리")
+                                        .description("<<question-category,카테고리>>")
                         )
                 ));
     }
@@ -113,7 +113,7 @@ class QuestionControllerTest extends RestDocsTestSupport {
                                         .description("1024글자 이내의 내용"),
                                 fieldWithPath("category")
                                         .type(JsonFieldType.STRING)
-                                        .description("카테고리")
+                                        .description("<<question-category,카테고리>>")
                         )
                 ));
     }
@@ -158,7 +158,7 @@ class QuestionControllerTest extends RestDocsTestSupport {
                 .andDo(restDocs.document(
                         queryParameters(
                                 parameterWithName("category")
-                                        .description("카테고리")
+                                        .description("<<question-category,카테고리>>")
                         )
                 ));
 

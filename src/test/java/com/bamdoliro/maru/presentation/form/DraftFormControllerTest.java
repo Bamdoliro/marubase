@@ -59,7 +59,7 @@ class DraftFormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("type")
                                         .type(JsonFieldType.STRING)
                                         .optional()
-                                        .description("원서 유형"),
+                                        .description("<<form-type,원서 유형>>"),
                                 fieldWithPath("applicant.identificationPictureUri")
                                         .type(JsonFieldType.STRING)
                                         .optional()
@@ -79,7 +79,7 @@ class DraftFormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("applicant.gender")
                                         .type(JsonFieldType.STRING)
                                         .optional()
-                                        .description("지원자 성별"),
+                                        .description("<<gender,지원자 성별>>"),
                                 fieldWithPath("parent.name")
                                         .type(JsonFieldType.STRING)
                                         .optional()
@@ -107,7 +107,7 @@ class DraftFormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("education.graduationType")
                                         .type(JsonFieldType.STRING)
                                         .optional()
-                                        .description("졸업 유형"),
+                                        .description("<<graduation-type,졸업 유형>>"),
                                 fieldWithPath("education.graduationYear")
                                         .type(JsonFieldType.STRING)
                                         .optional()
@@ -142,20 +142,20 @@ class DraftFormControllerTest extends RestDocsTestSupport {
                                         .description("과목명"),
                                 fieldWithPath("grade.subjectList[].achievementLevel21")
                                         .type(JsonFieldType.STRING)
-                                        .description("2학년 1학기 성취도 (성적이 없는 경우 null)")
+                                        .description("<<achievement-level,2학년 1학기 성취도 (성적이 없는 경우 null)>>")
                                         .optional(),
                                 fieldWithPath("grade.subjectList[].achievementLevel22")
                                         .type(JsonFieldType.STRING)
-                                        .description("2학년 2학기 성취도 (성적이 없는 경우 null)")
+                                        .description("<<achievement-level,2학년 2학기 성취도 (성적이 없는 경우 null)>>")
                                         .optional(),
                                 fieldWithPath("grade.subjectList[].achievementLevel31")
                                         .type(JsonFieldType.STRING)
-                                        .description("3학년 1학기 성취도 (성적이 없는 경우 null)")
+                                        .description("<<achievement-level,3학년 1학기 성취도 (성적이 없는 경우 null)>>")
                                         .optional(),
                                 fieldWithPath("grade.certificateList[]")
                                         .type(JsonFieldType.ARRAY)
                                         .optional()
-                                        .description("자격증 리스트"),
+                                        .description("<<certificate,자격증 리스트>>"),
                                 fieldWithPath("grade.attendance1.absenceCount")
                                         .type(JsonFieldType.NUMBER)
                                         .optional()

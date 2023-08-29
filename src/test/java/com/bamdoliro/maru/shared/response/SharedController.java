@@ -1,11 +1,14 @@
 package com.bamdoliro.maru.shared.response;
 
+import com.bamdoliro.maru.domain.fair.domain.type.FairStatus;
+import com.bamdoliro.maru.domain.fair.domain.type.FairType;
 import com.bamdoliro.maru.domain.form.domain.type.AchievementLevel;
 import com.bamdoliro.maru.domain.form.domain.type.Certificate;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.domain.type.Gender;
 import com.bamdoliro.maru.domain.form.domain.type.GraduationType;
+import com.bamdoliro.maru.domain.question.domain.type.QuestionCategory;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.domain.type.Authority;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
@@ -34,6 +37,9 @@ public class SharedController {
                 .formType(getDocs(FormType.values()))
                 .gender(getDocs(GraduationType.values()))
                 .graduationType(getDocs(GraduationType.values()))
+                .fairStatus(getDocs(FairStatus.values()))
+                .fairType(getDocs(FairType.values()))
+                .questionCategory(getDocs(QuestionCategory.values()))
                 .build();
     }
 

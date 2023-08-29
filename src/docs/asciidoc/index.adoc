@@ -24,3 +24,5 @@ include::notice.adoc[]
 include::form.adoc[]
 
 include::fair.adoc[]
+
+include::enum.adoc[]
