@@ -38,8 +38,8 @@ public class SignUpUserUseCase {
         Verification verification = verificationRepository.findById(request.getPhoneNumber())
                 .orElseThrow(VerifyingHasFailedException::new);
 
-        if (!verification.getCode().equals(request.getCode())) {
-            throw new VerificationCodeMismatchException();
+        if (!verification.getIsVerified()) {
+            throw new VerifyingHasFailedException();
         }
 
         if (userRepository.existsByPhoneNumber(request.getPhoneNumber())) {

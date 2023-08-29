@@ -1,7 +1,7 @@
 package com.bamdoliro.maru.infrastructure.persistence.form;
 
 import com.bamdoliro.maru.domain.form.domain.DraftForm;
-import org.springframework.data.keyvalue.repository.KeyValueRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface DraftFormRepository extends KeyValueRepository<DraftForm, String> {
+public interface DraftFormRepository extends CrudRepository<DraftForm, String> {
 }

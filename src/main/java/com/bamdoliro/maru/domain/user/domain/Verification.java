@@ -17,8 +17,15 @@ public class Verification {
 
     private String code;
 
+    private Boolean isVerified;
+
     public Verification(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         this.code = RandomCodeUtil.generate(6);
+        this.isVerified = false;
+    }
+
+    public void verify() {
+        this.isVerified = true;
     }
 }

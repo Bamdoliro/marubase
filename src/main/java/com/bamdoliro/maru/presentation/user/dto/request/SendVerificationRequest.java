@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class VerificationRequest {
+public class SendVerificationRequest {
 
     @NotBlank(message = "필수값입니다.")
     @Size(min = 11, max = 11, message = "11글자여야 합니다.")
