@@ -39,6 +39,7 @@ import com.bamdoliro.maru.application.question.UpdateQuestionUseCase;
 import com.bamdoliro.maru.application.school.SearchSchoolUseCase;
 import com.bamdoliro.maru.application.user.SendVerificationUseCase;
 import com.bamdoliro.maru.application.user.SignUpUserUseCase;
+import com.bamdoliro.maru.application.user.VerifyUseCase;
 import com.bamdoliro.maru.domain.auth.service.TokenService;
 import com.bamdoliro.maru.infrastructure.message.SendMessageService;
 import com.bamdoliro.maru.infrastructure.neis.SearchSchoolService;
@@ -199,6 +200,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected ExportAttendeeListUseCase exportAttendeeListUseCase;
+
+    @MockBean
+    protected VerifyUseCase verifyUseCase;
 
 
     @MockBean

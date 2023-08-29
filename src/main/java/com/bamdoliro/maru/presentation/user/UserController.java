@@ -60,7 +60,7 @@ public class UserController {
     @PatchMapping("/verification")
     public void verify(
             @RequestBody @Valid VerifyRequest request
-            ) {
+    ) {
         verifyUseCase.execute(request);
     }
 }

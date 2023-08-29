@@ -4,7 +4,7 @@ import com.bamdoliro.maru.domain.user.domain.Verification;
 import com.bamdoliro.maru.infrastructure.message.SendMessageService;
 import com.bamdoliro.maru.infrastructure.message.exception.FailedToSendException;
 import com.bamdoliro.maru.infrastructure.persistence.user.VerificationRepository;
-import com.bamdoliro.maru.presentation.user.dto.request.VerificationRequest;
+import com.bamdoliro.maru.presentation.user.dto.request.SendVerificationRequest;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,12 +40,12 @@ class SendVerificationUseCaseTest {
     @Test
     void 유저가_전화번호_인증을_요청한다() {
         // given
-        Verification verification = UserFixture.createVerification();
+        Verification verification = UserFixture.createVerification(false);
         willDoNothing().given(sendMessageService).execute(anyString(), anyString());
         given(verificationRepository.save(any(Verification.class))).willReturn(verification);
 
         // when
-        sendVerificationUseCase.execute(new VerificationRequest(verification.getPhoneNumber()));
+        sendVerificationUseCase.execute(new SendVerificationRequest(verification.getPhoneNumber()));
 
         // then
         verify(sendMessageService, times(1)).execute(anyString(), anyString());
@@ -57,12 +57,12 @@ class SendVerificationUseCaseTest {
     @Test
     void 전화번호_전송이_실패한다() {
         // given
-        Verification verification = UserFixture.createVerification();
+        Verification verification = UserFixture.createVerification(false);
         doThrow(new FailedToSendException()).when(sendMessageService).execute(anyString(), anyString());
 
         // when and then
         assertThrows(FailedToSendException.class,
-                () -> sendVerificationUseCase.execute(new VerificationRequest(verification.getPhoneNumber())));
+                () -> sendVerificationUseCase.execute(new SendVerificationRequest(verification.getPhoneNumber())));
 
         verify(sendMessageService, times(1)).execute(anyString(), anyString());
         verify(verificationRepository, never()).save(any(Verification.class));

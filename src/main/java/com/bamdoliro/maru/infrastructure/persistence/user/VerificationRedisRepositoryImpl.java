@@ -14,8 +14,9 @@ public class VerificationRedisRepositoryImpl implements VerificationRedisReposit
 
     @Override
     public void updateVerification(String phoneNumber, boolean verified) {
-        PartialUpdate<Verification> update = new PartialUpdate<Verification>(phoneNumber, Verification.class)
-                .set("isVerified", verified);
+        PartialUpdate<Verification> update = new PartialUpdate<>(phoneNumber, Verification.class)
+                .set("isVerified", verified)
+                .refreshTtl(true);
 
         template.update(update);
     }

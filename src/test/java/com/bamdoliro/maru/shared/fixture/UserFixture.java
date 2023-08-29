@@ -19,8 +19,13 @@ public class UserFixture {
         return new User("01085852525", "김드민", "비밀번호", Authority.ADMIN);
     }
 
-    public static Verification createVerification() {
-        return new Verification("01085852525");
+    public static Verification createVerification(boolean verified) {
+        Verification verification = new Verification("01085852525");
+        if (verified) {
+            verification.verify();
+        }
+
+        return verification;
     }
 
     public static List<User> generateUserList() {

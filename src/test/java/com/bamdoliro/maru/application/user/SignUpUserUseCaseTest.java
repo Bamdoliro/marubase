@@ -1,12 +1,11 @@
 package com.bamdoliro.maru.application.user;
 
-import com.bamdoliro.maru.domain.user.domain.Verification;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.domain.user.domain.Verification;
 import com.bamdoliro.maru.domain.user.exception.UserAlreadyExistsException;
-import com.bamdoliro.maru.domain.user.exception.VerificationCodeMismatchException;
 import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
-import com.bamdoliro.maru.infrastructure.persistence.user.VerificationRepository;
 import com.bamdoliro.maru.infrastructure.persistence.user.UserRepository;
+import com.bamdoliro.maru.infrastructure.persistence.user.VerificationRepository;
 import com.bamdoliro.maru.presentation.user.dto.request.SignUpUserRequest;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
@@ -42,8 +41,8 @@ class SignUpUserUseCaseTest {
     void 유저를_생성한다() {
         // given
         User user = UserFixture.createUser();
-        Verification verification = UserFixture.createVerification();
-        SignUpUserRequest request = new SignUpUserRequest(user.getPhoneNumber(), user.getName(), verification.getCode(), "비밀번호");
+        Verification verification = UserFixture.createVerification(true);
+        SignUpUserRequest request = new SignUpUserRequest(user.getPhoneNumber(), user.getName(), "비밀번호");
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
 
         given(verificationRepository.findById(request.getPhoneNumber())).willReturn(Optional.of(verification));
@@ -63,7 +62,7 @@ class SignUpUserUseCaseTest {
     @Test
     void 전화번호_인증을_요청하지_않았거나_만료되었다면_에러가_발생한다() {
         // given
-        SignUpUserRequest request = new SignUpUserRequest("전화번호", "김밤돌", "ABC123", "비밀번호");
+        SignUpUserRequest request = new SignUpUserRequest("전화번호", "김밤돌", "비밀번호");
 
         given(verificationRepository.findById(request.getPhoneNumber())).willReturn(Optional.empty());
 
@@ -76,16 +75,16 @@ class SignUpUserUseCaseTest {
     }
 
     @Test
-    void 전화번호_인증_코드가_틀렸다면_에러가_발생한다() {
+    void 전화번호_인증을_하지_않았다면_에러가_발생한다() {
         // given
         User user = UserFixture.createUser();
-        Verification verification = UserFixture.createVerification();
-        SignUpUserRequest request = new SignUpUserRequest(user.getPhoneNumber(), user.getName(), "다른코드같을수가없는코드", "비밀번호");
+        Verification verification = UserFixture.createVerification(false);
+        SignUpUserRequest request = new SignUpUserRequest(user.getPhoneNumber(), user.getName(), "비밀번호");
 
         given(verificationRepository.findById(request.getPhoneNumber())).willReturn(Optional.of(verification));
 
         // when and then
-        assertThrows(VerificationCodeMismatchException.class,
+        assertThrows(VerifyingHasFailedException.class,
                 () -> signUpUserUseCase.execute(request));
 
         verify(userRepository, never()).existsByPhoneNumber(any());
@@ -96,8 +95,8 @@ class SignUpUserUseCaseTest {
     void 이미_유저가_있다면_에러가_발생한다() {
         // given
         User user = UserFixture.createUser();
-        Verification verification = UserFixture.createVerification();
-        SignUpUserRequest request = new SignUpUserRequest(user.getPhoneNumber(), user.getName(), verification.getCode(), "비밀번호");
+        Verification verification = UserFixture.createVerification(true);
+        SignUpUserRequest request = new SignUpUserRequest(user.getPhoneNumber(), user.getName(), "비밀번호");
 
         given(verificationRepository.findById(request.getPhoneNumber())).willReturn(Optional.of(verification));
         given(userRepository.existsByPhoneNumber(request.getPhoneNumber())).willReturn(true);
