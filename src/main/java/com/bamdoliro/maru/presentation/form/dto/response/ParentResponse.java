@@ -17,7 +17,7 @@ public class ParentResponse {
 
     public ParentResponse(Parent parent) {
         this.name = parent.getName();
-        this.phoneNumber = parent.getPhoneNumber();
+        this.phoneNumber = parent.getPhoneNumber().toString();
         this.relation = parent.getRelation();
         this.zoneCode = parent.getAddress().getZoneCode();
         this.address = parent.getAddress().getAddress();

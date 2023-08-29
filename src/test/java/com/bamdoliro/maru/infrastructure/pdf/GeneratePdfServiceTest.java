@@ -5,6 +5,7 @@ import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.Templates;
+import com.bamdoliro.maru.shared.constants.Schedule;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.util.SaveFileUtil;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -61,7 +62,8 @@ class GeneratePdfServiceTest {
                 "form", form,
                 "grade21", form.getGrade().getSubjectList().getSubjectMap().getSubjectListOf(2, 1),
                 "grade22", form.getGrade().getSubjectList().getSubjectMap().getSubjectListOf(2, 2),
-                "grade31", form.getGrade().getSubjectList().getSubjectMap().getSubjectListOf(3, 1)
+                "grade31", form.getGrade().getSubjectList().getSubjectMap().getSubjectListOf(3, 1),
+                "year", Schedule.getAdmissionYear()
         );
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

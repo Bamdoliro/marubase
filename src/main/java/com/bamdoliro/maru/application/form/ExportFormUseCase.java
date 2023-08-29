@@ -11,6 +11,7 @@ import com.bamdoliro.maru.infrastructure.pdf.MergePdfService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.Templates;
 import com.bamdoliro.maru.shared.annotation.UseCase;
+import com.bamdoliro.maru.shared.constants.Schedule;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.utils.PdfMerger;
@@ -39,7 +40,8 @@ public class ExportFormUseCase {
                 "form", form,
                 "grade21", subjectMap.getSubjectListOf(2, 1),
                 "grade22", subjectMap.getSubjectListOf(2, 2),
-                "grade31", subjectMap.getSubjectListOf(3, 1)
+                "grade31", subjectMap.getSubjectListOf(3, 1),
+                "year", Schedule.getAdmissionYear()
         );
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PdfDocument mergedDocument = new PdfDocument(new PdfWriter(outputStream));

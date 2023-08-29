@@ -24,6 +24,6 @@ public class EducationResponse {
         this.schoolLocation = education.getSchool().getLocation();
         this.schoolCode = education.getSchool().getCode();
         this.teacherName = education.getTeacher().getName();
-        this.teacherPhoneNumber = education.getTeacher().getPhoneNumber();
+        this.teacherPhoneNumber = education.getTeacher().getPhoneNumber().toString();
     }
 }

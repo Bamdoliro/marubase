@@ -14,6 +14,7 @@ import com.bamdoliro.maru.domain.form.domain.value.Document;
 import com.bamdoliro.maru.domain.form.domain.value.Education;
 import com.bamdoliro.maru.domain.form.domain.value.Grade;
 import com.bamdoliro.maru.domain.form.domain.value.Parent;
+import com.bamdoliro.maru.domain.form.domain.value.PhoneNumber;
 import com.bamdoliro.maru.domain.form.domain.value.School;
 import com.bamdoliro.maru.domain.form.domain.value.Subject;
 import com.bamdoliro.maru.domain.form.domain.value.SubjectList;
@@ -51,13 +52,13 @@ public class FormFixture {
                 new Applicant(
                         "https://maru.com/photo.png",
                         "김밤돌",
-                        "01012345678",
+                        new PhoneNumber("01012345678"),
                         LocalDate.of(2005, 4, 15),
                         Gender.FEMALE
                 ),
                 new Parent(
                         "김이로",
-                        "01012345678",
+                        new PhoneNumber("01012345678"),
                         "엄마",
                         new Address(
                                 "18071",
@@ -69,7 +70,7 @@ public class FormFixture {
                         GraduationType.EXPECTED,
                         "2021",
                         new School("비전중학교", "경기도", "7631003"),
-                        new Teacher("나교사", "0519701234", "01012344321")
+                        new Teacher("나교사", new PhoneNumber("0519701234"), new PhoneNumber("01012344321"))
                 ),
                 new Grade(
                         new SubjectList(
@@ -115,13 +116,13 @@ public class FormFixture {
                 new Applicant(
                         "https://maru.com/photo.png",
                         "김밤돌",
-                        "01012345678",
+                        new PhoneNumber("01012345678"),
                         LocalDate.of(2005, 4, 15),
                         Gender.FEMALE
                 ),
                 new Parent(
                         "김이로",
-                        "01012345678",
+                        new PhoneNumber("01012345678"),
                         "엄마",
                         new Address(
                                 "18071",
@@ -133,7 +134,7 @@ public class FormFixture {
                         GraduationType.EXPECTED,
                         "2021",
                         new School("비전중학교", "경기도", "7631003"),
-                        new Teacher("나교사", "0519701234", "01012344321")
+                        new Teacher("나교사", new PhoneNumber("0519701234"), new PhoneNumber("01012344321"))
                 ),
                 new Grade(
                         new SubjectList(
@@ -194,13 +195,13 @@ public class FormFixture {
                 new Applicant(
                         "https://maru.com/photo.png",
                         "김밤돌",
-                        "01012345678",
+                        new PhoneNumber("01012345678"),
                         LocalDate.of(2005, 4, 15),
                         Gender.FEMALE
                 ),
                 new Parent(
                         "김이로",
-                        "01012345678",
+                        new PhoneNumber("01012345678"),
                         "엄마",
                         new Address(
                                 "18071",
@@ -211,7 +212,11 @@ public class FormFixture {
                 new Education(
                         GraduationType.QUALIFICATION_EXAMINATION,
                         "2021",
-                        null,
+                        new School(
+                                "비전중학교",
+                                "경기도",
+                                "7631003"
+                        ),
                         null
                 ),
                 new Grade(

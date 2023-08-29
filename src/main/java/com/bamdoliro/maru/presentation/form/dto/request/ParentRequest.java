@@ -2,6 +2,7 @@ package com.bamdoliro.maru.presentation.form.dto.request;
 
 import com.bamdoliro.maru.domain.form.domain.value.Address;
 import com.bamdoliro.maru.domain.form.domain.value.Parent;
+import com.bamdoliro.maru.domain.form.domain.value.PhoneNumber;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -40,7 +41,7 @@ public class ParentRequest {
     public Parent toValue() {
         return new Parent(
                 name,
-                phoneNumber,
+                new PhoneNumber(phoneNumber),
                 relation,
                 new Address(
                         zoneCode,

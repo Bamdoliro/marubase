@@ -1,8 +1,11 @@
 package com.bamdoliro.maru.domain.form.domain.value;
 
 import com.bamdoliro.maru.domain.form.domain.type.Gender;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
@@ -24,8 +27,12 @@ public class Applicant {
     @Column(nullable = false, length = 20)
     private String name;
 
-    @Column(nullable = false, length = 11)
-    private String phoneNumber;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "value", column = @Column(name = "phone_number", nullable = false, length = 11)),
+    })
+    private PhoneNumber phoneNumber;
 
     @Column(nullable = false)
     private LocalDate birthday;

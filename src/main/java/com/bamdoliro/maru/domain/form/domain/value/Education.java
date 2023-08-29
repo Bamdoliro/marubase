@@ -33,4 +33,12 @@ public class Education {
     public boolean isQualificationExamination() {
         return graduationType.equals(GraduationType.QUALIFICATION_EXAMINATION);
     }
+
+    public boolean isGraduated() {
+        return graduationType.equals(GraduationType.GRADUATED);
+    }
+
+    public boolean isExpected() {
+        return graduationType.equals(GraduationType.EXPECTED);
+    }
 }

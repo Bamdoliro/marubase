@@ -2,6 +2,7 @@ package com.bamdoliro.maru.presentation.form.dto.request;
 
 import com.bamdoliro.maru.domain.form.domain.type.Gender;
 import com.bamdoliro.maru.domain.form.domain.value.Applicant;
+import com.bamdoliro.maru.domain.form.domain.value.PhoneNumber;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -41,7 +42,7 @@ public class ApplicantRequest {
         return new Applicant(
                 identificationPictureUri,
                 name,
-                phoneNumber,
+                new PhoneNumber(phoneNumber),
                 birthday,
                 gender
         );

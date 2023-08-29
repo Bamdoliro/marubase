@@ -2,6 +2,7 @@ package com.bamdoliro.maru.presentation.form.dto.request;
 
 import com.bamdoliro.maru.domain.form.domain.type.GraduationType;
 import com.bamdoliro.maru.domain.form.domain.value.Education;
+import com.bamdoliro.maru.domain.form.domain.value.PhoneNumber;
 import com.bamdoliro.maru.domain.form.domain.value.School;
 import com.bamdoliro.maru.domain.form.domain.value.Teacher;
 import jakarta.annotation.Nullable;
@@ -53,8 +54,16 @@ public class EducationRequest {
         return new Education(
                 graduationType,
                 graduationYear,
-                new School(schoolName, schoolLocation, schoolCode),
-                new Teacher(teacherName, teacherPhoneNumber, teacherMobilePhoneNumber)
+                new School(
+                        schoolName,
+                        schoolLocation,
+                        schoolCode
+                ),
+                new Teacher(
+                        teacherName,
+                        new PhoneNumber(teacherPhoneNumber),
+                        new PhoneNumber(teacherMobilePhoneNumber)
+                )
         );
     }
 }
