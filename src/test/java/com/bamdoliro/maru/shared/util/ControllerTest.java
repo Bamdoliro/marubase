@@ -11,6 +11,7 @@ import com.bamdoliro.maru.application.fair.QueryFairListUseCase;
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
 import com.bamdoliro.maru.application.form.DownloadSecondRoundScoreFormatUseCase;
 import com.bamdoliro.maru.application.form.DraftFormUseCase;
+import com.bamdoliro.maru.application.form.ExportFinalPassedFormUseCase;
 import com.bamdoliro.maru.application.form.ExportFormUseCase;
 import com.bamdoliro.maru.application.form.GenerateAdmissionTicketUseCase;
 import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
@@ -29,10 +30,12 @@ import com.bamdoliro.maru.application.form.UpdateSecondRoundScoreUseCase;
 import com.bamdoliro.maru.application.form.UploadFormUseCase;
 import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
 import com.bamdoliro.maru.application.notice.CreateNoticeUseCase;
+import com.bamdoliro.maru.application.notice.DeleteNoticeUseCase;
 import com.bamdoliro.maru.application.notice.QueryNoticeListUseCase;
 import com.bamdoliro.maru.application.notice.QueryNoticeUseCase;
 import com.bamdoliro.maru.application.notice.UpdateNoticeUseCase;
 import com.bamdoliro.maru.application.question.CreateQuestionUseCase;
+import com.bamdoliro.maru.application.question.DeleteQuestionUseCase;
 import com.bamdoliro.maru.application.question.QueryQuestionListUseCase;
 import com.bamdoliro.maru.application.question.QueryQuestionUseCase;
 import com.bamdoliro.maru.application.question.UpdateQuestionUseCase;
@@ -203,6 +206,15 @@ public abstract class ControllerTest {
 
     @MockBean
     protected VerifyUseCase verifyUseCase;
+
+    @MockBean
+    protected DeleteNoticeUseCase deleteNoticeUseCase;
+
+    @MockBean
+    protected DeleteQuestionUseCase deleteQuestionUseCase;
+
+    @MockBean
+    protected ExportFinalPassedFormUseCase exportFinalPassedFormUseCase;
 
 
     @MockBean
