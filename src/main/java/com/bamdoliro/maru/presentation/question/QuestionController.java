@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.presentation.question;
 
 import com.bamdoliro.maru.application.question.CreateQuestionUseCase;
+import com.bamdoliro.maru.application.question.DeleteQuestionUseCase;
 import com.bamdoliro.maru.application.question.QueryQuestionListUseCase;
 import com.bamdoliro.maru.application.question.QueryQuestionUseCase;
 import com.bamdoliro.maru.application.question.UpdateQuestionUseCase;
@@ -17,6 +18,7 @@ import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +38,7 @@ public class QuestionController {
     private final UpdateQuestionUseCase updateQuestionUseCase;
     private final QueryQuestionListUseCase queryQuestionListUseCase;
     private final QueryQuestionUseCase queryQuestionUseCase;
+    private final DeleteQuestionUseCase deleteQuestionUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -72,5 +75,14 @@ public class QuestionController {
         return CommonResponse.ok(
                 queryQuestionUseCase.execute(questionId)
         );
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{question-id}")
+    public void deleteQuestion(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
+            @PathVariable(name = "question-id") Long questionId
+    ) {
+        deleteQuestionUseCase.execute(questionId);
     }
 }
