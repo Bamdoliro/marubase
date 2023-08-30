@@ -73,3 +73,24 @@ include::{snippets}/notice-controller-test/공지사항을_불러온다/http-res
 
 ===== 공지사항을 찾을 수 없는 경우
 include::{snippets}/notice-controller-test/공지사항을_불러올_때_공지사항이_없으면_에러가_발생한다/http-response.adoc[]
+
+
+
+=== 공지사항 삭제
+어드민 사용자가 공지사항을 삭제할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/notice-controller-test/공지사항을_삭제한다/request-headers.adoc[]
+
+===== Path Parameter
+include::{snippets}/notice-controller-test/공지사항을_삭제한다/path-parameters.adoc[]
+
+==== 요청
+include::{snippets}/notice-controller-test/공지사항을_삭제한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/notice-controller-test/공지사항을_삭제한다/http-response.adoc[]
