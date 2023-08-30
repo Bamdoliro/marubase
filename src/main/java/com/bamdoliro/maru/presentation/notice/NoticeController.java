@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.presentation.notice;
 
 import com.bamdoliro.maru.application.notice.CreateNoticeUseCase;
+import com.bamdoliro.maru.application.notice.DeleteNoticeUseCase;
 import com.bamdoliro.maru.application.notice.QueryNoticeListUseCase;
 import com.bamdoliro.maru.application.notice.QueryNoticeUseCase;
 import com.bamdoliro.maru.application.notice.UpdateNoticeUseCase;
@@ -16,6 +17,7 @@ import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +36,7 @@ public class NoticeController {
     private final UpdateNoticeUseCase updateNoticeUseCase;
     private final QueryNoticeListUseCase queryNoticeListUseCase;
     private final QueryNoticeUseCase queryNoticeUseCase;
+    private final DeleteNoticeUseCase deleteNoticeUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -68,5 +71,14 @@ public class NoticeController {
         return CommonResponse.ok(
                 queryNoticeUseCase.execute(noticeId)
         );
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{notice-id}")
+    public void deleteNotice(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
+            @PathVariable(name = "notice-id") Long noticeId
+    ) {
+        deleteNoticeUseCase.execute(noticeId);
     }
 }
