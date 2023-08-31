@@ -193,5 +193,9 @@ public class Form extends BaseTimeEntity {
     public FormType getOriginalType() {
         return type;
     }
+
+    public boolean tookSecondRound() {
+        return status.equals(FormStatus.PASSED) || status.equals(FormStatus.FAILED);
+    }
 }
 
