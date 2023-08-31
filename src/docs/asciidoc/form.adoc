@@ -487,3 +487,57 @@ include::{snippets}/form-controller-test/정상적으로_최종_합격자를_다
 
 ===== 정상 응답
 include::{snippets}/form-controller-test/정상적으로_최종_합격자를_다운로드한다/http-response.adoc[]
+
+
+
+=== 1차 전형 결과 엑셀 다운로드
+어드민은 1차 전형 결과를 엑셀로 다운로드 받을 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/정상적으로_1차전형_결과를_다운로드한다/request-headers.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/정상적으로_1차전형_결과를_다운로드한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/정상적으로_1차전형_결과를_다운로드한다/http-response.adoc[]
+
+
+
+=== 2차 전형 결과 엑셀 다운로드
+어드민은 2차 전형 결과를 엑셀로 다운로드 받을 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/정상적으로_2차전형_결과를_다운로드한다/request-headers.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/정상적으로_2차전형_결과를_다운로드한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/정상적으로_2차전형_결과를_다운로드한다/http-response.adoc[]
+
+
+
+=== 전체 결과 엑셀 다운로드
+어드민은 전체 결과를 엑셀로 다운로드 받을 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/정상적으로_입학전형_전체_결과를_다운로드한다/request-headers.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/정상적으로_입학전형_전체_결과를_다운로드한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/정상적으로_입학전형_전체_결과를_다운로드한다/http-response.adoc[]

@@ -1712,8 +1712,8 @@ class FormControllerTest extends RestDocsTestSupport {
     void 정상적으로_입학전형_전체_결과를_다운로드한다() throws Exception {
         User user = UserFixture.createAdminUser();
         MockMultipartFile file = new MockMultipartFile(
-                "최종결과",
-                "최종결과.xlsx",
+                "전체결과",
+                "전체결과.xlsx",
                 String.valueOf(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")),
                 "<<file>>".getBytes()
         );
