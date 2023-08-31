@@ -28,8 +28,8 @@ public class UserFixture {
         return verification;
     }
 
-    public static List<User> generateUserList() {
-        return IntStream.range(0, FixedNumber.TOTAL * 2)
+    public static List<User> generateUserList(int size) {
+        return IntStream.range(0, size)
                 .mapToObj(i -> new User(RandomCodeUtil.generate(11), "김밤돌" + i, "비밀번호", Authority.USER))
                 .toList();
     }

@@ -7,6 +7,7 @@ import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.infrastructure.persistence.user.UserRepository;
+import com.bamdoliro.maru.shared.constants.FixedNumber;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +53,7 @@ class UpdateSecondRoundScoreUseCaseTest {
     @BeforeEach
     void setUp() {
         List<User> userList = userRepository.saveAll(
-                UserFixture.generateUserList()
+                UserFixture.generateUserList(FixedNumber.TOTAL * 2)
         );
         List<Form> formList = FormFixture.generateFormList(userList);
         formList.forEach(form -> {
