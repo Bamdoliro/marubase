@@ -17,15 +17,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 @Disabled
 @ActiveProfiles("test")
 @SpringBootTest
-class ExportFinalPassedFormUseCaseTest {
+class ExportSecondRoundResultUseCaseTest {
 
     @Autowired
-    private ExportFinalPassedFormUseCase exportFinalPassedFormUseCase;
+    private ExportSecondRoundResultUseCase exportSecondRoundResultUseCase;
 
     @Autowired
     private UserRepository userRepository;
@@ -42,20 +44,31 @@ class ExportFinalPassedFormUseCaseTest {
     @BeforeEach
     void setUp() {
         List<User> userList = userRepository.saveAll(
-                UserFixture.generateUserList(FixedNumber.TOTAL)
+                UserFixture.generateUserList(FixedNumber.TOTAL * 2)
         );
         List<Form> formList = FormFixture.generateFormList(userList);
         formList.forEach(form -> {
             assignExaminationNumberService.execute(form);
-            form.pass();
+
+            if (getRandomBoolean()) {
+                form.pass();
+            } else {
+                form.fail();
+            }
+
             calculateFormScoreService.execute(form);
             form.getScore().updateSecondRoundMeisterScore(100.2, 10.4, 100.7);
             formRepository.save(form);
         });
     }
 
+    private boolean getRandomBoolean() {
+        Random random = new Random();
+        return random.nextBoolean();
+    }
+
     @Test
-    void 최종합격자_명단을_엑셀로_저장한다() throws Exception {
-        SaveFileUtil.execute(exportFinalPassedFormUseCase.execute(), SaveFileUtil.XLSX);
+    void 정상적으로_2차전형_결과를_다운받는다() throws IOException {
+        SaveFileUtil.execute(exportSecondRoundResultUseCase.execute(), SaveFileUtil.XLSX);
     }
 }
