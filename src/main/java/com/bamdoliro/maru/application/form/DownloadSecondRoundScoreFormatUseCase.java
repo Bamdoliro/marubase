@@ -2,8 +2,7 @@ package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
-import com.bamdoliro.maru.domain.form.domain.type.FormType;
-import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
+import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.infrastructure.xlsx.XlsxService;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +14,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 import static com.bamdoliro.maru.infrastructure.xlsx.constant.XlsxConstant.FIRST_ROW_INDEX_WITH_NO_TITLE;
 
@@ -25,17 +22,11 @@ import static com.bamdoliro.maru.infrastructure.xlsx.constant.XlsxConstant.FIRST
 @UseCase
 public class DownloadSecondRoundScoreFormatUseCase {
 
-    private final FormRepository formRepository;
+    private final FormFacade formFacade;
     private final XlsxService xlsxService;
 
     public Resource execute() throws IOException {
-        List<Form> formList = formRepository.findByStatus(FormStatus.FIRST_PASSED)
-                .stream()
-                .sorted(Comparator
-                        .comparing(this::getOrder)
-                        .thenComparing(Form::getChangedToRegular)
-                        .thenComparing(Form::getExaminationNumber))
-                .toList();
+        List<Form> formList = formFacade.getSortedFormList(FormStatus.FIRST_PASSED);
 
         Workbook workbook = xlsxService.openTemplate("2차전형점수양식");
         Sheet sheet = workbook.getSheetAt(0);
@@ -74,18 +65,5 @@ public class DownloadSecondRoundScoreFormatUseCase {
         }
 
         return xlsxService.convertToByteArrayResource(workbook);
-    }
-
-    private Integer getOrder(Form form) {
-        return getOrderMap().get(form.getType().getCategory());
-    }
-
-    private Map<FormType.Category, Integer> getOrderMap() {
-        return Map.of(
-                FormType.Category.REGULAR, 1,
-                FormType.Category.MEISTER_TALENT, 2,
-                FormType.Category.SOCIAL_INTEGRATION, 3,
-                FormType.Category.SUPERNUMERARY, 4
-        );
     }
 }

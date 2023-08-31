@@ -41,4 +41,8 @@ public class Education {
     public boolean isExpected() {
         return graduationType.equals(GraduationType.EXPECTED);
     }
+
+    public String getGraduationTypeToString() {
+        return graduationYear + "년 " + graduationType.getDescription();
+    }
 }

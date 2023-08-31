@@ -2,6 +2,7 @@ package com.bamdoliro.maru.presentation.form;
 
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
 import com.bamdoliro.maru.application.form.DownloadSecondRoundScoreFormatUseCase;
+import com.bamdoliro.maru.application.form.ExportFinalPassedFormUseCase;
 import com.bamdoliro.maru.application.form.ExportFormUseCase;
 import com.bamdoliro.maru.application.form.GenerateAdmissionTicketUseCase;
 import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
@@ -76,6 +77,7 @@ public class FormController {
     private final GenerateAdmissionTicketUseCase generateAdmissionTicketUseCase;
     private final DownloadSecondRoundScoreFormatUseCase downloadSecondRoundScoreFormatUseCase;
     private final UpdateSecondRoundScoreUseCase updateSecondRoundScoreUseCase;
+    private final ExportFinalPassedFormUseCase exportFinalPassedFormUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -248,5 +250,14 @@ public class FormController {
             @RequestPart(value = "xlsx") MultipartFile file
     ) throws IOException {
         updateSecondRoundScoreUseCase.execute(file);
+    }
+
+    @GetMapping("/final/export")
+    public ResponseEntity<Resource> exportFinalPassedForm(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+    ) throws Exception {
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(exportFinalPassedFormUseCase.execute());
     }
 }

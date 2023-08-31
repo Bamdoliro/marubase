@@ -189,5 +189,9 @@ public class Form extends BaseTimeEntity {
 
         return type;
     }
+
+    public FormType getOriginalType() {
+        return type;
+    }
 }
 
