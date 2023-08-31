@@ -10,4 +10,6 @@ public interface FormRepositoryCustom {
     List<Form> findByStatus(FormStatus status);
     List<Form> findReceivedSpecialForm();
     List<Form> findReceivedRegularOrSupernumeraryForm();
+    List<Form> findFirstRoundForm();
+    List<Form> findSecondRoundForm();
 }

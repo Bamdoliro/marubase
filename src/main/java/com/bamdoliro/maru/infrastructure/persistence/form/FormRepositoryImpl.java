@@ -72,4 +72,26 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 )
                 .fetch();
     }
+
+    @Override
+    public List<Form> findFirstRoundForm() {
+        return queryFactory
+                .selectFrom(form)
+                .where(form.status.eq(FormStatus.FIRST_PASSED)
+                        .or(form.status.eq(FormStatus.FIRST_FAILED))
+                )
+                .orderBy(form.examinationNumber.asc())
+                .fetch();
+    }
+
+    @Override
+    public List<Form> findSecondRoundForm() {
+        return queryFactory
+                .selectFrom(form)
+                .where(form.status.eq(FormStatus.FAILED)
+                        .or(form.status.eq(FormStatus.PASSED))
+                )
+                .orderBy(form.examinationNumber.asc())
+                .fetch();
+    }
 }

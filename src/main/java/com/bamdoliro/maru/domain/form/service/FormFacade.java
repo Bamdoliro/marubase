@@ -37,11 +37,17 @@ public class FormFacade {
     public List<Form> getSortedFormList(FormStatus status) {
         return formRepository.findByStatus(status)
                 .stream()
-                .sorted(Comparator
-                        .comparing(this::getOrder)
-                        .thenComparing(Form::getChangedToRegular)
-                        .thenComparing(Form::getExaminationNumber))
+                .sorted(
+                        getFormComparator()
+                                .thenComparing(Form::getExaminationNumber)
+                )
                 .toList();
+    }
+
+    public Comparator<Form> getFormComparator() {
+        return Comparator
+                .comparing(this::getOrder)
+                .thenComparing(Form::getChangedToRegular);
     }
 
     private Integer getOrder(Form form) {
