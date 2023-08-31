@@ -3,7 +3,10 @@ package com.bamdoliro.maru.presentation.form;
 import com.bamdoliro.maru.application.form.ApproveFormUseCase;
 import com.bamdoliro.maru.application.form.DownloadSecondRoundScoreFormatUseCase;
 import com.bamdoliro.maru.application.form.ExportFinalPassedFormUseCase;
+import com.bamdoliro.maru.application.form.ExportFirstRoundResultUseCase;
 import com.bamdoliro.maru.application.form.ExportFormUseCase;
+import com.bamdoliro.maru.application.form.ExportResultUseCase;
+import com.bamdoliro.maru.application.form.ExportSecondRoundResultUseCase;
 import com.bamdoliro.maru.application.form.GenerateAdmissionTicketUseCase;
 import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
 import com.bamdoliro.maru.application.form.QueryFinalFormResultUseCase;
@@ -13,8 +16,8 @@ import com.bamdoliro.maru.application.form.QueryFormUseCase;
 import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.ReceiveFormUseCase;
 import com.bamdoliro.maru.application.form.RejectFormUseCase;
-import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.application.form.SubmitFinalFormUseCase;
+import com.bamdoliro.maru.application.form.SubmitFormUseCase;
 import com.bamdoliro.maru.application.form.UpdateFormUseCase;
 import com.bamdoliro.maru.application.form.UpdateSecondRoundScoreUseCase;
 import com.bamdoliro.maru.application.form.UploadFormUseCase;
@@ -23,8 +26,8 @@ import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
-import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFinalFormRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.UpdateFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormResultResponse;
@@ -78,6 +81,9 @@ public class FormController {
     private final DownloadSecondRoundScoreFormatUseCase downloadSecondRoundScoreFormatUseCase;
     private final UpdateSecondRoundScoreUseCase updateSecondRoundScoreUseCase;
     private final ExportFinalPassedFormUseCase exportFinalPassedFormUseCase;
+    private final ExportFirstRoundResultUseCase exportFirstRoundResultUseCase;
+    private final ExportSecondRoundResultUseCase exportSecondRoundResultUseCase;
+    private final ExportResultUseCase exportResultUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -252,12 +258,39 @@ public class FormController {
         updateSecondRoundScoreUseCase.execute(file);
     }
 
-    @GetMapping("/final/export")
+    @GetMapping("/xlsx/final-passed")
     public ResponseEntity<Resource> exportFinalPassedForm(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user
-    ) throws Exception {
+    ) throws IOException {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(exportFinalPassedFormUseCase.execute());
+    }
+
+    @GetMapping("/xlsx/first-round")
+    public ResponseEntity<Resource> exportFirstRoundResult(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+    ) throws IOException {
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(exportFirstRoundResultUseCase.execute());
+    }
+
+    @GetMapping("/xlsx/second-round")
+    public ResponseEntity<Resource> exportSecondRoundResult(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+    ) throws IOException {
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(exportSecondRoundResultUseCase.execute());
+    }
+
+    @GetMapping("/xlsx/result")
+    public ResponseEntity<Resource> exportResult(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+    ) throws IOException {
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(exportResultUseCase.execute());
     }
 }
