@@ -20,7 +20,7 @@ public class SearchSchoolService {
     private final ObjectMapper objectMapper;
 
     public List<SchoolResponse> execute(String q) throws JsonProcessingException {
-        String htmlResponse = neisClient.getSchoolInfo(neisProperties.getKey(), q);
+        String htmlResponse = neisClient.getSchoolInfo(neisProperties.getKey(), q, "중학교");
         NeisSchoolResponse response = objectMapper.readValue(htmlResponse, NeisSchoolResponse.class);
 
         return response.getSchoolInfo().stream()

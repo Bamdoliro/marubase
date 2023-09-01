@@ -19,11 +19,11 @@ class SearchSchoolServiceTest {
     private SearchSchoolService searchSchoolService;
 
     @Test
-    void 부산소프트웨어를_검색하면_부산소프트웨어마이스터고등학교를_반환한다() throws JsonProcessingException {
-        String q = "부산소프트웨어";
+    void 비전을_검색하면_비전중학교를_반환한다() throws JsonProcessingException {
+        String q = "비전";
         List<SchoolResponse> responseList = searchSchoolService.execute(q);
         assertEquals(1, responseList.size());
-        assertEquals("부산소프트웨어마이스터고등학교", responseList.get(0).getName());
+        assertEquals("비전중학교", responseList.get(0).getName());
     }
 
     @Test
