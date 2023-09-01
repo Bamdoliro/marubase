@@ -131,7 +131,7 @@ public class FormFixture {
                         )
                 ),
                 new Education(
-                        GraduationType.EXPECTED,
+                        GraduationType.QUALIFICATION_EXAMINATION,
                         "2021",
                         new School("비전중학교", "경기도", "7631003"),
                         new Teacher("나교사", new PhoneNumber("0519701234"), new PhoneNumber("01012344321"))

@@ -47,7 +47,7 @@ public class ExportFormUseCase {
         PdfDocument mergedDocument = new PdfDocument(new PdfWriter(outputStream));
         PdfMerger pdfMerger = new PdfMerger(mergedDocument);
 
-        getRequiredTemplates(form.getType())
+        getRequiredTemplates(form)
                 .stream()
                 .map((t) -> processTemplateService.execute(t, formMap))
                 .map(generatePdfService::execute)
@@ -65,8 +65,17 @@ public class ExportFormUseCase {
         }
     }
 
-    private List<String> getRequiredTemplates(FormType formType) {
-        if (formType.isRegular()) {
+    private List<String> getRequiredTemplates(Form form) {
+        if (form.getEducation().isQualificationExamination()) {
+            return List.of(
+                    Templates.FORM,
+                    Templates.GRADE_TABLE,
+                    Templates.DOCUMENT,
+                    Templates.NO_SMOKING
+            );
+        }
+
+        if (form.getType().isRegular()) {
             return List.of(
                     Templates.FORM,
                     Templates.DOCUMENT,

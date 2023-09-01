@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        @page {
+            size: A4;
+            margin: 70px;
+        }
+
+        * {
+            font-family: SUIT, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        table {
+            border: none;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 12px;
+            text-align: center;
+            margin: 16px;
+        }
+
+        tr {
+            vertical-align: middle;
+        }
+
+        td {
+            padding: 8px 0;
+        }
+
+        .title {
+            font-weight: bold;
+            font-size: 24px;
+            line-height: 48px;
+            text-align: center;
+        }
+
+        caption {
+            text-align: left;
+            font-size: 18px;
+        }
+
+        th {
+            background-color: #ECF2FA;
+            font-weight: 500;
+            padding: 8px 0;
+        }
+
+        .ba {
+            border: #000000 1px solid;
+        }
+    </style>
+    <title>원서</title>
+</head>
+<body>
+<table>
+    <tr>
+        <th style="width: 20%;" class="ba">접수번호</th>
+        <td class="title" colspan="3" rowspan="2">개인별 성적 일람표</td>
+        <th style="width: 20%;" class="ba">수험번호</th>
+    </tr>
+    <tr>
+        <td class="ba" th:text="${form.id}"></td>
+        <td class="ba" th:text="${form.examinationNumber}"></td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <th class="ba">인적사항</th>
+        <td class="ba" th:text='${"검정, "+form.applicant.name}'></td>
+        <th class="ba">생년월일</th>
+        <td class="ba"th:text="${#temporals.format(form.applicant.birthday, 'YYYY년 MM월 dd일')}"></td>
+    </tr>
+</table>
+<table>
+    <caption th:text='${"1. 교과성적 - " + form.score.subjectGradeScore + "점 (비교평가 미응시자)"}'></caption>
+    <tr>
+        <th class="ba">과목</th>
+        <th class="ba">만점</th>
+        <th class="ba">득점</th>
+    </tr>
+    <tr>
+        <td class="ba">국어</td>
+        <td class="ba">100</td>
+        <td class="ba">92</td>
+    </tr>
+    <tr>
+        <td class="ba">국어</td>
+        <td class="ba">100</td>
+        <td class="ba">92</td>
+    </tr>
+    <tr>
+        <td class="ba">국어</td>
+        <td class="ba">100</td>
+        <td class="ba">92</td>
+    </tr>
+</table>
+<table>
+    <caption>2. 출결 상황 - 14점</caption>
+    <tr>
+        <th class="ba">출결</th>
+        <th class="ba">부여점수</th>
+    </tr>
+    <tr>
+        <th class="ba">출결내역</th>
+        <td class="ba">14점(기본점수)</td>
+    </tr>
+</table>
+<table>
+    <caption>3. 봉사활동 - 14점</caption>
+    <tr>
+        <th class="ba">봉사활동</th>
+        <th class="ba">부여점수</th>
+    </tr>
+    <tr>
+        <th class="ba">봉사내역</th>
+        <td class="ba">14점(기본점수)</td>
+    </tr>
+</table>
+<table>
+    <caption>4. 가산점 - 0점</caption>
+    <tr>
+        <th class="ba">자격증명</th>
+    </tr>
+    <tr>
+        <td class="ba">(점)</td>
+    </tr>
+</table>
+<table>
+    <caption>5. 산출내역</caption>
+    <tr>
+        <th class="ba">성명</th>
+        <th class="ba">교과성적</th>
+        <th class="ba">출결상황</th>
+        <th class="ba">봉사활동</th>
+        <th class="ba">가산점</th>
+        <th class="ba">총점</th>
+    </tr>
+    <tr>
+        <td class="ba" th:text="${form.applicant.name}"></td>
+        <td class="ba" th:text="${form.score.subjectGradeScore}"></td>
+        <td class="ba">14</td>
+        <td class="ba">14</td>
+        <td class="ba" th:text="${form.score.bonusScore}"></td>
+        <td class="ba" th:text="${form.score.firstRoundScore}"></td>
+    </tr>
+</table>
+</body>
+</html>
