@@ -117,7 +117,7 @@
         <table class="admission-ticket">
             <tr class="ba">
                 <td colspan="3" class="ba center" style="height: 48px;">
-                    <p>2023학년도</p>
+                    <p th:text='${year+"학년도"}'></p>
                     <p>부산소프트웨어마이스터고등학교 입학전형</p>
                     <p class="big letter-spacing-10">수험표</p>
                 </td>
@@ -174,22 +174,22 @@
             </tr>
             <tr>
                 <td class="ba" style="word-break: keep-all;">코딩 테스트 (마이스터 인재전형 지원자)</td>
-                <td class="ba">2023.10.27 (금) 09:30</td>
+                <td class="ba" th:text="${codingTest}"></td>
                 <td class="ba">평가장</td>
             </tr>
             <tr>
                 <td class="ba">NCS 인적성 검사</td>
-                <td class="ba">2023.10.27 (금) 11:00</td>
+                <td class="ba" th:text="${ncs}"></td>
                 <td class="ba">검사장</td>
             </tr>
             <tr>
                 <td class="ba">심층면접</td>
-                <td class="ba">2023.10.27 (금) 13:00</td>
+                <td class="ba" th:text="${depthInterview}"></td>
                 <td class="ba">면접장</td>
             </tr>
             <tr>
                 <td class="ba">신체검사</td>
-                <td class="ba">2023.10.27 (금) 13:00</td>
+                <td class="ba" th:text="${physicalExamination}"></td>
                 <td class="ba">검사장</td>
             </tr>
         </table>

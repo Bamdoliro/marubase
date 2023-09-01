@@ -8,11 +8,17 @@ import com.bamdoliro.maru.infrastructure.pdf.GeneratePdfService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.Templates;
 import com.bamdoliro.maru.shared.annotation.UseCase;
+import com.bamdoliro.maru.shared.constants.Schedule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
+
+import static com.bamdoliro.maru.shared.constants.Schedule.CODING_TEST;
+import static com.bamdoliro.maru.shared.constants.Schedule.DEPTH_INTERVIEW;
+import static com.bamdoliro.maru.shared.constants.Schedule.NCS;
+import static com.bamdoliro.maru.shared.constants.Schedule.PHYSICAL_EXAMINATION;
 
 @RequiredArgsConstructor
 @UseCase
@@ -27,7 +33,12 @@ public class GenerateAdmissionTicketUseCase {
         validateFormStatus(form);
 
         Map<String, Object> formMap = Map.of(
-                "form", form
+                "form", form,
+                "year", Schedule.getAdmissionYear(),
+                "codingTest", Schedule.toLocaleString(CODING_TEST),
+                "ncs", Schedule.toLocaleString(NCS),
+                "depthInterview", Schedule.toLocaleString(DEPTH_INTERVIEW),
+                "physicalExamination", Schedule.toLocaleString(PHYSICAL_EXAMINATION)
         );
         String html = processTemplateService.execute(Templates.ADMISSION_TICKET, formMap);
         ByteArrayOutputStream outputStream = generatePdfService.execute(html);
