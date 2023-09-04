@@ -31,6 +31,6 @@ public class GradeResponse {
         this.volunteerTime1 = grade.getVolunteerTime1();
         this.volunteerTime2 = grade.getVolunteerTime2();
         this.volunteerTime3 = grade.getVolunteerTime3();
-        this.certificateList = grade.getCertificateList();
+        this.certificateList = grade.getCertificateListValue();
     }
 }

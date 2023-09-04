@@ -24,4 +24,10 @@ public enum Certificate implements EnumProperty {
                 || this == COMPUTER_SPECIALIST_LEVEL_2
                 || this == COMPUTER_SPECIALIST_LEVEL_3;
     }
+
+
+    @Override
+    public String toString() {
+        return this.getDescription() + "(" + this.getScore() + "점)";
+    }
 }

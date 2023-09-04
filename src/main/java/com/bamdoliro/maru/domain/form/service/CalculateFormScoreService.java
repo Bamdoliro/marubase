@@ -118,11 +118,11 @@ public class CalculateFormScoreService {
     }
 
     private Integer calculateBonusScore(Form form) {
-        if (Objects.isNull(form.getGrade().getCertificateList())) {
+        if (Objects.isNull(form.getGrade().getCertificateListValue())) {
             return 0;
         }
 
-        int bonusScore = form.getGrade().getCertificateList().stream()
+        int bonusScore = form.getGrade().getCertificateListValue().stream()
                 .mapToInt(Certificate::getScore)
                 .sum();
 

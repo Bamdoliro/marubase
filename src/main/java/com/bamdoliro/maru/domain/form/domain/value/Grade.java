@@ -66,14 +66,10 @@ public class Grade {
     @Column(nullable = true)
     private Integer volunteerTime3;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "tbl_certificate",
-            joinColumns = @JoinColumn(name = "form_id"))
-    @Column(nullable = false, name = "certificate")
-    @Enumerated(EnumType.STRING)
-    private List<Certificate> certificateList;
+    @Embedded
+    private CertificateList certificateList;
 
-    public Grade(SubjectList subjectList, Attendance attendance1, Attendance attendance2, Attendance attendance3, Integer volunteerTime1, Integer volunteerTime2, Integer volunteerTime3, List<Certificate> certificateList) {
+    public Grade(SubjectList subjectList, Attendance attendance1, Attendance attendance2, Attendance attendance3, Integer volunteerTime1, Integer volunteerTime2, Integer volunteerTime3, CertificateList certificateList) {
         this.subjectList = subjectList;
         this.attendance1 = attendance1;
         this.attendance2 = attendance2;
@@ -81,27 +77,7 @@ public class Grade {
         this.volunteerTime1 = volunteerTime1;
         this.volunteerTime2 = volunteerTime2;
         this.volunteerTime3 = volunteerTime3;
-        this.certificateList = validate(certificateList);
-    }
-
-    private List<Certificate> validate(List<Certificate> certificateList) {
-        if (Objects.nonNull(certificateList) && !certificateList.isEmpty()) {
-            Optional<Certificate> highestScoreComputerSpecialistCertificate = certificateList.stream()
-                    .filter(Certificate::isComputerSpecialist)
-                    .max(Comparator.comparingInt(Certificate::getScore));
-
-            if (highestScoreComputerSpecialistCertificate.isPresent()) {
-                List<Certificate> validatedCertificateList = new ArrayList<>(
-                        certificateList.stream()
-                                .filter((c) -> !c.isComputerSpecialist())
-                                .toList());
-
-                validatedCertificateList.add(highestScoreComputerSpecialistCertificate.get());
-                return validatedCertificateList;
-            }
-        }
-
-        return certificateList;
+        this.certificateList = certificateList;
     }
 
     public Attendance getTotalAttendance() {
@@ -135,5 +111,9 @@ public class Grade {
 
     public List<Subject> getSubjectListValue() {
         return subjectList.getValue();
+    }
+
+    public List<Certificate> getCertificateListValue() {
+        return certificateList.getValue();
     }
 }

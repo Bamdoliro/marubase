@@ -66,7 +66,7 @@ public class ExportFormUseCase {
     }
 
     private List<String> getRequiredTemplates(Form form) {
-        if (form.getEducation().isQualificationExamination()) {
+        if (form.getType().isRegular()) {
             return List.of(
                     Templates.FORM,
                     Templates.GRADE_TABLE,
@@ -75,16 +75,9 @@ public class ExportFormUseCase {
             );
         }
 
-        if (form.getType().isRegular()) {
-            return List.of(
-                    Templates.FORM,
-                    Templates.DOCUMENT,
-                    Templates.NO_SMOKING
-            );
-        }
-
         return List.of(
                 Templates.FORM,
+                Templates.GRADE_TABLE,
                 Templates.DOCUMENT,
                 Templates.RECOMMENDATION,
                 Templates.NO_SMOKING

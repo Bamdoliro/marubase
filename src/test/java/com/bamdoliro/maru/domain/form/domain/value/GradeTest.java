@@ -20,10 +20,10 @@ class GradeTest {
         );
 
         // when
-        Grade grade = new Grade(null, null, null, null, null, null, null, certificateList);
+        Grade grade = new Grade(null, null, null, null, null, null, null, new CertificateList(certificateList));
 
         // then
-        Certificate computerSpecialistCertificate = grade.getCertificateList().stream()
+        Certificate computerSpecialistCertificate = grade.getCertificateListValue().stream()
                 .filter(Certificate::isComputerSpecialist)
                 .findFirst()
                 .get();

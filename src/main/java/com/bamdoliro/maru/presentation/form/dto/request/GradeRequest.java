@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.presentation.form.dto.request;
 
 import com.bamdoliro.maru.domain.form.domain.type.Certificate;
+import com.bamdoliro.maru.domain.form.domain.value.CertificateList;
 import com.bamdoliro.maru.domain.form.domain.value.Grade;
 import com.bamdoliro.maru.domain.form.domain.value.Subject;
 import com.bamdoliro.maru.domain.form.domain.value.SubjectList;
@@ -63,7 +64,7 @@ public class GradeRequest {
                 volunteerTime1,
                 volunteerTime2,
                 volunteerTime3,
-                certificateList
+                new CertificateList(certificateList)
         );
     }
 }

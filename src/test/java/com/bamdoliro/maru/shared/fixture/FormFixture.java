@@ -10,6 +10,7 @@ import com.bamdoliro.maru.domain.form.domain.type.GraduationType;
 import com.bamdoliro.maru.domain.form.domain.value.Address;
 import com.bamdoliro.maru.domain.form.domain.value.Applicant;
 import com.bamdoliro.maru.domain.form.domain.value.Attendance;
+import com.bamdoliro.maru.domain.form.domain.value.CertificateList;
 import com.bamdoliro.maru.domain.form.domain.value.Document;
 import com.bamdoliro.maru.domain.form.domain.value.Education;
 import com.bamdoliro.maru.domain.form.domain.value.Grade;
@@ -34,7 +35,6 @@ import com.bamdoliro.maru.presentation.form.dto.response.AttendanceResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.DocumentResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.EducationResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
-import com.bamdoliro.maru.presentation.form.dto.response.FormResultResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.GradeResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.ParentResponse;
@@ -100,7 +100,7 @@ public class FormFixture {
                         8,
                         2,
                         1,
-                        List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2)
+                        new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2))
                 ),
                 new Document(
                         "하이난김밤돌",
@@ -164,7 +164,8 @@ public class FormFixture {
                         randomNumber(0, 100),
                         randomNumber(0, 100),
                         randomNumber(0, 100),
-                        List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2)
+//                        new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2, Certificate.CRAFTSMAN_COMPUTER))
+                        new CertificateList(null)
                 ),
                 new Document(
                         "하이난김밤돌",
@@ -233,7 +234,7 @@ public class FormFixture {
                         null,
                         null,
                         null,
-                        List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2)
+                        new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2))
                 ),
                 new Document(
                         "하이난김밤돌",

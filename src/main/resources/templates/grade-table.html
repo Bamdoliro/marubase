@@ -53,6 +53,11 @@
         .ba {
             border: #000000 1px solid;
         }
+
+        .disabled {
+            color: #f3f3f3;
+            background-color: #f3f3f3;
+        }
     </style>
     <title>원서</title>
 </head>
@@ -77,7 +82,7 @@
     </tr>
 </table>
 <table>
-    <caption th:text='${"1. 교과성적 - " + form.score.subjectGradeScore + "점 (비교평가 미응시자)"}'></caption>
+    <caption th:text='${"1. 교과성적 - " + form.score.subjectGradeScore + "점"}'></caption>
     <tr>
         <th class="ba">과목</th>
         <th class="ba">만점</th>
@@ -100,34 +105,35 @@
     </tr>
 </table>
 <table>
-    <caption>2. 출결 상황 - 14점</caption>
+    <caption th:text='${"2. 출결 상황 - " + form.score.attendanceScore + "점"}'></caption>
     <tr>
         <th class="ba">출결</th>
         <th class="ba">부여점수</th>
     </tr>
-    <tr>
+    <tr th:if="${form.education.isQualificationExamination()}">
         <th class="ba">출결내역</th>
         <td class="ba">14점(기본점수)</td>
     </tr>
 </table>
 <table>
-    <caption>3. 봉사활동 - 14점</caption>
+    <caption th:text='${"3. 봉사활동 - " + form.score.volunteerScore + "점"}'></caption>
     <tr>
         <th class="ba">봉사활동</th>
         <th class="ba">부여점수</th>
     </tr>
-    <tr>
+    <tr th:if="${form.education.isQualificationExamination()}">
         <th class="ba">봉사내역</th>
         <td class="ba">14점(기본점수)</td>
     </tr>
 </table>
 <table>
-    <caption>4. 가산점 - 0점</caption>
+    <caption th:text='${"4. 가산점 - " + form.score.bonusScore + "점"}'></caption>
     <tr>
         <th class="ba">자격증명</th>
     </tr>
     <tr>
-        <td class="ba">(점)</td>
+        <td class="ba disabled" th:if="${form.score.bonusScore == 0}">-</td>
+        <td class="ba" th:unless="${form.score.bonusScore == 0}" th:text="${form.grade.certificateList.toString()}"></td>
     </tr>
 </table>
 <table>
