@@ -49,4 +49,15 @@ public class Subject {
     public String toString() {
         return String.format("%d%d", grade, semester);
     }
+
+    public String achievementLevelToString() {
+        if (subjectName.equals("음악") ||
+                subjectName.equals("미술") ||
+                subjectName.equals("체육")
+        ) {
+            return String.format("%s/%s", achievementLevel.name(), achievementLevel.getKorean3step());
+        }
+
+        return String.format("%s/%s", achievementLevel.name(), achievementLevel.getKorean());
+    }
 }

@@ -131,7 +131,7 @@ public class FormFixture {
                         )
                 ),
                 new Education(
-                        GraduationType.QUALIFICATION_EXAMINATION,
+                        GraduationType.EXPECTED,
                         "2021",
                         new School("비전중학교", "경기도", "7631003"),
                         new Teacher("나교사", new PhoneNumber("0519701234"), new PhoneNumber("01012344321"))
@@ -156,7 +156,8 @@ public class FormFixture {
                                         new Subject(3, 1, "사회", randomAchievementLevel()),
                                         new Subject(3, 1, "과학", randomAchievementLevel()),
                                         new Subject(3, 1, "영어", randomAchievementLevel()),
-                                        new Subject(3, 1, "체육", randomAchievementLevel())
+                                        new Subject(3, 1, "체육", randomAchievementLevel()),
+                                        new Subject(3, 1, "한문", randomAchievementLevel())
                                 )),
                         new Attendance(randomNumber(0, 5), randomNumber(0, 5), randomNumber(0, 5), randomNumber(0, 5)),
                         new Attendance(randomNumber(0, 3), randomNumber(0, 3), randomNumber(0, 3), randomNumber(0, 3)),
@@ -164,8 +165,7 @@ public class FormFixture {
                         randomNumber(0, 100),
                         randomNumber(0, 100),
                         randomNumber(0, 100),
-//                        new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2, Certificate.CRAFTSMAN_COMPUTER))
-                        new CertificateList(null)
+                        new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2, Certificate.CRAFTSMAN_COMPUTER))
                 ),
                 new Document(
                         "하이난김밤돌",

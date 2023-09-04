@@ -1,7 +1,8 @@
 package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
-import com.bamdoliro.maru.domain.form.domain.type.FormType;
+import com.bamdoliro.maru.domain.form.domain.type.AchievementLevel;
+import com.bamdoliro.maru.domain.form.domain.value.Subject;
 import com.bamdoliro.maru.domain.form.domain.value.SubjectMap;
 import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
@@ -10,18 +11,26 @@ import com.bamdoliro.maru.infrastructure.pdf.GeneratePdfService;
 import com.bamdoliro.maru.infrastructure.pdf.MergePdfService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.Templates;
+import com.bamdoliro.maru.presentation.form.dto.request.SubjectRequest;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import com.bamdoliro.maru.shared.constants.Schedule;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.utils.PdfMerger;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @UseCase
 public class ExportFormUseCase {
@@ -41,6 +50,7 @@ public class ExportFormUseCase {
                 "grade21", subjectMap.getSubjectListOf(2, 1),
                 "grade22", subjectMap.getSubjectListOf(2, 2),
                 "grade31", subjectMap.getSubjectListOf(3, 1),
+                "achievementLevelBySubject", achievementLevelBySubject(form),
                 "year", Schedule.getAdmissionYear()
         );
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -57,6 +67,29 @@ public class ExportFormUseCase {
         pdfMerger.close();
 
         return new ByteArrayResource(outputStream.toByteArray());
+    }
+
+    private List<SubjectVO> achievementLevelBySubject(Form form) {
+        List<SubjectVO> value = new ArrayList<>();
+        Map<String, List<Subject>> subjectMap = form.getGrade()
+                .getSubjectListValue()
+                .stream()
+                .collect(Collectors.groupingBy(Subject::getSubjectName));
+
+        subjectMap.forEach((key, values) -> {
+            SubjectVO subject = new SubjectVO(key);
+            values.forEach(v -> {
+                try {
+                    SubjectVO.class.getField("achievementLevel" + v.toString())
+                            .set(subject, v.getAchievementLevel());
+                } catch (IllegalAccessException | NoSuchFieldException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            value.add(subject);
+        });
+
+        return value;
     }
 
     private void validateFormStatus(Form form) {
@@ -82,5 +115,21 @@ public class ExportFormUseCase {
                 Templates.RECOMMENDATION,
                 Templates.NO_SMOKING
         );
+    }
+}
+
+@Getter
+class SubjectVO {
+
+    private String subjectName;
+
+    public AchievementLevel achievementLevel21;
+
+    public AchievementLevel achievementLevel22;
+
+    public AchievementLevel achievementLevel31;
+
+    public SubjectVO(String subjectName) {
+        this.subjectName = subjectName;
     }
 }
