@@ -21,7 +21,7 @@
             width: 100%;
             font-size: 12px;
             text-align: center;
-            margin: 16px;
+            margin-top: 16px;
         }
 
         tr {
@@ -41,7 +41,7 @@
 
         caption {
             text-align: left;
-            font-size: 18px;
+            font-size: 16px;
         }
 
         th {
@@ -76,7 +76,7 @@
 <table>
     <tr>
         <th class="ba">인적사항</th>
-        <td class="ba" th:text='${"검정, "+form.applicant.name}'></td>
+        <td class="ba" th:text='${form.education.isQualificationExamination() ? "검정" :  form.education.school.name + ", "  +form.applicant.name}'></td>
         <th class="ba">생년월일</th>
         <td class="ba" th:text="${#temporals.format(form.applicant.birthday, 'YYYY년 MM월 dd일')}"></td>
     </tr>
@@ -120,11 +120,14 @@
     <tr th:each="subject : ${achievementLevelBySubject}">
         <td class="ba" th:text="${subject.subjectName}"></td>
         <td class="ba disabled" th:if="${subject.achievementLevel21 == null}"></td>
-        <td class="ba" th:unless="${subject.achievementLevel21 == null}" th:text="${subject.achievementLevel21}"></td>
+        <td class="ba" th:unless="${subject.achievementLevel21 == null}"
+            th:text="${subject.achievementLevel21.toString(subject.subjectName)}"></td>
         <td class="ba disabled" th:if="${subject.achievementLevel22 == null}"></td>
-        <td class="ba" th:unless="${subject.achievementLevel22 == null}" th:text="${subject.achievementLevel22}"></td>
+        <td class="ba" th:unless="${subject.achievementLevel22 == null}"
+            th:text="${subject.achievementLevel22.toString(subject.subjectName)}"></td>
         <td class="ba disabled" th:if="${subject.achievementLevel31 == null}"></td>
-        <td class="ba" th:unless="${subject.achievementLevel31 == null}" th:text="${subject.achievementLevel31}"></td>
+        <td class="ba" th:unless="${subject.achievementLevel31 == null}"
+            th:text="${subject.achievementLevel31.toString(subject.subjectName)}"></td>
     </tr>
 </table>
 <table th:if="${form.education.isQualificationExamination()}">
