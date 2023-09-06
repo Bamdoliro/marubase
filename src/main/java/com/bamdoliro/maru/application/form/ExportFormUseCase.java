@@ -25,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -47,7 +48,7 @@ public class ExportFormUseCase {
                 "grade21", subjectMap.getSubjectListOf(2, 1),
                 "grade22", subjectMap.getSubjectListOf(2, 2),
                 "grade31", subjectMap.getSubjectListOf(3, 1),
-                "achievementLevelBySubject", achievementLevelBySubject(form),
+                "subjectList", getSubjectList(form),
                 "year", Schedule.getAdmissionYear()
         );
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -66,7 +67,7 @@ public class ExportFormUseCase {
         return new ByteArrayResource(outputStream.toByteArray());
     }
 
-    private List<SubjectVO> achievementLevelBySubject(Form form) {
+    private List<SubjectVO> getSubjectList(Form form) {
         List<SubjectVO> value = new ArrayList<>();
         Map<String, List<Subject>> subjectMap = form.getGrade()
                 .getSubjectListValue()
@@ -76,11 +77,15 @@ public class ExportFormUseCase {
         subjectMap.forEach((key, values) -> {
             SubjectVO subject = new SubjectVO(key);
             values.forEach(v -> {
-                try {
-                    SubjectVO.class.getField("achievementLevel" + v.toString())
-                            .set(subject, v.getAchievementLevel());
-                } catch (IllegalAccessException | NoSuchFieldException e) {
-                    throw new RuntimeException(e);
+                if (Objects.nonNull(v.getOriginalScore())) {
+                    subject.score = v.getOriginalScore();
+                } else {
+                    try {
+                        SubjectVO.class.getField("achievementLevel" + v.toString())
+                                .set(subject, v.getAchievementLevel());
+                    } catch (IllegalAccessException | NoSuchFieldException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             });
             value.add(subject);
@@ -125,6 +130,8 @@ class SubjectVO {
     public AchievementLevel achievementLevel22;
 
     public AchievementLevel achievementLevel31;
+
+    Integer score;
 
     public SubjectVO(String subjectName) {
         this.subjectName = subjectName;

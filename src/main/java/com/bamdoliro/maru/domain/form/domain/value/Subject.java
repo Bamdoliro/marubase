@@ -29,8 +29,8 @@ public class Subject {
     @Column(nullable = false, length = 2)
     private AchievementLevel achievementLevel;
 
-    @Column(nullable = true)
-    private Integer score;
+    @Column(nullable = true, name = "score")
+    private Integer originalScore;
 
     public Subject(Integer grade, Integer semester, String subjectName, AchievementLevel achievementLevel) {
         this.grade = grade;
@@ -39,12 +39,12 @@ public class Subject {
         this.achievementLevel = achievementLevel;
     }
 
-    public Subject(String subjectName, Integer score) {
+    public Subject(String subjectName, Integer originalScore) {
         this.grade = 0;
         this.semester = 0;
         this.subjectName = subjectName;
-        this.score = score;
-        this.achievementLevel = calculateQualificationExaminationAchievementLevel(score);
+        this.originalScore = originalScore;
+        this.achievementLevel = calculateQualificationExaminationAchievementLevel(originalScore);
     }
 
     private AchievementLevel calculateQualificationExaminationAchievementLevel(int score) {

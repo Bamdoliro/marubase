@@ -36,6 +36,19 @@ class ExportFormUseCaseSpringBootTest {
 
     @Transactional
     @Test
+    void 검정고시_원서를_pdf로_저장한다() throws IOException {
+        User user = userRepository.save(UserFixture.createUser());
+        Form form = FormFixture.createRandomQualificationExaminationForm(user);
+
+        calculateFormScoreService.execute(form);
+        form.assignExaminationNumber(2004L);
+        formRepository.save(form);
+
+        SaveFileUtil.execute(exportFormUseCase.execute(user), SaveFileUtil.PDF);
+    }
+
+    @Transactional
+    @Test
     void 원서를_pdf로_저장한다() throws IOException {
         User user = userRepository.save(UserFixture.createUser());
         Form form = FormFixture.createRandomForm(user);

@@ -140,23 +140,36 @@ public class FormFixture {
                         new SubjectList(
                                 List.of(
                                         new Subject(2, 1, "국어", randomAchievementLevel()),
+                                        new Subject(2, 1, "도덕", randomAchievementLevel()),
+                                        new Subject(2, 1, "역사", randomAchievementLevel()),
                                         new Subject(2, 1, "수학", randomAchievementLevel()),
-                                        new Subject(2, 1, "사회", randomAchievementLevel()),
                                         new Subject(2, 1, "과학", randomAchievementLevel()),
                                         new Subject(2, 1, "영어", randomAchievementLevel()),
-                                        new Subject(2, 1, "체육", randomAchievementLevel()),
+                                        new Subject(2, 1, "체육", random3AchievementLevel()),
+                                        new Subject(2, 1, "미술", random3AchievementLevel()),
+                                        new Subject(2, 1, "음악", random3AchievementLevel()),
+
                                         new Subject(2, 2, "국어", randomAchievementLevel()),
+                                        new Subject(2, 2, "도덕", randomAchievementLevel()),
+                                        new Subject(2, 2, "역사", randomAchievementLevel()),
                                         new Subject(2, 2, "수학", randomAchievementLevel()),
-                                        new Subject(2, 2, "사회", randomAchievementLevel()),
                                         new Subject(2, 2, "과학", randomAchievementLevel()),
                                         new Subject(2, 2, "영어", randomAchievementLevel()),
-                                        new Subject(2, 2, "체육", randomAchievementLevel()),
+                                        new Subject(2, 2, "체육", random3AchievementLevel()),
+                                        new Subject(2, 2, "미술", random3AchievementLevel()),
+                                        new Subject(2, 2, "음악", random3AchievementLevel()),
+                                        new Subject(2, 2, "한문", randomAchievementLevel()),
+
                                         new Subject(3, 1, "국어", randomAchievementLevel()),
-                                        new Subject(3, 1, "수학", randomAchievementLevel()),
                                         new Subject(3, 1, "사회", randomAchievementLevel()),
+                                        new Subject(3, 1, "역사", randomAchievementLevel()),
+                                        new Subject(3, 1, "수학", randomAchievementLevel()),
                                         new Subject(3, 1, "과학", randomAchievementLevel()),
+                                        new Subject(3, 1, "기가", randomAchievementLevel()),
                                         new Subject(3, 1, "영어", randomAchievementLevel()),
-                                        new Subject(3, 1, "체육", randomAchievementLevel()),
+                                        new Subject(3, 1, "체육", random3AchievementLevel()),
+                                        new Subject(3, 1, "미술", random3AchievementLevel()),
+                                        new Subject(3, 1, "음악", random3AchievementLevel()),
                                         new Subject(3, 1, "한문", randomAchievementLevel())
                                 )),
                         new Attendance(randomNumber(0, 5), randomNumber(0, 5), randomNumber(0, 5), randomNumber(0, 5)),
@@ -176,9 +189,66 @@ public class FormFixture {
         );
     }
 
+    public static Form createRandomQualificationExaminationForm(User user) {
+        return new Form(
+                new Applicant(
+                        "https://maru.com/photo.png",
+                        "김밤돌",
+                        new PhoneNumber("01012345678"),
+                        LocalDate.of(2005, 4, 15),
+                        Gender.FEMALE
+                ),
+                new Parent(
+                        "김이로",
+                        new PhoneNumber("01012345678"),
+                        "엄마",
+                        new Address(
+                                "18071",
+                                "부산광역시 가락대로1393",
+                                "부산소프트웨어마이스터고"
+                        )
+                ),
+                new Education(
+                        GraduationType.QUALIFICATION_EXAMINATION,
+                        "2021",
+                        new School("비전중학교", "경기도", "7631003"),
+                        null
+                ),
+                new Grade(
+                        new SubjectList(
+                                List.of(
+                                        new Subject("국어", randomNumber(50, 100)),
+                                        new Subject("수학", randomNumber(50, 100)),
+                                        new Subject("사회", randomNumber(50, 100)),
+                                        new Subject("과학", randomNumber(50, 100)),
+                                        new Subject("영어", randomNumber(50, 100)),
+                                        new Subject("도덕", randomNumber(50, 100))
+                                )),
+                        new Attendance(randomNumber(0, 5), randomNumber(0, 5), randomNumber(0, 5), randomNumber(0, 5)),
+                        new Attendance(randomNumber(0, 3), randomNumber(0, 3), randomNumber(0, 3), randomNumber(0, 3)),
+                        new Attendance(randomNumber(0, 2), randomNumber(0, 2), randomNumber(0, 2), randomNumber(0, 2)),
+                        randomNumber(0, 100),
+                        randomNumber(0, 100),
+                        randomNumber(0, 100),
+                        new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2, Certificate.CRAFTSMAN_COMPUTER))
+                ),
+                new Document(
+                        "하이난김밤돌",
+                        "공부열심히할게용"
+                ),
+                FormType.REGULAR,
+                user
+        );
+    }
+
 
     private static AchievementLevel randomAchievementLevel() {
         AchievementLevel[] values = AchievementLevel.values();
+        return values[new Random().nextInt(values.length)];
+    }
+
+    private static AchievementLevel random3AchievementLevel() {
+        AchievementLevel[] values = {AchievementLevel.A, AchievementLevel.B, AchievementLevel.C};
         return values[new Random().nextInt(values.length)];
     }
 
@@ -266,6 +336,11 @@ public class FormFixture {
                                 new SubjectRequest("사회", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
                                 new SubjectRequest("과학", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
                                 new SubjectRequest("영어", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
+                                new SubjectRequest("도덕", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
+                                new SubjectRequest("기술가정", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
+                                new SubjectRequest("역사", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
+                                new SubjectRequest("미술", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
+                                new SubjectRequest("음악", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
                                 new SubjectRequest("체육", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
                                 new SubjectRequest("한문", null, randomAchievementLevel(), null, null)
                         ),

@@ -5,7 +5,7 @@
     <style>
         @page {
             size: A4;
-            margin: 70px;
+            margin: 50px;
         }
 
         * {
@@ -21,7 +21,7 @@
             width: 100%;
             font-size: 12px;
             text-align: center;
-            margin-top: 16px;
+            margin-top: 8px;
         }
 
         tr {
@@ -29,7 +29,7 @@
         }
 
         td {
-            padding: 8px 0;
+            padding: 6px 0;
         }
 
         .title {
@@ -47,7 +47,7 @@
         th {
             background-color: #ECF2FA;
             font-weight: 500;
-            padding: 8px 0;
+            padding: 6px 0;
         }
 
         .ba {
@@ -62,7 +62,7 @@
     <title>원서</title>
 </head>
 <body>
-<table>
+<table style="margin: 0">
     <tr>
         <th style="width: 20%;" class="ba">접수번호</th>
         <td class="title" colspan="3" rowspan="2">개인별 성적 일람표</td>
@@ -76,7 +76,9 @@
 <table>
     <tr>
         <th class="ba">인적사항</th>
-        <td class="ba" th:text='${form.education.isQualificationExamination() ? "검정" :  form.education.school.name + ", "  +form.applicant.name}'></td>
+        <td class="ba"
+            th:text='${(form.education.isQualificationExamination() ? "검정" :  form.education.school.name) + ", "  + form.applicant.name}'>
+        </td>
         <th class="ba">생년월일</th>
         <td class="ba" th:text="${#temporals.format(form.applicant.birthday, 'YYYY년 MM월 dd일')}"></td>
     </tr>
@@ -88,20 +90,10 @@
         <th class="ba">만점</th>
         <th class="ba">득점</th>
     </tr>
-    <tr>
-        <td class="ba">국어</td>
+    <tr th:each="subject : ${subjectList}">
+        <td class="ba" th:text="${subject.subjectName}"></td>
         <td class="ba">100</td>
-        <td class="ba">92</td>
-    </tr>
-    <tr>
-        <td class="ba">국어</td>
-        <td class="ba">100</td>
-        <td class="ba">92</td>
-    </tr>
-    <tr>
-        <td class="ba">국어</td>
-        <td class="ba">100</td>
-        <td class="ba">92</td>
+        <td class="ba" th:text="${subject.score}"></td>
     </tr>
 </table>
 <table th:unless="${form.education.isQualificationExamination()}">
@@ -117,7 +109,7 @@
         <th class="ba">성취수준</th>
         <th class="ba">성취수준</th>
     </tr>
-    <tr th:each="subject : ${achievementLevelBySubject}">
+    <tr th:each="subject : ${subjectList}">
         <td class="ba" th:text="${subject.subjectName}"></td>
         <td class="ba disabled" th:if="${subject.achievementLevel21 == null}"></td>
         <td class="ba" th:unless="${subject.achievementLevel21 == null}"
@@ -149,9 +141,18 @@
         <th class="ba" colspan="4">3학년</th>
     </tr>
     <tr>
-        <th class="ba">미인정<br/>결석</th><th class="ba">미인정<br/>지각</th><th class="ba">미인정<br/>조퇴</th><th class="ba">미인정<br/>결과</th>
-        <th class="ba">미인정<br/>결석</th><th class="ba">미인정<br/>지각</th><th class="ba">미인정<br/>조퇴</th><th class="ba">미인정<br/>결과</th>
-        <th class="ba">미인정<br/>결석</th><th class="ba">미인정<br/>지각</th><th class="ba">미인정<br/>조퇴</th><th class="ba">미인정<br/>결과</th>
+        <th class="ba">미인정<br/>결석</th>
+        <th class="ba">미인정<br/>지각</th>
+        <th class="ba">미인정<br/>조퇴</th>
+        <th class="ba">미인정<br/>결과</th>
+        <th class="ba">미인정<br/>결석</th>
+        <th class="ba">미인정<br/>지각</th>
+        <th class="ba">미인정<br/>조퇴</th>
+        <th class="ba">미인정<br/>결과</th>
+        <th class="ba">미인정<br/>결석</th>
+        <th class="ba">미인정<br/>지각</th>
+        <th class="ba">미인정<br/>조퇴</th>
+        <th class="ba">미인정<br/>결과</th>
     </tr>
     <tr>
         <td class="ba" th:text="${form.grade.attendance1.absenceCount}"></td>
