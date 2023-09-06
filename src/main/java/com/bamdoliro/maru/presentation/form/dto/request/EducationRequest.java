@@ -8,7 +8,6 @@ import com.bamdoliro.maru.domain.form.domain.value.Teacher;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,15 +25,15 @@ public class EducationRequest {
     @Size(min = 4, max = 4, message = "4자여야 합니다.")
     private String graduationYear;
 
-    @Nullable
+    @NotBlank
     @Size(max = 20, message = "20자 이하여야 합니다.")
     private String schoolName;
 
-    @Nullable
+    @NotBlank
     @Size(max = 20, message = "20자 이하여야 합니다.")
     private String schoolLocation;
 
-    @Nullable
+    @NotBlank
     @Size(min = 7, max = 7, message = "7자여야 합니다.")
     private String schoolCode;
 
