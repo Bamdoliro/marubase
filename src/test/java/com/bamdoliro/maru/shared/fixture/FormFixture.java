@@ -261,13 +261,13 @@ public class FormFixture {
                         "01012344321"
                 ),
                 new GradeRequest(
-                        List.of(new SubjectRequest("국어", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel()),
-                                new SubjectRequest("수학", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel()),
-                                new SubjectRequest("사회", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel()),
-                                new SubjectRequest("과학", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel()),
-                                new SubjectRequest("영어", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel()),
-                                new SubjectRequest("체육", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel()),
-                                new SubjectRequest("한문", null, randomAchievementLevel(), null)
+                        List.of(new SubjectRequest("국어", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
+                                new SubjectRequest("수학", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
+                                new SubjectRequest("사회", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
+                                new SubjectRequest("과학", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
+                                new SubjectRequest("영어", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
+                                new SubjectRequest("체육", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
+                                new SubjectRequest("한문", null, randomAchievementLevel(), null, null)
                         ),
                         new AttendanceRequest(0, 0, 0, 2),
                         new AttendanceRequest(2, 1, 0, 0),
@@ -289,20 +289,20 @@ public class FormFixture {
                 new EducationRequest(
                         GraduationType.QUALIFICATION_EXAMINATION,
                         "2021",
-                        null,
-                        null,
-                        null,
+                        "비전중학교",
+                        "경기도",
+                        "7631003",
                         null,
                         null,
                         null
                 ),
                 new GradeRequest(
-                        List.of(new SubjectRequest("국어", randomAchievementLevel(), null, null),
-                                new SubjectRequest("수학", randomAchievementLevel(), null, null),
-                                new SubjectRequest("사회", randomAchievementLevel(), null, null),
-                                new SubjectRequest("과학", randomAchievementLevel(), null, null),
-                                new SubjectRequest("영어", randomAchievementLevel(), null, null),
-                                new SubjectRequest("도덕", randomAchievementLevel(), null, null)
+                        List.of(new SubjectRequest("국어", null, null, null, randomNumber(50, 100)),
+                                new SubjectRequest("수학", null, null, null, randomNumber(50, 100)),
+                                new SubjectRequest("사회", null, null, null, randomNumber(50, 100)),
+                                new SubjectRequest("과학", null, null, null, randomNumber(50, 100)),
+                                new SubjectRequest("영어", null, null, null, randomNumber(50, 100)),
+                                new SubjectRequest("도덕", null, null, null, randomNumber(50, 100))
                         ),
                         null,
                         null,
@@ -332,13 +332,13 @@ public class FormFixture {
                         "01012344321"
                 ),
                 new GradeRequest(
-                        List.of(new SubjectRequest("국어", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel()),
-                                new SubjectRequest("수학", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel()),
-                                new SubjectRequest("사회", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel()),
-                                new SubjectRequest("과학", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel()),
-                                new SubjectRequest("영어", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel()),
-                                new SubjectRequest("체육", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel()),
-                                new SubjectRequest("한문", null, randomAchievementLevel(), null)
+                        List.of(new SubjectRequest("국어", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
+                                new SubjectRequest("수학", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
+                                new SubjectRequest("사회", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
+                                new SubjectRequest("과학", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
+                                new SubjectRequest("영어", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
+                                new SubjectRequest("체육", randomAchievementLevel(), randomAchievementLevel(), randomAchievementLevel(), null),
+                                new SubjectRequest("한문", null, randomAchievementLevel(), null, null)
                         ),
                         new AttendanceRequest(0, 0, 0, 2),
                         new AttendanceRequest(2, 1, 0, 0),

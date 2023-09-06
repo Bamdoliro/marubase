@@ -76,5 +76,4 @@ class SubmitFormUseCaseTest {
         verify(assignExaminationNumberService, never()).execute(any(Form.class));
         verify(formRepository, never()).save(any(Form.class));
     }
-
 }

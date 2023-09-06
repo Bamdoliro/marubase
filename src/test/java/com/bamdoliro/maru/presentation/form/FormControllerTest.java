@@ -134,13 +134,13 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("졸업 연도"),
                                 fieldWithPath("education.schoolName")
                                         .type(JsonFieldType.STRING)
-                                        .description("출신 학교 이름 (출신 학교가 없는 경우 null)"),
+                                        .description("출신 학교 이름"),
                                 fieldWithPath("education.schoolLocation")
                                         .type(JsonFieldType.STRING)
-                                        .description("출신 학교 지역 (출신 학교가 없는 경우 null)"),
+                                        .description("출신 학교 지역"),
                                 fieldWithPath("education.schoolCode")
                                         .type(JsonFieldType.STRING)
-                                        .description("출신 학교 코드 (출신 학교가 없는 경우 null)"),
+                                        .description("출신 학교 코드"),
                                 fieldWithPath("education.teacherName")
                                         .type(JsonFieldType.STRING)
                                         .description("작성 교사 (없는 경우 null)"),
@@ -164,6 +164,10 @@ class FormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("grade.subjectList[].achievementLevel31")
                                         .type(JsonFieldType.STRING)
                                         .description("<<achievement-level,3학년 1학기 성취도 (성적이 없는 경우 null)>>")
+                                        .optional(),
+                                fieldWithPath("grade.subjectList[].score")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("검정고시인 경우 점수 (검정고시가 아닐시 무조건 null)")
                                         .optional(),
                                 fieldWithPath("grade.certificateList[]")
                                         .type(JsonFieldType.ARRAY)
@@ -742,13 +746,13 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("졸업 연도"),
                                 fieldWithPath("education.schoolName")
                                         .type(JsonFieldType.STRING)
-                                        .description("출신 학교 이름 (출신 학교가 없는 경우 null)"),
+                                        .description("출신 학교 이름"),
                                 fieldWithPath("education.schoolLocation")
                                         .type(JsonFieldType.STRING)
-                                        .description("출신 학교 지역 (출신 학교가 없는 경우 null)"),
+                                        .description("출신 학교 지역"),
                                 fieldWithPath("education.schoolCode")
                                         .type(JsonFieldType.STRING)
-                                        .description("출신 학교 코드 (출신 학교가 없는 경우 null)"),
+                                        .description("출신 학교 코드"),
                                 fieldWithPath("education.teacherName")
                                         .type(JsonFieldType.STRING)
                                         .description("작성 교사 (없는 경우 null)"),
@@ -772,6 +776,10 @@ class FormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("grade.subjectList[].achievementLevel31")
                                         .type(JsonFieldType.STRING)
                                         .description("<<achievement-level,3학년 1학기 성취도 (성적이 없는 경우 null)>>")
+                                        .optional(),
+                                fieldWithPath("grade.subjectList[].score")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("검정고시인 경우 점수 (검정고시가 아닐시 무조건 null)")
                                         .optional(),
                                 fieldWithPath("grade.certificateList[]")
                                         .type(JsonFieldType.ARRAY)
