@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.domain.form.domain.value;
 
+import com.bamdoliro.maru.shared.util.MathUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
@@ -41,11 +42,11 @@ public class Score {
     private Double totalScore;
 
     public Score(Double subjectGradeScore, Integer attendanceScore, Integer volunteerScore, Integer bonusScore) {
-        this.subjectGradeScore = subjectGradeScore;
+        this.subjectGradeScore = MathUtil.roundTo(subjectGradeScore, 3);
         this.attendanceScore = attendanceScore;
         this.volunteerScore = volunteerScore;
         this.bonusScore = bonusScore;
-        this.firstRoundScore = subjectGradeScore + attendanceScore + volunteerScore + bonusScore;
+        this.firstRoundScore = MathUtil.roundTo(subjectGradeScore + attendanceScore + volunteerScore + bonusScore, 3);
     }
 
     public void updateSubjectScore(Double subjectGradeScore) {

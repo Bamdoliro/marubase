@@ -5,7 +5,6 @@ import com.bamdoliro.maru.domain.form.domain.type.Certificate;
 import com.bamdoliro.maru.domain.form.domain.value.Attendance;
 import com.bamdoliro.maru.domain.form.domain.value.Score;
 import com.bamdoliro.maru.domain.form.domain.value.SubjectMap;
-import com.bamdoliro.maru.shared.util.MathUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +21,7 @@ import static com.bamdoliro.maru.domain.form.constant.FormConstant.MIN_ATTENDANC
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.MIN_VOLUNTEER_SCORE;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.MIN_VOLUNTEER_TIME;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.REGULAR_TYPE_DEFAULT_SCORE;
-import static com.bamdoliro.maru.domain.form.constant.FormConstant.SPECIAL_TYPE_DEFAULT_SCORE ;
+import static com.bamdoliro.maru.domain.form.constant.FormConstant.SPECIAL_TYPE_DEFAULT_SCORE;
 
 @RequiredArgsConstructor
 @Service
@@ -63,7 +62,7 @@ public class CalculateFormScoreService {
                     7.2 * 2 * subjectMap.getScoreOf(3, 1);
         }
 
-        return REGULAR_TYPE_DEFAULT_SCORE + MathUtil.roundTo(score, 3);
+        return REGULAR_TYPE_DEFAULT_SCORE + score;
     }
 
     private Double calculateSpecialScore(Form form) {
@@ -77,7 +76,7 @@ public class CalculateFormScoreService {
                     4.32 * 2 * subjectMap.getScoreOf(3, 1);
         }
 
-        return SPECIAL_TYPE_DEFAULT_SCORE + MathUtil.roundTo(score, 3);
+        return SPECIAL_TYPE_DEFAULT_SCORE + score;
     }
 
     private Integer calculateAttendanceScore(Form form) {
