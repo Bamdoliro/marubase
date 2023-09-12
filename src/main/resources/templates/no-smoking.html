@@ -83,7 +83,8 @@
         }
 
         .indent {
-            text-indent: 24px;
+            text-indent: 14px;
+            word-break: keep-all;
         }
 
         .red {
@@ -118,7 +119,7 @@
             <p class="indent">나 <span th:text="${form.applicant.name}"></span>은(는) 이 시대를 이끌어갈 SW 분야 영 마이스터가 되기 위해 <span class="red">흡연을 하지 않겠습니다.</span></p>
             <p class="indent">보호자는 지원자의 건강한 성장과 발전을 위해 용기와 도움을 줄 것을 약속합니다.</p>
             <div style="height: 48px;"></div>
-            <p id="security">■ 개인 정보 수집·이용 동의</p>
+            <p id="security">■ 개인 정보 수집&#183;이용 동의</p>
             <table aria-describedby="security">
                 <tr>
                     <th scope="col" class="ba" style="width: 35%">항목</th>
@@ -138,7 +139,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row" class="ba">개인정보 수집·이용 동의</th>
+                    <th scope="row" class="ba">개인정보 수집&#183;이용 동의</th>
                     <td class="ba" colspan="2">□ 예&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;□ 아니오</td>
                 </tr>
             </table>

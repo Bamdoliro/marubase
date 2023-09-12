@@ -73,7 +73,8 @@
         }
 
         .indent {
-            text-indent: 36px;
+            text-indent: 14px;
+            word-break: keep-all;
         }
     </style>
     <title>원서</title>
@@ -133,18 +134,18 @@
             <p class="middle left indent">위 학생을 <span th:text="${year}"></span>학년도 부산소프트웨어마이스터고등학교 특별전형 대상자로 추천합니다.</p>
             <div style="height: 81px;"></div>
             <p class="middle" th:text="${#dates.format(#dates.createNow(),'YYYY년 MM월 dd일')}"></p>
-            <div style="height: 54px;"></div>
+            <div style="height: 72px;"></div>
             <p class="middle">
                 작성자 담임:&nbsp;&nbsp;
                 <span th:text="${form.education.teacher.name}"></span>&nbsp;&nbsp;&nbsp;
                 <span class="guide">(서명)</span>
             </p>
-            <div style="height: 81px;"></div>
+            <div style="height: 96px;"></div>
             <p class="school">
                 <span th:text="${form.education.school.name}"></span>장&nbsp;&nbsp;
                 <span class="guide">(직인)</span>
             </p>
-            <div style="height: 81px;"></div>
+            <div style="height: 96px;"></div>
             <p class="school left">부산소프트웨어마이스터고등학교장 귀하</p>
         </td>
     </tr>
