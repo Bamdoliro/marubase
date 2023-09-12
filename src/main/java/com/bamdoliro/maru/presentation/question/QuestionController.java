@@ -61,7 +61,7 @@ public class QuestionController {
 
     @GetMapping
     public ListCommonResponse<QuestionResponse> queryQuestionList(
-            @RequestParam QuestionCategory category
+            @RequestParam(name = "category", required = false) QuestionCategory category
     ) {
         return CommonResponse.ok(
                 queryQuestionListUseCase.execute(category)

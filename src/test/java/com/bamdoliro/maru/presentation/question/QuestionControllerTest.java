@@ -1,6 +1,5 @@
 package com.bamdoliro.maru.presentation.question;
 
-import com.bamdoliro.maru.domain.question.domain.Question;
 import com.bamdoliro.maru.domain.question.domain.type.QuestionCategory;
 import com.bamdoliro.maru.domain.question.exception.QuestionNotFoundException;
 import com.bamdoliro.maru.domain.user.domain.User;
@@ -159,6 +158,7 @@ class QuestionControllerTest extends RestDocsTestSupport {
                 .andDo(restDocs.document(
                         queryParameters(
                                 parameterWithName("category")
+                                        .optional()
                                         .description("<<question-category,카테고리>>")
                         )
                 ));
