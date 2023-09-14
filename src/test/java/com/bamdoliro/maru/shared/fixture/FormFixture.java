@@ -17,6 +17,7 @@ import com.bamdoliro.maru.domain.form.domain.value.Grade;
 import com.bamdoliro.maru.domain.form.domain.value.Parent;
 import com.bamdoliro.maru.domain.form.domain.value.PhoneNumber;
 import com.bamdoliro.maru.domain.form.domain.value.School;
+import com.bamdoliro.maru.domain.form.domain.value.Score;
 import com.bamdoliro.maru.domain.form.domain.value.Subject;
 import com.bamdoliro.maru.domain.form.domain.value.SubjectList;
 import com.bamdoliro.maru.domain.form.domain.value.Teacher;
@@ -48,7 +49,7 @@ import java.util.stream.Collectors;
 public class FormFixture {
 
     public static Form createForm(FormType type) {
-        return new Form(
+        Form form = new Form(
                 new Applicant(
                         "https://maru.com/photo.png",
                         "김밤돌",
@@ -109,6 +110,8 @@ public class FormFixture {
                 type,
                 UserFixture.createUser()
         );
+        form.updateScore(new Score(1.0, 2, 3, 4));
+        return form;
     }
 
     public static Form createRandomForm(User user) {
