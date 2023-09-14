@@ -4,7 +4,9 @@ import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FormTest {
 
@@ -36,6 +38,9 @@ class FormTest {
 
         form.fail();
         assertTrue(form.isReceived());
+
+        form.noShow();
+        assertTrue(form.isReceived());
     }
 
     @Test
@@ -65,6 +70,9 @@ class FormTest {
         assertTrue(form.isFirstPassed());
 
         form.fail();
+        assertTrue(form.isFirstPassed());
+
+        form.noShow();
         assertTrue(form.isFirstPassed());
     }
 
