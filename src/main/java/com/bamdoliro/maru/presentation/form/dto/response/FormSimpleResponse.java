@@ -2,7 +2,6 @@ package com.bamdoliro.maru.presentation.form.dto.response;
 
 
 import com.bamdoliro.maru.domain.form.domain.Form;
-import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.domain.type.GraduationType;
 import lombok.AllArgsConstructor;
@@ -21,6 +20,10 @@ public class FormSimpleResponse {
     private String school;
     private String status;
     private FormType type;
+    private Double totalScore;
+    private Boolean hasDocument;
+    private Boolean firstRoundPassed;
+    private Boolean secondRoundPassed;
 
     public FormSimpleResponse(Form form) {
         this.id = form.getId();
@@ -30,5 +33,9 @@ public class FormSimpleResponse {
         this.school = form.getEducation().getSchool().getName();
         this.status = form.getStatus().getDescription();
         this.type = form.getType();
+        this.totalScore = form.getScore().getTotalScore();
+        this.hasDocument = form.hasDocumentFile();
+        this.firstRoundPassed = form.isFirstPassed();
+        this.secondRoundPassed = form.isPassed();
     }
 }

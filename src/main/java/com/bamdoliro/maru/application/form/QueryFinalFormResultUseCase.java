@@ -15,6 +15,6 @@ public class QueryFinalFormResultUseCase {
 
     public FormResultResponse execute(User user) {
         Form form = formFacade.getForm(user);
-        return new FormResultResponse(form, form.isPassed());
+        return new FormResultResponse(form, form.isPassedNow());
     }
 }

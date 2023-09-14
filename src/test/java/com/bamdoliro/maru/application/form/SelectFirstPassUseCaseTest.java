@@ -78,7 +78,7 @@ class SelectFirstPassUseCaseTest {
             log.info("score: {}", form.getScore().getFirstRoundScore());
             log.info("status: {}", form.getStatus());
         });
-        int passedFormCount = formList.stream().filter(Form::isFirstPassed).toList().size();
+        int passedFormCount = formList.stream().filter(Form::isFirstPassedNow).toList().size();
         assertEquals(Math.round(FixedNumber.TOTAL * FixedNumber.MULTIPLE), passedFormCount);
     }
 }

@@ -153,12 +153,44 @@ public class Form extends BaseTimeEntity {
         return status.equals(FormStatus.SUBMITTED);
     }
 
-    public boolean isFirstPassed() {
+    public boolean hasDocumentFile() {
+        return isFirstPassed() != null || status.equals(FormStatus.RECEIVED);
+    }
+
+    public boolean isNoShow() {
+        return status.equals(FormStatus.NO_SHOW);
+    }
+
+    public boolean isFirstPassedNow() {
         return status.equals(FormStatus.FIRST_PASSED);
     }
 
-    public boolean isPassed() {
+    public Boolean isFirstPassed() {
+        if (isFirstPassedNow() || isPassed() != null || isNoShow()) {
+            return true;
+        }
+
+        return isFirstFailedNow() ? false : null;
+    }
+
+    public boolean isFirstFailedNow() {
+        return status.equals(FormStatus.FIRST_FAILED);
+    }
+
+    public boolean isPassedNow() {
         return status.equals(FormStatus.PASSED);
+    }
+
+    public Boolean isPassed() {
+        if (isPassedNow()) {
+            return true;
+        }
+
+        return !isFailedNow() ? false : null;
+    }
+
+    public boolean isFailedNow() {
+        return status.equals(FormStatus.FAILED);
     }
 
     public void changeToRegular(CalculateFormScoreService calculateFormScoreService) {

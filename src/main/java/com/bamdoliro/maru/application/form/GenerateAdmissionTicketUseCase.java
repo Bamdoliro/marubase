@@ -47,7 +47,7 @@ public class GenerateAdmissionTicketUseCase {
     }
 
     private void validateFormStatus(Form form) {
-        if (!form.isFirstPassed()) {
+        if (!form.isFirstPassedNow()) {
             throw new InvalidFromStatusException();
         }
     }
