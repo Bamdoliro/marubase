@@ -153,7 +153,7 @@ public class Form extends BaseTimeEntity {
         return status.equals(FormStatus.SUBMITTED);
     }
 
-    public boolean hasDocumentFile() {
+    public boolean isReceived() {
         return isFirstPassed() != null || status.equals(FormStatus.RECEIVED);
     }
 
@@ -186,7 +186,7 @@ public class Form extends BaseTimeEntity {
             return true;
         }
 
-        return !isFailedNow() ? false : null;
+        return isFailedNow() || isNoShow() ? false : null;
     }
 
     public boolean isFailedNow() {

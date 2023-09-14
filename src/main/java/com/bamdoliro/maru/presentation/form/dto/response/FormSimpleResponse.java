@@ -34,7 +34,7 @@ public class FormSimpleResponse {
         this.status = form.getStatus().getDescription();
         this.type = form.getType();
         this.totalScore = form.getScore().getTotalScore();
-        this.hasDocument = form.hasDocumentFile();
+        this.hasDocument = form.isReceived();
         this.firstRoundPassed = form.isFirstPassed();
         this.secondRoundPassed = form.isPassed();
     }
