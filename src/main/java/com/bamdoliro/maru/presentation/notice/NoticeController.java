@@ -12,6 +12,7 @@ import com.bamdoliro.maru.presentation.notice.dto.response.NoticeSimpleResponse;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.auth.Authority;
 import com.bamdoliro.maru.shared.response.CommonResponse;
+import com.bamdoliro.maru.shared.response.IdResponse;
 import com.bamdoliro.maru.shared.response.ListCommonResponse;
 import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import jakarta.validation.Valid;
@@ -40,11 +41,12 @@ public class NoticeController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public void createNotice(
+    public SingleCommonResponse<IdResponse> createNotice(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestBody @Valid NoticeRequest request
     ) {
-        createNoticeUseCase.execute(request);
+        return CommonResponse.ok(
+                createNoticeUseCase.execute(request));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

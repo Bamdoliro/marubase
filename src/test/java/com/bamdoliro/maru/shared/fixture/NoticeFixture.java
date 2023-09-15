@@ -2,6 +2,7 @@ package com.bamdoliro.maru.shared.fixture;
 
 import com.bamdoliro.maru.domain.notice.domain.Notice;
 import com.bamdoliro.maru.presentation.notice.dto.response.NoticeSimpleResponse;
+import com.bamdoliro.maru.shared.response.IdResponse;
 
 public class NoticeFixture {
 

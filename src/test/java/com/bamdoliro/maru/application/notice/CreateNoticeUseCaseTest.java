@@ -4,6 +4,7 @@ import com.bamdoliro.maru.domain.notice.domain.Notice;
 import com.bamdoliro.maru.infrastructure.persistence.notice.NoticeRepository;
 import com.bamdoliro.maru.presentation.notice.dto.request.NoticeRequest;
 import com.bamdoliro.maru.shared.fixture.NoticeFixture;
+import com.bamdoliro.maru.shared.response.IdResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -36,12 +37,13 @@ class CreateNoticeUseCaseTest {
         given(noticeRepository.save(any(Notice.class))).willReturn(notice);
 
         // when
-        createNoticeUseCase.execute(request);
+        IdResponse response = createNoticeUseCase.execute(request);
 
         // then
         verify(noticeRepository, times(1)).save(captor.capture());
         Notice savedNotice = captor.getValue();
         assertEquals(request.getTitle(), savedNotice.getTitle());
         assertEquals(request.getContent(), savedNotice.getContent());
+        assertEquals(response.getId(), savedNotice.getId());
     }
 }

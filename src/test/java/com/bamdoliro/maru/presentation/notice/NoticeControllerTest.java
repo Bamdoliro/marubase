@@ -7,6 +7,7 @@ import com.bamdoliro.maru.presentation.notice.dto.response.NoticeResponse;
 import com.bamdoliro.maru.presentation.notice.dto.response.NoticeSimpleResponse;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.NoticeFixture;
+import com.bamdoliro.maru.shared.fixture.SharedFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,7 @@ class NoticeControllerTest extends RestDocsTestSupport {
     @Test
     void 공지사항을_생성한다() throws Exception {
         NoticeRequest request = new NoticeRequest("오늘 급식 맛있엇나용?", "토요일인데요");
-        willDoNothing().given(createNoticeUseCase).execute(request);
+        given(createNoticeUseCase.execute(any(NoticeRequest.class))).willReturn(SharedFixture.createIdResponse());
 
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);

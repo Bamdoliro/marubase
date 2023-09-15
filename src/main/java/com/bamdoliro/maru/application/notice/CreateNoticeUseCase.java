@@ -4,6 +4,7 @@ import com.bamdoliro.maru.domain.notice.domain.Notice;
 import com.bamdoliro.maru.infrastructure.persistence.notice.NoticeRepository;
 import com.bamdoliro.maru.presentation.notice.dto.request.NoticeRequest;
 import com.bamdoliro.maru.shared.annotation.UseCase;
+import com.bamdoliro.maru.shared.response.IdResponse;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -12,9 +13,11 @@ public class CreateNoticeUseCase {
 
     private final NoticeRepository noticeRepository;
 
-    public void execute(NoticeRequest request) {
-        noticeRepository.save(
+    public IdResponse execute(NoticeRequest request) {
+        Notice notice = noticeRepository.save(
                 new Notice(request.getTitle(), request.getContent())
         );
+
+        return new IdResponse(notice);
     }
 }

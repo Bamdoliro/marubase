@@ -13,6 +13,7 @@ import com.bamdoliro.maru.presentation.question.dto.response.QuestionResponse;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.auth.Authority;
 import com.bamdoliro.maru.shared.response.CommonResponse;
+import com.bamdoliro.maru.shared.response.IdResponse;
 import com.bamdoliro.maru.shared.response.ListCommonResponse;
 import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import jakarta.validation.Valid;
@@ -42,11 +43,11 @@ public class QuestionController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public void createQuestion(
+    public SingleCommonResponse<IdResponse> createQuestion(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestBody @Valid CreateQuestionRequest request
     ) {
-        createQuestionUseCase.execute(request);
+        return CommonResponse.ok(createQuestionUseCase.execute(request));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

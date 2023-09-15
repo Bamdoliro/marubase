@@ -8,6 +8,7 @@ import com.bamdoliro.maru.presentation.question.dto.request.UpdateQuestionReques
 import com.bamdoliro.maru.presentation.question.dto.response.QuestionResponse;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.QuestionFixture;
+import com.bamdoliro.maru.shared.fixture.SharedFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
@@ -42,7 +43,7 @@ class QuestionControllerTest extends RestDocsTestSupport {
 
     @Test
     void 자주묻는질문을_생성한다() throws Exception {
-        willDoNothing().given(createQuestionUseCase).execute(any(CreateQuestionRequest.class));
+        given(createQuestionUseCase.execute(any(CreateQuestionRequest.class))).willReturn(SharedFixture.createIdResponse());
         CreateQuestionRequest request = new CreateQuestionRequest("오늘 급식 맛있엇나용?", "토요일인데요", QuestionCategory.TOP_QUESTION);
 
         User user = UserFixture.createAdminUser();
