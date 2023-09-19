@@ -2,6 +2,7 @@ package com.bamdoliro.maru.presentation.form.dto.response;
 
 
 import com.bamdoliro.maru.domain.form.domain.Form;
+import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.domain.type.GraduationType;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ public class FormSimpleResponse {
     private LocalDate birthday;
     private GraduationType graduationType;
     private String school;
-    private String status;
+    private FormStatus status;
     private FormType type;
     private Double totalScore;
     private Boolean hasDocument;
@@ -31,7 +32,7 @@ public class FormSimpleResponse {
         this.birthday = form.getApplicant().getBirthday();
         this.graduationType = form.getEducation().getGraduationType();
         this.school = form.getEducation().getSchool().getName();
-        this.status = form.getStatus().getDescription();
+        this.status = form.getStatus();
         this.type = form.getType();
         this.totalScore = form.getScore().getTotalScore();
         this.hasDocument = form.isReceived();
