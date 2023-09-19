@@ -8,6 +8,7 @@ import com.bamdoliro.maru.application.form.ExportFormUseCase;
 import com.bamdoliro.maru.application.form.ExportResultUseCase;
 import com.bamdoliro.maru.application.form.ExportSecondRoundResultUseCase;
 import com.bamdoliro.maru.application.form.GenerateAdmissionTicketUseCase;
+import com.bamdoliro.maru.application.form.PassOrFailFormUseCase;
 import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
 import com.bamdoliro.maru.application.form.QueryFinalFormResultUseCase;
 import com.bamdoliro.maru.application.form.QueryFirstFormResultUseCase;
@@ -26,6 +27,7 @@ import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
+import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFinalFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.UpdateFormRequest;
@@ -84,6 +86,7 @@ public class FormController {
     private final ExportFirstRoundResultUseCase exportFirstRoundResultUseCase;
     private final ExportSecondRoundResultUseCase exportSecondRoundResultUseCase;
     private final ExportResultUseCase exportResultUseCase;
+    private final PassOrFailFormUseCase passOrFailFormUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -250,7 +253,7 @@ public class FormController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PatchMapping("/second-round")
+    @PatchMapping("/second-round/score")
     public void updateSecondRoundScore(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestPart(value = "xlsx") MultipartFile file
@@ -292,5 +295,14 @@ public class FormController {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(exportResultUseCase.execute());
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/second-round/result")
+    public void passOrFailForm(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
+            @RequestBody @Valid PassOrFailFormListRequest request
+    ) {
+        passOrFailFormUseCase.execute(request);
     }
 }

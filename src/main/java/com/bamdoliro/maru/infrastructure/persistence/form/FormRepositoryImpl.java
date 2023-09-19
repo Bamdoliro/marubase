@@ -94,4 +94,13 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 .orderBy(form.examinationNumber.asc())
                 .fetch();
     }
+
+    @Override
+    public List<Form> findByFormIdList(List<Long> idList) {
+        return queryFactory
+                .selectFrom(form)
+                .where(form.id.in(idList))
+                .orderBy(form.id.asc())
+                .fetch();
+    }
 }

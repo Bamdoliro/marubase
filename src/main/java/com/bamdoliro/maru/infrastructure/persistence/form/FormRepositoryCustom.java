@@ -12,4 +12,5 @@ public interface FormRepositoryCustom {
     List<Form> findReceivedRegularOrSupernumeraryForm();
     List<Form> findFirstRoundForm();
     List<Form> findSecondRoundForm();
+    List<Form> findByFormIdList(List<Long> idList);
 }
