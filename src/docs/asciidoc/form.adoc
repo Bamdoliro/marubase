@@ -565,3 +565,24 @@ include::{snippets}/form-controller-test/정상적으로_2차_합격_여부를_�
 
 ===== 해당하는 원서가 없는 경우
 include::{snippets}/form-controller-test/어드민이_2차_합격_여부를_입력할_때_존재하지_않는_원서를_입력했다면_에러가_발생한다/http-response.adoc[]
+
+
+
+=== 선택한 원서의 원서 url 조회
+어드민은 선택한 원서의 원서 url을 조회할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/선택한_원서의_원서url을_조회한다/request-headers.adoc[]
+
+===== Query Parameter
+include::{snippets}/form-controller-test/선택한_원서의_원서url을_조회한다/query-parameters.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/선택한_원서의_원서url을_조회한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/선택한_원서의_원서url을_조회한다/http-response.adoc[]
