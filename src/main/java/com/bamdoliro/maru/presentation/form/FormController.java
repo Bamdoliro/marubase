@@ -13,6 +13,7 @@ import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
 import com.bamdoliro.maru.application.form.QueryFinalFormResultUseCase;
 import com.bamdoliro.maru.application.form.QueryFirstFormResultUseCase;
 import com.bamdoliro.maru.application.form.QueryFormStatusUseCase;
+import com.bamdoliro.maru.application.form.QueryFormUrlUseCase;
 import com.bamdoliro.maru.application.form.QueryFormUseCase;
 import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
 import com.bamdoliro.maru.application.form.ReceiveFormUseCase;
@@ -34,8 +35,10 @@ import com.bamdoliro.maru.presentation.form.dto.request.UpdateFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormResultResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.FormUrlResponse;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.auth.Authority;
+import com.bamdoliro.maru.shared.response.CommonResponse;
 import com.bamdoliro.maru.shared.response.ListCommonResponse;
 import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import jakarta.validation.Valid;
@@ -58,6 +61,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/form")
@@ -87,6 +91,7 @@ public class FormController {
     private final ExportSecondRoundResultUseCase exportSecondRoundResultUseCase;
     private final ExportResultUseCase exportResultUseCase;
     private final PassOrFailFormUseCase passOrFailFormUseCase;
+    private final QueryFormUrlUseCase queryFormUrlUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -304,5 +309,15 @@ public class FormController {
             @RequestBody @Valid PassOrFailFormListRequest request
     ) {
         passOrFailFormUseCase.execute(request);
+    }
+
+    @GetMapping("/form-url")
+    public ListCommonResponse<FormUrlResponse> getFormUrl(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
+            @RequestParam(name = "id-list") List<Long> formIdList
+    ) {
+        return CommonResponse.ok(
+                queryFormUrlUseCase.execute(formIdList)
+        );
     }
 }

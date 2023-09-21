@@ -3,6 +3,8 @@ package com.bamdoliro.maru.infrastructure.persistence.form;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
+import com.bamdoliro.maru.infrastructure.persistence.form.vo.FormUrlVo;
+import com.bamdoliro.maru.infrastructure.persistence.form.vo.QFormUrlVo;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -101,6 +103,20 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 .selectFrom(form)
                 .where(form.id.in(idList))
                 .orderBy(form.id.asc())
+                .fetch();
+    }
+
+    @Override
+    public List<FormUrlVo> findFormUrlByFormIdList(List<Long> idList) {
+        return queryFactory
+                .select(new QFormUrlVo(
+                        form.examinationNumber,
+                        form.applicant.name,
+                        form.formUrl
+                ))
+                .from(form)
+                .where(form.id.in(idList))
+                .orderBy(form.examinationNumber.asc())
                 .fetch();
     }
 }
