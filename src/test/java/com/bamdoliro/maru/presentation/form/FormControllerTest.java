@@ -17,6 +17,8 @@ import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
 import com.bamdoliro.maru.infrastructure.s3.exception.FileSizeLimitExceededException;
 import com.bamdoliro.maru.infrastructure.s3.exception.ImageSizeMismatchException;
 import com.bamdoliro.maru.infrastructure.s3.exception.MediaTypeMismatchException;
+import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFinalFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.UpdateFormRequest;
@@ -1579,7 +1581,7 @@ class FormControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
         willDoNothing().given(updateSecondRoundScoreUseCase).execute(any(MultipartFile.class));
 
-        mockMvc.perform(multipartPatch("/form/second-round")
+        mockMvc.perform(multipartPatch("/form/second-round/score")
                         .file(file)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
@@ -1614,7 +1616,7 @@ class FormControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
         doThrow(new InvalidFileException()).when(updateSecondRoundScoreUseCase).execute(any(MultipartFile.class));
 
-        mockMvc.perform(multipartPatch("/form/second-round")
+        mockMvc.perform(multipartPatch("/form/second-round/score")
                         .file(file)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
@@ -1744,5 +1746,77 @@ class FormControllerTest extends RestDocsTestSupport {
                 ));
 
         verify(exportResultUseCase, times(1)).execute();
+    }
+
+    @Test
+    void 정상적으로_2차_합격_여부를_입력한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        willDoNothing().given(passOrFailFormUseCase).execute(any(PassOrFailFormListRequest.class));
+
+        PassOrFailFormListRequest request = new PassOrFailFormListRequest(
+                List.of(
+                        new PassOrFailFormRequest(3L, true),
+                        new PassOrFailFormRequest(2L, false),
+                        new PassOrFailFormRequest(5L, true),
+                        new PassOrFailFormRequest(4L, false),
+                        new PassOrFailFormRequest(1L, true)
+                )
+        );
+
+        mockMvc.perform(patch("/form/second-round/result")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request)))
+
+                .andExpect(status().isNoContent())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        ),
+                        requestFields(
+                                fieldWithPath("formList")
+                                        .type(JsonFieldType.ARRAY)
+                                        .description("2차 전형 결과를 입력할 원서 목록"),
+                                fieldWithPath("formList[].formId")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("원서 id"),
+                                fieldWithPath("formList[].pass")
+                                        .type(JsonFieldType.BOOLEAN)
+                                        .description("합격 여부")
+                        )
+                ));
+
+        verify(passOrFailFormUseCase, times(1)).execute(any(PassOrFailFormListRequest.class));
+    }
+
+    @Test
+    void 어드민이_2차_합격_여부를_입력할_때_존재하지_않는_원서를_입력했다면_에러가_발생한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        willThrow(new FormNotFoundException()).given(passOrFailFormUseCase).execute(any(PassOrFailFormListRequest.class));
+
+        PassOrFailFormListRequest request = new PassOrFailFormListRequest(
+                List.of(
+                        new PassOrFailFormRequest(390L, true)
+                )
+        );
+
+        mockMvc.perform(patch("/form/second-round/result")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request)))
+
+                .andExpect(status().isNotFound())
+
+                .andDo(restDocs.document());
+
+        verify(passOrFailFormUseCase, times(1)).execute(any(PassOrFailFormListRequest.class));
     }
 }

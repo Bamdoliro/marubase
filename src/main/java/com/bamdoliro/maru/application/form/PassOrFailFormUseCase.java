@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
+import com.bamdoliro.maru.domain.form.exception.FormNotFoundException;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormRequest;
@@ -49,7 +50,7 @@ public class PassOrFailFormUseCase {
 
     private void validate(List<PassOrFailFormRequest> requestList, List<Form> formList) {
         if (requestList.size() != formList.size()) {
-            throw new IllegalArgumentException("존재하지 않는 원서가 있습니다.");
+            throw new FormNotFoundException();
         }
     }
 }

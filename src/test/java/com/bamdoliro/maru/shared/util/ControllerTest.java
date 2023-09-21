@@ -17,6 +17,7 @@ import com.bamdoliro.maru.application.form.ExportFormUseCase;
 import com.bamdoliro.maru.application.form.ExportResultUseCase;
 import com.bamdoliro.maru.application.form.ExportSecondRoundResultUseCase;
 import com.bamdoliro.maru.application.form.GenerateAdmissionTicketUseCase;
+import com.bamdoliro.maru.application.form.PassOrFailFormUseCase;
 import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
 import com.bamdoliro.maru.application.form.QueryDraftFormUseCase;
 import com.bamdoliro.maru.application.form.QueryFinalFormResultUseCase;
@@ -227,6 +228,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected ExportResultUseCase exportResultUseCase;
+
+    @MockBean
+    protected PassOrFailFormUseCase passOrFailFormUseCase;
 
 
     @MockBean

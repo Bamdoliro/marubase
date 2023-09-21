@@ -83,14 +83,6 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(GlobalErrorProperty.BAD_REQUEST, e.getMessage()));
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException e) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponse(GlobalErrorProperty.BAD_REQUEST, e.getMessage()));
-    }
-
     @ExceptionHandler(MaruException.class)
     public ResponseEntity<ErrorResponse> handleMaruException(MaruException e) {
         return ResponseEntity
