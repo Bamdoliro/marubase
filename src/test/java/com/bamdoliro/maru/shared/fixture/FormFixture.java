@@ -46,6 +46,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import static com.bamdoliro.maru.shared.util.RandomUtil.randomNumber;
+
 public class FormFixture {
 
     public static Form createForm(FormType type) {
@@ -119,13 +121,13 @@ public class FormFixture {
                 new Applicant(
                         "https://maru.com/photo.png",
                         "김밤돌",
-                        new PhoneNumber("01012345678"),
+                        new PhoneNumber("01085852525"),
                         LocalDate.of(2005, 4, 15),
                         Gender.FEMALE
                 ),
                 new Parent(
                         "김이로",
-                        new PhoneNumber("01012345678"),
+                        new PhoneNumber("01085852626"),
                         "엄마",
                         new Address(
                                 "18071",
@@ -258,10 +260,6 @@ public class FormFixture {
     private static FormType randomFormType() {
         FormType[] values = {FormType.REGULAR, FormType.REGULAR, FormType.REGULAR, FormType.REGULAR, FormType.MEISTER_TALENT, FormType.MEISTER_TALENT, FormType.MEISTER_TALENT, FormType.MEISTER_TALENT, FormType.ONE_PARENT, FormType.MULTI_CHILDREN, FormType.SPECIAL_ADMISSION};
         return values[new Random().nextInt(values.length)];
-    }
-
-    private static int randomNumber(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
     }
 
     public static Form createQualificationExaminationForm(FormType type) {

@@ -9,10 +9,12 @@ import com.bamdoliro.maru.shared.util.RandomCodeUtil;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static com.bamdoliro.maru.shared.util.RandomUtil.randomPhoneNumber;
+
 public class UserFixture {
 
     public static User createUser() {
-        return new User("01085852525", "김밤돌", "비밀번호", Authority.USER);
+        return new User(randomPhoneNumber(), "김밤돌", "비밀번호", Authority.USER);
     }
 
     public static User createAdminUser() {

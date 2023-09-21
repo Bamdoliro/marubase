@@ -1,7 +1,6 @@
 package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
-import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormRequest;
@@ -20,15 +19,15 @@ public class PassOrFailFormUseCase {
 
     @Transactional
     public void execute(PassOrFailFormListRequest request) {
-        List<PassOrFailFormRequest> requestList = request.getFormList().stream()
-                .sorted(Comparator.comparingLong(PassOrFailFormRequest::getFormId))
-                .toList();
+        List<PassOrFailFormRequest> requestList = getSortedList(request);
 
         List<Form> formList = formRepository.findByFormIdList(
                 requestList.stream()
                         .map(PassOrFailFormRequest::getFormId)
                         .toList()
         );
+
+        validate(requestList, formList);
 
         for (int i = 0; i < formList.size(); i++) {
             Form form = formList.get(i);
@@ -39,6 +38,18 @@ public class PassOrFailFormUseCase {
             } else {
                 form.fail();
             }
+        }
+    }
+
+    private List<PassOrFailFormRequest> getSortedList(PassOrFailFormListRequest request) {
+        return request.getFormList().stream()
+                .sorted(Comparator.comparingLong(PassOrFailFormRequest::getFormId))
+                .toList();
+    }
+
+    private void validate(List<PassOrFailFormRequest> requestList, List<Form> formList) {
+        if (requestList.size() != formList.size()) {
+            throw new IllegalArgumentException("존재하지 않는 원서가 있습니다.");
         }
     }
 }
