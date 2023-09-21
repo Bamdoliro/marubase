@@ -22,6 +22,7 @@ import com.bamdoliro.maru.domain.form.domain.value.Subject;
 import com.bamdoliro.maru.domain.form.domain.value.SubjectList;
 import com.bamdoliro.maru.domain.form.domain.value.Teacher;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.infrastructure.persistence.form.vo.FormUrlVo;
 import com.bamdoliro.maru.presentation.form.dto.request.ApplicantRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.AttendanceRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.DocumentRequest;
@@ -37,6 +38,7 @@ import com.bamdoliro.maru.presentation.form.dto.response.DocumentResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.EducationResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.FormUrlResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.GradeResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.ParentResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.SubjectResponse;
@@ -532,5 +534,19 @@ public class FormFixture {
         return userList.stream()
                 .map(FormFixture::createRandomForm)
                 .collect(Collectors.toList());
+    }
+
+    public static FormUrlVo createFormUrlVo() {
+        return new FormUrlVo(
+                (long) randomNumber(1000, 5000),
+                "김밤돌",
+                "https://maru.bamdoliro.com/form.pdf"
+        );
+    }
+
+    public static FormUrlResponse createFormUrlResponse() {
+        return new FormUrlResponse(
+                createFormUrlVo()
+        );
     }
 }

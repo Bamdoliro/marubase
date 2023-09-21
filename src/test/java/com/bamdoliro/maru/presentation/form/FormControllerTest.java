@@ -46,6 +46,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -1818,5 +1819,41 @@ class FormControllerTest extends RestDocsTestSupport {
                 .andDo(restDocs.document());
 
         verify(passOrFailFormUseCase, times(1)).execute(any(PassOrFailFormListRequest.class));
+    }
+
+    @Test
+    void 선택한_원서의_원서url을_조회한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+        List<Long> idList = List.of(1L, 2L, 3L, 4L, 5L);
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(queryFormUrlUseCase.execute(idList)).willReturn(
+                List.of(FormFixture.createFormUrlResponse(),
+                        FormFixture.createFormUrlResponse(),
+                        FormFixture.createFormUrlResponse(),
+                        FormFixture.createFormUrlResponse(),
+                        FormFixture.createFormUrlResponse())
+        );
+
+        mockMvc.perform(get("/form/form-url")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .param("id-list", "1,2,3,4,5")
+                        .accept(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        ),
+                        queryParameters(
+                                parameterWithName("id-list")
+                                        .description("조회할 원서 id 목록")
+                        )
+                ));
+
+        verify(queryFormUrlUseCase, times(1)).execute(idList);
     }
 }
