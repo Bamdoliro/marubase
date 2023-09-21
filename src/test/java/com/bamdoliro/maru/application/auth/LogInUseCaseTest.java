@@ -2,8 +2,8 @@ package com.bamdoliro.maru.application.auth;
 
 import com.bamdoliro.maru.domain.auth.service.TokenService;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.domain.user.exception.PasswordMismatchException;
 import com.bamdoliro.maru.domain.user.exception.UserNotFoundException;
+import com.bamdoliro.maru.domain.auth.exception.WrongLoginException;
 import com.bamdoliro.maru.domain.user.service.UserFacade;
 import com.bamdoliro.maru.presentation.auth.dto.request.LogInRequest;
 import com.bamdoliro.maru.presentation.auth.dto.response.TokenResponse;
@@ -66,7 +66,7 @@ class LogInUseCaseTest {
         given(userFacade.getUser(request.getPhoneNumber())).willThrow(UserNotFoundException.class);
 
         // when and then
-        assertThrows(UserNotFoundException.class, () -> logInUseCase.execute(request));
+        assertThrows(WrongLoginException.class, () -> logInUseCase.execute(request));
 
         verify(userFacade, times(1)).getUser(request.getPhoneNumber());
         verify(tokenService, never()).generateAccessToken(user.getPhoneNumber());
@@ -82,7 +82,7 @@ class LogInUseCaseTest {
         given(userFacade.getUser(request.getPhoneNumber())).willReturn(user);
 
         // when and then
-        assertThrows(PasswordMismatchException.class, () -> logInUseCase.execute(request));
+        assertThrows(WrongLoginException.class, () -> logInUseCase.execute(request));
 
         verify(userFacade, times(1)).getUser(request.getPhoneNumber());
         verify(tokenService, never()).generateAccessToken(user.getPhoneNumber());
