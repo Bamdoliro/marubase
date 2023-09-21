@@ -541,3 +541,27 @@ include::{snippets}/form-controller-test/정상적으로_입학전형_전체_결
 
 ===== 정상 응답
 include::{snippets}/form-controller-test/정상적으로_입학전형_전체_결과를_다운로드한다/http-response.adoc[]
+
+
+
+=== 2차 합격자 처리
+어드민은 2차 합격자를 처리할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/정상적으로_2차_합격_여부를_입력한다/request-headers.adoc[]
+
+===== Request Body
+include::{snippets}/form-controller-test/정상적으로_2차_합격_여부를_입력한다/request-fields.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/정상적으로_2차_합격_여부를_입력한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/정상적으로_2차_합격_여부를_입력한다/http-response.adoc[]
+
+===== 해당하는 원서가 없는 경우
+include::{snippets}/form-controller-test/어드민이_2차_합격_여부를_입력할_때_존재하지_않는_원서를_입력했다면_에러가_발생한다/http-response.adoc[]
