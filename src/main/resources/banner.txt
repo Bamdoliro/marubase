@@ -6,7 +6,7 @@
 _|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|
 "`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'
 
-Contributors - @gimhanul, @hsem4717
+Contributors - @gimhanul, @hsem4717, @jyj1289, @cabbage16
 SpringBoot - ${spring-boot.version}
 Java - ${java.version}
 
