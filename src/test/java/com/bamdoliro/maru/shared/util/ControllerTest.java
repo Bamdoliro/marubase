@@ -55,6 +55,7 @@ import com.bamdoliro.maru.presentation.auth.AuthController;
 import com.bamdoliro.maru.presentation.fair.FairController;
 import com.bamdoliro.maru.presentation.form.DraftFormController;
 import com.bamdoliro.maru.presentation.form.FormController;
+import com.bamdoliro.maru.presentation.message.MessageController;
 import com.bamdoliro.maru.presentation.notice.NoticeController;
 import com.bamdoliro.maru.presentation.question.QuestionController;
 import com.bamdoliro.maru.presentation.school.SchoolController;
@@ -81,7 +82,8 @@ import org.springframework.test.web.servlet.MockMvc;
         FormController.class,
         NoticeController.class,
         DraftFormController.class,
-        FairController.class
+        FairController.class,
+        MessageController.class
 })
 public abstract class ControllerTest {
 
