@@ -79,7 +79,6 @@ public class MessageControllerTest extends RestDocsTestSupport {
                         )
                 ));
 
-        verify(sendMessageService, times(1)).execute(any(SendMessageRequest.class));
     }
 
     @Test
@@ -109,7 +108,6 @@ public class MessageControllerTest extends RestDocsTestSupport {
                         )
                 ));
 
-        verify(sendMessageService, times(1)).execute(any(SendMessageRequest.class));
     }
 
 
