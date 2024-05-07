@@ -89,14 +89,13 @@ public class MessageControllerTest extends RestDocsTestSupport {
 
         SendMessageRequest request = new SendMessageRequest("부산소마고 공지사항", "배고파요..", FormStatus.FINAL_SUBMITTED);
 
-        // 예외 발생 설정
         doThrow(new RuntimeException("원서를 찾을 수 없음")).when(sendMessageService).execute(any(SendMessageRequest.class));
 
         mockMvc.perform(post("/message")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
-                .andExpect(status().isInternalServerError()) // 내부 서버 오류 예상
+                .andExpect(status().isInternalServerError())
                 .andDo(restDocs.document(
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
@@ -107,10 +106,5 @@ public class MessageControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("status").type(JsonFieldType.STRING).description("메시지를 보낼 원서의 상태")
                         )
                 ));
-
     }
-
-
-
-
 }
