@@ -77,7 +77,6 @@ public class SendMessageService {
             messageService.send(messageList, false, false);
         } catch (Exception e){
             log.error(e.getMessage());
-            e.printStackTrace();
             throw new FailedToSendException();
         }
     }
