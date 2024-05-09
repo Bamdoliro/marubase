@@ -23,7 +23,8 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -53,7 +54,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
         SendMessageRequest request = new SendMessageRequest("부산소마고 공지사항", "배고파요..", FormStatus.RECEIVED);
-        doNothing().when(sendMessageService).execute(any(SendMessageRequest.class));
+        doNothing().when(sendMessageUseCase).execute(any(SendMessageRequest.class));
 
         mockMvc.perform(post("/message")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
@@ -89,7 +90,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
 
         SendMessageRequest request = new SendMessageRequest("부산소마고 공지사항", "배고파요..", FormStatus.FINAL_SUBMITTED);
 
-        doThrow(new RuntimeException("원서를 찾을 수 없음")).when(sendMessageService).execute(any(SendMessageRequest.class));
+        doThrow(new RuntimeException("원서를 찾을 수 없음")).when(sendMessageUseCase).execute(any(SendMessageRequest.class));
 
         mockMvc.perform(post("/message")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
