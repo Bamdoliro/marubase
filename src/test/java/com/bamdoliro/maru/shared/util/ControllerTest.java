@@ -34,6 +34,7 @@ import com.bamdoliro.maru.application.form.UpdateFormUseCase;
 import com.bamdoliro.maru.application.form.UpdateSecondRoundScoreUseCase;
 import com.bamdoliro.maru.application.form.UploadFormUseCase;
 import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
+import com.bamdoliro.maru.application.message.SendMessageUseCase;
 import com.bamdoliro.maru.application.notice.CreateNoticeUseCase;
 import com.bamdoliro.maru.application.notice.DeleteNoticeUseCase;
 import com.bamdoliro.maru.application.notice.QueryNoticeListUseCase;
@@ -73,18 +74,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @Disabled
-@WebMvcTest({
-        UserController.class,
-        AuthController.class,
-        SharedController.class,
-        SchoolController.class,
-        QuestionController.class,
-        FormController.class,
-        NoticeController.class,
-        DraftFormController.class,
-        FairController.class,
-        MessageController.class
-})
+@WebMvcTest({UserController.class, AuthController.class, SharedController.class, SchoolController.class, QuestionController.class, FormController.class, NoticeController.class, DraftFormController.class, FairController.class, MessageController.class})
 public abstract class ControllerTest {
 
     @Autowired
@@ -238,7 +228,6 @@ public abstract class ControllerTest {
     @MockBean
     protected QueryFormUrlUseCase queryFormUrlUseCase;
 
-
     @MockBean
     protected TokenService tokenService;
 
@@ -248,6 +237,8 @@ public abstract class ControllerTest {
     @MockBean
     protected SendMessageService sendMessageService;
 
+    @MockBean
+    protected SendMessageUseCase sendMessageUseCase;
 
     @MockBean
     protected JwtProperties jwtProperties;

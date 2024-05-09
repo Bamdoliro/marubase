@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.presentation.message;
 
+import com.bamdoliro.maru.application.message.SendMessageUseCase;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.message.SendMessageService;
 import com.bamdoliro.maru.presentation.message.dto.request.SendMessageRequest;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class MessageController {
 
-    private final SendMessageService messageService;
+    private final SendMessageUseCase sendMessageUseCase;
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping
@@ -23,6 +24,6 @@ public class MessageController {
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestBody @Valid SendMessageRequest request
     ) {
-        messageService.execute(request);
+        sendMessageUseCase.execute(request);
     }
 }
