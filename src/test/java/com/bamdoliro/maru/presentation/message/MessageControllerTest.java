@@ -37,7 +37,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
     private FormRepository formRepository;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         Form form = FormFixture.createForm(FormType.REGULAR);
         form.receive();
         List<Form> forms = Arrays.asList(form);
@@ -46,7 +46,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 원서가_접수된_학생들에게_메시지를_보낸다() throws Exception{
+    void 원서가_접수된_학생들에게_메시지를_보낸다() throws Exception {
 
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
@@ -56,9 +56,9 @@ public class MessageControllerTest extends RestDocsTestSupport {
         doNothing().when(sendMessageService).execute(any(SendMessageRequest.class));
 
         mockMvc.perform(post("/message")
-                .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)))
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request)))
                 .andExpect(status().isNoContent())
 
                 .andDo(restDocs.document(

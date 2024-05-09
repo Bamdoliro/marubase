@@ -22,7 +22,7 @@ public class MessageController {
     public void sendMessage(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestBody @Valid SendMessageRequest request
-            ){
+    ) {
         messageService.execute(request);
     }
 }

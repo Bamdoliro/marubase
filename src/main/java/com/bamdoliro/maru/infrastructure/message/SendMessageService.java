@@ -35,16 +35,16 @@ public class SendMessageService {
         sendOneMessage(message);
     }
 
-    public void execute(SendMessageRequest request){
+    public void execute(SendMessageRequest request) {
         List<Form> formList = formRepository.findByStatus(request.getStatus());
         List<String> phoneNumberList = new ArrayList<>();
         List<Message> messageList = new ArrayList<>();
 
-        for (Form form : formList){
+        for (Form form : formList) {
             phoneNumberList.add(form.getUser().getPhoneNumber());
         }
 
-        for(String phoneNumber : phoneNumberList){
+        for (String phoneNumber : phoneNumberList) {
             Message message = createMessage(phoneNumber, request.getText());
             message.setSubject(request.getTitle());
             messageList.add(message);
@@ -72,10 +72,10 @@ public class SendMessageService {
         }
     }
 
-    private void sendManyMessage(List<Message> messageList){
-        try{
+    private void sendManyMessage(List<Message> messageList) {
+        try {
             messageService.send(messageList, false, false);
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage());
             throw new FailedToSendException();
         }
