@@ -18,7 +18,9 @@ public class SendMessageUseCase {
 
     public void execute(SendMessageRequest request) {
         List<Form> formList = formRepository.findByStatus(request.getStatus());
-        List<String> phoneNumberList = formList.stream().map(form -> form.getUser().getPhoneNumber()).toList();
+        List<String> phoneNumberList = formList.stream()
+                .map(form -> form.getUser().getPhoneNumber())
+                .toList();
         sendMessageService.execute(phoneNumberList, request.getText(), request.getTitle());
     }
 }
