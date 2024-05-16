@@ -19,8 +19,8 @@ public class MessageController {
     private final SendMessageUseCase sendMessageUseCase;
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping
-    public void sendMessage(
+    @PostMapping("/status")
+    public void sendMessageByStatus(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestBody @Valid SendMessageRequest request
     ) {
