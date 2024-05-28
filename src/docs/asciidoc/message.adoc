@@ -1,0 +1,24 @@
+== 그룹별 메세지 보내기
+
+=== 메시지 보내기
+메세지를 보낼 원서의 상태를 입력해 메시지를 보낼 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/message-controller-test/원서가_접수된_학생들에게_메시지를_보낸다/request-headers.adoc[]
+
+===== Request Body
+include::{snippets}/message-controller-test/원서가_접수된_학생들에게_메시지를_보낸다/request-fields.adoc[]
+
+==== 요청
+===== 접수된 원서를 가진 사용자에게 메시지 보내기
+include::{snippets}/message-controller-test/원서가_접수된_학생들에게_메시지를_보낸다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/message-controller-test/원서가_접수된_학생들에게_메시지를_보낸다/http-response.adoc[]
+
+===== 입력한 상태의 원서가 없거나 상태를 잘못 입력한 경우
+include::{snippets}/message-controller-test/해당제출상태인_원서가_없으면_오류가난다/http-response.adoc[]

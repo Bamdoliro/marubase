@@ -29,7 +29,9 @@ public class WebConfig implements WebMvcConfigurer {
                         "http://localhost:3001",
                         "http://localhost:3002",
                         "https://maru.bamdoliro.com",
-                        "https://admin.maru.bamdoliro.com"
+                        "https://admin.maru.bamdoliro.com",
+                        "https://maru-user.vercel.app",
+                        "https://maru-admin.vercel.app"
                 )
                 .allowedMethods(
                         HttpMethod.GET.name(),
