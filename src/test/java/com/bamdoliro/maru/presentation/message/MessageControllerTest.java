@@ -3,7 +3,6 @@ package com.bamdoliro.maru.presentation.message;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.message.dto.request.SendMessageByStatusRequest;
-import com.bamdoliro.maru.presentation.message.dto.request.SendMessageRequest;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
