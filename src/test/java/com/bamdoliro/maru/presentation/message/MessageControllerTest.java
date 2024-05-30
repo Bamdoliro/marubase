@@ -2,6 +2,7 @@ package com.bamdoliro.maru.presentation.message;
 
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.presentation.message.dto.request.SendMessageByStatusRequest;
 import com.bamdoliro.maru.presentation.message.dto.request.SendMessageRequest;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
@@ -29,7 +30,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        SendMessageRequest request = new SendMessageRequest("부산소마고 공지사항", "테스트임니다...", FormStatus.FINAL_SUBMITTED);
+        SendMessageByStatusRequest request = new SendMessageByStatusRequest("부산소마고 공지사항", "테스트임니다...", FormStatus.FINAL_SUBMITTED);
         willDoNothing().given(sendMessageUseCase).execute(request);
 
         mockMvc.perform(post("/message/status")
@@ -55,9 +56,9 @@ public class MessageControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        SendMessageRequest request = new SendMessageRequest("부산소마고 공지사항", "배고파요..", FormStatus.FINAL_SUBMITTED);
+        SendMessageByStatusRequest request = new SendMessageByStatusRequest("부산소마고 공지사항", "배고파요..", FormStatus.FINAL_SUBMITTED);
 
-        willThrow(new RuntimeException("원서를 찾을 수 없음")).given(sendMessageUseCase).execute(any(SendMessageRequest.class));
+        willThrow(new RuntimeException("원서를 찾을 수 없음")).given(sendMessageUseCase).execute(any(SendMessageByStatusRequest.class));
 
         mockMvc.perform(post("/message/status")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
