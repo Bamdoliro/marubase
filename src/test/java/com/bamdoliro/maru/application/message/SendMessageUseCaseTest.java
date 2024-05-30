@@ -6,7 +6,7 @@ import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.infrastructure.message.SendMessageService;
 import com.bamdoliro.maru.infrastructure.message.exception.FailedToSendException;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
-import com.bamdoliro.maru.presentation.message.dto.request.SendMessageRequest;
+import com.bamdoliro.maru.presentation.message.dto.request.SendMessageByStatusRequest;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ public class SendMessageUseCaseTest {
         Form form = FormFixture.createForm(FormType.REGULAR);
         form.submit("https://maru.bamdoliro.com/pdf/1");
         given(formRepository.findByStatus(FormStatus.FINAL_SUBMITTED)).willReturn(List.of(form));
-        SendMessageRequest request = new SendMessageRequest("부산소마고 공지사항", "테스트입니다", FormStatus.FINAL_SUBMITTED);
+        SendMessageByStatusRequest request = new SendMessageByStatusRequest("부산소마고 공지사항", "테스트입니다", FormStatus.FINAL_SUBMITTED);
 
         //when
         sendMessageUseCase.execute(request);
@@ -57,7 +57,7 @@ public class SendMessageUseCaseTest {
         Form form = FormFixture.createForm(FormType.REGULAR);
         form.approve();
         given(formRepository.findByStatus(FormStatus.APPROVED)).willReturn(List.of(form));
-        SendMessageRequest request = new SendMessageRequest("부산소마고 공지사항", "테스트입니다", FormStatus.APPROVED);
+        SendMessageByStatusRequest request = new SendMessageByStatusRequest("부산소마고 공지사항", "테스트입니다", FormStatus.APPROVED);
 
         //when
         sendMessageUseCase.execute(request);
@@ -74,7 +74,7 @@ public class SendMessageUseCaseTest {
         Form form = FormFixture.createForm(FormType.REGULAR);
         form.reject();
         given(formRepository.findByStatus(FormStatus.REJECTED)).willReturn(List.of(form));
-        SendMessageRequest request = new SendMessageRequest("부산소마고 공지사항", "학생들의 원서가 조건을 충족하지 못해 반려되었습니다.", FormStatus.REJECTED);
+        SendMessageByStatusRequest request = new SendMessageByStatusRequest("부산소마고 공지사항", "학생들의 원서가 조건을 충족하지 못해 반려되었습니다.", FormStatus.REJECTED);
 
         //when
         sendMessageUseCase.execute(request);
@@ -91,7 +91,7 @@ public class SendMessageUseCaseTest {
         Form form = FormFixture.createForm(FormType.REGULAR);
         form.receive();
         given(formRepository.findByStatus(FormStatus.RECEIVED)).willReturn(List.of(form));
-        SendMessageRequest request = new SendMessageRequest("부산소마고 공지사항", "제출하신 원서가 접수되었습니다.", FormStatus.RECEIVED);
+        SendMessageByStatusRequest request = new SendMessageByStatusRequest("부산소마고 공지사항", "제출하신 원서가 접수되었습니다.", FormStatus.RECEIVED);
 
         //when
         sendMessageUseCase.execute(request);
@@ -108,7 +108,7 @@ public class SendMessageUseCaseTest {
         Form form = FormFixture.createForm(FormType.REGULAR);
         form.firstPass();
         given(formRepository.findByStatus(FormStatus.FIRST_PASSED)).willReturn(List.of(form));
-        SendMessageRequest request = new SendMessageRequest("부산소마고 공지사항", "1차 전형에 합격하신것을 축하드립니다. 면접 장소를 확인하시고 꼭 제시간에 방문하시길 바라겠습니다,", FormStatus.FIRST_PASSED);
+        SendMessageByStatusRequest request = new SendMessageByStatusRequest("부산소마고 공지사항", "1차 전형에 합격하신것을 축하드립니다. 면접 장소를 확인하시고 꼭 제시간에 방문하시길 바라겠습니다,", FormStatus.FIRST_PASSED);
 
         //when
         sendMessageUseCase.execute(request);
@@ -125,7 +125,7 @@ public class SendMessageUseCaseTest {
         Form form = FormFixture.createForm(FormType.REGULAR);
         form.firstFail();
         given(formRepository.findByStatus(FormStatus.FIRST_FAILED)).willReturn(List.of(form));
-        SendMessageRequest request = new SendMessageRequest("부산소마고 공지사항", "1차 전형에 불합격하신것에 대해 유감입니당~", FormStatus.FIRST_FAILED);
+        SendMessageByStatusRequest request = new SendMessageByStatusRequest("부산소마고 공지사항", "1차 전형에 불합격하신것에 대해 유감입니당~", FormStatus.FIRST_FAILED);
 
         //when
         sendMessageUseCase.execute(request);
@@ -142,7 +142,7 @@ public class SendMessageUseCaseTest {
         Form form = FormFixture.createForm(FormType.REGULAR);
         form.noShow();
         given(formRepository.findByStatus(FormStatus.NO_SHOW)).willReturn(List.of(form));
-        SendMessageRequest request = new SendMessageRequest("부산소마고 공지사항", "해당 지원자들은 2차전형에 '불참'하였으므로 패널티가 있을 예정입니다.", FormStatus.NO_SHOW);
+        SendMessageByStatusRequest request = new SendMessageByStatusRequest("부산소마고 공지사항", "해당 지원자들은 2차전형에 '불참'하였으므로 패널티가 있을 예정입니다.", FormStatus.NO_SHOW);
 
         //when
         sendMessageUseCase.execute(request);
@@ -159,7 +159,7 @@ public class SendMessageUseCaseTest {
         Form form = FormFixture.createForm(FormType.REGULAR);
         form.pass();
         given(formRepository.findByStatus(FormStatus.PASSED)).willReturn(List.of(form));
-        SendMessageRequest request = new SendMessageRequest("부산소마고 공지사항", "합격하였습니다. 축하드립니다.", FormStatus.PASSED);
+        SendMessageByStatusRequest request = new SendMessageByStatusRequest("부산소마고 공지사항", "합격하였습니다. 축하드립니다.", FormStatus.PASSED);
 
         //when
         sendMessageUseCase.execute(request);
@@ -176,7 +176,7 @@ public class SendMessageUseCaseTest {
         Form form = FormFixture.createForm(FormType.REGULAR);
         form.fail();
         given(formRepository.findByStatus(FormStatus.FAILED)).willReturn(List.of(form));
-        SendMessageRequest request = new SendMessageRequest("부산소마고 공지사항", "불합격", FormStatus.FAILED);
+        SendMessageByStatusRequest request = new SendMessageByStatusRequest("부산소마고 공지사항", "불합격", FormStatus.FAILED);
 
         //when
         sendMessageUseCase.execute(request);
@@ -191,7 +191,7 @@ public class SendMessageUseCaseTest {
 
         //given
         willThrow(new FailedToSendException()).given(formRepository).findByStatus(FormStatus.SUBMITTED);
-        SendMessageRequest request = new SendMessageRequest("부산소마고 공지사항", "제출이 완료되었습니다.", FormStatus.SUBMITTED);
+        SendMessageByStatusRequest request = new SendMessageByStatusRequest("부산소마고 공지사항", "제출이 완료되었습니다.", FormStatus.SUBMITTED);
 
         //when and then
         Assertions.assertThrows(FailedToSendException.class,
