@@ -87,6 +87,26 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
     }
 
     @Override
+    public List<Form> findMeisterTalentFirstRoundForm() {
+        return queryFactory
+                .selectFrom(form)
+                .where(form.status.eq(FormStatus.FIRST_PASSED)
+                        .and(form.type.eq(FormType.MEISTER_TALENT))
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<Form> findNotExistsMeisterTalentFirstRoundForm() {
+        return queryFactory
+                .selectFrom(form)
+                .where(form.status.eq(FormStatus.FIRST_PASSED)
+                        .and(form.type.ne(FormType.MEISTER_TALENT))
+                )
+                .fetch();
+    }
+
+    @Override
     public List<Form> findSecondRoundForm() {
         return queryFactory
                 .selectFrom(form)
