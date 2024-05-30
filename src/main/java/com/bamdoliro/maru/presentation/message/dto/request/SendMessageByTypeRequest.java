@@ -22,6 +22,6 @@ public class SendMessageByTypeRequest {
     private FormType formType;
 
     @NotNull(message = "필수값입니다.")
-    private boolean isChangeToRegular;
+    private Boolean isChangeToRegular;
 }
 

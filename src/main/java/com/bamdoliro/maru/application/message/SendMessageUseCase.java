@@ -26,13 +26,13 @@ public class SendMessageUseCase {
     }
 
     public void execute(SendMessageByTypeRequest request) {
-        List<Form> formList = formListFilter(request.getFormType(), request.isChangeToRegular());
+        List<Form> formList = formListFilter(request.getFormType(), request.getIsChangeToRegular());
         List<String> phoneNumberList = phoneNumberListConvert(formList);
 
         sendMessageService.execute(phoneNumberList, request.getText(), request.getTitle());
     }
 
-    private List<Form> formListFilter(FormType formType, boolean isChangeToRegular) {
+    private List<Form> formListFilter(FormType formType, Boolean isChangeToRegular) {
         List<Form> formList;
         if (formType.isMeister()) {
             formList = formRepository.findMeisterTalentFirstRoundForm();
@@ -47,6 +47,11 @@ public class SendMessageUseCase {
                         .filter(form -> !form.getChangedToRegular())
                         .toList();
             }
+        }
+
+        System.out.println("-------------------------------------------------------------------");
+        for(Form form : formList){
+            System.out.println("form id : " + form.getId() + "form type : " + form.getType() + "isChangeToRegular : " + form.getChangedToRegular());
         }
 
         return formList;
