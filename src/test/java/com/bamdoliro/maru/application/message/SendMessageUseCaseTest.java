@@ -3,10 +3,12 @@ package com.bamdoliro.maru.application.message;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
+import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.infrastructure.message.SendMessageService;
 import com.bamdoliro.maru.infrastructure.message.exception.FailedToSendException;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.presentation.message.dto.request.SendMessageByStatusRequest;
+import com.bamdoliro.maru.presentation.message.dto.request.SendMessageByTypeRequest;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -33,8 +35,11 @@ public class SendMessageUseCaseTest {
     @Mock
     private FormRepository formRepository;
 
+    @Mock
+    private CalculateFormScoreService calculateFormScoreService;
+
     @Test
-    void 원서를_최종제출한_학생들에게_메시지를_보낸다(){
+    void 원서를_최종제출한_학생들에게_메시지를_보낸다() {
 
         //given
         Form form = FormFixture.createForm(FormType.REGULAR);
@@ -51,7 +56,7 @@ public class SendMessageUseCaseTest {
     }
 
     @Test
-    void 원서를_승인받은_학생들에게_메시지를_보낸다(){
+    void 원서를_승인받은_학생들에게_메시지를_보낸다() {
 
         //given
         Form form = FormFixture.createForm(FormType.REGULAR);
@@ -68,7 +73,7 @@ public class SendMessageUseCaseTest {
     }
 
     @Test
-    void 원서를_반려받은_학생들에게_메시지를_보낸다(){
+    void 원서를_반려받은_학생들에게_메시지를_보낸다() {
 
         //given
         Form form = FormFixture.createForm(FormType.REGULAR);
@@ -85,7 +90,7 @@ public class SendMessageUseCaseTest {
     }
 
     @Test
-    void 원서를_접수한_학생들에게_메시지를_보낸다(){
+    void 원서를_접수한_학생들에게_메시지를_보낸다() {
 
         //given
         Form form = FormFixture.createForm(FormType.REGULAR);
@@ -102,7 +107,7 @@ public class SendMessageUseCaseTest {
     }
 
     @Test
-    void 제1차_합격자들에게_메시지를_보낸다(){
+    void 제1차_합격자들에게_메시지를_보낸다() {
 
         //given
         Form form = FormFixture.createForm(FormType.REGULAR);
@@ -119,7 +124,7 @@ public class SendMessageUseCaseTest {
     }
 
     @Test
-    void 제1차_불합격자들에게_메시지를_보낸다(){
+    void 제1차_불합격자들에게_메시지를_보낸다() {
 
         //given
         Form form = FormFixture.createForm(FormType.REGULAR);
@@ -136,7 +141,7 @@ public class SendMessageUseCaseTest {
     }
 
     @Test
-    void 제2차전형에_불참한_학생들에게_메시지를_보낸다(){
+    void 제2차전형에_불참한_학생들에게_메시지를_보낸다() {
 
         //given
         Form form = FormFixture.createForm(FormType.REGULAR);
@@ -153,7 +158,7 @@ public class SendMessageUseCaseTest {
     }
 
     @Test
-    void 최종합격자들에게_메시지를_보낸다(){
+    void 최종합격자들에게_메시지를_보낸다() {
 
         //given
         Form form = FormFixture.createForm(FormType.REGULAR);
@@ -170,7 +175,7 @@ public class SendMessageUseCaseTest {
     }
 
     @Test
-    void 최종불합격자들에게_메시지를_보낸다(){
+    void 최종불합격자들에게_메시지를_보낸다() {
 
         //given
         Form form = FormFixture.createForm(FormType.REGULAR);
@@ -187,7 +192,63 @@ public class SendMessageUseCaseTest {
     }
 
     @Test
-    void 보낼메시지대상이_존재하지_않으면_오류가_발생한다(){
+    void 마이스터전형과_마이스터전형에서_일반전형으로_바뀐_합격자를_제외한_1차_전형_합격자들에게_메시지를_보낸다() {
+
+        //given
+        Form form = FormFixture.createForm(FormType.REGULAR);
+        form.firstPass();
+        given(formRepository.findNotExistsMeisterTalentFirstRoundForm()).willReturn(List.of(form));
+        SendMessageByTypeRequest request = new SendMessageByTypeRequest("부산소마고 공지사항", "살려줘요..", FormType.REGULAR, false);
+
+        //when
+        sendMessageUseCase.execute(request);
+
+        //then
+        verify(formRepository, times(1)).findNotExistsMeisterTalentFirstRoundForm();
+        verify(sendMessageService, times(1)).execute(List.of(form.getUser().getPhoneNumber()), request.getText(), request.getTitle());
+    }
+
+    @Test
+    void 마이스터전형_1차_합격자들에게_메시지를_보낸다() {
+
+        //given
+        Form form = FormFixture.createForm(FormType.MEISTER_TALENT);
+        form.firstPass();
+        given(formRepository.findMeisterTalentFirstRoundForm()).willReturn(List.of(form));
+        SendMessageByTypeRequest request = new SendMessageByTypeRequest("부산소마고 공지사항", "배고파요...", FormType.MEISTER_TALENT, false);
+
+        //when
+        sendMessageUseCase.execute(request);
+
+        //then
+        verify(formRepository, times(1)).findMeisterTalentFirstRoundForm();
+        verify(sendMessageService, times(1)).execute(List.of(form.getUser().getPhoneNumber()), request.getText(), request.getTitle());
+    }
+
+    @Test
+    void 마이스터전형에서_일반전형으로_바뀐_1차_합격자들에게_메시지를_보낸다() {
+
+        //given
+        Form form = FormFixture.createForm(FormType.MEISTER_TALENT);
+
+        when(calculateFormScoreService.calculateSubjectGradeScore(any())).thenReturn(100.0);
+        when(formRepository.findNotExistsMeisterTalentFirstRoundForm()).thenReturn(List.of(form));
+
+        form.firstPass();
+        form.changeToRegular(calculateFormScoreService);
+        SendMessageByTypeRequest request = new SendMessageByTypeRequest("부산소마고 공지사항", "헤헤", FormType.REGULAR, true);
+
+        //when
+        sendMessageUseCase.execute(request);
+        System.out.println(form.getUser().getPhoneNumber());
+
+        //then
+        verify(formRepository, times(1)).findNotExistsMeisterTalentFirstRoundForm();
+        verify(sendMessageService, times(1)).execute(List.of(form.getUser().getPhoneNumber()), request.getText(), request.getTitle());
+    }
+
+    @Test
+    void 상태에_따라_메시지를_보낼_대상이_존재하지_않으면_오류가_발생한다() {
 
         //given
         willThrow(new FailedToSendException()).given(formRepository).findByStatus(FormStatus.SUBMITTED);
@@ -197,6 +258,20 @@ public class SendMessageUseCaseTest {
         Assertions.assertThrows(FailedToSendException.class,
                 () -> sendMessageUseCase.execute(request));
         verify(formRepository, times(1)).findByStatus(FormStatus.SUBMITTED);
+        verify(sendMessageService, never()).execute(anyList(), anyString(), anyString());
+    }
+
+    @Test
+    void 조회할_전형대상이_없으면_오류가_발생한다() {
+
+        //given
+        willThrow(new FailedToSendException()).given(formRepository).findMeisterTalentFirstRoundForm();
+        SendMessageByTypeRequest request = new SendMessageByTypeRequest("부산소마고 공지사항", "오늘은 꼭 롯데가..!", FormType.MEISTER_TALENT, false);
+
+        //when and then
+        Assertions.assertThrows(FailedToSendException.class,
+                () -> sendMessageUseCase.execute(request));
+        verify(formRepository, times(1)).findMeisterTalentFirstRoundForm();
         verify(sendMessageService, never()).execute(anyList(), anyString(), anyString());
     }
 }
