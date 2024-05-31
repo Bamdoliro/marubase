@@ -49,11 +49,6 @@ public class SendMessageUseCase {
             }
         }
 
-        System.out.println("-------------------------------------------------------------------");
-        for(Form form : formList){
-            System.out.println("form id : " + form.getId() + "form type : " + form.getType() + "isChangeToRegular : " + form.getChangedToRegular());
-        }
-
         return formList;
     }
 
