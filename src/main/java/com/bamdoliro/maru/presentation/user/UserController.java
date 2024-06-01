@@ -2,8 +2,10 @@ package com.bamdoliro.maru.presentation.user;
 
 import com.bamdoliro.maru.application.user.SendVerificationUseCase;
 import com.bamdoliro.maru.application.user.SignUpUserUseCase;
+import com.bamdoliro.maru.application.user.UpdatePasswordUseCase;
 import com.bamdoliro.maru.application.user.VerifyUseCase;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.presentation.user.dto.request.UpdatePasswordRequest;
 import com.bamdoliro.maru.presentation.user.dto.request.SignUpUserRequest;
 import com.bamdoliro.maru.presentation.user.dto.request.SendVerificationRequest;
 import com.bamdoliro.maru.presentation.user.dto.request.VerifyRequest;
@@ -15,13 +17,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @Validated
@@ -32,6 +28,7 @@ public class UserController {
     private final SignUpUserUseCase signUpUserUseCase;
     private final SendVerificationUseCase sendVerificationUseCase;
     private final VerifyUseCase verifyUseCase;
+    private final UpdatePasswordUseCase updatePasswordUseCase;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -62,5 +59,13 @@ public class UserController {
             @RequestBody @Valid VerifyRequest request
     ) {
         verifyUseCase.execute(request);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/password-update")
+    public void updatePassword(
+            @RequestBody @Valid UpdatePasswordRequest request
+    ){
+        updatePasswordUseCase.execute(request);
     }
 }
