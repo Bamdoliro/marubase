@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SendMessageRequest {
+public class SendMessageByStatusRequest {
 
     @NotBlank(message = "필수값입니다.")
     private String title;

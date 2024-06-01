@@ -1,6 +1,6 @@
 == 그룹별 메세지 보내기
 
-=== 메시지 보내기
+=== 상태에 따른 메시지 보내기
 메세지를 보낼 원서의 상태를 입력해 메시지를 보낼 수 있습니다.
 
 ==== 요청 형식
@@ -22,3 +22,24 @@ include::{snippets}/message-controller-test/조회할_상태의_원서를_가진
 
 ===== 입력한 상태의 원서가 없거나 상태를 잘못 입력한 경우
 include::{snippets}/message-controller-test/해당제출상태인_원서가_없으면_오류가난다/http-response.adoc[]
+
+=== 전형에 따른 메시지 보내기
+메세지를 보낼 원서의 전형을 입력해 메시지를 보낼 수 있습니다.
+
+=== 요청 형식
+
+==== Request Header
+include::{snippets}/message-controller-test/마이스터전형과_마이스터에서_일반전형으로_바뀐_합격자를_제외한_1차_합격자들에게_메시지를_보낸다/request-headers.adoc[]
+
+==== Request Body
+include::{snippets}/message-controller-test/마이스터전형과_마이스터에서_일반전형으로_바뀐_합격자를_제외한_1차_합격자들에게_메시지를_보낸다/request-fields.adoc[]
+
+==== 요청
+===== 일반전형(마이스터전형 & 마이스터 -> 일반을 제외한 모든 전형) 1차 합격자에게 메시지를 보내는 경우
+include::{snippets}/message-controller-test/마이스터전형과_마이스터에서_일반전형으로_바뀐_합격자를_제외한_1차_합격자들에게_메시지를_보낸다/http-request.adoc[]
+
+===== 마이스터 -> 일반 전형으로 바뀐 1차 합격자들에게 메시지를 보내는 경우
+include::{snippets}/message-controller-test/마이스터전형에서_일반전형으로_바뀐_1차_합격자들에게_메시지를_보낸다/http-request.adoc[]
+
+===== 마이스터전형 1차 합격자들에게 메시지를 보내는 경우
+include::{snippets}/message-controller-test/마이스터_전형_1차_합격자들에게_메시지를_보낸다/http-request.adoc[]https://xxx[]

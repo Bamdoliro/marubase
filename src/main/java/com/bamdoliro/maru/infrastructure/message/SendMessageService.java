@@ -19,7 +19,6 @@ public class SendMessageService {
 
     private final MessageProperties messageProperties;
     private final DefaultMessageService messageService;
-    private final FormRepository formRepository;
 
     public void execute(String to, String text) {
         Message message = createMessage(to, text);
