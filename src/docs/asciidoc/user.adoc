@@ -102,3 +102,27 @@ include::{snippets}/user-controller-test/로그인한_유저를_불러온다/htt
 
 ===== 정상 응답
 include::{snippets}/user-controller-test/로그인한_유저를_불러온다/http-response.adoc[]
+
+=== 비밀번호 변경
+전화번호와 변경할 비밀번호를 입력해 해당 사용자의 비밀 번호를 변경할 수 있습니다.
+
+==== 요청 형식
+===== RequestBody
+include::{snippets}/user-controller-test/비밀번호를_변경한다/request-fields.adoc[]
+
+==== 요청
+include::{snippets}/user-controller-test/비밀번호를_변경한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/user-controller-test/비밀번호를_변경한다/http-response.adoc[]
+
+===== 전화번호 인증에 실패할 경우
+include::{snippets}/user-controller-test/비밀번호를_변경할_때_전화번호_인증이_실패한_경우_에러가_발생한다/http-response.adoc[]
+
+===== 비밀번호 형식이 다를 경우
+include::{snippets}/user-controller-test/비밀번호_형식이_다르면_오류가_발생한다/http-response.adoc[]
+
+===== 해당 전화번호를 가진 유저가 없을 경우
+include::{snippets}/user-controller-test/해당_전화번호를_가진_유저가_없으면_오류가_발생한다/http-response.adoc[]
