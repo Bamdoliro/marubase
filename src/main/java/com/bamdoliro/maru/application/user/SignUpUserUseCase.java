@@ -44,5 +44,10 @@ public class SignUpUserUseCase {
         if (userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new UserAlreadyExistsException();
         }
+
+        verificationRepository.updateVerification(
+                verification.getPhoneNumber(),
+                false
+        );
     }
 }
