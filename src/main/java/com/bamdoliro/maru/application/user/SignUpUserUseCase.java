@@ -4,7 +4,6 @@ import com.bamdoliro.maru.domain.user.domain.Verification;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.domain.type.Authority;
 import com.bamdoliro.maru.domain.user.exception.UserAlreadyExistsException;
-import com.bamdoliro.maru.domain.user.exception.VerificationCodeMismatchException;
 import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
 import com.bamdoliro.maru.infrastructure.persistence.user.VerificationRepository;
 import com.bamdoliro.maru.infrastructure.persistence.user.UserRepository;
