@@ -2,12 +2,14 @@ package com.bamdoliro.maru.presentation.user;
 
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.exception.UserAlreadyExistsException;
+import com.bamdoliro.maru.domain.user.exception.UserNotFoundException;
 import com.bamdoliro.maru.domain.user.exception.VerificationCodeMismatchException;
 import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
 import com.bamdoliro.maru.domain.user.exception.error.UserErrorProperty;
 import com.bamdoliro.maru.infrastructure.message.exception.FailedToSendException;
 import com.bamdoliro.maru.presentation.user.dto.request.SendVerificationRequest;
 import com.bamdoliro.maru.presentation.user.dto.request.SignUpUserRequest;
+import com.bamdoliro.maru.presentation.user.dto.request.UpdatePasswordRequest;
 import com.bamdoliro.maru.presentation.user.dto.request.VerifyRequest;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
@@ -27,9 +29,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -258,5 +258,73 @@ class UserControllerTest extends RestDocsTestSupport {
                 .andDo(restDocs.document());
 
         verify(verifyUseCase, times(1)).execute(any(VerifyRequest.class));
+    }
+
+    @Test
+    void 비밀번호를_변경한다() throws Exception {
+        willDoNothing().given(updatePasswordUseCase).execute(any(UpdatePasswordRequest.class));
+        UpdatePasswordRequest request = new UpdatePasswordRequest("01085852525", "hihi1234!");
+
+        mockMvc.perform(put("/user/password-update")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+                )
+                .andExpect(status().isNoContent())
+                .andDo(restDocs.document(
+                        requestFields(
+                                fieldWithPath("phoneNumber")
+                                        .type(JsonFieldType.STRING)
+                                        .description("전화번호"),
+                                fieldWithPath("password")
+                                        .type(JsonFieldType.STRING)
+                                        .description("변경할 비밀번호")
+                        )
+                ));
+    }
+
+    @Test
+    void 비밀번호를_변경할_때_전화번호_인증이_실패한_경우_에러가_발생한다() throws Exception {
+        doThrow(new VerifyingHasFailedException()).when(updatePasswordUseCase).execute(any(UpdatePasswordRequest.class));
+        SignUpUserRequest request = new SignUpUserRequest("01085852525", "김밤돌", "password123$");
+
+        mockMvc.perform(put("/user/password-update")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+                )
+                .andExpect(status().isUnauthorized())
+                .andDo(restDocs.document());
+    }
+
+    @Test
+    void 해당_전화번호를_가진_유저가_없으면_오류가_발생한다() throws Exception {
+        doThrow(new UserNotFoundException()).when(updatePasswordUseCase).execute(any(UpdatePasswordRequest.class));
+        UpdatePasswordRequest request = new UpdatePasswordRequest("01085852525", "hihi1234!");
+
+        mockMvc.perform(put("/user/password-update")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+                )
+                .andExpect(status().isNotFound())
+                .andDo(restDocs.document());
+
+        verify(updatePasswordUseCase, times(1)).execute(any(UpdatePasswordRequest.class));
+    }
+
+    @Test
+    void 비밀번호_형식이_다르면_오류가_발생한다() throws Exception {
+        UpdatePasswordRequest request = new UpdatePasswordRequest("01085852525", "123456");
+
+        mockMvc.perform(put("/user/password-update")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+                )
+                .andExpect(status().isBadRequest())
+                .andDo(restDocs.document());
+
+        verify(updatePasswordUseCase, never()).execute(any(UpdatePasswordRequest.class));
     }
 }
