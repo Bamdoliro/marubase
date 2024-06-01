@@ -17,7 +17,7 @@ public class SendVerificationUseCase {
     public void execute(SendVerificationRequest request) {
         Verification verification = new Verification(request.getPhoneNumber());
         String text = String.format(
-                "[부산소프트웨어마이스터고] 회원가입 인증번호는 [%s]입니다.",
+                "[부산소프트웨어마이스터고] 인증번호는 [%s]입니다.",
                 verification.getCode()
         );
 
