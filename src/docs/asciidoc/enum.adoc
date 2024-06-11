@@ -29,3 +29,6 @@ include::{snippets}/enum-controller-test/enums/custom-response-fields-fairType.a
 
 [[question-category]]
 include::{snippets}/enum-controller-test/enums/custom-response-fields-questionCategory.adoc[]
+
+[[verification-category]]
+include::{snippets}/enum-controller-test/enums/custom-response-fields-verificationType.adoc[]

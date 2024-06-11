@@ -43,15 +43,14 @@ include::{snippets}/user-controller-test/유저를_생성할_때_잘못된_형�
 ==== 요청 형식
 
 ===== Request Body
-include::{snippets}/user-controller-test/전화번호_인증을_요청한다/request-fields.adoc[]
-
+include::{snippets}/user-controller-test/회원가입_전화번호_인증을_요청한다/request-fields.adoc[]
 ==== 요청
-include::{snippets}/user-controller-test/전화번호_인증을_요청한다/http-request.adoc[]
+include::{snippets}/user-controller-test/회원가입_전화번호_인증을_요청한다/http-request.adoc[]
 
 ==== 응답
 
 ===== 정상 응답
-include::{snippets}/user-controller-test/전화번호_인증을_요청한다/http-response.adoc[]
+include::{snippets}/user-controller-test/회원가입_전화번호_인증을_요청한다/http-response.adoc[]
 
 ===== 요청 형식이 틀린 경우
 include::{snippets}/user-controller-test/전화번호_인증을_요청할_때_잘못된_형식의_전화번호를_보내면_에러가_발생한다/http-response.adoc[]
@@ -67,23 +66,23 @@ include::{snippets}/user-controller-test/전화번호_인증을_요청할_때_�
 ==== 요청 형식
 
 ===== Request Body
-include::{snippets}/user-controller-test/전화번호_인증을_완료한다/request-fields.adoc[]
+include::{snippets}/user-controller-test/회원가입_전화번호_인증을_완료한다/request-fields.adoc[]
 
 ==== 요청
-include::{snippets}/user-controller-test/전화번호_인증을_완료한다/http-request.adoc[]
+include::{snippets}/user-controller-test/회원가입_전화번호_인증을_완료한다/http-request.adoc[]
 
 ==== 응답
 
 ===== 정상 응답
-include::{snippets}/user-controller-test/전화번호_인증을_완료한다/http-response.adoc[]
+include::{snippets}/user-controller-test/회원가입_전화번호_인증을_완료한다/http-response.adoc[]
 
 ===== 인증 코드가 틀린 경우
-include::{snippets}/user-controller-test/전화번호를_인증할_때_인증_코드가_틀렸으면_에러가_발생한다/http-response.adoc[]
+include::{snippets}/user-controller-test/회원가입_전화번호를_인증할_때_인증_코드가_틀렸으면_에러가_발생한다/http-response.adoc[]
 
 ===== 전화번호 인증이 실패한 경우
 - 인증 요청을 보내지 않은 경우
 - 인증 시간이 만료된 경우
-include::{snippets}/user-controller-test/전화번호를_인증할_때_인증이_실패한_경우_에러가_발생한다/http-response.adoc[]
+include::{snippets}/user-controller-test/회원가입_전화번호를_인증할_때_인증이_실패한_경우_에러가_발생한다/response-body.adoc[]
 
 
 
