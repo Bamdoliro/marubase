@@ -85,8 +85,12 @@ public class EnumControllerTest extends RestDocsTestSupport {
                                 beneathPath("questionCategory").withSubsectionId("questionCategory"),
                                 attributes(key("title").value("QuestionCategory")),
                                 enumConvertFieldDescriptor((enumDocs.getQuestionCategory()))
-                        )
-                ));
+                        ),
+                        customResponseFields("custom-response",
+                                beneathPath("verificationType").withSubsectionId("verificationType"),
+                                attributes(key("title").value("VerificationType")),
+                                enumConvertFieldDescriptor((enumDocs.getVerificationType()))
+                )));
     }
 
     public static CustomResponseFieldsSnippet customResponseFields
