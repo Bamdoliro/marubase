@@ -41,7 +41,7 @@ class SignUpUserUseCaseTest {
     void 유저를_생성한다() {
         // given
         User user = UserFixture.createUser();
-        SignUpVerification signUpVerification = UserFixture.createVerification(true);
+        SignUpVerification signUpVerification = UserFixture.createSignUpVerification(true);
         SignUpUserRequest request = new SignUpUserRequest(user.getPhoneNumber(), user.getName(), "비밀번호");
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
 
@@ -78,7 +78,7 @@ class SignUpUserUseCaseTest {
     void 전화번호_인증을_하지_않았다면_에러가_발생한다() {
         // given
         User user = UserFixture.createUser();
-        SignUpVerification signUpVerification = UserFixture.createVerification(false);
+        SignUpVerification signUpVerification = UserFixture.createSignUpVerification(false);
         SignUpUserRequest request = new SignUpUserRequest(user.getPhoneNumber(), user.getName(), "비밀번호");
 
         given(signUpVerificationRepository.findById(request.getPhoneNumber())).willReturn(Optional.of(signUpVerification));
@@ -95,7 +95,7 @@ class SignUpUserUseCaseTest {
     void 이미_유저가_있다면_에러가_발생한다() {
         // given
         User user = UserFixture.createUser();
-        SignUpVerification signUpVerification = UserFixture.createVerification(true);
+        SignUpVerification signUpVerification = UserFixture.createSignUpVerification(true);
         SignUpUserRequest request = new SignUpUserRequest(user.getPhoneNumber(), user.getName(), "비밀번호");
 
         given(signUpVerificationRepository.findById(request.getPhoneNumber())).willReturn(Optional.of(signUpVerification));
