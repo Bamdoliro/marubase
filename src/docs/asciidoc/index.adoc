@@ -25,4 +25,6 @@ include::form.adoc[]
 
 include::fair.adoc[]
 
+include::message.adoc[]
+
 include::enum.adoc[]
