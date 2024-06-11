@@ -22,6 +22,7 @@ public class FairFixture {
                 LocalDateTime.of(2025, 4, 15, 10, 39),
                 120,
                 "서울시 강남구",
+                "https://docs.google.com",
                 FairType.STUDENT_AND_PARENT,
                 LocalDate.now(),
                 LocalDate.now().plusDays(3)
@@ -32,6 +33,7 @@ public class FairFixture {
                 LocalDateTime.of(2025, 4, 15, 10, 39),
                 120,
                 "서울시 강남구",
+                "https://docs.google.com",
                 FairType.STUDENT_AND_PARENT,
                 LocalDate.now(),
                 null
@@ -43,6 +45,7 @@ public class FairFixture {
                 LocalDateTime.of(2005, 4, 15, 10, 39),
                 120,
                 "서울시 강남구",
+                "https://docs.google.com",
                 FairType.STUDENT_AND_PARENT,
                 LocalDate.now(),
                 LocalDate.now().plusDays(3)

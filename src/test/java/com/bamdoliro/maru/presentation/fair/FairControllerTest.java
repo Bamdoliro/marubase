@@ -72,6 +72,9 @@ class FairControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("place")
                                         .type(JsonFieldType.STRING)
                                         .description("입학설명회 장소"),
+                                fieldWithPath("applicationUrl")
+                                        .type(JsonFieldType.STRING)
+                                        .description("입학설명회 신청 폼 링크"),
                                 fieldWithPath("type")
                                         .type(JsonFieldType.STRING)
                                         .description("<<fair-type,입학설명회 유형>>"),
