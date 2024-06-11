@@ -9,8 +9,8 @@ import org.springframework.data.redis.core.RedisHash;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@RedisHash(value = "verification", timeToLive = 60 * 5)
-public class Verification {
+@RedisHash(value = "password-verification")
+public class UpdatePasswordVerification {
 
     @Id
     private String phoneNumber;
@@ -19,7 +19,7 @@ public class Verification {
 
     private Boolean isVerified;
 
-    public Verification(String phoneNumber) {
+    public UpdatePasswordVerification(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         this.code = RandomCodeUtil.generate(6);
         this.isVerified = false;

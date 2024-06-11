@@ -1,12 +1,11 @@
 package com.bamdoliro.maru.application.user;
 
-import com.bamdoliro.maru.domain.user.domain.Verification;
+import com.bamdoliro.maru.domain.user.domain.SignUpVerification;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.domain.type.Authority;
 import com.bamdoliro.maru.domain.user.exception.UserAlreadyExistsException;
-import com.bamdoliro.maru.domain.user.exception.VerificationCodeMismatchException;
 import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
-import com.bamdoliro.maru.infrastructure.persistence.user.VerificationRepository;
+import com.bamdoliro.maru.infrastructure.persistence.user.SignUpVerificationRepository;
 import com.bamdoliro.maru.infrastructure.persistence.user.UserRepository;
 import com.bamdoliro.maru.presentation.user.dto.request.SignUpUserRequest;
 import com.bamdoliro.maru.shared.annotation.UseCase;
@@ -17,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @UseCase
 public class SignUpUserUseCase {
 
-    private final VerificationRepository verificationRepository;
+    private final SignUpVerificationRepository signUpVerificationRepository;
     private final UserRepository userRepository;
 
     @Transactional
@@ -35,15 +34,17 @@ public class SignUpUserUseCase {
     }
 
     private void validate(SignUpUserRequest request) {
-        Verification verification = verificationRepository.findById(request.getPhoneNumber())
+        SignUpVerification signUpVerification = signUpVerificationRepository.findById(request.getPhoneNumber())
                 .orElseThrow(VerifyingHasFailedException::new);
 
-        if (!verification.getIsVerified()) {
+        if (!signUpVerification.getIsVerified()) {
             throw new VerifyingHasFailedException();
         }
 
         if (userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new UserAlreadyExistsException();
         }
+
+        signUpVerificationRepository.delete(signUpVerification);
     }
 }

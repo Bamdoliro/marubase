@@ -59,4 +59,8 @@ public class User extends BaseTimeEntity {
     public boolean isAdmin() {
         return this.authority == Authority.ADMIN;
     }
+
+    public void updatePassword(String password) {
+        this.password = new Password(PasswordUtil.encode(password));
+    }
 }
