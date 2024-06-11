@@ -23,4 +23,5 @@ public class EnumDocs {
     Map<String, String> fairStatus;
     Map<String, String> fairType;
     Map<String, String> questionCategory;
+    Map<String, String> verificationType;
 }

@@ -85,6 +85,11 @@ public class EnumControllerTest extends RestDocsTestSupport {
                                 beneathPath("questionCategory").withSubsectionId("questionCategory"),
                                 attributes(key("title").value("QuestionCategory")),
                                 enumConvertFieldDescriptor((enumDocs.getQuestionCategory()))
+                        ),
+                        customResponseFields("custom-response",
+                                beneathPath("verificationType").withSubsectionId("verificationType"),
+                                attributes(key("title").value("VerificationType")),
+                                enumConvertFieldDescriptor((enumDocs.getVerificationType()))
                         )
                 ));
     }
@@ -106,7 +111,8 @@ public class EnumControllerTest extends RestDocsTestSupport {
     private EnumDocs getData(MvcResult result) throws IOException {
         return objectMapper
                 .readValue(result.getResponse().getContentAsByteArray(),
-                        new TypeReference<EnumDocs>() {}
+                        new TypeReference<EnumDocs>() {
+                        }
                 );
     }
 }

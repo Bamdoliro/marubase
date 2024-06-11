@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MessageControllerTest extends RestDocsTestSupport {
 
     @Test
-    void 조회할_상태의_원서를_가진_학생들에게() throws Exception {
+    void 조회할_상태의_원서를_가진_학생들에게_메시지를_보낸다() throws Exception {
         User user = UserFixture.createUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
