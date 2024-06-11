@@ -1,9 +1,8 @@
 package com.bamdoliro.maru.shared.fixture;
 
-import com.bamdoliro.maru.domain.user.domain.Verification;
+import com.bamdoliro.maru.domain.user.domain.SignUpVerification;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.domain.type.Authority;
-import com.bamdoliro.maru.shared.constants.FixedNumber;
 import com.bamdoliro.maru.shared.util.RandomCodeUtil;
 
 import java.util.List;
@@ -21,13 +20,13 @@ public class UserFixture {
         return new User("01085852525", "김드민", "비밀번호", Authority.ADMIN);
     }
 
-    public static Verification createVerification(boolean verified) {
-        Verification verification = new Verification("01085852525");
+    public static SignUpVerification createVerification(boolean verified) {
+        SignUpVerification signUpVerification = new SignUpVerification("01085852525");
         if (verified) {
-            verification.verify();
+            signUpVerification.verify();
         }
 
-        return verification;
+        return signUpVerification;
     }
 
     public static List<User> generateUserList(int size) {

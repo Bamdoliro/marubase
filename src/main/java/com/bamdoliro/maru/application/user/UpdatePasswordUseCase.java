@@ -1,12 +1,14 @@
 package com.bamdoliro.maru.application.user;
 
+import com.bamdoliro.maru.domain.user.domain.SignUpVerification;
+import com.bamdoliro.maru.domain.user.domain.UpdatePasswordVerification;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.domain.user.domain.Verification;
 import com.bamdoliro.maru.domain.user.exception.UserNotFoundException;
 import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
 import com.bamdoliro.maru.domain.user.service.UserFacade;
+import com.bamdoliro.maru.infrastructure.persistence.user.UpdatePasswordVerificationRepository;
 import com.bamdoliro.maru.infrastructure.persistence.user.UserRepository;
-import com.bamdoliro.maru.infrastructure.persistence.user.VerificationRepository;
+import com.bamdoliro.maru.infrastructure.persistence.user.SignUpVerificationRepository;
 import com.bamdoliro.maru.presentation.user.dto.request.UpdatePasswordRequest;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @UseCase
 public class UpdatePasswordUseCase {
 
-    private final VerificationRepository verificationRepository;
-    private final UserRepository userRepository;
+    private final UpdatePasswordVerificationRepository updatePasswordVerificationRepository;
     private final UserFacade userFacade;
 
     @Transactional
@@ -29,20 +30,13 @@ public class UpdatePasswordUseCase {
     }
 
     private void validate(UpdatePasswordRequest request) {
-        Verification verification = verificationRepository.findById(request.getPhoneNumber())
+        UpdatePasswordVerification updatePasswordVerification = updatePasswordVerificationRepository.findById(request.getPhoneNumber())
                 .orElseThrow(VerifyingHasFailedException::new);
 
-        if (!verification.getIsVerified()) {
+        if (!updatePasswordVerification.getIsVerified()) {
             throw new VerifyingHasFailedException();
         }
 
-        if (!userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
-            throw new UserNotFoundException();
-        }
-
-        verificationRepository.updateVerification(
-                request.getPhoneNumber(),
-                false
-        );
+        updatePasswordVerificationRepository.delete(updatePasswordVerification);
     }
 }
