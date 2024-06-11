@@ -24,10 +24,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -117,7 +114,7 @@ class UserControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 전화번호_인증을_요청한다() throws Exception {
+    void 회원가입_전화번호_인증을_요청한다() throws Exception {
         SendVerificationRequest request = new SendVerificationRequest("01085852525", VerificationType.SIGNUP);
         willDoNothing().given(sendVerificationUseCase).execute(any(SendVerificationRequest.class));
 
@@ -133,7 +130,10 @@ class UserControllerTest extends RestDocsTestSupport {
                         requestFields(
                                 fieldWithPath("phoneNumber")
                                         .type(JsonFieldType.STRING)
-                                        .description("전화번호")
+                                        .description("전화번호"),
+                                fieldWithPath("type")
+                                        .type(JsonFieldType.STRING)
+                                        .description("인증 코드 용도 : SIGNUP(회원가입) / UPDATE_PASSWORD(비밀번호 변경)")
                         )
                 ));
 
@@ -199,7 +199,7 @@ class UserControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 전화번호_인증을_완료한다() throws Exception {
+    void 회원가입_전화번호_인증을_완료한다() throws Exception {
         willDoNothing().given(verifyUseCase).execute(any(VerifyRequest.class));
         VerifyRequest request = new VerifyRequest("01085852525", "123456", VerificationType.SIGNUP);
 
@@ -218,7 +218,10 @@ class UserControllerTest extends RestDocsTestSupport {
                                         .description("전화번호"),
                                 fieldWithPath("code")
                                         .type(JsonFieldType.STRING)
-                                        .description("인증 코드")
+                                        .description("인증 코드"),
+                                fieldWithPath("type")
+                                        .type(JsonFieldType.STRING)
+                                        .description("인증 코드 용도 : SIGNUP(회원가입) / UPDATE_PASSWORD(비밀번호 변경)")
                         )
                 ));
 
@@ -226,7 +229,7 @@ class UserControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 전화번호를_인증할_때_인증_코드가_틀렸으면_에러가_발생한다() throws Exception {
+    void 회원가입_전화번호를_인증할_때_인증_코드가_틀렸으면_에러가_발생한다() throws Exception {
         doThrow(new VerificationCodeMismatchException()).when(verifyUseCase).execute(any(VerifyRequest.class));
         VerifyRequest request = new VerifyRequest("01085852525", "123456", VerificationType.SIGNUP);
 
@@ -244,9 +247,75 @@ class UserControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 전화번호를_인증할_때_인증이_실패한_경우_에러가_발생한다() throws Exception {
+    void 회원가입_전화번호를_인증할_때_인증이_실패한_경우_에러가_발생한다() throws Exception {
         doThrow(new VerifyingHasFailedException()).when(verifyUseCase).execute(any(VerifyRequest.class));
         VerifyRequest request = new VerifyRequest("01085852525", "123456", VerificationType.SIGNUP);
+
+        mockMvc.perform(patch("/user/verification")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+                )
+
+                .andExpect(status().isUnauthorized())
+
+                .andDo(restDocs.document());
+
+        verify(verifyUseCase, times(1)).execute(any(VerifyRequest.class));
+    }
+
+    @Test
+    void 비밀번호_변경_전화번호_인증을_완료한다() throws Exception {
+        willDoNothing().given(verifyUseCase).execute(any(VerifyRequest.class));
+        VerifyRequest request = new VerifyRequest("01085852525", "123456", VerificationType.UPDATE_PASSWORD);
+
+        mockMvc.perform(patch("/user/verification")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+                )
+
+                .andExpect(status().isNoContent())
+
+                .andDo(restDocs.document(
+                        requestFields(
+                                fieldWithPath("phoneNumber")
+                                        .type(JsonFieldType.STRING)
+                                        .description("전화번호"),
+                                fieldWithPath("code")
+                                        .type(JsonFieldType.STRING)
+                                        .description("인증 코드"),
+                                fieldWithPath("type")
+                                        .type(JsonFieldType.STRING)
+                                        .description("인증 코드 용도 : SIGNUP(회원가입) / UPDATE_PASSWORD(비밀번호 변경)")
+                        )
+                ));
+
+        verify(verifyUseCase, times(1)).execute(any(VerifyRequest.class));
+    }
+
+    @Test
+    void 비밀번호_변경_전화번호를_인증할_때_인증_코드가_틀렸으면_에러가_발생한다() throws Exception {
+        doThrow(new VerificationCodeMismatchException()).when(verifyUseCase).execute(any(VerifyRequest.class));
+        VerifyRequest request = new VerifyRequest("01085852525", "123456", VerificationType.UPDATE_PASSWORD);
+
+        mockMvc.perform(patch("/user/verification")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+                )
+
+                .andExpect(status().isUnauthorized())
+
+                .andDo(restDocs.document());
+
+        verify(verifyUseCase, times(1)).execute(any(VerifyRequest.class));
+    }
+
+    @Test
+    void 비밀번호_변경_전화번호를_인증할_때_인증이_실패한_경우_에러가_발생한다() throws Exception {
+        doThrow(new VerifyingHasFailedException()).when(verifyUseCase).execute(any(VerifyRequest.class));
+        VerifyRequest request = new VerifyRequest("01085852525", "123456", VerificationType.UPDATE_PASSWORD);
 
         mockMvc.perform(patch("/user/verification")
                         .accept(MediaType.APPLICATION_JSON)
@@ -266,7 +335,7 @@ class UserControllerTest extends RestDocsTestSupport {
         willDoNothing().given(updatePasswordUseCase).execute(any(UpdatePasswordRequest.class));
         UpdatePasswordRequest request = new UpdatePasswordRequest("01085852525", "hihi1234!");
 
-        mockMvc.perform(put("/user/password-update")
+        mockMvc.perform(patch("/user/password")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request))
@@ -289,7 +358,7 @@ class UserControllerTest extends RestDocsTestSupport {
         doThrow(new VerifyingHasFailedException()).when(updatePasswordUseCase).execute(any(UpdatePasswordRequest.class));
         SignUpUserRequest request = new SignUpUserRequest("01085852525", "김밤돌", "password123$");
 
-        mockMvc.perform(put("/user/password-update")
+        mockMvc.perform(patch("/user/password")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request))
@@ -303,7 +372,7 @@ class UserControllerTest extends RestDocsTestSupport {
         doThrow(new UserNotFoundException()).when(updatePasswordUseCase).execute(any(UpdatePasswordRequest.class));
         UpdatePasswordRequest request = new UpdatePasswordRequest("01085852525", "hihi1234!");
 
-        mockMvc.perform(put("/user/password-update")
+        mockMvc.perform(patch("/user/password")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request))
@@ -318,7 +387,7 @@ class UserControllerTest extends RestDocsTestSupport {
     void 비밀번호_형식이_다르면_오류가_발생한다() throws Exception {
         UpdatePasswordRequest request = new UpdatePasswordRequest("01085852525", "123456");
 
-        mockMvc.perform(put("/user/password-update")
+        mockMvc.perform(patch("/user/password")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request))
