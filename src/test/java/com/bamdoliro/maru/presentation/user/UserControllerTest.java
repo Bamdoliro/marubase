@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.presentation.user;
 
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.domain.user.domain.type.VerificationType;
 import com.bamdoliro.maru.domain.user.exception.UserAlreadyExistsException;
 import com.bamdoliro.maru.domain.user.exception.UserNotFoundException;
 import com.bamdoliro.maru.domain.user.exception.VerificationCodeMismatchException;
@@ -117,7 +118,7 @@ class UserControllerTest extends RestDocsTestSupport {
 
     @Test
     void 전화번호_인증을_요청한다() throws Exception {
-        SendVerificationRequest request = new SendVerificationRequest("01085852525");
+        SendVerificationRequest request = new SendVerificationRequest("01085852525", VerificationType.SIGNUP);
         willDoNothing().given(sendVerificationUseCase).execute(any(SendVerificationRequest.class));
 
         mockMvc.perform(post("/user/verification")
@@ -141,7 +142,7 @@ class UserControllerTest extends RestDocsTestSupport {
 
     @Test
     void 전화번호_인증을_요청할_때_잘못된_형식의_전화번호를_보내면_에러가_발생한다() throws Exception {
-        SendVerificationRequest request = new SendVerificationRequest("누가봐도전화번호아님ㅎg");
+        SendVerificationRequest request = new SendVerificationRequest("누가봐도전화번호아님ㅎg", VerificationType.SIGNUP);
         willDoNothing().given(sendVerificationUseCase).execute(any(SendVerificationRequest.class));
 
         mockMvc.perform(post("/user/verification")
@@ -159,7 +160,7 @@ class UserControllerTest extends RestDocsTestSupport {
 
     @Test
     void 전화번호_인증을_요청할_때_전화번호_전송이_실패하면_에러가_발생한다() throws Exception {
-        SendVerificationRequest request = new SendVerificationRequest("010아무도안쓰는번호");
+        SendVerificationRequest request = new SendVerificationRequest("010아무도안쓰는번호", VerificationType.SIGNUP);
         doThrow(new FailedToSendException())
                 .when(sendVerificationUseCase).execute(any(SendVerificationRequest.class));
 
@@ -200,7 +201,7 @@ class UserControllerTest extends RestDocsTestSupport {
     @Test
     void 전화번호_인증을_완료한다() throws Exception {
         willDoNothing().given(verifyUseCase).execute(any(VerifyRequest.class));
-        VerifyRequest request = new VerifyRequest("01085852525", "123456");
+        VerifyRequest request = new VerifyRequest("01085852525", "123456", VerificationType.SIGNUP);
 
         mockMvc.perform(patch("/user/verification")
                         .accept(MediaType.APPLICATION_JSON)
@@ -227,7 +228,7 @@ class UserControllerTest extends RestDocsTestSupport {
     @Test
     void 전화번호를_인증할_때_인증_코드가_틀렸으면_에러가_발생한다() throws Exception {
         doThrow(new VerificationCodeMismatchException()).when(verifyUseCase).execute(any(VerifyRequest.class));
-        VerifyRequest request = new VerifyRequest("01085852525", "123456");
+        VerifyRequest request = new VerifyRequest("01085852525", "123456", VerificationType.SIGNUP);
 
         mockMvc.perform(patch("/user/verification")
                         .accept(MediaType.APPLICATION_JSON)
@@ -245,7 +246,7 @@ class UserControllerTest extends RestDocsTestSupport {
     @Test
     void 전화번호를_인증할_때_인증이_실패한_경우_에러가_발생한다() throws Exception {
         doThrow(new VerifyingHasFailedException()).when(verifyUseCase).execute(any(VerifyRequest.class));
-        VerifyRequest request = new VerifyRequest("01085852525", "123456");
+        VerifyRequest request = new VerifyRequest("01085852525", "123456", VerificationType.SIGNUP);
 
         mockMvc.perform(patch("/user/verification")
                         .accept(MediaType.APPLICATION_JSON)

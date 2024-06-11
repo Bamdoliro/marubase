@@ -1,11 +1,10 @@
 package com.bamdoliro.maru.application.user;
 
+import com.bamdoliro.maru.domain.user.domain.UpdatePasswordVerification;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.domain.user.domain.Verification;
 import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
 import com.bamdoliro.maru.domain.user.service.UserFacade;
-import com.bamdoliro.maru.infrastructure.persistence.user.UserRepository;
-import com.bamdoliro.maru.infrastructure.persistence.user.VerificationRepository;
+import com.bamdoliro.maru.infrastructure.persistence.user.UpdatePasswordVerificationRepository;
 import com.bamdoliro.maru.presentation.user.dto.request.UpdatePasswordRequest;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
@@ -29,10 +28,7 @@ public class UpdatePasswordUseCaseTest {
     private UpdatePasswordUseCase updatePasswordUseCase;
 
     @Mock
-    private VerificationRepository verificationRepository;
-
-    @Mock
-    private UserRepository userRepository;
+    private UpdatePasswordVerificationRepository verificationRepository;
 
     @Mock
     private UserFacade userFacade;
@@ -41,12 +37,10 @@ public class UpdatePasswordUseCaseTest {
     void 비밀번호를_변경한다() {
         //given
         User user = UserFixture.createUser();
-        System.out.println(user.getPassword());
-        Verification verification = UserFixture.createVerification(true);
+        UpdatePasswordVerification verification = UserFixture.createUpdatePasswordVerification(true);
         UpdatePasswordRequest request = new UpdatePasswordRequest(user.getPhoneNumber(), "비밀번호");
 
         given(verificationRepository.findById(request.getPhoneNumber())).willReturn(Optional.of(verification));
-        given(userRepository.existsByPhoneNumber(user.getPhoneNumber())).willReturn(true);
         given(userFacade.getUser(request.getPhoneNumber())).willReturn(user);
 
         //when
@@ -54,9 +48,6 @@ public class UpdatePasswordUseCaseTest {
 
         //then
         verify(verificationRepository, times(1)).findById(request.getPhoneNumber());
-        verify(userRepository, times(1)).existsByPhoneNumber(request.getPhoneNumber());
-        verify(userFacade, times(1)).getUser(request.getPhoneNumber());
-        verify(verificationRepository, times(1)).updateVerification(request.getPhoneNumber(), false);
 
         assertTrue(user.getPassword().match(request.getPassword()));
     }
@@ -72,16 +63,14 @@ public class UpdatePasswordUseCaseTest {
         assertThrows(VerifyingHasFailedException.class,
                 () -> updatePasswordUseCase.execute(request));
 
-        verify(userRepository, never()).existsByPhoneNumber(any());
         verify(userFacade, never()).getUser(any());
-        verify(verificationRepository, never()).updateVerification(any(), anyBoolean());
     }
 
     @Test
     void 전화번호_인증을_하지_않았다면_에러가_발생한다() {
         // given
         User user = UserFixture.createUser();
-        Verification verification = UserFixture.createVerification(false);
+        UpdatePasswordVerification verification = UserFixture.createUpdatePasswordVerification(false);
         UpdatePasswordRequest request = new UpdatePasswordRequest(user.getPhoneNumber(), "비밀번호");
 
         given(verificationRepository.findById(request.getPhoneNumber())).willReturn(Optional.of(verification));
@@ -90,8 +79,6 @@ public class UpdatePasswordUseCaseTest {
         assertThrows(VerifyingHasFailedException.class,
                 () -> updatePasswordUseCase.execute(request));
 
-        verify(userRepository, never()).existsByPhoneNumber(any());
         verify(userFacade, never()).getUser(any());
-        verify(verificationRepository, never()).updateVerification(any(), anyBoolean());
     }
 }
