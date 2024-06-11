@@ -62,7 +62,7 @@ public class UserController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("/password-update")
+    @PatchMapping("/password")
     public void updatePassword(
             @RequestBody @Valid UpdatePasswordRequest request
     ){
