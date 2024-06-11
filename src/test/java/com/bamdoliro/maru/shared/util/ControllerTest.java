@@ -48,6 +48,7 @@ import com.bamdoliro.maru.application.question.UpdateQuestionUseCase;
 import com.bamdoliro.maru.application.school.SearchSchoolUseCase;
 import com.bamdoliro.maru.application.user.SendVerificationUseCase;
 import com.bamdoliro.maru.application.user.SignUpUserUseCase;
+import com.bamdoliro.maru.application.user.UpdatePasswordUseCase;
 import com.bamdoliro.maru.application.user.VerifyUseCase;
 import com.bamdoliro.maru.domain.auth.service.TokenService;
 import com.bamdoliro.maru.infrastructure.message.SendMessageService;
@@ -89,6 +90,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected LogInUseCase logInUseCase;
+
+    @MockBean
+    protected UpdatePasswordUseCase updatePasswordUseCase;
 
     @MockBean
     protected RefreshTokenUseCase refreshTokenUseCase;
@@ -248,6 +252,7 @@ public abstract class ControllerTest {
 
     @MockBean
     protected AuthenticationExtractor authenticationExtractor;
+
 
     protected String toJson(Object object) throws JsonProcessingException {
         return objectMapper.writeValueAsString(object);
