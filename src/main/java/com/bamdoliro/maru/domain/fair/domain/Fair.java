@@ -44,6 +44,9 @@ public class Fair extends BaseTimeEntity {
     @Column(nullable = false, length = 30)
     private String place;
 
+    @Column(nullable = false)
+    private String applicationUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private FairType type;
@@ -54,14 +57,16 @@ public class Fair extends BaseTimeEntity {
     @Column(nullable = false)
     private LocalDate applicationEndDate;
 
+
     @OneToMany(mappedBy = "fair", fetch = FetchType.LAZY)
     private final List<Attendee> attendeeList = new ArrayList<>();
 
     @Builder
-    public Fair(LocalDateTime start, Integer capacity, String place, FairType type, LocalDate applicationStartDate, LocalDate applicationEndDate) {
+    public Fair(LocalDateTime start, Integer capacity, String place, String applicationUrl, FairType type, LocalDate applicationStartDate, LocalDate applicationEndDate) {
         this.start = start;
         this.capacity = capacity;
         this.place = place;
+        this.applicationUrl = applicationUrl;
         this.type = type;
         this.applicationStartDate = applicationStartDate == null ? LocalDate.now() : applicationStartDate;
         this.applicationEndDate = applicationEndDate == null ? start.minusDays(3).toLocalDate() : applicationEndDate;
