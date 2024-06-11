@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.infrastructure.persistence.user;
 
-import com.bamdoliro.maru.domain.user.domain.Verification;
+import com.bamdoliro.maru.domain.user.domain.SignUpVerification;
+import com.bamdoliro.maru.domain.user.domain.UpdatePasswordVerification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.PartialUpdate;
 import org.springframework.data.redis.core.RedisKeyValueTemplate;
@@ -13,8 +14,17 @@ public class VerificationRedisRepositoryImpl implements VerificationRedisReposit
     private final RedisKeyValueTemplate template;
 
     @Override
-    public void updateVerification(String phoneNumber, boolean verified) {
-        PartialUpdate<Verification> update = new PartialUpdate<>(phoneNumber, Verification.class)
+    public void updateSignUpVerification(String phoneNumber, boolean verified) {
+        PartialUpdate<SignUpVerification> update = new PartialUpdate<>(phoneNumber, SignUpVerification.class)
+                .set("isVerified", verified)
+                .refreshTtl(true);
+
+        template.update(update);
+    }
+
+    @Override
+    public void updatePasswordVerification(String phoneNumber, boolean verified) {
+        PartialUpdate<UpdatePasswordVerification> update = new PartialUpdate<>(phoneNumber, UpdatePasswordVerification.class)
                 .set("isVerified", verified)
                 .refreshTtl(true);
 
