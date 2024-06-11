@@ -90,7 +90,8 @@ public class EnumControllerTest extends RestDocsTestSupport {
                                 beneathPath("verificationType").withSubsectionId("verificationType"),
                                 attributes(key("title").value("VerificationType")),
                                 enumConvertFieldDescriptor((enumDocs.getVerificationType()))
-                )));
+                        )
+                ));
     }
 
     public static CustomResponseFieldsSnippet customResponseFields
@@ -110,7 +111,8 @@ public class EnumControllerTest extends RestDocsTestSupport {
     private EnumDocs getData(MvcResult result) throws IOException {
         return objectMapper
                 .readValue(result.getResponse().getContentAsByteArray(),
-                        new TypeReference<EnumDocs>() {}
+                        new TypeReference<EnumDocs>() {
+                        }
                 );
     }
 }

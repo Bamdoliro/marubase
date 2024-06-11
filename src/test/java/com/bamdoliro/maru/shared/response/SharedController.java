@@ -11,6 +11,7 @@ import com.bamdoliro.maru.domain.form.domain.type.GraduationType;
 import com.bamdoliro.maru.domain.question.domain.type.QuestionCategory;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.domain.type.Authority;
+import com.bamdoliro.maru.domain.user.domain.type.VerificationType;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.property.EnumProperty;
 import jakarta.annotation.security.PermitAll;
@@ -40,6 +41,7 @@ public class SharedController {
                 .fairStatus(getDocs(FairStatus.values()))
                 .fairType(getDocs(FairType.values()))
                 .questionCategory(getDocs(QuestionCategory.values()))
+                .verificationType(getDocs(VerificationType.values()))
                 .build();
     }
 
