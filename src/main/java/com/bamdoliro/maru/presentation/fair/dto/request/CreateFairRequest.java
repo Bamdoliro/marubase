@@ -29,6 +29,9 @@ public class CreateFairRequest {
     @Size(max = 30, message = "30자 이하여야 합니다.")
     private String place;
 
+    @NotBlank(message = "필수값입니다.")
+    private String applicationUrl;
+
     @NotNull(message = "필수값입니다.")
     private FairType type;
 
