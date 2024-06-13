@@ -25,15 +25,19 @@ public class EducationRequest {
     @Size(min = 4, max = 4, message = "4자여야 합니다.")
     private String graduationYear;
 
-    @NotBlank
+    @NotBlank(message = "필수값입니다.")
     @Size(max = 20, message = "20자 이하여야 합니다.")
     private String schoolName;
 
-    @NotBlank
+    @NotBlank(message = "필수값입니다.")
     @Size(max = 20, message = "20자 이하여야 합니다.")
     private String schoolLocation;
 
-    @NotBlank
+    @NotBlank(message = "필수값입니다.")
+    @Size(max = 40, message = "40자 이하여야 합니다.")
+    private String schoolAddress;
+
+    @NotBlank(message = "필수값입니다.")
     @Size(min = 7, max = 7, message = "7자여야 합니다.")
     private String schoolCode;
 
@@ -56,6 +60,7 @@ public class EducationRequest {
                 new School(
                         schoolName,
                         schoolLocation,
+                        schoolAddress,
                         schoolCode
                 ),
                 new Teacher(
