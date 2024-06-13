@@ -3,8 +3,7 @@ package com.bamdoliro.maru.infrastructure.persistence.form;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
-import com.bamdoliro.maru.infrastructure.persistence.form.vo.FormUrlVo;
-import com.bamdoliro.maru.infrastructure.persistence.form.vo.QFormUrlVo;
+import com.bamdoliro.maru.infrastructure.persistence.form.vo.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import static com.bamdoliro.maru.domain.form.domain.QForm.form;
 
@@ -30,12 +30,46 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<Form> findByType(FormType type) {
+        return queryFactory
+                .selectFrom(form)
+                .where(eqType(type))
+                .orderBy(form.examinationNumber.asc())
+                .fetch();
+    }
+
+    @Override
+    public List<Form> findByCategory(FormType.Category category) {
+        List<FormType> matchingFormTypes = getFormTypesByCategory(category);
+
+        return queryFactory
+                .selectFrom(form)
+                .where(form.type.in(matchingFormTypes))
+                .orderBy(form.examinationNumber.asc())
+                .fetch();
+    }
+
     private BooleanExpression eqStatus(FormStatus status) {
         if (Objects.isNull(status)) {
             return null;
         }
 
         return form.status.eq(status);
+    }
+
+    private BooleanExpression eqType(FormType type) {
+        if (Objects.isNull(type)) {
+            return null;
+        }
+
+        return form.type.eq(type);
+    }
+
+    private List<FormType> getFormTypesByCategory(FormType.Category category) {
+        return Stream.of(FormType.values())
+                .filter(formType -> formType.categoryEquals(category))
+                .toList();
     }
 
     @Override
@@ -137,6 +171,65 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 .from(form)
                 .where(form.id.in(idList))
                 .orderBy(form.examinationNumber.asc())
+                .fetch();
+    }
+
+    @Override
+    public List<NumberOfApplicantsVo> findTypeAndCountGroupByType() {
+        return queryFactory
+                .select(new QNumberOfApplicantsVo(
+                        form.type,
+                        form.count()
+                ))
+                .from(form)
+                .groupBy(form.type)
+                .fetch();
+    }
+
+    @Override
+    public List<GradeVo> findGradeGroupByTypeAndStatus(List<FormStatus> round) {
+        return queryFactory
+                .select(new QGradeVo(
+                        form.type.stringValue(),
+                        form.score.firstRoundScore.max(),
+                        form.score.firstRoundScore.min(),
+                        form.score.firstRoundScore.avg(),
+                        form.score.totalScore.max(),
+                        form.score.totalScore.min(),
+                        form.score.totalScore.avg()
+                ))
+                .from(form)
+                .where(form.status.in(round))
+                .groupBy(form.type)
+                .fetch();
+    }
+
+    @Override
+    public List<SchoolStatusVo> findSchoolByAddress(List<FormStatus> round, String keyword) {
+        return queryFactory
+                .select(new QSchoolStatusVo(
+                        form.applicant.name,
+                        form.education.school.name,
+                        form.education.school.address
+                ))
+                .from(form)
+                .where(form.education.school.address.contains(keyword)
+                        .or(form.education.school.location.eq(keyword))
+                        .and(form.status.in(round)))
+                .fetch();
+    }
+
+    @Override
+    public List<SchoolStatusVo> findNotBusanSchool(List<FormStatus> round) {
+        return queryFactory
+                .select(new QSchoolStatusVo(
+                        form.applicant.name,
+                        form.education.school.name,
+                        form.education.school.address
+                ))
+                .from(form)
+                .where(form.education.school.location.eq("부산광역시").not()
+                        .and(form.status.in(round)))
                 .fetch();
     }
 }
