@@ -141,6 +141,9 @@ class FormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("education.schoolLocation")
                                         .type(JsonFieldType.STRING)
                                         .description("출신 학교 지역"),
+                                fieldWithPath("education.schoolAddress")
+                                        .type(JsonFieldType.STRING)
+                                        .description("출신 학교 주소지"),
                                 fieldWithPath("education.schoolCode")
                                         .type(JsonFieldType.STRING)
                                         .description("출신 학교 코드"),
@@ -753,6 +756,9 @@ class FormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("education.schoolLocation")
                                         .type(JsonFieldType.STRING)
                                         .description("출신 학교 지역"),
+                                fieldWithPath("education.schoolAddress")
+                                        .type(JsonFieldType.STRING)
+                                        .description("출신 학교 주소지"),
                                 fieldWithPath("education.schoolCode")
                                         .type(JsonFieldType.STRING)
                                         .description("출신 학교 코드"),
