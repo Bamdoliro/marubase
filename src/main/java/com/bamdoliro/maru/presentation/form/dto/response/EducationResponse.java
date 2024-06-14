@@ -14,6 +14,7 @@ public class EducationResponse {
     private String schoolName;
     private String schoolLocation;
     private String schoolCode;
+    private String schoolAddress;
     private String teacherName;
     private String teacherPhoneNumber;
 
@@ -22,6 +23,7 @@ public class EducationResponse {
         this.graduationYear = education.getGraduationYear();
         this.schoolName = education.getSchool().getName();
         this.schoolLocation = education.getSchool().getLocation();
+        this.schoolAddress = education.getSchool().getAddress();
         this.schoolCode = education.getSchool().getCode();
         this.teacherName = education.getTeacher().getName();
         this.teacherPhoneNumber = education.getTeacher().getPhoneNumber().toString();
