@@ -8,7 +8,6 @@ import com.bamdoliro.maru.presentation.analysis.dto.response.SchoolStatusRespons
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.bamdoliro.maru.shared.util.RandomUtil.randomDouble;
 import static com.bamdoliro.maru.shared.util.RandomUtil.randomNumber;
