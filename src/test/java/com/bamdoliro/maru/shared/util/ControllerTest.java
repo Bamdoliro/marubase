@@ -1,5 +1,9 @@
 package com.bamdoliro.maru.shared.util;
 
+import com.bamdoliro.maru.application.analysis.QueryGenderRatioUseCase;
+import com.bamdoliro.maru.application.analysis.QueryGradeDistributionUseCase;
+import com.bamdoliro.maru.application.analysis.QueryNumberOfApplicantsUseCase;
+import com.bamdoliro.maru.application.analysis.QuerySchoolStatusUseCase;
 import com.bamdoliro.maru.application.auth.LogInUseCase;
 import com.bamdoliro.maru.application.auth.LogOutUseCase;
 import com.bamdoliro.maru.application.auth.RefreshTokenUseCase;
@@ -53,6 +57,7 @@ import com.bamdoliro.maru.application.user.VerifyUseCase;
 import com.bamdoliro.maru.domain.auth.service.TokenService;
 import com.bamdoliro.maru.infrastructure.message.SendMessageService;
 import com.bamdoliro.maru.infrastructure.neis.SearchSchoolService;
+import com.bamdoliro.maru.presentation.analysis.AnalysisController;
 import com.bamdoliro.maru.presentation.auth.AuthController;
 import com.bamdoliro.maru.presentation.fair.FairController;
 import com.bamdoliro.maru.presentation.form.DraftFormController;
@@ -75,7 +80,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @Disabled
-@WebMvcTest({UserController.class, AuthController.class, SharedController.class, SchoolController.class, QuestionController.class, FormController.class, NoticeController.class, DraftFormController.class, FairController.class, MessageController.class})
+@WebMvcTest({UserController.class,
+            AuthController.class,
+            SharedController.class,
+            SchoolController.class,
+            QuestionController.class,
+            FormController.class,
+            NoticeController.class,
+            DraftFormController.class,
+            FairController.class,
+            MessageController.class,
+            AnalysisController.class})
 public abstract class ControllerTest {
 
     @Autowired
@@ -233,6 +248,22 @@ public abstract class ControllerTest {
     protected QueryFormUrlUseCase queryFormUrlUseCase;
 
     @MockBean
+    protected SendMessageUseCase sendMessageUseCase;
+
+    @MockBean
+    protected QueryNumberOfApplicantsUseCase queryNumberOfApplicantsUseCase;
+
+    @MockBean
+    protected QueryGradeDistributionUseCase queryGradeDistributionUseCase;
+
+    @MockBean
+    protected QueryGenderRatioUseCase queryGenderRatioUseCase;
+
+    @MockBean
+    protected QuerySchoolStatusUseCase querySchoolStatusUseCase;
+
+
+    @MockBean
     protected TokenService tokenService;
 
     @MockBean
@@ -241,8 +272,6 @@ public abstract class ControllerTest {
     @MockBean
     protected SendMessageService sendMessageService;
 
-    @MockBean
-    protected SendMessageUseCase sendMessageUseCase;
 
     @MockBean
     protected JwtProperties jwtProperties;
