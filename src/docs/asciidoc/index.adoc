@@ -27,4 +27,6 @@ include::fair.adoc[]
 
 include::message.adoc[]
 
+include::analysis.adoc[]
+
 include::enum.adoc[]
