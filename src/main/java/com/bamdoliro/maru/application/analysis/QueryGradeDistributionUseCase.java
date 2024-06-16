@@ -26,8 +26,6 @@ public class QueryGradeDistributionUseCase {
                 .map(GradeDistributionResponse::getType)
                 .toList();
 
-//        System.out.println(existingTypes);
-
         for (FormType formType : FormType.values()) {
             if (!existingTypes.contains(formType)) {
                 result.add(new GradeDistributionResponse(formType, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
