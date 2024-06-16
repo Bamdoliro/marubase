@@ -190,7 +190,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
     public List<GradeVo> findGradeGroupByTypeAndStatus(List<FormStatus> round) {
         return queryFactory
                 .select(new QGradeVo(
-                        form.type.stringValue(),
+                        form.type,
                         form.score.firstRoundScore.max(),
                         form.score.firstRoundScore.min(),
                         form.score.firstRoundScore.avg(),

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @UseCase
 public class QueryNumberOfApplicantsUseCase {
+
     private final FormRepository formRepository;
 
     public List<NumberOfApplicantsResponse> execute() {
@@ -20,7 +21,8 @@ public class QueryNumberOfApplicantsUseCase {
                 .map(NumberOfApplicantsResponse::new)
                 .collect(Collectors.toList());
 
-        List<FormType> existingTypes = result.stream()
+        List<FormType> existingTypes = result
+                .stream()
                 .map(NumberOfApplicantsResponse::getType)
                 .toList();
 

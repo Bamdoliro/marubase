@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.presentation.analysis.dto.response;
 
+import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.infrastructure.persistence.form.vo.GradeVo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GradeDistributionResponse {
-    private String type;
+    private FormType type;
     private Double firstRoundMax;
     private Double firstRoundMin;
     private Double firstRoundAvg;

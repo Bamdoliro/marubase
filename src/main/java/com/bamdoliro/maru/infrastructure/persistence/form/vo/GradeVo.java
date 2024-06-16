@@ -1,11 +1,12 @@
 package com.bamdoliro.maru.infrastructure.persistence.form.vo;
 
+import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
 @Getter
 public class GradeVo {
-    private String type;
+    private FormType type;
     private Double firstRoundMax;
     private Double firstRoundMin;
     private Double firstRoundAvg;
@@ -14,7 +15,7 @@ public class GradeVo {
     private Double totalAvg;
 
     @QueryProjection
-    public GradeVo(String type, Double firstRoundMax, Double firstRoundMin, Double firstRoundAvg, Double totalMax, Double totalMin, Double totalAvg) {
+    public GradeVo(FormType type, Double firstRoundMax, Double firstRoundMin, Double firstRoundAvg, Double totalMax, Double totalMin, Double totalAvg) {
         this.type = type;
         this.firstRoundMax = firstRoundMax;
         this.firstRoundMin = firstRoundMin;
