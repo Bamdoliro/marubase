@@ -27,6 +27,7 @@ public class SearchSchoolService {
                 .map(s -> SchoolResponse.builder()
                         .name(s.getSchoolName())
                         .location(s.getLocation())
+                        .address((s.getAddress()))
                         .code(s.getStandardSchoolCode())
                         .build())
                 .toList();
