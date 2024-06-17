@@ -11,5 +11,6 @@ public class SchoolResponse {
 
     private String name;
     private String location;
+    private String address;
     private String code;
 }
