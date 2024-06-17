@@ -74,7 +74,7 @@ public class AnalysisFixture {
                 new SchoolStatusResponse(
                         "김밤돌",
                         "비전중학교",
-                        "경기도 용인시 비전구 비전로 1"
+                        "경기도 비전시 비전구 비전로 1"
                 )
         );
     }
