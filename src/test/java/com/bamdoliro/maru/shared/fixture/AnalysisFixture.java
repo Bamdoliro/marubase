@@ -8,6 +8,7 @@ import com.bamdoliro.maru.presentation.analysis.dto.response.SchoolStatusRespons
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.bamdoliro.maru.shared.util.RandomUtil.randomDouble;
 import static com.bamdoliro.maru.shared.util.RandomUtil.randomNumber;
@@ -42,9 +43,9 @@ public class AnalysisFixture {
         );
     }
 
-    public static List<SchoolStatusResponse> createSchoolStatusResponse(Boolean isBusan, String  gu) {
-        if (isBusan) {
-            if (gu == null) {
+    public static List<SchoolStatusResponse> createSchoolStatusResponse(List<String> isBusan, List<String> gu) {
+        if (Objects.equals(isBusan.get(0), "true")) {
+            if (gu.get(0) == null) {
                 return List.of(
                         new SchoolStatusResponse(
                                 "김밤돌",

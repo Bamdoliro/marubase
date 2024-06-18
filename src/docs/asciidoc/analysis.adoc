@@ -22,8 +22,8 @@ include::{snippets}/analysis-controller-test/전형별_지원자수를_조회한
 ==== Request Header
 include::{snippets}/analysis-controller-test/_1차_합격자들의_성적_분포를_조회한다/request-headers.adoc[]
 
-==== Request Body
-include::{snippets}/analysis-controller-test/_1차_합격자들의_성적_분포를_조회한다/request-fields.adoc[]
+==== Query Parameter
+include::{snippets}/analysis-controller-test/_1차_합격자들의_성적_분포를_조회한다/query-parameters.adoc[]
 
 ==== 요청
 
@@ -49,8 +49,8 @@ include::{snippets}/analysis-controller-test/최종_합격자들의_성적_분�
 ==== Request Header
 include::{snippets}/analysis-controller-test/전형별_성비를_조회한다/request-headers.adoc[]
 
-==== Request Body
-include::{snippets}/analysis-controller-test/전형별_성비를_조회한다/request-fields.adoc[]
+==== Query Parameter
+include::{snippets}/analysis-controller-test/전형별_성비를_조회한다/query-parameters.adoc[]
 
 ==== 요청
 include::{snippets}/analysis-controller-test/전형별_성비를_조회한다/http-request.adoc[]
@@ -68,8 +68,8 @@ include::{snippets}/analysis-controller-test/전형별_성비를_조회한다/ht
 ==== Request Header
 include::{snippets}/analysis-controller-test/부산_특정구_출신_지원자들의_출신학교_통계를_조회한다/request-headers.adoc[]
 
-==== Request Body
-include::{snippets}/analysis-controller-test/부산_특정구_출신_지원자들의_출신학교_통계를_조회한다/request-fields.adoc[]
+==== Query Parameter
+include::{snippets}/analysis-controller-test/부산_특정구_출신_지원자들의_출신학교_통계를_조회한다/query-parameters.adoc[]
 
 ==== 요청
 ===== 부산 특정구 출신

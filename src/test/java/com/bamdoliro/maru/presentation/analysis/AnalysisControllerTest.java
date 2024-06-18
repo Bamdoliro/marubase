@@ -1,7 +1,6 @@
 package com.bamdoliro.maru.presentation.analysis;
 
 
-import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.analysis.dto.request.GenderRatioRequest;
@@ -15,16 +14,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -43,7 +44,8 @@ class AnalysisControllerTest extends RestDocsTestSupport {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
                         )
                 ));
     }
@@ -53,26 +55,23 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        GradeDistributionRequest request = new GradeDistributionRequest(List.of(
-                FormStatus.FIRST_PASSED,
-                FormStatus.FAILED,
-                FormStatus.PASSED
-        ));
-        System.out.println(AnalysisFixture.createGradeDistributionResponse());
         given(queryGradeDistributionUseCase.execute(any(GradeDistributionRequest.class))).willReturn(AnalysisFixture.createGradeDistributionResponse());
 
         mockMvc.perform(get("/analysis/grade-distribution")
+                        .param("statusList", "FIRST_PASSED", "FAILED", "PASSED")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJson(request)))
+                        .contentType(MediaType.APPLICATION_JSON))
+
                 .andExpect(status().isOk())
+
                 .andDo(restDocs.document(
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
                         ),
-                        requestFields(
-                                fieldWithPath("statusList").type(JsonFieldType.ARRAY).description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)")
+                        queryParameters(
+                                parameterWithName("statusList")
+                                        .description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)")
                         )
                 ));
     }
@@ -82,24 +81,23 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        GradeDistributionRequest request = new GradeDistributionRequest(List.of(
-                FormStatus.FAILED,
-                FormStatus.PASSED
-        ));
         given(queryGradeDistributionUseCase.execute(any(GradeDistributionRequest.class))).willReturn(AnalysisFixture.createGradeDistributionResponse());
 
         mockMvc.perform(get("/analysis/grade-distribution")
+                        .param("statusList", "FAILED", "PASSED")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJson(request)))
+                        .contentType(MediaType.APPLICATION_JSON))
+
                 .andExpect(status().isOk())
+
                 .andDo(restDocs.document(
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
                         ),
-                        requestFields(
-                                fieldWithPath("statusList").type(JsonFieldType.ARRAY).description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)")
+                        queryParameters(
+                                parameterWithName("statusList")
+                                        .description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)")
                         )
                 ));
     }
@@ -109,23 +107,23 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        GradeDistributionRequest request = new GradeDistributionRequest(List.of(
-                FormStatus.PASSED
-        ));
         given(queryGradeDistributionUseCase.execute(any(GradeDistributionRequest.class))).willReturn(AnalysisFixture.createGradeDistributionResponse());
 
         mockMvc.perform(get("/analysis/grade-distribution")
+                        .param("statusList", "PASSED")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJson(request)))
+                        .contentType(MediaType.APPLICATION_JSON))
+
                 .andExpect(status().isOk())
+
                 .andDo(restDocs.document(
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
                         ),
-                        requestFields(
-                                fieldWithPath("statusList").type(JsonFieldType.ARRAY).description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)")
+                        queryParameters(
+                                parameterWithName("statusList")
+                                        .description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)")
                         )
                 ));
     }
@@ -135,27 +133,30 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        GenderRatioRequest request = new GenderRatioRequest(List.of(
-                FormStatus.FIRST_PASSED,
-                FormStatus.FAILED,
-                FormStatus.PASSED
-        ),
-                FormType.Category.REGULAR);
-        given(queryGenderRatioUseCase.execute(any(GenderRatioRequest.class))).willReturn(AnalysisFixture.createGenderRatioResponse(FormType.Category.REGULAR));
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.put("statusList", List.of("FIRST_PASSED", "FAILED", "PASSED"));
+        multiValueMap.add("mainCategory", "REGULAR");
+        given(queryGenderRatioUseCase.execute(any(GenderRatioRequest.class))).willReturn(AnalysisFixture.createGenderRatioResponse(
+                FormType.Category.valueOf(Objects.requireNonNull(multiValueMap.get("mainCategory")).get(0))
+        ));
 
         mockMvc.perform(get("/analysis/gender-ratio")
+                        .params(multiValueMap)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJson(request)))
+                        .contentType(MediaType.APPLICATION_JSON))
+
                 .andExpect(status().isOk())
+
                 .andDo(restDocs.document(
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
                         ),
-                        requestFields(
-                                fieldWithPath("statusList").type(JsonFieldType.ARRAY).description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)"),
-                                fieldWithPath("mainCategory").type(JsonFieldType.STRING).description("메인 카테고리(FormType.Category 참고)")
+                        queryParameters(
+                                parameterWithName("statusList")
+                                        .description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)"),
+                                parameterWithName("mainCategory")
+                                        .description("메인 카테고리(FormType.Category 참고)")
                         )
                 ));
     }
@@ -165,29 +166,31 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        SchoolStatusRequest request = new SchoolStatusRequest(List.of(
-                FormStatus.FIRST_PASSED,
-                FormStatus.FAILED,
-                FormStatus.PASSED
-        ),
-                true,
-                "사상구");
-        given(querySchoolStatusUseCase.execute(any(SchoolStatusRequest.class))).willReturn(AnalysisFixture.createSchoolStatusResponse(request.getIsBusan(), request.getGu()));
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.put("statusList", List.of("FIRST_PASSED", "FAILED", "PASSED"));
+        multiValueMap.add("isBusan", "true");
+        multiValueMap.add("gu", "사상구");
+        given(querySchoolStatusUseCase.execute(any(SchoolStatusRequest.class))).willReturn(AnalysisFixture.createSchoolStatusResponse(Objects.requireNonNull(multiValueMap.get("isBusan")), multiValueMap.get("gu")));
 
         mockMvc.perform(get("/analysis/school-status")
-                .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)))
+                        .params(multiValueMap)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+
                 .andExpect(status().isOk())
+
                 .andDo(restDocs.document(
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
                         ),
-                        requestFields(
-                                fieldWithPath("statusList").type(JsonFieldType.ARRAY).description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)"),
-                                fieldWithPath("isBusan").type(JsonFieldType.BOOLEAN).description("부산 지역 학교 검색 여부(true면 부산, false면 부산 외 다른 모든 타지역)"),
-                                fieldWithPath("gu").type(JsonFieldType.STRING).optional().description("구(isBusan이 true이고, null인 경우 부산지역 전체 조회)")
+                        queryParameters(
+                                parameterWithName("statusList")
+                                        .description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)"),
+                                parameterWithName("isBusan")
+                                        .description("부산 지역 학교 검색 여부(true면 부산, false면 부산 외 다른 모든 타지역)"),
+                                parameterWithName("gu")
+                                        .description("구(isBusan이 true이고, null인 경우 부산지역 전체 조회)")
                         )
                 ));
     }
@@ -197,29 +200,31 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        SchoolStatusRequest request = new SchoolStatusRequest(List.of(
-                FormStatus.FIRST_PASSED,
-                FormStatus.FAILED,
-                FormStatus.PASSED
-        ),
-                true,
-                null);
-        given(querySchoolStatusUseCase.execute(any(SchoolStatusRequest.class))).willReturn(AnalysisFixture.createSchoolStatusResponse(request.getIsBusan(), request.getGu()));
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.put("statusList", List.of("FIRST_PASSED", "FAILED", "PASSED"));
+        multiValueMap.add("isBusan", "true");
+        multiValueMap.add("gu", null);
+        given(querySchoolStatusUseCase.execute(any(SchoolStatusRequest.class))).willReturn(AnalysisFixture.createSchoolStatusResponse(Objects.requireNonNull(multiValueMap.get("isBusan")), multiValueMap.get("gu")));
 
         mockMvc.perform(get("/analysis/school-status")
+                        .params(multiValueMap)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJson(request)))
+                        .contentType(MediaType.APPLICATION_JSON))
+
                 .andExpect(status().isOk())
+
                 .andDo(restDocs.document(
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
                         ),
-                        requestFields(
-                                fieldWithPath("statusList").type(JsonFieldType.ARRAY).description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)"),
-                                fieldWithPath("isBusan").type(JsonFieldType.BOOLEAN).description("부산 지역 학교 검색 여부(true면 부산, false면 부산 외 다른 모든 타지역)"),
-                                fieldWithPath("gu").type(JsonFieldType.STRING).optional().description("구(isBusan이 true이고, null인 경우 부산지역 전체 조회)")
+                        queryParameters(
+                                parameterWithName("statusList")
+                                        .description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)"),
+                                parameterWithName("isBusan")
+                                        .description("부산 지역 학교 검색 여부(true면 부산, false면 부산 외 다른 모든 타지역)"),
+                                parameterWithName("gu")
+                                        .description("구(isBusan이 true이고, null인 경우 부산지역 전체 조회)")
                         )
                 ));
     }
@@ -229,29 +234,31 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        SchoolStatusRequest request = new SchoolStatusRequest(List.of(
-                FormStatus.FIRST_PASSED,
-                FormStatus.FAILED,
-                FormStatus.PASSED
-        ),
-                false,
-                null);
-        given(querySchoolStatusUseCase.execute(any(SchoolStatusRequest.class))).willReturn(AnalysisFixture.createSchoolStatusResponse(request.getIsBusan(), request.getGu()));
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.put("statusList", List.of("FIRST_PASSED", "FAILED", "PASSED"));
+        multiValueMap.add("isBusan", "false");
+        multiValueMap.add("gu", null);
+        given(querySchoolStatusUseCase.execute(any(SchoolStatusRequest.class))).willReturn(AnalysisFixture.createSchoolStatusResponse(Objects.requireNonNull(multiValueMap.get("isBusan")), multiValueMap.get("gu")));
 
         mockMvc.perform(get("/analysis/school-status")
+                        .params(multiValueMap)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJson(request)))
+                        .contentType(MediaType.APPLICATION_JSON))
+
                 .andExpect(status().isOk())
+
                 .andDo(restDocs.document(
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
                         ),
-                        requestFields(
-                                fieldWithPath("statusList").type(JsonFieldType.ARRAY).description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)"),
-                                fieldWithPath("isBusan").type(JsonFieldType.BOOLEAN).description("부산 지역 학교 검색 여부(true면 부산, false면 부산 외 다른 모든 타지역)"),
-                                fieldWithPath("gu").type(JsonFieldType.STRING).optional().description("구(isBusan이 true이고, null인 경우 부산지역 전체 조회)")
+                        queryParameters(
+                                parameterWithName("statusList")
+                                        .description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)"),
+                                parameterWithName("isBusan")
+                                        .description("부산 지역 학교 검색 여부(true면 부산, false면 부산 외 다른 모든 타지역)"),
+                                parameterWithName("gu")
+                                        .description("구(isBusan이 true이고, null인 경우 부산지역 전체 조회)")
                         )
                 ));
     }

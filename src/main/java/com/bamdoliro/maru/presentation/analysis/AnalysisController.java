@@ -18,10 +18,7 @@ import com.bamdoliro.maru.shared.response.CommonResponse;
 import com.bamdoliro.maru.shared.response.ListCommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/analysis")
@@ -44,7 +41,7 @@ public class AnalysisController {
     @GetMapping("/grade-distribution")
     public ListCommonResponse<GradeDistributionResponse> getGradeDistribution(
             @AuthenticationPrincipal(authority = Authority.ADMIN)User user,
-            @RequestBody @Valid GradeDistributionRequest request
+            @ModelAttribute @Valid GradeDistributionRequest request
     ) {
         return CommonResponse.ok(
                 queryGradeDistributionUseCase.execute(request)
@@ -54,7 +51,7 @@ public class AnalysisController {
     @GetMapping("/gender-ratio")
     public ListCommonResponse<GenderRatioResponse> getGenderRatio(
             @AuthenticationPrincipal(authority = Authority.ADMIN)User user,
-            @RequestBody @Valid GenderRatioRequest request
+            @ModelAttribute @Valid GenderRatioRequest request
     ) {
         return CommonResponse.ok(
                 queryGenderRatioUseCase.execute(request)
@@ -64,7 +61,7 @@ public class AnalysisController {
     @GetMapping("/school-status")
     public ListCommonResponse<SchoolStatusResponse> getSchoolStatus(
             @AuthenticationPrincipal(authority = Authority.ADMIN)User user,
-            @RequestBody @Valid SchoolStatusRequest request
+            @ModelAttribute @Valid SchoolStatusRequest request
     ) {
         return CommonResponse.ok(
                 querySchoolStatusUseCase.execute(request)
