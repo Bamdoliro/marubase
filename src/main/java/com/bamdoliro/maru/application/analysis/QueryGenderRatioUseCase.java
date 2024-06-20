@@ -20,15 +20,14 @@ public class QueryGenderRatioUseCase {
     private final FormRepository formRepository;
 
     public List<GenderRatioResponse> execute(GenderRatioRequest request) {
+        FormType.Category mainCategory = request.getMainCategory();
         List<GenderRatioResponse> result = new ArrayList<>();
-
         List<FormType.Category> subCategories = new ArrayList<>();
 
-        if (request.getMainCategory().equals(FormType.Category.REGULAR))
+        if (mainCategory.equals(FormType.Category.REGULAR))
             subCategories.add(FormType.Category.REGULAR);
-        else if (request.getMainCategory().equals(FormType.Category.SPECIAL))
-            subCategories.addAll(List.of(FormType.Category.EQUAL_OPPORTUNITY, FormType.Category.SOCIETY_DIVERSITY));
-        else subCategories.add(FormType.Category.SUPERNUMERARY);
+        else if (mainCategory.equals(FormType.Category.SPECIAL))
+            subCategories.addAll(List.of(FormType.Category.MEISTER_TALENT, FormType.Category.SOCIAL_INTEGRATION));
 
         Map<FormType.Category, List<Form>> formLists = subCategories.stream()
                 .collect(Collectors.toMap(
@@ -38,16 +37,22 @@ public class QueryGenderRatioUseCase {
                                 .collect(Collectors.toList())
                 ));
 
+        if (mainCategory.equals(FormType.Category.SPECIAL)) {
+            formLists.put(FormType.Category.SUPERNUMERARY, formRepository.findByType(FormType.NATIONAL_VETERANS_EDUCATION));
+        } else if(mainCategory.equals(FormType.Category.SUPERNUMERARY)) {
+            formLists.put(FormType.Category.SUPERNUMERARY, formRepository.findByType(FormType.SPECIAL_ADMISSION));
+        }
+
         for(Map.Entry<FormType.Category, List<Form>> entry : formLists.entrySet()) {
             FormType.Category category = entry.getKey();
             List<Form> formList = entry.getValue();
 
             long busanMale = formList.stream().filter(this::isBusan).filter(this::isMale).count();
-            long busanFeMale = formList.stream().filter(this::isBusan).filter(this::isFemale).count();
+            long busanFemale = formList.stream().filter(this::isBusan).filter(this::isFemale).count();
             long otherLocationMale = formList.stream().filter(this::isNotBusan).filter(this::isMale).count();
             long otherLocationFemale = formList.stream().filter(this::isNotBusan).filter(this::isFemale).count();
 
-            result.add(new GenderRatioResponse(category, busanMale, busanFeMale, otherLocationMale, otherLocationFemale));
+            result.add(new GenderRatioResponse(category, busanMale, busanFemale, otherLocationMale, otherLocationFemale));
         }
 
         return result;
