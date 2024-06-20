@@ -27,7 +27,13 @@ public class QueryGenderRatioUseCase {
         if (mainCategory.equals(FormType.Category.REGULAR))
             subCategories.add(FormType.Category.REGULAR);
         else if (mainCategory.equals(FormType.Category.SPECIAL))
-            subCategories.addAll(List.of(FormType.Category.MEISTER_TALENT, FormType.Category.SOCIAL_INTEGRATION));
+            subCategories.addAll(List.of(
+                    FormType.Category.MEISTER_TALENT,
+                    FormType.Category.SOCIAL_INTEGRATION));
+        else if (mainCategory.equals(FormType.Category.SUPERNUMERARY))
+            subCategories.addAll(List.of(
+                    FormType.Category.NATIONAL_VETERANS_EDUCATION,
+                    FormType.Category.SPECIAL_ADMISSION));
 
         Map<FormType.Category, List<Form>> formLists = subCategories.stream()
                 .collect(Collectors.toMap(
@@ -36,12 +42,6 @@ public class QueryGenderRatioUseCase {
                                 .filter(form -> request.getStatusList().contains(form.getStatus()))
                                 .collect(Collectors.toList())
                 ));
-
-        if (mainCategory.equals(FormType.Category.SPECIAL)) {
-            formLists.put(FormType.Category.SUPERNUMERARY, formRepository.findByType(FormType.NATIONAL_VETERANS_EDUCATION));
-        } else if(mainCategory.equals(FormType.Category.SUPERNUMERARY)) {
-            formLists.put(FormType.Category.SUPERNUMERARY, formRepository.findByType(FormType.SPECIAL_ADMISSION));
-        }
 
         for(Map.Entry<FormType.Category, List<Form>> entry : formLists.entrySet()) {
             FormType.Category category = entry.getKey();
