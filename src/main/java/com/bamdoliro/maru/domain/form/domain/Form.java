@@ -215,14 +215,6 @@ public class Form extends BaseTimeEntity {
         this.examinationNumber = examinationNumber;
     }
 
-    public FormType getType() {
-        if (changedToRegular) {
-            return FormType.REGULAR;
-        }
-
-        return type;
-    }
-
     public FormType getOriginalType() {
         return type;
     }

@@ -32,21 +32,15 @@ public class SendMessageUseCase {
         sendMessageService.execute(phoneNumberList, request.getText(), request.getTitle());
     }
 
-    private List<Form> formListFilter(FormType formType, Boolean isChangeToRegular) {
+    private List<Form> formListFilter(FormType formType, Boolean isChangedToRegular) {
         List<Form> formList;
         if (formType.isMeister()) {
             formList = formRepository.findMeisterTalentFirstRoundForm();
         } else {
-            formList = formRepository.findNotExistsMeisterTalentFirstRoundForm();
-            if (isChangeToRegular) {
-                formList = formList.stream()
-                        .filter(Form::getChangedToRegular)
-                        .toList();
-            } else {
-                formList = formList.stream()
-                        .filter(form -> !form.getChangedToRegular())
-                        .toList();
-            }
+            if(isChangedToRegular)
+                formList = formRepository.findChangedToRegularFirstRoundForm();
+            else
+                formList = formRepository.findNotExistsMeisterTalentAndChangedToRegularFirstRoundForm();
         }
 
         return formList;

@@ -97,11 +97,23 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
     }
 
     @Override
-    public List<Form> findNotExistsMeisterTalentFirstRoundForm() {
+    public List<Form> findNotExistsMeisterTalentAndChangedToRegularFirstRoundForm() {
         return queryFactory
                 .selectFrom(form)
                 .where(form.status.eq(FormStatus.FIRST_PASSED)
-                        .and(form.type.ne(FormType.MEISTER_TALENT))
+                        .and(form.type.ne(FormType.MEISTER_TALENT)
+                                .and(form.changedToRegular.isFalse()))
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<Form> findChangedToRegularFirstRoundForm() {
+        return queryFactory
+                .selectFrom(form)
+                .where(form.status.eq(FormStatus.FIRST_PASSED)
+                        .and(form.type.eq(FormType.REGULAR)
+                                .and(form.changedToRegular.isTrue()))
                 )
                 .fetch();
     }
