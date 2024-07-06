@@ -15,6 +15,7 @@ import java.time.LocalDate;
 public class FormSimpleResponse {
 
     private Long id;
+    private Long examinationNumber;
     private String name;
     private LocalDate birthday;
     private GraduationType graduationType;
@@ -28,6 +29,7 @@ public class FormSimpleResponse {
 
     public FormSimpleResponse(Form form) {
         this.id = form.getId();
+        this.examinationNumber = form.getExaminationNumber();
         this.name = form.getApplicant().getName();
         this.birthday = form.getApplicant().getBirthday();
         this.graduationType = form.getEducation().getGraduationType();
