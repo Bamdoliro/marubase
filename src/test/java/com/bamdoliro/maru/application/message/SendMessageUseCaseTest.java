@@ -197,14 +197,14 @@ public class SendMessageUseCaseTest {
         //given
         Form form = FormFixture.createForm(FormType.REGULAR);
         form.firstPass();
-        given(formRepository.findNotExistsMeisterTalentFirstRoundForm()).willReturn(List.of(form));
+        given(formRepository.findNotExistsMeisterTalentAndChangedToRegularFirstRoundForm()).willReturn(List.of(form));
         SendMessageByTypeRequest request = new SendMessageByTypeRequest("부산소마고 공지사항", "살려줘요..", FormType.REGULAR, false);
 
         //when
         sendMessageUseCase.execute(request);
 
         //then
-        verify(formRepository, times(1)).findNotExistsMeisterTalentFirstRoundForm();
+        verify(formRepository, times(1)).findNotExistsMeisterTalentAndChangedToRegularFirstRoundForm();
         verify(sendMessageService, times(1)).execute(List.of(form.getUser().getPhoneNumber()), request.getText(), request.getTitle());
     }
 
@@ -232,7 +232,7 @@ public class SendMessageUseCaseTest {
         Form form = FormFixture.createForm(FormType.MEISTER_TALENT);
 
         when(calculateFormScoreService.calculateSubjectGradeScore(any())).thenReturn(100.0);
-        when(formRepository.findNotExistsMeisterTalentFirstRoundForm()).thenReturn(List.of(form));
+        when(formRepository.findNotExistsMeisterTalentAndChangedToRegularFirstRoundForm()).thenReturn(List.of(form));
 
         form.firstPass();
         form.changeToRegular(calculateFormScoreService);
@@ -243,7 +243,7 @@ public class SendMessageUseCaseTest {
         System.out.println(form.getUser().getPhoneNumber());
 
         //then
-        verify(formRepository, times(1)).findNotExistsMeisterTalentFirstRoundForm();
+        verify(formRepository, times(1)).findNotExistsMeisterTalentAndChangedToRegularFirstRoundForm();
         verify(sendMessageService, times(1)).execute(List.of(form.getUser().getPhoneNumber()), request.getText(), request.getTitle());
     }
 

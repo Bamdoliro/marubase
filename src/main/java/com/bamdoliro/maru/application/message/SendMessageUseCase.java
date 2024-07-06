@@ -40,7 +40,7 @@ public class SendMessageUseCase {
             if(isChangedToRegular)
                 formList = formRepository.findChangedToRegularFirstRoundForm();
             else
-                formList = formRepository.findNotExistsMeisterTalentFirstRoundForm();
+                formList = formRepository.findNotExistsMeisterTalentAndChangedToRegularFirstRoundForm();
         }
 
         return formList;

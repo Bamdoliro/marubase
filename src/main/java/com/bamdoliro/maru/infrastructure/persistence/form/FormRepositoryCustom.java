@@ -13,7 +13,7 @@ public interface FormRepositoryCustom {
     List<Form> findReceivedRegularOrSupernumeraryForm();
     List<Form> findFirstRoundForm();
     List<Form> findMeisterTalentFirstRoundForm();
-    List<Form> findNotExistsMeisterTalentFirstRoundForm();
+    List<Form> findNotExistsMeisterTalentAndChangedToRegularFirstRoundForm();
     List<Form> findChangedToRegularFirstRoundForm();
     List<Form> findSecondRoundForm();
     List<Form> findByFormIdList(List<Long> idList);
