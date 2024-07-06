@@ -232,7 +232,7 @@ public class SendMessageUseCaseTest {
         Form form = FormFixture.createForm(FormType.MEISTER_TALENT);
 
         when(calculateFormScoreService.calculateSubjectGradeScore(any())).thenReturn(100.0);
-        when(formRepository.findNotExistsMeisterTalentAndChangedToRegularFirstRoundForm()).thenReturn(List.of(form));
+        when(formRepository.findChangedToRegularFirstRoundForm()).thenReturn(List.of(form));
 
         form.firstPass();
         form.changeToRegular(calculateFormScoreService);
@@ -243,7 +243,7 @@ public class SendMessageUseCaseTest {
         System.out.println(form.getUser().getPhoneNumber());
 
         //then
-        verify(formRepository, times(1)).findNotExistsMeisterTalentAndChangedToRegularFirstRoundForm();
+        verify(formRepository, times(1)).findChangedToRegularFirstRoundForm();
         verify(sendMessageService, times(1)).execute(List.of(form.getUser().getPhoneNumber()), request.getText(), request.getTitle());
     }
 
