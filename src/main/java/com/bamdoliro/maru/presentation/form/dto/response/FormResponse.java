@@ -11,6 +11,7 @@ import lombok.Getter;
 public class FormResponse {
 
     private Long id;
+    private Long examinationNumber;
     private ApplicantResponse applicant;
     private ParentResponse parent;
     private EducationResponse education;
@@ -22,6 +23,7 @@ public class FormResponse {
 
     public FormResponse(Form form) {
         this.id = form.getId();
+        this.examinationNumber = form.getExaminationNumber();
         this.applicant = new ApplicantResponse(form.getApplicant());
         this.parent = new ParentResponse(form.getParent());
         this.education = new EducationResponse(form.getEducation());
