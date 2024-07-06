@@ -14,6 +14,7 @@ public interface FormRepositoryCustom {
     List<Form> findFirstRoundForm();
     List<Form> findMeisterTalentFirstRoundForm();
     List<Form> findNotExistsMeisterTalentFirstRoundForm();
+    List<Form> findChangedToRegularFirstRoundForm();
     List<Form> findSecondRoundForm();
     List<Form> findByFormIdList(List<Long> idList);
     List<FormUrlVo> findFormUrlByFormIdList(List<Long> idList);

@@ -107,6 +107,17 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
     }
 
     @Override
+    public List<Form> findChangedToRegularFirstRoundForm() {
+        return queryFactory
+                .selectFrom(form)
+                .where(form.status.eq(FormStatus.FIRST_PASSED)
+                        .and(form.type.eq(FormType.MEISTER_TALENT)
+                                .and(form.changedToRegular.isTrue()))
+                )
+                .fetch();
+    }
+
+    @Override
     public List<Form> findSecondRoundForm() {
         return queryFactory
                 .selectFrom(form)
