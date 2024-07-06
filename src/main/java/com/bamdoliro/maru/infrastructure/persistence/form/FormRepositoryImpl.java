@@ -101,7 +101,8 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
         return queryFactory
                 .selectFrom(form)
                 .where(form.status.eq(FormStatus.FIRST_PASSED)
-                        .and(form.type.ne(FormType.MEISTER_TALENT))
+                        .and(form.type.ne(FormType.MEISTER_TALENT)
+                                .and(form.changedToRegular.isFalse()))
                 )
                 .fetch();
     }
@@ -111,7 +112,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
         return queryFactory
                 .selectFrom(form)
                 .where(form.status.eq(FormStatus.FIRST_PASSED)
-                        .and(form.type.eq(FormType.MEISTER_TALENT)
+                        .and(form.type.eq(FormType.REGULAR)
                                 .and(form.changedToRegular.isTrue()))
                 )
                 .fetch();

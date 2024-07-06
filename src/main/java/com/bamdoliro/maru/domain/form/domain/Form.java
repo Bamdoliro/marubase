@@ -195,6 +195,7 @@ public class Form extends BaseTimeEntity {
 
     public void changeToRegular(CalculateFormScoreService calculateFormScoreService) {
         this.changedToRegular = true;
+        this.type = FormType.REGULAR;
 
         Double subjectGradeScore = calculateFormScoreService.calculateSubjectGradeScore(this);
         this.score.updateSubjectScore(subjectGradeScore);
@@ -212,14 +213,6 @@ public class Form extends BaseTimeEntity {
 
     public void assignExaminationNumber(Long examinationNumber) {
         this.examinationNumber = examinationNumber;
-    }
-
-    public FormType getType() {
-        if (changedToRegular) {
-            return FormType.REGULAR;
-        }
-
-        return type;
     }
 
     public FormType getOriginalType() {
