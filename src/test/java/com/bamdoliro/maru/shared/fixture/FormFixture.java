@@ -74,7 +74,7 @@ public class FormFixture {
                 new Education(
                         GraduationType.EXPECTED,
                         "2021",
-                        new School("비전중학교", "경기도", "7631003"),
+                        new School("비전중학교", "경기도", "경기도 비전시 비전구 비전로 1", "7631003"),
                         new Teacher("나교사", new PhoneNumber("0519701234"), new PhoneNumber("01012344321"))
                 ),
                 new Grade(
@@ -140,7 +140,7 @@ public class FormFixture {
                 new Education(
                         GraduationType.EXPECTED,
                         "2021",
-                        new School("비전중학교", "경기도", "7631003"),
+                        new School("비전중학교", "경기도", "경기도 비전시 비전구 비전로 1", "7631003"),
                         new Teacher("나교사", new PhoneNumber("0519701234"), new PhoneNumber("01012344321"))
                 ),
                 new Grade(
@@ -218,7 +218,7 @@ public class FormFixture {
                 new Education(
                         GraduationType.QUALIFICATION_EXAMINATION,
                         "2021",
-                        new School("비전중학교", "경기도", "7631003"),
+                        new School("비전중학교", "경기도", "경기도 비전시 비전구 비전로 1", "7631003"),
                         null
                 ),
                 new Grade(
@@ -289,6 +289,7 @@ public class FormFixture {
                         new School(
                                 "비전중학교",
                                 "경기도",
+                                "경기도 비전시 비전구 비전로 1",
                                 "7631003"
                         ),
                         null
@@ -328,6 +329,7 @@ public class FormFixture {
                         "2021",
                         "비전중학교",
                         "경기도",
+                        "경기도 비전시 비전구 비전로 1",
                         "7631003",
                         "나교사",
                         "0519701234",
@@ -369,6 +371,7 @@ public class FormFixture {
                         "2021",
                         "비전중학교",
                         "경기도",
+                        "경기도 비전시 비전구 비전로 1",
                         "7631003",
                         null,
                         null,
@@ -404,6 +407,7 @@ public class FormFixture {
                         "2021",
                         "비전중학교",
                         "경기도",
+                        "경기도 비전시 비전구 비전로 1",
                         "7631003",
                         "나교사",
                         "0519701234",
@@ -461,6 +465,7 @@ public class FormFixture {
                         "비전중학교",
                         "경기도",
                         "7631003",
+                        "경기도 비전시 비전구 비전로 1",
                         "나교사",
                         "0519701234"
                 ),

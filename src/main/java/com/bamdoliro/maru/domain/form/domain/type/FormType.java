@@ -25,8 +25,8 @@ public enum FormType implements EnumProperty {
     MULTI_CHILDREN("다자녀가정자녀", Category.SPECIAL, Category.SOCIAL_INTEGRATION, Category.SOCIETY_DIVERSITY),
     FARMING_AND_FISHING("농어촌지역출신자", Category.SPECIAL, Category.SOCIAL_INTEGRATION, Category.SOCIETY_DIVERSITY),
 
-    NATIONAL_VETERANS_EDUCATION("국가보훈대상자 중 교육지원대상자녀", Category.SUPERNUMERARY, null, null),
-    SPECIAL_ADMISSION("특례입학대상자", Category.SUPERNUMERARY, null, null),
+    NATIONAL_VETERANS_EDUCATION("국가보훈대상자 중 교육지원대상자녀", Category.SUPERNUMERARY, Category.NATIONAL_VETERANS_EDUCATION, null),
+    SPECIAL_ADMISSION("특례입학대상자", Category.SUPERNUMERARY, Category.SPECIAL_ADMISSION, null),
     ;
 
 
@@ -46,6 +46,8 @@ public enum FormType implements EnumProperty {
         // Middle Category
         SOCIAL_INTEGRATION("사회통합전형"),
         MEISTER_TALENT("마이스터인재전형"),
+        NATIONAL_VETERANS_EDUCATION("국가보훈대상자 중 교육지원대상자녀"),
+        SPECIAL_ADMISSION("특례입학대상자"),
 
         // Sub Category
         EQUAL_OPPORTUNITY("기회균등전형"),

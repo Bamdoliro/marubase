@@ -19,6 +19,9 @@ public class School {
     @Column(name = "school_location", nullable = false, length = 20)
     private String location;
 
+    @Column(name = "school_address", nullable = false, length = 40)
+    private String address;
+
     @Column(name = "school_code", nullable = false, length = 10)
     private String code;
 

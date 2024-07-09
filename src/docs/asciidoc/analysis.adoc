@@ -1,0 +1,92 @@
+== 분석 Analysis
+
+=== 전형별 지원자 수 조회
+전형별 지원자들의 수를 조회할 수 있습니다.
+
+=== 요청 형식
+
+==== Request Header
+include::{snippets}/analysis-controller-test/전형별_지원자수를_조회한다/request-headers.adoc[]
+
+==== 요청
+include::{snippets}/analysis-controller-test/전형별_지원자수를_조회한다/http-request.adoc[]
+
+==== 응답
+include::{snippets}/analysis-controller-test/전형별_지원자수를_조회한다/http-response.adoc[]
+
+=== 전형별 성적 분포 조회
+1차 합격자, 2차 전형자, 최종 합격자들의 전형별 성적 분포를 조회할 수 있습니다.
+
+=== 요청 형식
+
+==== Request Header
+include::{snippets}/analysis-controller-test/_1차_합격자들의_성적_분포를_조회한다/request-headers.adoc[]
+
+==== Query Parameter
+include::{snippets}/analysis-controller-test/_1차_합격자들의_성적_분포를_조회한다/query-parameters.adoc[]
+
+==== 요청
+
+===== 1차 합격자
+include::{snippets}/analysis-controller-test/_1차_합격자들의_성적_분포를_조회한다/http-request.adoc[]
+
+===== 2차 전형자
+include::{snippets}/analysis-controller-test/_2차_전형자들의_성적_분포를_조회한다/http-request.adoc[]
+
+===== 최종 합격자
+include::{snippets}/analysis-controller-test/최종_합격자들의_성적_분포를_조회한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/analysis-controller-test/최종_합격자들의_성적_분포를_조회한다/http-response.adoc[]
+
+=== 전형별 성비 조회
+1차 합격자, 2차 전형자, 최종 합격자들의 전형별, 지역별 성비를 조회할 수 있습니다.
+
+=== 요청 형식
+
+==== Request Header
+include::{snippets}/analysis-controller-test/전형별_성비를_조회한다/request-headers.adoc[]
+
+==== Query Parameter
+include::{snippets}/analysis-controller-test/전형별_성비를_조회한다/query-parameters.adoc[]
+
+==== 요청
+include::{snippets}/analysis-controller-test/전형별_성비를_조회한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/analysis-controller-test/전형별_성비를_조회한다/http-response.adoc[]
+
+=== 전형별 출신학교 조회
+1차 합격자, 2차 전형자, 최종 합격자들의 출신학교를 조회할 수 있습니다.
+
+=== 요청 형식
+
+==== Request Header
+include::{snippets}/analysis-controller-test/부산_특정구_출신_지원자들의_출신학교_통계를_조회한다/request-headers.adoc[]
+
+==== Query Parameter
+include::{snippets}/analysis-controller-test/부산_특정구_출신_지원자들의_출신학교_통계를_조회한다/query-parameters.adoc[]
+
+==== 요청
+===== 부산 특정구 출신
+include::{snippets}/analysis-controller-test/부산_특정구_출신_지원자들의_출신학교_통계를_조회한다/http-request.adoc[]
+
+==== 부산 출신
+include::{snippets}/analysis-controller-test/부산_출신_지원자들의_출신학교_통계를_조회한다/http-request.adoc[]
+
+==== 타지역 출신
+include::{snippets}/analysis-controller-test/타지역_출신_지원자들의_출신학교_통계를_조회한다/http-request.adoc[]
+
+==== 응답
+==== 부산 특정구 출신 정상 응답
+include::{snippets}/analysis-controller-test/부산_특정구_출신_지원자들의_출신학교_통계를_조회한다/http-response.adoc[]
+
+==== 부산 출신 정상 응답
+include::{snippets}/analysis-controller-test/부산_출신_지원자들의_출신학교_통계를_조회한다/http-response.adoc[]
+
+==== 타지역 출신 정상 응답
+include::{snippets}/analysis-controller-test/타지역_출신_지원자들의_출신학교_통계를_조회한다/http-response.adoc[]

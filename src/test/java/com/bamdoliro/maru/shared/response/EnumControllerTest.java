@@ -63,7 +63,7 @@ public class EnumControllerTest extends RestDocsTestSupport {
                         ),
                         customResponseFields("custom-response",
                                 beneathPath("gender").withSubsectionId("gender"),
-                                attributes(key("title").value("GraduationType")),
+                                attributes(key("title").value("Gender")),
                                 enumConvertFieldDescriptor((enumDocs.getGender()))
                         ),
                         customResponseFields("custom-response",
