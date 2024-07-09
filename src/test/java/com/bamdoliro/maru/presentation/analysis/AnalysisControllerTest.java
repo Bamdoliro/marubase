@@ -36,7 +36,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(queryNumberOfApplicantsUseCase.execute()).willReturn(AnalysisFixture.createNumberOfApplicantsResponse());
+        given(queryNumberOfApplicantsUseCase.execute()).willReturn(AnalysisFixture.createNumberOfApplicantsResponseList());
 
         mockMvc.perform(get("/analysis/number-of-applicants")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
@@ -55,7 +55,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(queryGradeDistributionUseCase.execute(any(GradeDistributionRequest.class))).willReturn(AnalysisFixture.createGradeDistributionResponse());
+        given(queryGradeDistributionUseCase.execute(any(GradeDistributionRequest.class))).willReturn(AnalysisFixture.createGradeDistributionResponseList());
 
         mockMvc.perform(get("/analysis/grade-distribution")
                         .param("statusList", "FIRST_PASSED", "FAILED", "PASSED")
@@ -81,7 +81,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(queryGradeDistributionUseCase.execute(any(GradeDistributionRequest.class))).willReturn(AnalysisFixture.createGradeDistributionResponse());
+        given(queryGradeDistributionUseCase.execute(any(GradeDistributionRequest.class))).willReturn(AnalysisFixture.createGradeDistributionResponseList());
 
         mockMvc.perform(get("/analysis/grade-distribution")
                         .param("statusList", "FAILED", "PASSED")
@@ -107,7 +107,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(queryGradeDistributionUseCase.execute(any(GradeDistributionRequest.class))).willReturn(AnalysisFixture.createGradeDistributionResponse());
+        given(queryGradeDistributionUseCase.execute(any(GradeDistributionRequest.class))).willReturn(AnalysisFixture.createGradeDistributionResponseList());
 
         mockMvc.perform(get("/analysis/grade-distribution")
                         .param("statusList", "PASSED")
