@@ -1,29 +1,6 @@
 package com.bamdoliro.maru.presentation.form;
 
-import com.bamdoliro.maru.application.form.ApproveFormUseCase;
-import com.bamdoliro.maru.application.form.DownloadSecondRoundScoreFormatUseCase;
-import com.bamdoliro.maru.application.form.ExportFinalPassedFormUseCase;
-import com.bamdoliro.maru.application.form.ExportFirstRoundResultUseCase;
-import com.bamdoliro.maru.application.form.ExportFormUseCase;
-import com.bamdoliro.maru.application.form.ExportResultUseCase;
-import com.bamdoliro.maru.application.form.ExportSecondRoundResultUseCase;
-import com.bamdoliro.maru.application.form.GenerateAdmissionTicketUseCase;
-import com.bamdoliro.maru.application.form.PassOrFailFormUseCase;
-import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
-import com.bamdoliro.maru.application.form.QueryFinalFormResultUseCase;
-import com.bamdoliro.maru.application.form.QueryFirstFormResultUseCase;
-import com.bamdoliro.maru.application.form.QueryFormStatusUseCase;
-import com.bamdoliro.maru.application.form.QueryFormUrlUseCase;
-import com.bamdoliro.maru.application.form.QueryFormUseCase;
-import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
-import com.bamdoliro.maru.application.form.ReceiveFormUseCase;
-import com.bamdoliro.maru.application.form.RejectFormUseCase;
-import com.bamdoliro.maru.application.form.SubmitFinalFormUseCase;
-import com.bamdoliro.maru.application.form.SubmitFormUseCase;
-import com.bamdoliro.maru.application.form.UpdateFormUseCase;
-import com.bamdoliro.maru.application.form.UpdateSecondRoundScoreUseCase;
-import com.bamdoliro.maru.application.form.UploadFormUseCase;
-import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
+import com.bamdoliro.maru.application.form.*;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.user.domain.User;
@@ -92,6 +69,7 @@ public class FormController {
     private final ExportResultUseCase exportResultUseCase;
     private final PassOrFailFormUseCase passOrFailFormUseCase;
     private final QueryFormUrlUseCase queryFormUrlUseCase;
+    private final SelectSecondPassUseCase selectSecondPassUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -319,5 +297,12 @@ public class FormController {
         return CommonResponse.ok(
                 queryFormUrlUseCase.execute(formIdList)
         );
+    }
+
+    @PatchMapping("/second-pass")
+    public void selectSecondPass(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+    ) {
+        selectSecondPassUseCase.execute();
     }
 }
