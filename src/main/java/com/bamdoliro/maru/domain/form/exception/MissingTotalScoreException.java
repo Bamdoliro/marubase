@@ -3,8 +3,8 @@ package com.bamdoliro.maru.domain.form.exception;
 import com.bamdoliro.maru.domain.form.exception.error.FormErrorProperty;
 import com.bamdoliro.maru.shared.error.MaruException;
 
-public class TotalScoreMissingException extends MaruException {
-    public TotalScoreMissingException() {
+public class MissingTotalScoreException extends MaruException {
+    public MissingTotalScoreException() {
         super(FormErrorProperty.TOTAL_SCORE_MISSING);
     }
 }
