@@ -91,16 +91,31 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
     }
 
     @Override
-    public List<Form> findReceivedRegularOrSupernumeraryForm() {
+    public List<Form> findReceivedRegularForm() {
         return queryFactory
                 .selectFrom(form)
                 .where(
                         form.status.eq(FormStatus.RECEIVED)
                                 .and(
                                         form.type.eq(FormType.REGULAR)
-                                                .or(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION))
-                                                .or(form.type.eq(FormType.SPECIAL_ADMISSION))
                                                 .or(form.changedToRegular.isTrue())
+                                )
+                )
+                .orderBy(
+                        form.score.firstRoundScore.desc()
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<Form> findReceivedSupernumeraryForm() {
+        return queryFactory
+                .selectFrom(form)
+                .where(
+                        form.status.eq(FormStatus.RECEIVED)
+                                .and(
+                                        form.type.eq(FormType.SPECIAL_ADMISSION)
+                                                .or(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION))
                                 )
                 )
                 .orderBy(
@@ -128,15 +143,13 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
     }
 
     @Override
-    public List<Form> findFirstPassedRegularOrSupernumeraryForm() {
+    public List<Form> findFirstPassedRegularForm() {
         return queryFactory
                 .selectFrom(form)
                 .where(
                         form.status.eq(FormStatus.FIRST_PASSED)
                                 .and(
                                         form.type.eq(FormType.REGULAR)
-                                                .or(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION))
-                                                .or(form.type.eq(FormType.SPECIAL_ADMISSION))
                                                 .or(form.changedToRegular.isTrue())
                                 )
                 )
@@ -145,6 +158,16 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 )
                 .fetch();
     }
+
+    @Override
+    public List<Form> findFirstPassedSupernumeraryForm() {
+        return List.of();
+    }
+
+//    @Override
+//    public List<Form> findFirstPassedRegularOrSupernumeraryForm() {
+//
+//    }
 
     @Override
     public List<Form> findFirstRoundForm() {

@@ -299,7 +299,8 @@ public class FormController {
         );
     }
 
-    @PatchMapping("/second-pass")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/second-round/select")
     public void selectSecondPass(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user
     ) {

@@ -3,7 +3,7 @@ package com.bamdoliro.maru.application.form;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
-import com.bamdoliro.maru.domain.form.exception.TotalScoreMissingException;
+import com.bamdoliro.maru.domain.form.exception.MissingTotalScoreException;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import com.bamdoliro.maru.shared.constants.FixedNumber;
@@ -57,25 +57,25 @@ public class SelectSecondPassUseCase {
         }
 
         formRepository.flush();
-        List<Form> regularOrSupernumeraryFormList = formRepository.findFirstPassedRegularOrSupernumeraryForm();
-        System.out.println(regularOrSupernumeraryFormList.size());
+        List<Form> regularFormList = formRepository.findFirstPassedRegularForm();
 
-        for (Form form : regularOrSupernumeraryFormList) {
-            if (form.getType().isRegular() && regularCount > 0) {
+        for (Form form : regularFormList) {
+            if (regularCount > 0) {
                 form.pass();
                 regularCount--;
-            } else if (
-                    form.getType().isNationalVeteransEducation() &&
-                            regularCount > 0 &&
-                            nationalVeteransEducationCount > 0
-            ) {
+            } else {
+                form.fail();
+            }
+        }
+
+        formRepository.flush();
+        List<Form> supernumeraryFormList = formRepository.findFirstPassedSupernumeraryForm();
+
+        for (Form form : supernumeraryFormList) {
+            if (form.getType().isNationalVeteransEducation() && nationalVeteransEducationCount > 0) {
                 form.pass();
                 nationalVeteransEducationCount--;
-            } else if (
-                    form.getType().isSpecialAdmission() &&
-                            regularCount > 0 &&
-                            specialAdmissionCount > 0
-            ) {
+            } else if (form.getType().isSpecialAdmission() && specialAdmissionCount > 0) {
                 form.pass();
                 specialAdmissionCount--;
             } else {
@@ -86,11 +86,9 @@ public class SelectSecondPassUseCase {
 
     private void validate() {
         List<Form> firstPassedFormList = formRepository.findByStatus(FormStatus.FIRST_PASSED);
-        for (Form form : firstPassedFormList) {
-            if (form.getScore().getTotalScore() == null) {
-                throw new TotalScoreMissingException();
-            }
-        }
+        firstPassedFormList.stream()
+                .filter(form -> form.getScore().getTotalScore() == null)
+                .forEach(form -> {throw new MissingTotalScoreException();});
     }
 
     private List<Form> classifyFormsByType(List<Form> formList, FormTypeFilter filter) {

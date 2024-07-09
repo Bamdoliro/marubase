@@ -1,11 +1,12 @@
 package com.bamdoliro.maru.shared.variable;
 
+import com.bamdoliro.maru.shared.constants.FixedNumber;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class AdmissionCapacity {
 
-    public static int regular = 36;
-    public static int meisterTalent = 25;
-    public static int socialIntegration = 3;
+    public static int regular = FixedNumber.REGULAR;
+    public static int meisterTalent = FixedNumber.MEISTER_TALENT;
+    public static int socialIntegration = FixedNumber.SOCIAL_INTEGRATION;
 }
