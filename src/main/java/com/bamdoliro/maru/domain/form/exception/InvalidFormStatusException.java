@@ -3,9 +3,9 @@ package com.bamdoliro.maru.domain.form.exception;
 import com.bamdoliro.maru.domain.form.exception.error.FormErrorProperty;
 import com.bamdoliro.maru.shared.error.MaruException;
 
-public class InvalidFromStatusException extends MaruException {
+public class InvalidFormStatusException extends MaruException {
 
-    public InvalidFromStatusException() {
+    public InvalidFormStatusException() {
         super(FormErrorProperty.INVALID_FORM_STATUS);
     }
 }

@@ -1,7 +1,7 @@
 package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
-import com.bamdoliro.maru.domain.form.exception.InvalidFromStatusException;
+import com.bamdoliro.maru.domain.form.exception.InvalidFormStatusException;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.pdf.GeneratePdfService;
@@ -48,7 +48,7 @@ public class GenerateAdmissionTicketUseCase {
 
     private void validateFormStatus(Form form) {
         if (!form.isFirstPassedNow()) {
-            throw new InvalidFromStatusException();
+            throw new InvalidFormStatusException();
         }
     }
 }
