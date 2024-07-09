@@ -14,9 +14,10 @@ public class EducationResponse {
     private String schoolName;
     private String schoolLocation;
     private String schoolCode;
+    private String schoolPhoneNumber;
     private String schoolAddress;
     private String teacherName;
-    private String teacherPhoneNumber;
+    private String teacherMobilePhoneNumber;
 
     public EducationResponse(Education education) {
         this.graduationType = education.getGraduationType();
@@ -25,7 +26,8 @@ public class EducationResponse {
         this.schoolLocation = education.getSchool().getLocation();
         this.schoolAddress = education.getSchool().getAddress();
         this.schoolCode = education.getSchool().getCode();
+        this.schoolPhoneNumber = education.getTeacher().getPhoneNumber().toString();
         this.teacherName = education.getTeacher().getName();
-        this.teacherPhoneNumber = education.getTeacher().getPhoneNumber().toString();
+        this.teacherMobilePhoneNumber = education.getTeacher().getMobilePhoneNumber().toString();
     }
 }
