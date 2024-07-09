@@ -78,22 +78,29 @@ public class SelectFirstPassUseCase {
         }
 
         formRepository.flush();
-        List<Form> regularOrSupernumeraryFormList = formRepository.findReceivedRegularOrSupernumeraryForm();
+        List<Form> regularOrSupernumeraryFormList = formRepository.findReceivedRegularForm();
 
         for (Form form : regularOrSupernumeraryFormList) {
-            if (form.getType().isRegular() && regularCount > 0) {
+            if (regularCount > 0) {
                 form.firstPass();
                 regularCount--;
-            } else if (
+            } else {
+                form.firstFail();
+            }
+        }
+
+        formRepository.flush();
+        List<Form> supernumeraryFormList = formRepository.findReceivedSupernumeraryForm();
+
+        for (Form form : supernumeraryFormList) {
+            if (
                     form.getType().isNationalVeteransEducation() &&
-                            regularCount > 0 &&
                             nationalVeteransEducationCount > 0
             ) {
                 form.firstPass();
                 nationalVeteransEducationCount--;
             } else if (
                     form.getType().isSpecialAdmission() &&
-                            regularCount > 0 &&
                             specialAdmissionCount > 0
             ) {
                 form.firstPass();
