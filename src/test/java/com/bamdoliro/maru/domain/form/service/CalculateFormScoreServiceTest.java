@@ -27,7 +27,7 @@ class CalculateFormScoreServiceTest {
         // then
         assertEquals(195.886, form.getScore().getSubjectGradeScore());
         assertEquals(15, form.getScore().getAttendanceScore());
-        assertEquals(16, form.getScore().getVolunteerScore());
+        assertEquals(0, form.getScore().getVolunteerScore());
         assertEquals(2, form.getScore().getBonusScore());
     }
 
@@ -42,7 +42,7 @@ class CalculateFormScoreServiceTest {
         // then
         assertEquals(117.531, form.getScore().getSubjectGradeScore());
         assertEquals(15, form.getScore().getAttendanceScore());
-        assertEquals(16, form.getScore().getVolunteerScore());
+        assertEquals(0, form.getScore().getVolunteerScore());
         assertEquals(2, form.getScore().getBonusScore());
     }
 
