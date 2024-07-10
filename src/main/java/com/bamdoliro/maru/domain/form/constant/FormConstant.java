@@ -11,7 +11,7 @@ public class FormConstant {
     public static final int DEFAULT_ATTENDANCE_SCORE = 14;
     public static final int MIN_ATTENDANCE_SCORE = 0;
     public static final int MAX_ATTENDANCE_SCORE = 18;
-    public static final int MAX_ABSENCE_COUNT = 18;
+    public static final int MAX_ABSENCE_COUNT = 16;
 
     public static final int DEFAULT_VOLUNTEER_SCORE = 14;
     public static final int MIN_VOLUNTEER_SCORE = 0;
