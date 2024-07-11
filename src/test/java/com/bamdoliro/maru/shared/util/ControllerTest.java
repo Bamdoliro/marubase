@@ -12,32 +12,7 @@ import com.bamdoliro.maru.application.fair.CreateAdmissionFairUseCase;
 import com.bamdoliro.maru.application.fair.ExportAttendeeListUseCase;
 import com.bamdoliro.maru.application.fair.QueryFairDetailUseCase;
 import com.bamdoliro.maru.application.fair.QueryFairListUseCase;
-import com.bamdoliro.maru.application.form.ApproveFormUseCase;
-import com.bamdoliro.maru.application.form.DownloadSecondRoundScoreFormatUseCase;
-import com.bamdoliro.maru.application.form.DraftFormUseCase;
-import com.bamdoliro.maru.application.form.ExportFinalPassedFormUseCase;
-import com.bamdoliro.maru.application.form.ExportFirstRoundResultUseCase;
-import com.bamdoliro.maru.application.form.ExportFormUseCase;
-import com.bamdoliro.maru.application.form.ExportResultUseCase;
-import com.bamdoliro.maru.application.form.ExportSecondRoundResultUseCase;
-import com.bamdoliro.maru.application.form.GenerateAdmissionTicketUseCase;
-import com.bamdoliro.maru.application.form.PassOrFailFormUseCase;
-import com.bamdoliro.maru.application.form.QueryAllFormUseCase;
-import com.bamdoliro.maru.application.form.QueryDraftFormUseCase;
-import com.bamdoliro.maru.application.form.QueryFinalFormResultUseCase;
-import com.bamdoliro.maru.application.form.QueryFirstFormResultUseCase;
-import com.bamdoliro.maru.application.form.QueryFormStatusUseCase;
-import com.bamdoliro.maru.application.form.QueryFormUrlUseCase;
-import com.bamdoliro.maru.application.form.QueryFormUseCase;
-import com.bamdoliro.maru.application.form.QuerySubmittedFormUseCase;
-import com.bamdoliro.maru.application.form.ReceiveFormUseCase;
-import com.bamdoliro.maru.application.form.RejectFormUseCase;
-import com.bamdoliro.maru.application.form.SubmitFinalFormUseCase;
-import com.bamdoliro.maru.application.form.SubmitFormUseCase;
-import com.bamdoliro.maru.application.form.UpdateFormUseCase;
-import com.bamdoliro.maru.application.form.UpdateSecondRoundScoreUseCase;
-import com.bamdoliro.maru.application.form.UploadFormUseCase;
-import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
+import com.bamdoliro.maru.application.form.*;
 import com.bamdoliro.maru.application.message.SendMessageUseCase;
 import com.bamdoliro.maru.application.notice.*;
 import com.bamdoliro.maru.application.question.CreateQuestionUseCase;
@@ -245,6 +220,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected QueryFormUrlUseCase queryFormUrlUseCase;
+
+    @MockBean
+    protected SelectSecondPassUseCase selectSecondPassUseCase;
 
     @MockBean
     protected SendMessageUseCase sendMessageUseCase;

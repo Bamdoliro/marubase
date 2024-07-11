@@ -4,11 +4,7 @@ import com.bamdoliro.maru.domain.auth.exception.AuthorityMismatchException;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
-import com.bamdoliro.maru.domain.form.exception.CannotUpdateNotRejectedFormException;
-import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
-import com.bamdoliro.maru.domain.form.exception.FormNotFoundException;
-import com.bamdoliro.maru.domain.form.exception.InvalidFileException;
-import com.bamdoliro.maru.domain.form.exception.InvalidFormStatusException;
+import com.bamdoliro.maru.domain.form.exception.*;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.pdf.exception.FailedToExportPdfException;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
@@ -1861,5 +1857,45 @@ class FormControllerTest extends RestDocsTestSupport {
                 ));
 
         verify(queryFormUrlUseCase, times(1)).execute(idList);
+    }
+
+    @Test
+    void 자동으로_2차_합격_여부를_결정한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        willDoNothing().given(selectSecondPassUseCase).execute();
+
+        mockMvc.perform(patch("/form/second-round/select")
+                .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader()))
+
+                .andExpect(status().isNoContent())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        )
+                ));
+
+        verify(selectSecondPassUseCase, times(1)).execute();
+    }
+
+    @Test
+    void 자동으로_2차_합격_여부를_결정할_때_최종_점수가_없는_원서가_존재하면_에러가_발생한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        willThrow(new MissingTotalScoreException()).given(selectSecondPassUseCase).execute();
+
+        mockMvc.perform(patch("/form/second-round/select")
+                .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader()))
+
+                .andExpect(status().isPreconditionFailed())
+
+                .andDo(restDocs.document());
+
+        verify(selectSecondPassUseCase, times(1)).execute();
     }
 }
