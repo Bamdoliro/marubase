@@ -5,6 +5,6 @@ import com.bamdoliro.maru.shared.error.MaruException;
 
 public class MissingTotalScoreException extends MaruException {
     public MissingTotalScoreException() {
-        super(FormErrorProperty.TOTAL_SCORE_MISSING);
+        super(FormErrorProperty.MISSING_TOTAL_SCORE);
     }
 }

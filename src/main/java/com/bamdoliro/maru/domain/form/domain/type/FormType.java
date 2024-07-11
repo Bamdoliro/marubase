@@ -19,7 +19,7 @@ public enum FormType implements EnumProperty {
     NATIONAL_VETERANS("국가보훈자녀", Category.SPECIAL, Category.SOCIAL_INTEGRATION, Category.EQUAL_OPPORTUNITY),
     ONE_PARENT("한부모가정", Category.SPECIAL, Category.SOCIAL_INTEGRATION, Category.EQUAL_OPPORTUNITY),
 
-    FROM_NORTH_KOREA("북한이탈주민", Category.SPECIAL, Category.SOCIAL_INTEGRATION, Category.SOCIETY_DIVERSITY),
+    FROM_NORTH_KOREA("북한이탈청소년", Category.SPECIAL, Category.SOCIAL_INTEGRATION, Category.SOCIETY_DIVERSITY),
     MULTICULTURAL("다문화가정", Category.SPECIAL, Category.SOCIAL_INTEGRATION, Category.SOCIETY_DIVERSITY),
     TEEN_HOUSEHOLDER("소년소녀가장", Category.SPECIAL, Category.SOCIAL_INTEGRATION, Category.SOCIETY_DIVERSITY),
     MULTI_CHILDREN("다자녀가정자녀", Category.SPECIAL, Category.SOCIAL_INTEGRATION, Category.SOCIETY_DIVERSITY),
