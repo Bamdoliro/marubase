@@ -230,18 +230,4 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                         .and(form.status.in(round)))
                 .fetch();
     }
-
-    @Override
-    public List<SchoolStatusVo> findNotBusanSchool(List<FormStatus> round) {
-        return queryFactory
-                .select(new QSchoolStatusVo(
-                        form.applicant.name,
-                        form.education.school.name,
-                        form.education.school.address
-                ))
-                .from(form)
-                .where(form.education.school.location.eq("부산광역시").not()
-                        .and(form.status.in(round)))
-                .fetch();
-    }
 }
