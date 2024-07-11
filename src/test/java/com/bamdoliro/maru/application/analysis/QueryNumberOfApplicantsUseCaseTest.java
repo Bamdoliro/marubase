@@ -26,7 +26,7 @@ class QueryNumberOfApplicantsUseCaseTest {
     private FormRepository formRepository;
 
     @Test
-    void 유저가_전형별_지원자_수를_조회한다() {
+    void 전형별_지원자_수를_조회한다() {
         // given
         List<NumberOfApplicantsVo> voList = List.of(
                 new NumberOfApplicantsVo(FormType.REGULAR, 1L),
