@@ -6,17 +6,13 @@ import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.presentation.analysis.dto.request.GenderRatioRequest;
 import com.bamdoliro.maru.presentation.analysis.dto.response.GenderRatioResponse;
-import com.bamdoliro.maru.presentation.analysis.dto.response.GradeDistributionResponse;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
