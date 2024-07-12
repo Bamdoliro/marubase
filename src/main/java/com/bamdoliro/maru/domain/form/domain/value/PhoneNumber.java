@@ -17,7 +17,7 @@ public class PhoneNumber {
     @Override
     public String toString() {
         if (value == null) {
-            return null;
+            return "";
         }
         if (value.length() == 10) {
             return value.substring(0, 3) + "-" + value.substring(3, 6) + "-" + value.substring(6);
