@@ -218,7 +218,7 @@ public class FormFixture {
                 new Education(
                         GraduationType.QUALIFICATION_EXAMINATION,
                         "2021",
-                        new School("비전중학교", "경기도", "경기도 비전시 비전구 비전로 1", "7631003"),
+                        null,
                         null
                 ),
                 new Grade(
@@ -286,12 +286,7 @@ public class FormFixture {
                 new Education(
                         GraduationType.QUALIFICATION_EXAMINATION,
                         "2021",
-                        new School(
-                                "비전중학교",
-                                "경기도",
-                                "경기도 비전시 비전구 비전로 1",
-                                "7631003"
-                        ),
+                        null,
                         null
                 ),
                 new Grade(
@@ -369,10 +364,10 @@ public class FormFixture {
                 new EducationRequest(
                         GraduationType.QUALIFICATION_EXAMINATION,
                         "2021",
-                        "비전중학교",
-                        "경기도",
-                        "경기도 비전시 비전구 비전로 1",
-                        "7631003",
+                        null,
+                        null,
+                        null,
+                        null,
                         null,
                         null,
                         null
