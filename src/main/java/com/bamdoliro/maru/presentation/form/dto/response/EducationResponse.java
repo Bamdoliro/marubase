@@ -26,8 +26,8 @@ public class EducationResponse {
         this.schoolLocation = education.getSchool().getLocation();
         this.schoolAddress = education.getSchool().getAddress();
         this.schoolCode = education.getSchool().getCode();
-        this.schoolPhoneNumber = education.getTeacher().getPhoneNumber().toString();
+        this.schoolPhoneNumber = education.getTeacher().getPhoneNumber().toString().isEmpty() ? null : education.getTeacher().getPhoneNumber().toString();
         this.teacherName = education.getTeacher().getName();
-        this.teacherMobilePhoneNumber = education.getTeacher().getMobilePhoneNumber().toString();
+        this.teacherMobilePhoneNumber = education.getTeacher().getMobilePhoneNumber().toString().isEmpty() ? null : education.getTeacher().getMobilePhoneNumber().toString();
     }
 }
