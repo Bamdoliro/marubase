@@ -21,13 +21,13 @@ public class Teacher {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "value", column = @Column(name = "teacher_phone_number", nullable = true, length = 11)),
+            @AttributeOverride(name = "value", column = @Column(name = "teacher_phone_number", nullable = false, length = 11)),
     })
     private PhoneNumber phoneNumber;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "value", column = @Column(name = "teacher_mobile_phone_number", nullable = true, length = 11)),
+            @AttributeOverride(name = "value", column = @Column(name = "teacher_mobile_phone_number", nullable = false, length = 11)),
     })
     private PhoneNumber mobilePhoneNumber;
 }
