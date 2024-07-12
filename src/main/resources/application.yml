@@ -80,7 +80,7 @@ spring:
     activate:
       on-profile: dev
 
-debug: true
+debug: false
 ---
 spring:
   config:
@@ -103,7 +103,7 @@ spring:
       port: 6379
       password: bamdoliro
 
-debug: true
+debug: false
 ---
 spring:
   config:
@@ -137,4 +137,4 @@ spring:
       port: 6379
       password: bamdoliro
 
-debug: true
+debug: false

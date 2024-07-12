@@ -67,10 +67,10 @@ public class QueryGenderRatioUseCase {
     }
 
     private boolean isMale(Form form) {
-        return form.getApplicant().getGender().equals(Gender.MALE);
+        return form.getApplicant().getGender() == (Gender.MALE);
     }
 
     private boolean isFemale(Form form) {
-        return form.getApplicant().getGender().equals(Gender.FEMALE);
+        return form.getApplicant().getGender() == (Gender.FEMALE);
     }
 }
