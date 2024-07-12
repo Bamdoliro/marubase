@@ -8,6 +8,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        create_empty_composites:
+          enabled: true
 
     generate-ddl: true
     hibernate:
