@@ -61,7 +61,8 @@ public class DownloadSecondRoundScoreFormatUseCase {
 
             Cell showCell = row.createCell(6);
             showCell.setCellStyle(cellStyle);
-            showCell.setCellFormula(String.format("IF(C%1$d=\"마이스터인재전형\", IF(OR(ISBLANK(D%1$d), ISBLANK(E%1$d), ISBLANK(F%1$d)), FALSE, TRUE), IF(OR(ISBLANK(D%1$d), ISBLANK(E%1$d)), FALSE, TRUE))", xlsxIndex));
+            showCell.setCellFormula(String.format("IF(C%1$d=\"마이스터인재전형\", IF(OR(D%1$d=\"불참\", E%1$d=\"불참\", F%1$d=\"불참\"), FALSE, TRUE), IF(OR(D%1$d=\"불참\", E%1$d=\"불참\"), FALSE, TRUE))", xlsxIndex));
+
         }
 
         return xlsxService.convertToByteArrayResource(workbook);
