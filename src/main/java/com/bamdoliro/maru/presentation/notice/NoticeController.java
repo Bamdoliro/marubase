@@ -1,11 +1,8 @@
 package com.bamdoliro.maru.presentation.notice;
 
-import com.bamdoliro.maru.application.notice.CreateNoticeUseCase;
-import com.bamdoliro.maru.application.notice.DeleteNoticeUseCase;
-import com.bamdoliro.maru.application.notice.QueryNoticeListUseCase;
-import com.bamdoliro.maru.application.notice.QueryNoticeUseCase;
-import com.bamdoliro.maru.application.notice.UpdateNoticeUseCase;
+import com.bamdoliro.maru.application.notice.*;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
 import com.bamdoliro.maru.presentation.notice.dto.request.NoticeRequest;
 import com.bamdoliro.maru.presentation.notice.dto.response.NoticeResponse;
 import com.bamdoliro.maru.presentation.notice.dto.response.NoticeSimpleResponse;
@@ -18,15 +15,8 @@ import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RequestMapping("/notice")
@@ -38,6 +28,7 @@ public class NoticeController {
     private final QueryNoticeListUseCase queryNoticeListUseCase;
     private final QueryNoticeUseCase queryNoticeUseCase;
     private final DeleteNoticeUseCase deleteNoticeUseCase;
+    private final UploadFileUseCase uploadFileUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -47,6 +38,17 @@ public class NoticeController {
     ) {
         return CommonResponse.ok(
                 createNoticeUseCase.execute(request));
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/file")
+    public SingleCommonResponse<UploadResponse> uploadFile(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
+            @RequestPart("file") MultipartFile file
+    ) {
+        return SingleCommonResponse.ok(
+                uploadFileUseCase.execute(user, file)
+        );
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
