@@ -39,8 +39,9 @@ public class Notice extends BaseTimeEntity {
         this.fileUrl = fileUrl;
     }
 
-    public void update(String title, String content) {
+    public void update(String title, String content, String fileUrl) {
         this.title = title;
         this.content = content;
+        this.fileUrl = fileUrl;
     }
 }
