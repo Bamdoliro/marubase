@@ -15,6 +15,6 @@ public class UpdateNoticeUseCase {
     @Transactional
     public void execute(Long id, NoticeRequest request) {
         Notice notice = noticeFacade.getNotice(id);
-        notice.update(request.getTitle(), request.getContent());
+        notice.update(request.getTitle(), request.getContent(), request.getFileUrl());
     }
 }
