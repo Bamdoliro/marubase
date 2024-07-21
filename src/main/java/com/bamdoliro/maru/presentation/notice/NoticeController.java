@@ -47,7 +47,7 @@ public class NoticeController {
             @RequestPart("file") MultipartFile file
     ) {
         return SingleCommonResponse.ok(
-                uploadFileUseCase.execute(user, file)
+                uploadFileUseCase.execute(file)
         );
     }
 

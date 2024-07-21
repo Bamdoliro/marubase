@@ -19,8 +19,8 @@ public class UploadFileUseCase {
 
     private final UploadFileService uploadFileService;
 
-    public UploadResponse execute(User user, MultipartFile noticeFile) {
-        return uploadFileService.execute(noticeFile, FolderConstant.NOTICE_FILE, user.getUuid().toString(), file -> {
+    public UploadResponse execute(MultipartFile noticeFile) {
+        return uploadFileService.execute(noticeFile, FolderConstant.NOTICE_FILE, noticeFile.getOriginalFilename(), file -> {
             if (file.getSize() > 20 * MB) {
                 throw new FileSizeLimitExceededException();
             }
