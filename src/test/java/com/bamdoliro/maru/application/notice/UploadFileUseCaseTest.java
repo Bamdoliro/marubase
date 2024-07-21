@@ -7,7 +7,6 @@ import com.bamdoliro.maru.infrastructure.s3.validator.FileValidator;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -44,7 +43,7 @@ public class UploadFileUseCaseTest {
         given(uploadFileService.execute(any(MultipartFile.class), any(String.class), any(String.class), any(FileValidator.class))).willReturn(new UploadResponse("https://host.com/notice.pdf"));
 
         // when
-        uploadFileUseCase.execute(user, file);
+        uploadFileUseCase.execute(file);
 
         // then
         verify(uploadFileService, times(1)).execute(any(MultipartFile.class), any(String.class), any(String.class), any(FileValidator.class));

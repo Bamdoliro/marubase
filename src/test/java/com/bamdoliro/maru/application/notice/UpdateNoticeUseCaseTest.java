@@ -31,7 +31,7 @@ class UpdateNoticeUseCaseTest {
     void 유저가_공지사항을_수정한다() {
         //given
         Notice notice = NoticeFixture.createNotice();
-        NoticeRequest request = new NoticeRequest("제목 바뀌나?", "내용도 바뀌나?");
+        NoticeRequest request = new NoticeRequest("제목 바뀌나?", "내용도 바뀌나?", null);
 
         given(noticeFacade.getNotice(notice.getId())).willReturn(notice);
 
@@ -48,7 +48,7 @@ class UpdateNoticeUseCaseTest {
     void 유저가_공지사항을_수정할_때_공지사항이_없으면_에러가_발생한다() {
         // given
         Notice notice = NoticeFixture.createNotice();
-        NoticeRequest request = new NoticeRequest("제목 바뀌나?", "내용도 바뀌나?");
+        NoticeRequest request = new NoticeRequest("제목 바뀌나?", "내용도 바뀌나?", null);
 
         given(noticeFacade.getNotice(notice.getId())).willThrow(NoticeNotFoundException.class);
 

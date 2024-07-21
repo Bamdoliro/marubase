@@ -2,6 +2,9 @@ package com.bamdoliro.maru.presentation.notice;
 
 import com.bamdoliro.maru.domain.notice.exception.NoticeNotFoundException;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
+import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
+import com.bamdoliro.maru.infrastructure.s3.exception.FileSizeLimitExceededException;
 import com.bamdoliro.maru.presentation.notice.dto.request.NoticeRequest;
 import com.bamdoliro.maru.presentation.notice.dto.response.NoticeResponse;
 import com.bamdoliro.maru.presentation.notice.dto.response.NoticeSimpleResponse;
@@ -14,34 +17,29 @@ import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import static com.bamdoliro.maru.shared.constants.FileConstant.MB;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.BDDMockito.willThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class NoticeControllerTest extends RestDocsTestSupport {
 
     @Test
     void 공지사항을_생성한다() throws Exception {
-        NoticeRequest request = new NoticeRequest("오늘 급식 맛있엇나용?", "토요일인데요");
+        NoticeRequest request = new NoticeRequest("오늘 급식 맛있엇나용?", "토요일인데요", "http://example.com/file.pdf");
         given(createNoticeUseCase.execute(any(NoticeRequest.class))).willReturn(SharedFixture.createIdResponse());
 
         User user = UserFixture.createAdminUser();
@@ -68,7 +66,10 @@ class NoticeControllerTest extends RestDocsTestSupport {
                                         .description("64글자 이내의 제목"),
                                 fieldWithPath("content")
                                         .type(JsonFieldType.STRING)
-                                        .description("1024글자 이내의 내용")
+                                        .description("1024글자 이내의 내용"),
+                                fieldWithPath("fileUrl")
+                                        .type(JsonFieldType.STRING)
+                                        .description("파일 URL 150자 이하 / 파일 없을시 생략")
                         )
                 ));
 
@@ -78,7 +79,7 @@ class NoticeControllerTest extends RestDocsTestSupport {
     @Test
     void 공지사항을_수정한다() throws Exception {
         Long id = 1L;
-        NoticeRequest request = new NoticeRequest("이거 맞나", "아님 말고...");
+        NoticeRequest request = new NoticeRequest("이거 맞나", "아님 말고...", "http://example.com/file.pdf");
         willDoNothing().given(updateNoticeUseCase).execute(id, request);
 
         User user = UserFixture.createAdminUser();
@@ -108,7 +109,10 @@ class NoticeControllerTest extends RestDocsTestSupport {
                                         .description("64글자 이내의 제목"),
                                 fieldWithPath("content")
                                         .type(JsonFieldType.STRING)
-                                        .description("1024글자 이내의 내용")
+                                        .description("1024글자 이내의 내용"),
+                                fieldWithPath("fileUrl")
+                                        .type(JsonFieldType.STRING)
+                                        .description("파일 URL 150자 이하 / 파일 없을시 생략")
                         )
                 ));
     }
@@ -116,7 +120,7 @@ class NoticeControllerTest extends RestDocsTestSupport {
     @Test
     void 공지사항을_수정할_때_공지사항이_없으면_에러가_발생한다() throws Exception {
         Long id = 1L;
-        NoticeRequest request = new NoticeRequest("이거 맞나", "아님 말고...");
+        NoticeRequest request = new NoticeRequest("이거 맞나", "아님 말고...", null);
         willThrow(new NoticeNotFoundException()).given(updateNoticeUseCase).execute(eq(1L), any(NoticeRequest.class));
 
         User user = UserFixture.createAdminUser();
@@ -219,5 +223,92 @@ class NoticeControllerTest extends RestDocsTestSupport {
                 ));
 
         verify(deleteNoticeUseCase, times(1)).execute(id);
+    }
+
+    @Test
+    void 공지사항_파일을_업로드한다() throws Exception {
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "file.pdf",
+                MediaType.APPLICATION_PDF_VALUE,
+                "<<file>>".getBytes(StandardCharsets.UTF_8)
+        );
+        User user = UserFixture.createAdminUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(uploadFileUseCase.execute(file)).willReturn(new UploadResponse("https://example.com/notice-file.pdf"));
+
+        mockMvc.perform(multipart("/notice/file")
+                        .file(file)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                )
+                .andExpect(status().isCreated())
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        ),
+                        requestParts(
+                                partWithName("file")
+                                        .description("모든 파일, 최대 20MB")
+                        )
+                ));
+    }
+
+    @Test
+    void 공지사항_파일_업로드가_실패한다() throws Exception {
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "file.pdf",
+                MediaType.APPLICATION_PDF_VALUE,
+                "<<file>>".getBytes(StandardCharsets.UTF_8)
+        );
+        User user = UserFixture.createAdminUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        doThrow(new FailedToSaveException()).when(uploadFileUseCase).execute(file);
+
+        mockMvc.perform(multipart("/notice/file")
+                        .file(file)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                )
+                .andExpect(status().isInternalServerError())
+                .andDo(restDocs.document());
+
+        verify(uploadFileUseCase, times(1)).execute(file);
+    }
+
+    @Test
+    void 공지사항_파일을_업로드할_때_파일이_용량_제한을_넘으면_에러가_발생한다() throws Exception {
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "file.pdf",
+                MediaType.IMAGE_PNG_VALUE,
+                new byte[(int) (20 * MB + 1)]
+        );
+        User user = UserFixture.createAdminUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        doThrow(new FileSizeLimitExceededException()).when(uploadFileUseCase).execute(file);
+
+        mockMvc.perform(multipart("/notice/file")
+                        .file(file)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                )
+
+                .andExpect(status().isBadRequest())
+
+                .andDo(restDocs.document());
+
+        verify(uploadFileUseCase, times(1)).execute(file);
     }
 }

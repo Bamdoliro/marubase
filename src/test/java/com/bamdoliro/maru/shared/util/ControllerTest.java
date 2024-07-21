@@ -39,11 +39,7 @@ import com.bamdoliro.maru.application.form.UpdateSecondRoundScoreUseCase;
 import com.bamdoliro.maru.application.form.UploadFormUseCase;
 import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
 import com.bamdoliro.maru.application.message.SendMessageUseCase;
-import com.bamdoliro.maru.application.notice.CreateNoticeUseCase;
-import com.bamdoliro.maru.application.notice.DeleteNoticeUseCase;
-import com.bamdoliro.maru.application.notice.QueryNoticeListUseCase;
-import com.bamdoliro.maru.application.notice.QueryNoticeUseCase;
-import com.bamdoliro.maru.application.notice.UpdateNoticeUseCase;
+import com.bamdoliro.maru.application.notice.*;
 import com.bamdoliro.maru.application.question.CreateQuestionUseCase;
 import com.bamdoliro.maru.application.question.DeleteQuestionUseCase;
 import com.bamdoliro.maru.application.question.QueryQuestionListUseCase;
@@ -174,6 +170,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected CreateNoticeUseCase createNoticeUseCase;
+
+    @MockBean
+    protected UploadFileUseCase uploadFileUseCase;
 
     @MockBean
     protected UpdateNoticeUseCase updateNoticeUseCase;
