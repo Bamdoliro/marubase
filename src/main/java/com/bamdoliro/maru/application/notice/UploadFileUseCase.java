@@ -11,6 +11,8 @@ import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.UUID;
+
 import static com.bamdoliro.maru.shared.constants.FileConstant.MB;
 
 @RequiredArgsConstructor
@@ -20,7 +22,7 @@ public class UploadFileUseCase {
     private final UploadFileService uploadFileService;
 
     public UploadResponse execute(MultipartFile noticeFile) {
-        return uploadFileService.execute(noticeFile, FolderConstant.NOTICE_FILE, noticeFile.getOriginalFilename(), file -> {
+        return uploadFileService.execute(noticeFile, FolderConstant.NOTICE_FILE, UUID.randomUUID().toString(), file -> {
             if (file.getSize() > 20 * MB) {
                 throw new FileSizeLimitExceededException();
             }
