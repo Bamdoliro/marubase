@@ -194,11 +194,10 @@ public class FormController {
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestParam(name = "status", required = false) FormStatus status,
             @RequestParam(name = "type", required = false) FormType.Category type,
-            @RequestParam(name = "order-by", required = false) String orderBy,
-            @RequestParam(name = "order", required = false) String order
+            @RequestParam(name = "sort", required = false) String sort
     ) {
         return ListCommonResponse.ok(
-                queryAllFormUseCase.execute(status, type, orderBy, order)
+                queryAllFormUseCase.execute(status, type, sort)
         );
     }
 
