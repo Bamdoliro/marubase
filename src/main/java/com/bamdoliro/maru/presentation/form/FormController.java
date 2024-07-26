@@ -69,6 +69,7 @@ public class FormController {
     private final ExportResultUseCase exportResultUseCase;
     private final PassOrFailFormUseCase passOrFailFormUseCase;
     private final QueryFormUrlUseCase queryFormUrlUseCase;
+    private final SelectFirstPassUseCase selectFirstPassUseCase;
     private final SelectSecondPassUseCase selectSecondPassUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -192,10 +193,12 @@ public class FormController {
     public ListCommonResponse<FormSimpleResponse> getFormList(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestParam(name = "status", required = false) FormStatus status,
-            @RequestParam(name = "type", required = false) FormType.Category type
+            @RequestParam(name = "type", required = false) FormType.Category type,
+            @RequestParam(name = "order-by", required = false) String orderBy,
+            @RequestParam(name = "order", required = false) String order
     ) {
         return ListCommonResponse.ok(
-                queryAllFormUseCase.execute(status, type)
+                queryAllFormUseCase.execute(status, type, orderBy, order)
         );
     }
 
@@ -297,6 +300,18 @@ public class FormController {
         return CommonResponse.ok(
                 queryFormUrlUseCase.execute(formIdList)
         );
+    }
+
+    /**
+     * 테스트용 메서드. 커밋 전에 삭제해야함.
+     * @param user
+     */
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/first-round/select")
+    public void selectFirstPass(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+    ) {
+        selectFirstPassUseCase.execute();
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

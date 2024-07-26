@@ -161,13 +161,18 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
 
     @Override
     public List<Form> findFirstPassedSupernumeraryForm() {
-        return List.of();
+        return queryFactory
+                .selectFrom(form)
+                .where(
+                        form.status.eq(FormStatus.FIRST_PASSED)
+                                .and(
+                                        form.type.eq(FormType.SPECIAL_ADMISSION)
+                                                .or(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION))
+                                )
+                )
+                .orderBy(form.score.totalScore.desc())
+                .fetch();
     }
-
-//    @Override
-//    public List<Form> findFirstPassedRegularOrSupernumeraryForm() {
-//
-//    }
 
     @Override
     public List<Form> findFirstRoundForm() {
