@@ -1,5 +1,27 @@
 == 공지사항 Notice
 
+=== 공지사항 파일 업로드
+어드민 권한을 가진 사용자가 공지사항에 들어갈 파일을 업로드할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/notice-controller-test/공지사항_파일을_업로드한다/request-headers.adoc[]
+
+===== Request Body
+include::{snippets}/notice-controller-test/공지사항_파일을_업로드한다/request-parts.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/notice-controller-test/공지사항_파일을_업로드한다/http-response.adoc[]
+
+===== 파일을 업로드하는 도중 오류가 발생한 경우
+include::{snippets}/notice-controller-test/공지사항_파일_업로드가_실패한다/http-response.adoc[]
+
+===== 파일 사이즈가 20MB를 초과한 경우
+include::{snippets}/notice-controller-test/공지사항_파일을_업로드할_때_파일이_용량_제한을_넘으면_에러가_발생한다/http-response.adoc[]
+
 === 공지사항 생성
 어드민 권한을 가진 사용자가 제목과 내용을 입력해 공지사항을 생성할 수 있습니다.
 

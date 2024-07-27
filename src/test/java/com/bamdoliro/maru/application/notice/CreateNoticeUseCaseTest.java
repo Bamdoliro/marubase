@@ -31,7 +31,7 @@ class CreateNoticeUseCaseTest {
     void 유저가_공지사항을_생성한다() {
         // given
         Notice notice = NoticeFixture.createNotice();
-        NoticeRequest request = new NoticeRequest(notice.getTitle(), notice.getContent());
+        NoticeRequest request = new NoticeRequest(notice.getTitle(), notice.getContent(), null);
         ArgumentCaptor<Notice> captor = ArgumentCaptor.forClass(Notice.class);
 
         given(noticeRepository.save(any(Notice.class))).willReturn(notice);

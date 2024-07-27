@@ -7,4 +7,5 @@ public class FolderConstant {
     
     public static final String IDENTIFICATION_PICTURE = "identification-picture";
     public static final String FORM = "form";
+    public static final String NOTICE_FILE = "notice-file";
 }
