@@ -20,17 +20,17 @@ public class QueryAllFormUseCase {
     private final FormRepository formRepository;
 
     public List<FormSimpleResponse> execute(FormStatus status, FormType.Category category, String sort) {
-        List<Form> forms = new java.util.ArrayList<>(formRepository.findByStatus(status).stream()
+        List<Form> formList = new java.util.ArrayList<>(formRepository.findByStatus(status).stream()
                 .filter(form -> Objects.isNull(category) || form.getType().categoryEquals(category))
                 .toList());
 
-        if (sort.equals("total-score-asc")) {
-            forms.sort(Comparator.comparing(form -> form.getScore().getTotalScore(), Comparator.naturalOrder()));
-        } else if (sort.equals("total-score-desc")) {
-            forms.sort(Comparator.comparing(form -> form.getScore().getTotalScore(), Comparator.reverseOrder()));
+        if ("total-score-asc".equals(sort)) {
+            formList.sort(Comparator.comparing(form -> form.getScore().getTotalScore(), Comparator.naturalOrder()));
+        } else if ("total-score-desc".equals(sort)) {
+            formList.sort(Comparator.comparing(form -> form.getScore().getTotalScore(), Comparator.reverseOrder()));
         }
 
-        return forms.stream()
+        return formList.stream()
                 .map(FormSimpleResponse::new)
                 .collect(Collectors.toList());
     }
