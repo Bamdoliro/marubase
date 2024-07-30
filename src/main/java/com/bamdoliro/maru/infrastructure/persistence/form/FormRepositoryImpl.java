@@ -84,9 +84,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                                                 .and(form.type.eq(FormType.SPECIAL_ADMISSION).not())
                                 )
                 )
-                .orderBy(
-                        form.score.firstRoundScore.desc()
-                )
+                .orderBy(form.score.firstRoundScore.desc())
                 .fetch();
     }
 
@@ -101,9 +99,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                                                 .or(form.changedToRegular.isTrue())
                                 )
                 )
-                .orderBy(
-                        form.score.firstRoundScore.desc()
-                )
+                .orderBy(form.score.firstRoundScore.desc())
                 .fetch();
     }
 
@@ -118,9 +114,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                                                 .or(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION))
                                 )
                 )
-                .orderBy(
-                        form.score.firstRoundScore.desc()
-                )
+                .orderBy(form.score.firstRoundScore.desc())
                 .fetch();
     }
 
@@ -136,9 +130,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                                                 .and(form.type.eq(FormType.SPECIAL_ADMISSION).not())
                                 )
                 )
-                .orderBy(
-                        form.score.totalScore.desc()
-                )
+                .orderBy(form.score.totalScore.desc())
                 .fetch();
     }
 
@@ -153,9 +145,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                                                 .or(form.changedToRegular.isTrue())
                                 )
                 )
-                .orderBy(
-                        form.score.totalScore.desc()
-                )
+                .orderBy(form.score.totalScore.desc())
                 .fetch();
     }
 
