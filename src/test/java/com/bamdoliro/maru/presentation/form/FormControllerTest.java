@@ -1348,7 +1348,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(queryAllFormUseCase.execute(FormStatus.SUBMITTED, FormType.Category.REGULAR)).willReturn(responseList);
+        given(queryAllFormUseCase.execute(FormStatus.SUBMITTED, FormType.Category.REGULAR, null)).willReturn(responseList);
 
         mockMvc.perform(get("/form")
                         .param("status", FormStatus.SUBMITTED.name())
@@ -1374,7 +1374,7 @@ class FormControllerTest extends RestDocsTestSupport {
                         )
                 ));
 
-        verify(queryAllFormUseCase, times(1)).execute(FormStatus.SUBMITTED, FormType.Category.REGULAR);
+        verify(queryAllFormUseCase, times(1)).execute(FormStatus.SUBMITTED, FormType.Category.REGULAR, null);
     }
 
     @Test
