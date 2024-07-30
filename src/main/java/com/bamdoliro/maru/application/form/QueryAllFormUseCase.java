@@ -3,6 +3,7 @@ package com.bamdoliro.maru.application.form;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
+import com.bamdoliro.maru.domain.form.exception.MissingTotalScoreException;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.shared.annotation.UseCase;
@@ -24,6 +25,9 @@ public class QueryAllFormUseCase {
                 .filter(form -> Objects.isNull(category) || form.getType().categoryEquals(category))
                 .toList());
 
+        if (sort != null && formList.stream().anyMatch(form -> form.getScore().getTotalScore() == null)) {
+            throw new MissingTotalScoreException();
+        }
         if ("total-score-asc".equals(sort)) {
             formList.sort(Comparator.comparing(form -> form.getScore().getTotalScore(), Comparator.naturalOrder()));
         } else if ("total-score-desc".equals(sort)) {
