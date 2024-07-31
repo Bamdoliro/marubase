@@ -54,7 +54,7 @@ public class UploadFileService {
 
     public UploadResponse getPresignedUrl(String folder, String fileName) {
         String fullFileName = createFileName(folder, fileName);
-        GeneratePresignedUrlRequest request = getGeneratePresignedUrlRequest(bucket, fileName);
+        GeneratePresignedUrlRequest request = getGeneratePresignedUrlRequest(bucket, fullFileName);
 
         return new UploadResponse(
                 amazonS3Client.generatePresignedUrl(request).toString()
