@@ -52,31 +52,41 @@ public class UploadFileService {
         );
     }
 
-    public UploadResponse getPresignedUrl(String folder, String fileName) {
+    public UploadResponse getUploadPresignedUrl(String folder, String fileName) {
         String fullFileName = createFileName(folder, fileName);
-        GeneratePresignedUrlRequest request = getGeneratePresignedUrlRequest(bucket, fullFileName);
+        GeneratePresignedUrlRequest request = getGenerateUploadPresignedUrlRequest(bucket, fullFileName);
 
         return new UploadResponse(
                 amazonS3Client.generatePresignedUrl(request).toString()
         );
     }
 
-    private GeneratePresignedUrlRequest getGeneratePresignedUrlRequest(String bucket, String fileName) {
-        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, fileName)
-                .withMethod(HttpMethod.PUT)
-                .withExpiration(getPresignedUrlExpiration());
-        request.addRequestParameter(
-                Headers.S3_CANNED_ACL,
-                CannedAccessControlList.PublicRead.toString()
-        );
+    public UploadResponse getDownloadPresignedUrl(String folder, String fileName) {
+        String fullFileName = createFileName(folder, fileName);
+        GeneratePresignedUrlRequest request = getGenerateDownloadPresignedUrlRequest(bucket, fullFileName);
 
-        return request;
+        return new UploadResponse(
+                amazonS3Client.generatePresignedUrl(request).toString()
+        );
     }
 
-    private Date getPresignedUrlExpiration() {
+    private GeneratePresignedUrlRequest getGenerateUploadPresignedUrlRequest(String bucket, String fileName) {
+        return new GeneratePresignedUrlRequest(bucket, fileName)
+                .withMethod(HttpMethod.PUT)
+                .withExpiration(getPresignedUrlExpiration(1));
+    }
+
+    private GeneratePresignedUrlRequest getGenerateDownloadPresignedUrlRequest(String bucket, String fileName) {
+
+        return new GeneratePresignedUrlRequest(bucket, fileName)
+                .withMethod(HttpMethod.GET)
+                .withExpiration(getPresignedUrlExpiration(60 * 10));
+    }
+
+    private Date getPresignedUrlExpiration(int duration) {
         Date expiration = new Date();
         long expTimeMillis = expiration.getTime();
-        expTimeMillis += 1000 * 60 * 60;
+        expTimeMillis += 1000L * 60 * duration;
         expiration.setTime(expTimeMillis);
 
         return expiration;
