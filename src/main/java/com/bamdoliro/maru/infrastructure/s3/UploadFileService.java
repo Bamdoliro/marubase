@@ -4,10 +4,7 @@ import com.amazonaws.HttpMethod;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.Headers;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
 import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
 import com.bamdoliro.maru.infrastructure.s3.validator.FileValidator;
@@ -66,7 +63,7 @@ public class UploadFileService {
         GeneratePresignedUrlRequest request = getGenerateDownloadPresignedUrlRequest(bucket, fullFileName);
 
         return new UploadResponse(
-                amazonS3Client.generatePresignedUrl(request).toString()
+                request != null ? amazonS3Client.generatePresignedUrl(request).toString() : null
         );
     }
 
@@ -77,10 +74,18 @@ public class UploadFileService {
     }
 
     private GeneratePresignedUrlRequest getGenerateDownloadPresignedUrlRequest(String bucket, String fileName) {
+        try {
+            amazonS3Client.getObjectMetadata(bucket, fileName);
 
-        return new GeneratePresignedUrlRequest(bucket, fileName)
-                .withMethod(HttpMethod.GET)
-                .withExpiration(getPresignedUrlExpiration(60 * 10));
+            return new GeneratePresignedUrlRequest(bucket, fileName)
+                    .withMethod(HttpMethod.GET)
+                    .withExpiration(getPresignedUrlExpiration(60 * 10));
+        } catch (AmazonS3Exception e) {
+            if (e.getStatusCode() == 404) {
+                return null;
+            }
+            throw e;
+        }
     }
 
     private Date getPresignedUrlExpiration(int duration) {
