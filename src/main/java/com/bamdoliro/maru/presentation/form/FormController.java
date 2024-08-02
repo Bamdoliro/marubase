@@ -4,7 +4,7 @@ import com.bamdoliro.maru.application.form.*;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
+import com.bamdoliro.maru.infrastructure.s3.dto.response.UrlResponse;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFinalFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
@@ -155,27 +155,22 @@ public class FormController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(
-            value = "/identification-picture",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    )
-    public SingleCommonResponse<UploadResponse> uploadIdentificationPicture(
-            @AuthenticationPrincipal(authority = Authority.USER) User user,
-            @RequestPart(value = "image") MultipartFile image
+    @PostMapping(value = "/identification-picture")
+    public SingleCommonResponse<UrlResponse> uploadIdentificationPicture(
+            @AuthenticationPrincipal(authority = Authority.USER) User user
     ) {
         return SingleCommonResponse.ok(
-                uploadIdentificationPictureUseCase.execute(user, image)
+                uploadIdentificationPictureUseCase.execute(user)
         );
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "/form-document", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public SingleCommonResponse<UploadResponse> uploadFormDocument(
-            @AuthenticationPrincipal(authority = Authority.USER) User user,
-            @RequestPart(value = "file") MultipartFile file
+    @PostMapping(value = "/form-document")
+    public SingleCommonResponse<UrlResponse> uploadFormDocument(
+            @AuthenticationPrincipal(authority = Authority.USER) User user
     ) {
         return SingleCommonResponse.ok(
-                uploadFormUseCase.execute(user, file)
+                uploadFormUseCase.execute(user)
         );
     }
 
