@@ -20,10 +20,6 @@ import java.time.LocalDate;
 public class ApplicantRequest {
 
     @NotBlank(message = "필수값입니다.")
-    @URL(message = "올바른 URL 형식이어야 합니다.")
-    private String identificationPictureUri;
-
-    @NotBlank(message = "필수값입니다.")
     @Size(max = 20, message = "20자 이하여야 합니다.")
     private String name;
 
@@ -40,7 +36,6 @@ public class ApplicantRequest {
 
     public Applicant toValue() {
         return new Applicant(
-                identificationPictureUri,
                 name,
                 new PhoneNumber(phoneNumber),
                 birthday,

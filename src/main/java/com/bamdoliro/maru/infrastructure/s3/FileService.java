@@ -3,9 +3,8 @@ package com.bamdoliro.maru.infrastructure.s3;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.*;
-import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
+import com.bamdoliro.maru.infrastructure.s3.dto.response.UrlResponse;
 import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
 import com.bamdoliro.maru.infrastructure.s3.validator.FileValidator;
 import com.bamdoliro.maru.shared.config.properties.S3Properties;
@@ -19,7 +18,7 @@ import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
-public class UploadFileService {
+public class FileService {
 
     private final S3Properties s3Properties;
     private final AmazonS3Client amazonS3Client;
@@ -27,7 +26,7 @@ public class UploadFileService {
     @Value("${spring.cloud.aws.s3.bucket}")
     private String bucket;
 
-    public UploadResponse execute(MultipartFile file, String folder, String fileName, FileValidator validator) {
+    public UrlResponse execute(MultipartFile file, String folder, String fileName, FileValidator validator) {
         validator.validate(file);
         String fullFileName = createFileName(folder, fileName);
 
@@ -44,26 +43,20 @@ public class UploadFileService {
             throw new FailedToSaveException();
         }
 
-        return new UploadResponse(
+        return new UrlResponse(
+                amazonS3Client.getUrl(s3Properties.getBucket(), fullFileName).toString(),
                 amazonS3Client.getUrl(s3Properties.getBucket(), fullFileName).toString()
         );
     }
 
-    public UploadResponse getUploadPresignedUrl(String folder, String fileName) {
+    public UrlResponse getPresignedUrl(String folder, String fileName) {
         String fullFileName = createFileName(folder, fileName);
-        GeneratePresignedUrlRequest request = getGenerateUploadPresignedUrlRequest(bucket, fullFileName);
+        GeneratePresignedUrlRequest uploadRequest = getGenerateUploadPresignedUrlRequest(bucket, fullFileName);
+        GeneratePresignedUrlRequest downloadRequest = getGenerateDownloadPresignedUrlRequest(bucket, fullFileName);
 
-        return new UploadResponse(
-                amazonS3Client.generatePresignedUrl(request).toString()
-        );
-    }
-
-    public UploadResponse getDownloadPresignedUrl(String folder, String fileName) {
-        String fullFileName = createFileName(folder, fileName);
-        GeneratePresignedUrlRequest request = getGenerateDownloadPresignedUrlRequest(bucket, fullFileName);
-
-        return new UploadResponse(
-                request != null ? amazonS3Client.generatePresignedUrl(request).toString() : null
+        return new UrlResponse(
+                amazonS3Client.generatePresignedUrl(uploadRequest).toString(),
+                downloadRequest != null ? amazonS3Client.generatePresignedUrl(downloadRequest).toString() : null
         );
     }
 

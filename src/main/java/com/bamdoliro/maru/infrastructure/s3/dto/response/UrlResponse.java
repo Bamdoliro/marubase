@@ -5,7 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class UploadResponse {
+public class UrlResponse {
 
-    private String url;
+    private String uploadUrl;
+    private String downloadUrl;
 }
