@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 
+import java.util.UUID;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,7 +22,5 @@ public class NoticeRequest {
     @Size(max = 1024, message = "1024글자 이하여야 합니다.")
     private String content;
 
-    @Size(max = 150, message = "150자 이하여야합니다.")
-    @URL(message = "올바른 URL 형식이어야 합니다.")
-    private String fileUrl;
+    private String fileUuid;
 }

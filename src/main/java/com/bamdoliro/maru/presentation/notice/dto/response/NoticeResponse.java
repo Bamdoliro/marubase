@@ -13,10 +13,10 @@ public class NoticeResponse {
     private final String fileUrl;
     private final LocalDateTime createdAt;
     
-    public NoticeResponse(Notice notice) {
+    public NoticeResponse(Notice notice, String fileUrl) {
         this.title = notice.getTitle();
         this.content = notice.getContent();
-        this.fileUrl = notice.getFileUrl();
+        this.fileUrl = fileUrl;
         this.createdAt = notice.getCreatedAt();
     }
 }
