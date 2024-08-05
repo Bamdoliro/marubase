@@ -2,6 +2,7 @@ package com.bamdoliro.maru.presentation.notice;
 
 import com.bamdoliro.maru.application.notice.*;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.infrastructure.s3.dto.response.UrlResponse;
 import com.bamdoliro.maru.presentation.notice.dto.request.NoticeRequest;
 import com.bamdoliro.maru.presentation.notice.dto.response.NoticeResponse;
 import com.bamdoliro.maru.presentation.notice.dto.response.NoticeSimpleResponse;
@@ -16,6 +17,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RequestMapping("/notice")

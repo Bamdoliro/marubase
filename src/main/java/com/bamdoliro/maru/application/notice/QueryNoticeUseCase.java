@@ -16,9 +16,7 @@ public class QueryNoticeUseCase {
 
     public NoticeResponse execute(Long id) {
         Notice notice = noticeFacade.getNotice(id);
-        String fileUrl = notice.getFileUuid() != null ?
-                fileService.getPresignedUrl(FolderConstant.NOTICE_FILE, notice.getFileUuid().toString()).getDownloadUrl()
-                : null;
+        String fileUrl = fileService.getPresignedUrl(FolderConstant.NOTICE_FILE, notice.getFileUuid().toString()).getDownloadUrl();
 
         return new NoticeResponse(notice, fileUrl);
     }
