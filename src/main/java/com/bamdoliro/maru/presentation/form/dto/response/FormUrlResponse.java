@@ -15,6 +15,6 @@ public class FormUrlResponse {
     public FormUrlResponse(FormUrlVo vo) {
         this.examinationNumber = vo.getExaminationNumber();
         this.name = vo.getName();
-        this.formUrl = vo.getFormUrl();
+        this.formUrl = vo.getUuid();
     }
 }

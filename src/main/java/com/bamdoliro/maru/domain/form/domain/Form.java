@@ -61,9 +61,6 @@ public class Form extends BaseTimeEntity {
     @Embedded
     private Score score;
 
-    @Column(nullable = true, length = 150)
-    private String formUrl;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private FormType type;
@@ -92,8 +89,7 @@ public class Form extends BaseTimeEntity {
         this.status = FormStatus.SUBMITTED;
     }
 
-    public void submit(String formUrl) {
-        this.formUrl = formUrl;
+    public void submit() {
         this.status = FormStatus.FINAL_SUBMITTED;
     }
 

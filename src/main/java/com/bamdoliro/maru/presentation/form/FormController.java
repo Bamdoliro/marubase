@@ -105,10 +105,9 @@ public class FormController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping
     public void submitForm(
-            @AuthenticationPrincipal(authority = Authority.USER) User user,
-            @RequestBody @Valid SubmitFinalFormRequest request
+            @AuthenticationPrincipal(authority = Authority.USER) User user
     ) {
-        submitFinalFormUseCase.execute(user, request);
+        submitFinalFormUseCase.execute(user);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
