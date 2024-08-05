@@ -470,6 +470,8 @@ include::{snippets}/form-controller-test/정상적으로_2차_전형_점수를_�
 ===== 파일 양식이 잘못된 경우
 include::{snippets}/form-controller-test/잘못된_양식의_2차_전형_점수를_입력하면_에러가_발생한다/http-response.adoc[]
 
+===== 입력한 점수가 범위를 초과한 경우
+include::{snippets}/form-controller-test/입력한_2차_전형_점수가_범위를_초과한_경우_에러가_발생한다/http-response.adoc[]
 
 
 === 최종 합격자 명단 다운로드
