@@ -15,7 +15,7 @@ public enum FormErrorProperty implements ErrorProperty {
     CANNOT_UPDATE_NOT_REJECTED_FORM(HttpStatus.CONFLICT, "반려된 원서만 수정할 수 있습니다."),
     INVALID_FORM_STATUS(HttpStatus.CONFLICT, "원서 상태가 유효하지 않습니다."),
     INVALID_FILE(HttpStatus.BAD_REQUEST, "잘못된 파일입니다."),
-    MISSING_TOTAL_SCORE(HttpStatus.PRECONDITION_FAILED, "최종 점수가 입력되지 않은 원서가 존재합니다.")
+    MISSING_TOTAL_SCORE(HttpStatus.PRECONDITION_FAILED, "최종 점수가 입력되지 않은 원서가 존재합니다."),
     WRONG_SCORE(HttpStatus.BAD_REQUEST, "점수 범위를 초과했습니다."),
     ;
 
