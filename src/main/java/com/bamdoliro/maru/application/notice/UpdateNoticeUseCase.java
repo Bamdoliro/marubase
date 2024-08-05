@@ -6,6 +6,8 @@ import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @UseCase
 public class UpdateNoticeUseCase {
@@ -15,6 +17,6 @@ public class UpdateNoticeUseCase {
     @Transactional
     public void execute(Long id, NoticeRequest request) {
         Notice notice = noticeFacade.getNotice(id);
-        notice.update(request.getTitle(), request.getContent(), request.getFileUrl());
+        notice.update(request.getTitle(), request.getContent(), UUID.fromString(request.getFileUuid()));
     }
 }
