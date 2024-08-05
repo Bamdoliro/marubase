@@ -5,9 +5,6 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.URL;
-
-import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
