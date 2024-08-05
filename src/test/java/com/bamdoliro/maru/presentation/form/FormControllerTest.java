@@ -1632,6 +1632,32 @@ class FormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
+    void 입력한_2차_전형_점수가_범위를_초과한_경우_에러가_발생한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+        MockMultipartFile file = new MockMultipartFile(
+                "xlsx",
+                "2차전형점수양식.xlsx",
+                String.valueOf(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")),
+                "<<file>>".getBytes()
+        );
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        doThrow(new WrongScoreException()).when(updateSecondRoundScoreUseCase).execute(any(MultipartFile.class));
+
+        mockMvc.perform(multipartPatch("/form/second-round/score")
+                        .file(file)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+
+                .andExpect(status().isBadRequest())
+
+                .andDo(restDocs.document());
+
+        verify(updateSecondRoundScoreUseCase, times(1)).execute(any(MultipartFile.class));
+    }
+
+    @Test
     void 정상적으로_최종_합격자를_다운로드한다() throws Exception {
         User user = UserFixture.createAdminUser();
         MockMultipartFile file = new MockMultipartFile(

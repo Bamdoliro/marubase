@@ -4,6 +4,7 @@ import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.InvalidFileException;
+import com.bamdoliro.maru.domain.form.exception.WrongScoreException;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.AllArgsConstructor;
@@ -88,6 +89,20 @@ public class UpdateSecondRoundScoreUseCase {
 
         )) {
             throw new InvalidFileException();
+        }
+
+        if (isShow &&
+                ((row.getCell(2).getStringCellValue().equals("마이스터인재전형") &&
+                        ((row.getCell(3).getNumericCellValue() > 120 || row.getCell(4).getNumericCellValue() > 40 || row.getCell(5).getNumericCellValue() > 80) ||
+                                (row.getCell(3).getNumericCellValue() < 0 || row.getCell(4).getNumericCellValue() < 0 || row.getCell(5).getNumericCellValue() < 0))) ||
+                        (row.getCell(2).getStringCellValue().equals("사회통합전형") &&
+                                ((row.getCell(3).getNumericCellValue() > 200 || row.getCell(4).getNumericCellValue() > 40) ||
+                                        (row.getCell(3).getNumericCellValue() < 0 || row.getCell(4).getNumericCellValue() < 0))) ||
+                        (!row.getCell(2).getStringCellValue().equals("마이스터인재전형") &&
+                                !row.getCell(2).getStringCellValue().equals("사회통합전형") &&
+                                ((row.getCell(3).getNumericCellValue() > 120 || row.getCell(4).getNumericCellValue() > 40) ||
+                                        (row.getCell(3).getNumericCellValue() < 0 || row.getCell(4).getNumericCellValue() < 0))))) {
+            throw new WrongScoreException();
         }
     }
 
