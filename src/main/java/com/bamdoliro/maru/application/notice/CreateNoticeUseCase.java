@@ -7,6 +7,8 @@ import com.bamdoliro.maru.shared.annotation.UseCase;
 import com.bamdoliro.maru.shared.response.IdResponse;
 import lombok.RequiredArgsConstructor;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @UseCase
 public class CreateNoticeUseCase {
@@ -15,7 +17,7 @@ public class CreateNoticeUseCase {
 
     public IdResponse execute(NoticeRequest request) {
         Notice notice = noticeRepository.save(
-                new Notice(request.getTitle(), request.getContent(), request.getFileUrl())
+                new Notice(request.getTitle(), request.getContent(), UUID.fromString(request.getFileUuid()))
         );
 
         return new IdResponse(notice);
