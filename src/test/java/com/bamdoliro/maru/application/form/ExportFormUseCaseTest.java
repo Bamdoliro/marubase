@@ -92,7 +92,7 @@ class ExportFormUseCaseTest {
         // given
         User user = UserFixture.createUser();
         Form form = FormFixture.createForm(FormType.REGULAR);
-        form.submit("https://maru.bamdoliro.com/form.pdf");
+        form.submit();
         given(formFacade.getForm(user)).willReturn(form);
 
         // when and then

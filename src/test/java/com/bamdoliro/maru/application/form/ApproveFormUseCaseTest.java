@@ -45,7 +45,7 @@ class ApproveFormUseCaseTest {
     void 원서를_승인할_때_원서가_없으면_에러가_발생한다() {
         // given
         Form form = FormFixture.createForm(FormType.REGULAR);
-        form.submit("https://maru.bamdoliro.com/form.pdf");
+        form.submit();
         willThrow(new FormNotFoundException()).given(formFacade).getForm(form.getId());
         
         // when and then

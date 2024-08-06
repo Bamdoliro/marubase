@@ -5,7 +5,6 @@ import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.presentation.form.dto.request.SubmitFinalFormRequest;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,15 +32,13 @@ class SubmitFinalFormUseCaseTest {
     void 원서를_최종_제출한다() {
         // given
         Form form = FormFixture.createForm(FormType.REGULAR);
-        SubmitFinalFormRequest request = new SubmitFinalFormRequest("https://maru.bamdoliro.com/form.pdf");
 
         given(formFacade.getForm(any(User.class))).willReturn(form);
 
         // when
-        submitFinalFormUseCase.execute(form.getUser(), request);
+        submitFinalFormUseCase.execute(form.getUser());
 
         // then
-        assertEquals(form.getFormUrl(), request.getFormUrl());
         verify(formFacade, times(1)).getForm(any(User.class));
     }
 
@@ -50,14 +47,12 @@ class SubmitFinalFormUseCaseTest {
         // given
         Form form = FormFixture.createForm(FormType.REGULAR);
         form.approve();
-        SubmitFinalFormRequest request = new SubmitFinalFormRequest("https://maru.bamdoliro.com/form.pdf");
 
         given(formFacade.getForm(any(User.class))).willReturn(form);
 
         // when and then
-        assertThrows(FormAlreadySubmittedException.class, () -> submitFinalFormUseCase.execute(form.getUser(), request));
+        assertThrows(FormAlreadySubmittedException.class, () -> submitFinalFormUseCase.execute(form.getUser()));
 
-        assertNull(form.getFormUrl());
         verify(formFacade, times(1)).getForm(any(User.class));
     }
 }

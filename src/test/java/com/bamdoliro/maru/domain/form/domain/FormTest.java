@@ -15,7 +15,7 @@ class FormTest {
         Form form = FormFixture.createForm(FormType.REGULAR);
         assertFalse(form.isReceived());
 
-        form.submit("");
+        form.submit();
         assertFalse(form.isReceived());
 
         form.approve();
@@ -48,7 +48,7 @@ class FormTest {
         Form form = FormFixture.createForm(FormType.REGULAR);
         assertNull(form.isFirstPassed());
 
-        form.submit("");
+        form.submit();
         assertNull(form.isFirstPassed());
 
         form.approve();
@@ -81,7 +81,7 @@ class FormTest {
         Form form = FormFixture.createForm(FormType.REGULAR);
         assertNull(form.isPassed());
 
-        form.submit("");
+        form.submit();
         assertNull(form.isPassed());
 
         form.approve();

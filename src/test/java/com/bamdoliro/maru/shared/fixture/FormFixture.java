@@ -46,6 +46,7 @@ import com.bamdoliro.maru.presentation.form.dto.response.SubjectResponse;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.bamdoliro.maru.shared.util.RandomUtil.randomNumber;
@@ -55,7 +56,6 @@ public class FormFixture {
     public static Form createForm(FormType type) {
         Form form = new Form(
                 new Applicant(
-                        "https://maru.com/photo.png",
                         "김밤돌",
                         new PhoneNumber("01012345678"),
                         LocalDate.of(2005, 4, 15),
@@ -121,7 +121,6 @@ public class FormFixture {
     public static Form createMaleForm(FormType type) {
         Form form = new Form(
                 new Applicant(
-                        "https://maru.com/photo.png",
                         "김밤돌",
                         new PhoneNumber("01012345678"),
                         LocalDate.of(2005, 4, 15),
@@ -187,7 +186,6 @@ public class FormFixture {
     public static Form createRandomForm(User user) {
         return new Form(
                 new Applicant(
-                        "https://maru.com/photo.png",
                         "김밤돌",
                         new PhoneNumber("01085852525"),
                         LocalDate.of(2005, 4, 15),
@@ -265,7 +263,6 @@ public class FormFixture {
     public static Form createRandomQualificationExaminationForm(User user) {
         return new Form(
                 new Applicant(
-                        "https://maru.com/photo.png",
                         "김밤돌",
                         new PhoneNumber("01012345678"),
                         LocalDate.of(2005, 4, 15),
@@ -333,7 +330,6 @@ public class FormFixture {
     public static Form createQualificationExaminationForm(FormType type) {
         return new Form(
                 new Applicant(
-                        "https://maru.com/photo.png",
                         "김밤돌",
                         new PhoneNumber("01012345678"),
                         LocalDate.of(2005, 4, 15),
@@ -572,7 +568,6 @@ public class FormFixture {
 
     public static ApplicantRequest createApplicantRequest() {
         return new ApplicantRequest(
-                "https://maru.com/photo.png",
                 "김밤돌",
                 "01012345678",
                 LocalDate.of(2005, 4, 15),
@@ -608,7 +603,7 @@ public class FormFixture {
         return new FormUrlVo(
                 (long) randomNumber(1000, 5000),
                 "김밤돌",
-                "https://maru.bamdoliro.com/form.pdf"
+                UUID.randomUUID()
         );
     }
 
