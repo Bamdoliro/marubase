@@ -16,8 +16,9 @@ public class CreateNoticeUseCase {
     private final NoticeRepository noticeRepository;
 
     public IdResponse execute(NoticeRequest request) {
+        UUID fileUuid = request.getFileUuid() != null ? UUID.fromString(request.getFileUuid()) : null;
         Notice notice = noticeRepository.save(
-                new Notice(request.getTitle(), request.getContent(), UUID.fromString(request.getFileUuid()))
+                new Notice(request.getTitle(), request.getContent(), fileUuid)
         );
 
         return new IdResponse(notice);
