@@ -2,7 +2,6 @@ package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
-import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.service.AssignExaminationNumberService;
 import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.domain.user.domain.User;
@@ -22,8 +21,6 @@ import org.springframework.test.context.ActiveProfiles;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
-
-import static com.bamdoliro.maru.domain.form.domain.type.FormStatus.SUBMITTED;
 
 @Disabled
 @ActiveProfiles("test")
@@ -56,7 +53,7 @@ class ExportResultUseCaseTest {
             assignExaminationNumberService.execute(form);
 
             switch (randomFormStatus()) {
-                case FINAL_SUBMITTED -> form.submit("");
+                case FINAL_SUBMITTED -> form.submit();
                 case APPROVED -> form.approve();
                 case REJECTED -> form.reject();
                 case RECEIVED -> form.receive();
