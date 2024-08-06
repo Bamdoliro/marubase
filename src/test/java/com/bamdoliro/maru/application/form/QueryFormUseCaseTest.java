@@ -6,9 +6,10 @@ import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.FormNotFoundException;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.domain.user.service.UserFacade;
+import com.bamdoliro.maru.infrastructure.s3.FileService;
 import com.bamdoliro.maru.presentation.form.dto.response.FormResponse;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
+import com.bamdoliro.maru.shared.fixture.SharedFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.times;
@@ -32,6 +34,9 @@ class QueryFormUseCaseTest {
     @Mock
     private FormFacade formFacade;
 
+    @Mock
+    private FileService fileService;
+
     @Test
     void 원서를_조회한다() {
         // given
@@ -41,6 +46,7 @@ class QueryFormUseCaseTest {
 
         
         given(formFacade.getForm(id)).willReturn(form);
+        given(fileService.getPresignedUrl(any(String.class), any(String.class))).willReturn(SharedFixture.createFormUrlResponse());
 
         // when
         FormResponse response = queryFormUseCase.execute(user, id);
@@ -74,7 +80,6 @@ class QueryFormUseCaseTest {
         Long id = -1L;
         User user = UserFixture.createUser();
 
-        
         willThrow(new FormNotFoundException()).given(formFacade).getForm(id);
 
         // when and then

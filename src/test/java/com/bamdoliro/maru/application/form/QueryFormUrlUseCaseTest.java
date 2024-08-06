@@ -1,8 +1,10 @@
 package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
+import com.bamdoliro.maru.infrastructure.s3.FileService;
 import com.bamdoliro.maru.presentation.form.dto.response.FormUrlResponse;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
+import com.bamdoliro.maru.shared.fixture.SharedFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -25,6 +28,9 @@ class QueryFormUrlUseCaseTest {
     @Mock
     private FormRepository formRepository;
 
+    @Mock
+    private FileService fileService;
+
     @Test
     void 원서_url을_조회한다() {
         // given
@@ -34,6 +40,7 @@ class QueryFormUrlUseCaseTest {
                 FormFixture.createFormUrlVo(),
                 FormFixture.createFormUrlVo()
         ));
+        given(fileService.getPresignedUrl(any(String.class), any(String.class))).willReturn(SharedFixture.createFormUrlResponse());
 
         // when
         List<FormUrlResponse> responseList = queryFormUrlUseCase.execute(idList);

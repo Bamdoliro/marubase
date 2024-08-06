@@ -7,7 +7,6 @@ import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.*;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.pdf.exception.FailedToExportPdfException;
-import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
 import com.bamdoliro.maru.infrastructure.s3.exception.EmptyFileException;
 import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
 import com.bamdoliro.maru.infrastructure.s3.exception.FileSizeLimitExceededException;
@@ -22,6 +21,7 @@ import com.bamdoliro.maru.presentation.form.dto.response.FormResultResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
+import com.bamdoliro.maru.shared.fixture.SharedFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
@@ -35,14 +35,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.bamdoliro.maru.shared.constants.FileConstant.MB;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -92,9 +90,6 @@ class FormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("type")
                                         .type(JsonFieldType.STRING)
                                         .description("<<form-type,원서 유형>>"),
-                                fieldWithPath("applicant.identificationPictureUri")
-                                        .type(JsonFieldType.STRING)
-                                        .description("증명사진 URI"),
                                 fieldWithPath("applicant.name")
                                         .type(JsonFieldType.STRING)
                                         .description("지원자 이름"),
@@ -298,18 +293,16 @@ class FormControllerTest extends RestDocsTestSupport {
 
     @Test
     void 원서를_최종_제출한다() throws Exception {
-        SubmitFinalFormRequest request = new SubmitFinalFormRequest("https://maru.bamdoliro.com/form.pdf");
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        willDoNothing().given(submitFinalFormUseCase).execute(any(User.class), any(SubmitFinalFormRequest.class));
+        willDoNothing().given(submitFinalFormUseCase).execute(any(User.class));
 
         mockMvc.perform(patch("/form")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJson(request))
                 )
 
                 .andExpect(status().isNoContent())
@@ -318,15 +311,10 @@ class FormControllerTest extends RestDocsTestSupport {
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION)
                                         .description("Bearer token")
-                        ),
-                        requestFields(
-                                fieldWithPath("formUrl")
-                                        .type(JsonFieldType.STRING)
-                                        .description("원서 pdf 파일의 url")
                         )
                 ));
 
-        verify(submitFinalFormUseCase, times(1)).execute(any(User.class), any(SubmitFinalFormRequest.class));
+        verify(submitFinalFormUseCase, times(1)).execute(any(User.class));
     }
 
     @Test
@@ -336,7 +324,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FormAlreadySubmittedException()).when(submitFinalFormUseCase).execute(any(User.class), any(SubmitFinalFormRequest.class));
+        doThrow(new FormAlreadySubmittedException()).when(submitFinalFormUseCase).execute(any(User.class));
 
         mockMvc.perform(patch("/form")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
@@ -349,7 +337,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(submitFinalFormUseCase, times(1)).execute(any(User.class), any(SubmitFinalFormRequest.class));
+        verify(submitFinalFormUseCase, times(1)).execute(any(User.class));
     }
 
     @Test
@@ -707,9 +695,6 @@ class FormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("type")
                                         .type(JsonFieldType.STRING)
                                         .description("<<form-type,원서 유형>>"),
-                                fieldWithPath("applicant.identificationPictureUri")
-                                        .type(JsonFieldType.STRING)
-                                        .description("증명사진 URI"),
                                 fieldWithPath("applicant.name")
                                         .type(JsonFieldType.STRING)
                                         .description("지원자 이름"),
@@ -920,23 +905,16 @@ class FormControllerTest extends RestDocsTestSupport {
 
     @Test
     void 증명_사진을_업로드한다() throws Exception {
-        MockMultipartFile image = new MockMultipartFile(
-                "image",
-                "image.png",
-                MediaType.IMAGE_PNG_VALUE,
-                "<<image>>".getBytes()
-        );
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(uploadIdentificationPictureUseCase.execute(user, image)).willReturn(new UploadResponse("https://example.com/image.png"));
+        given(uploadIdentificationPictureUseCase.execute(user)).willReturn(SharedFixture.createIdentificationPictureUrlResponse());
 
         mockMvc.perform(multipart("/form/identification-picture")
-                        .file(image)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                 )
 
                 .andExpect(status().isCreated())
@@ -945,175 +923,129 @@ class FormControllerTest extends RestDocsTestSupport {
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION)
                                         .description("Bearer token")
-                        ),
-                        requestParts(
-                                partWithName("image")
-                                        .description("증명사진 파일, 3*4cm, 117*156px, 최대 2MB")
                         )
                 ));
 
-        verify(uploadIdentificationPictureUseCase, times(1)).execute(user, image);
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(user);
     }
 
     @Test
     void 증명_사진_업로드가_실패한다() throws Exception {
-        MockMultipartFile image = new MockMultipartFile(
-                "image",
-                "image.png",
-                MediaType.IMAGE_PNG_VALUE,
-                "<<image>>".getBytes()
-        );
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FailedToSaveException()).when(uploadIdentificationPictureUseCase).execute(user, image);
+        doThrow(new FailedToSaveException()).when(uploadIdentificationPictureUseCase).execute(user);
 
         mockMvc.perform(multipart("/form/identification-picture")
-                        .file(image)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                 )
 
                 .andExpect(status().isInternalServerError())
 
                 .andDo(restDocs.document());
 
-        verify(uploadIdentificationPictureUseCase, times(1)).execute(user, image);
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(user);
     }
 
     @Test
     void 증명_사진을_업로드할_때_사진_크기가_다르면_에러가_발생한다() throws Exception {
-        MockMultipartFile image = new MockMultipartFile(
-                "image",
-                "image.png",
-                MediaType.IMAGE_PNG_VALUE,
-                "<<image>>".getBytes()
-        );
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new ImageSizeMismatchException()).when(uploadIdentificationPictureUseCase).execute(user, image);
+        doThrow(new ImageSizeMismatchException()).when(uploadIdentificationPictureUseCase).execute(user);
 
         mockMvc.perform(multipart("/form/identification-picture")
-                        .file(image)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                 )
 
                 .andExpect(status().isBadRequest())
 
                 .andDo(restDocs.document());
 
-        verify(uploadIdentificationPictureUseCase, times(1)).execute(user, image);
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(user);
     }
 
     @Test
     void 증명_사진을_업로드할_때_파일이_비었으면_에러가_발생한다() throws Exception {
-        MockMultipartFile image = new MockMultipartFile(
-                "image",
-                "image.png",
-                MediaType.IMAGE_PNG_VALUE,
-                "".getBytes()
-        );
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new EmptyFileException()).when(uploadIdentificationPictureUseCase).execute(user, image);
+        doThrow(new EmptyFileException()).when(uploadIdentificationPictureUseCase).execute(user);
 
         mockMvc.perform(multipart("/form/identification-picture")
-                        .file(image)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                 )
 
                 .andExpect(status().isBadRequest())
 
                 .andDo(restDocs.document());
 
-        verify(uploadIdentificationPictureUseCase, times(1)).execute(user, image);
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(user);
     }
 
     @Test
     void 증명_사진을_업로드할_때_파일이_용량_제한을_넘으면_에러가_발생한다() throws Exception {
-        MockMultipartFile image = new MockMultipartFile(
-                "image",
-                "image.png",
-                MediaType.IMAGE_PNG_VALUE,
-                new byte[(int) (20 * MB + 1)]
-        );
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FileSizeLimitExceededException()).when(uploadIdentificationPictureUseCase).execute(user, image);
+        doThrow(new FileSizeLimitExceededException()).when(uploadIdentificationPictureUseCase).execute(user);
 
         mockMvc.perform(multipart("/form/identification-picture")
-                        .file(image)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                 )
 
                 .andExpect(status().isBadRequest())
 
                 .andDo(restDocs.document());
 
-        verify(uploadIdentificationPictureUseCase, times(1)).execute(user, image);
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(user);
     }
 
     @Test
     void 증명_사진을_업로드할_때_콘텐츠_타입이_다르다면_에러가_발생한다() throws Exception {
-        MockMultipartFile image = new MockMultipartFile(
-                "image",
-                "image.pdf",
-                MediaType.APPLICATION_PDF_VALUE,
-                "<<pdf>>".getBytes()
-        );
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new MediaTypeMismatchException()).when(uploadIdentificationPictureUseCase).execute(user, image);
+        doThrow(new MediaTypeMismatchException()).when(uploadIdentificationPictureUseCase).execute(user);
 
         mockMvc.perform(multipart("/form/identification-picture")
-                        .file(image)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                 )
 
                 .andExpect(status().isUnsupportedMediaType())
 
                 .andDo(restDocs.document());
 
-        verify(uploadIdentificationPictureUseCase, times(1)).execute(user, image);
+        verify(uploadIdentificationPictureUseCase, times(1)).execute(user);
     }
 
     @Test
     void 원서_서류를_업로드한다() throws Exception {
-        MockMultipartFile file = new MockMultipartFile(
-                "file",
-                "file.pdf",
-                MediaType.APPLICATION_PDF_VALUE,
-                "<<file>>".getBytes()
-        );
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(uploadFormUseCase.execute(user, file)).willReturn(new UploadResponse("https://example.com/file.pdf"));
+        given(uploadFormUseCase.execute(user)).willReturn(SharedFixture.createFormUrlResponse());
 
         mockMvc.perform(multipart("/form/form-document")
-                        .file(file)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                 )
 
                 .andExpect(status().isCreated())
@@ -1122,32 +1054,21 @@ class FormControllerTest extends RestDocsTestSupport {
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION)
                                         .description("Bearer token")
-                        ),
-                        requestParts(
-                                partWithName("file")
-                                        .description("원서 및 서류 파일, 최대 10MB")
                         )
                 ));
 
-        verify(uploadFormUseCase, times(1)).execute(user, file);
+        verify(uploadFormUseCase, times(1)).execute(user);
     }
 
     @Test
     void 원서_서류_업로드가_실패한다() throws Exception {
-        MockMultipartFile file = new MockMultipartFile(
-                "file",
-                "file.pdf",
-                MediaType.APPLICATION_PDF_VALUE,
-                "<<file>>".getBytes()
-        );
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FailedToSaveException()).when(uploadFormUseCase).execute(user, file);
+        doThrow(new FailedToSaveException()).when(uploadFormUseCase).execute(user);
 
         mockMvc.perform(multipart("/form/form-document")
-                        .file(file)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -1157,25 +1078,18 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(uploadFormUseCase, times(1)).execute(user, file);
+        verify(uploadFormUseCase, times(1)).execute(user);
     }
 
     @Test
     void 원서_서류를_업로드할_때_파일이_비었으면_에러가_발생한다() throws Exception {
-        MockMultipartFile file = new MockMultipartFile(
-                "file",
-                "file.pdf",
-                MediaType.APPLICATION_PDF_VALUE,
-                "<<file>>".getBytes()
-        );
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new EmptyFileException()).when(uploadFormUseCase).execute(user, file);
+        doThrow(new EmptyFileException()).when(uploadFormUseCase).execute(user);
 
         mockMvc.perform(multipart("/form/form-document")
-                        .file(file)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -1185,63 +1099,49 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(uploadFormUseCase, times(1)).execute(user, file);
+        verify(uploadFormUseCase, times(1)).execute(user);
     }
 
     @Test
     void 원서_서류를_업로드할_때_파일이_용량_제한을_넘으면_에러가_발생한다() throws Exception {
-        MockMultipartFile file = new MockMultipartFile(
-                "file",
-                "file.pdf",
-                MediaType.APPLICATION_PDF_VALUE,
-                "<<file>>".getBytes()
-        );
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FileSizeLimitExceededException()).when(uploadFormUseCase).execute(user, file);
+        doThrow(new FileSizeLimitExceededException()).when(uploadFormUseCase).execute(user);
 
         mockMvc.perform(multipart("/form/form-document")
-                        .file(file)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                 )
 
                 .andExpect(status().isBadRequest())
 
                 .andDo(restDocs.document());
 
-        verify(uploadFormUseCase, times(1)).execute(user, file);
+        verify(uploadFormUseCase, times(1)).execute(user);
     }
 
     @Test
     void 원서_서류를_업로드할_때_콘텐츠_타입이_다르다면_에러가_발생한다() throws Exception {
-        MockMultipartFile file = new MockMultipartFile(
-                "file",
-                "file.pdf",
-                MediaType.IMAGE_PNG_VALUE,
-                "<<file>>".getBytes()
-        );
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new MediaTypeMismatchException()).when(uploadFormUseCase).execute(user, file);
+        doThrow(new MediaTypeMismatchException()).when(uploadFormUseCase).execute(user);
 
         mockMvc.perform(multipart("/form/form-document")
-                        .file(file)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                 )
 
                 .andExpect(status().isUnsupportedMediaType())
 
                 .andDo(restDocs.document());
 
-        verify(uploadFormUseCase, times(1)).execute(user, file);
+        verify(uploadFormUseCase, times(1)).execute(user);
     }
 
     @Test
