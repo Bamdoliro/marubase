@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.presentation.notice.dto.request;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -19,5 +20,6 @@ public class NoticeRequest {
     @Size(max = 1024, message = "1024글자 이하여야 합니다.")
     private String content;
 
+    @Nullable
     private String fileUuid;
 }
