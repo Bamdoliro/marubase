@@ -9,6 +9,8 @@ import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.pdf.GeneratePdfService;
 import com.bamdoliro.maru.infrastructure.pdf.MergePdfService;
+import com.bamdoliro.maru.infrastructure.s3.FileService;
+import com.bamdoliro.maru.infrastructure.s3.constants.FolderConstant;
 import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.Templates;
 import com.bamdoliro.maru.shared.annotation.UseCase;
@@ -37,10 +39,10 @@ public class ExportFormUseCase {
     private final ProcessTemplateService processTemplateService;
     private final GeneratePdfService generatePdfService;
     private final MergePdfService mergePdfService;
+    private final FileService fileService;
 
     public ByteArrayResource execute(User user) {
         Form form = formFacade.getForm(user);
-        validateFormStatus(form);
 
         SubjectMap subjectMap = form.getGrade().getSubjectList().getSubjectMap();
         Map<String, Object> formMap = Map.of(
@@ -49,7 +51,8 @@ public class ExportFormUseCase {
                 "grade22", subjectMap.getSubjectListOf(2, 2),
                 "grade31", subjectMap.getSubjectListOf(3, 1),
                 "subjectList", getSubjectList(form),
-                "year", Schedule.getAdmissionYear()
+                "year", Schedule.getAdmissionYear(),
+                "identificationPictureUri", fileService.getPresignedUrl(FolderConstant.IDENTIFICATION_PICTURE, user.getUuid().toString()).getDownloadUrl()
         );
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PdfDocument mergedDocument = new PdfDocument(new PdfWriter(outputStream));
@@ -92,12 +95,6 @@ public class ExportFormUseCase {
         });
 
         return value;
-    }
-
-    private void validateFormStatus(Form form) {
-        if (!(form.isSubmitted() || form.isRejected())) {
-            throw new FormAlreadySubmittedException();
-        }
     }
 
     private List<String> getRequiredTemplates(Form form) {
