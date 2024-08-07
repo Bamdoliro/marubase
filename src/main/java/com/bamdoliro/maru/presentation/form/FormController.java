@@ -27,6 +27,8 @@ import com.bamdoliro.maru.application.form.UploadIdentificationPictureUseCase;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.infrastructure.s3.FileService;
+import com.bamdoliro.maru.infrastructure.s3.constants.FolderConstant;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UrlResponse;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
@@ -46,6 +48,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,6 +60,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -67,6 +71,8 @@ import java.util.List;
 @RestController
 public class FormController {
 
+    private final FileService fileService;
+    private RestTemplate restTemplate;
     private final SubmitFormUseCase submitFormUseCase;
     private final SubmitFinalFormUseCase submitFinalFormUseCase;
     private final ApproveFormUseCase approveFormUseCase;
@@ -196,8 +202,10 @@ public class FormController {
 
     @GetMapping(value = "/export")
     public ResponseEntity<Resource> exportForm(
-            @AuthenticationPrincipal(authority = Authority.USER) User user
+            @AuthenticationPrincipal(authority = Authority.USER) User user,
+            Model model
     ) {
+        model.addAttribute("a", "a");
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(exportFormUseCase.execute(user));
