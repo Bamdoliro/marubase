@@ -608,8 +608,11 @@ public class FormFixture {
     }
 
     public static FormUrlResponse createFormUrlResponse() {
+        FormUrlVo formUrlVo = createFormUrlVo();
         return new FormUrlResponse(
-                createFormUrlVo()
+                formUrlVo.getExaminationNumber(),
+                formUrlVo.getName(),
+                "https://maru.bamdoliro.com/form.pdf"
         );
     }
 }
