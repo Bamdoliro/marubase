@@ -4,8 +4,6 @@ import com.bamdoliro.maru.application.form.*;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.infrastructure.s3.FileService;
-import com.bamdoliro.maru.infrastructure.s3.constants.FolderConstant;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UrlResponse;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
@@ -37,7 +35,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -48,8 +45,6 @@ import java.util.List;
 @RestController
 public class FormController {
 
-    private final FileService fileService;
-    private RestTemplate restTemplate;
     private final SubmitFormUseCase submitFormUseCase;
     private final SubmitFinalFormUseCase submitFinalFormUseCase;
     private final ApproveFormUseCase approveFormUseCase;
