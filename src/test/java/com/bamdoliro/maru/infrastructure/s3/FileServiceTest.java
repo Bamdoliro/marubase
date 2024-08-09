@@ -2,6 +2,7 @@ package com.bamdoliro.maru.infrastructure.s3;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UrlResponse;
 import com.bamdoliro.maru.infrastructure.s3.exception.EmptyFileException;
@@ -27,8 +28,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 import static com.bamdoliro.maru.shared.constants.FileConstant.MB;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
@@ -190,6 +190,32 @@ class FileServiceTest {
         verify(s3Properties, never()).getBucket();
         verify(amazonS3Client, never()).putObject(any(PutObjectRequest.class));
         verify(amazonS3Client, never()).getUrl(any(String.class), any(String.class));
+    }
+
+    @Test
+    void presigned_URL을_생성한다() throws Exception {
+        // given
+        String url = "https://bucket.s3.ap-northeast-2.amazonaws.com/random-uuid-image.png";
+        given(amazonS3Client.generatePresignedUrl(any(GeneratePresignedUrlRequest.class))).willReturn(new URL(url));
+
+        // when
+        UrlResponse response = fileService.getPresignedUrl("folder", "uuid");
+
+        // then
+        verify(amazonS3Client, times(2)).generatePresignedUrl(any(GeneratePresignedUrlRequest.class));
+    }
+
+    @Test
+    void presigned_URL이_만료되면_에러가_발생한다() throws Exception {
+        // given
+        String url = "https://bucket.s3.ap-northeast-2.amazonaws.com/random-uuid-image.png";
+        given(amazonS3Client.generatePresignedUrl(any(GeneratePresignedUrlRequest.class))).willReturn(new URL(url));
+
+        // when
+        UrlResponse response = fileService.getPresignedUrl("folder", "uuid");
+
+        // then
+        verify(amazonS3Client, times(2)).generatePresignedUrl(any(GeneratePresignedUrlRequest.class));
     }
 
     private FileInputStream getFileStreamWith(String fileName) throws FileNotFoundException {

@@ -35,3 +35,281 @@ include::{snippets}/jwt-controller-test/토큰을_전달하지_않으면_인증�
 
 ===== 토큰에 대응하는 유저가 없는 경우
 include::{snippets}/jwt-controller-test/유저가_없다면_에러가_발생한다/http-response.adoc[]
+
+
+=== presigned URL 업로드
+증명사진, 서류, 공지사항 파일 등을 업로드할 때 공통적으로 다음 형식을 따라야 합니다.
+업로드 presigned URL의 토큰은 최대 1분 동안 유효합니다.
+
+==== 요청 형식
+
+===== Request Header
+|===
+|Name|Description
+
+|`+X-Amz-Algorithm+`
+|서명을 계산하는데 사용되는 알고리즘
+
+|`+X-Amz-Date+`
+|날짜 (ISO 8601)
+
+|`+X-Amz-SignedHeaders+`
+|서명을 계산하는데 사용되는 헤더 목록
+
+|`+X-Amz-Expires+`
+|presigned URL이 유효한 시간 주기. 초단위. 정수 값. 최소 1 에서 최대 604800 (7일)
+
+|`+X-Amz-Credential+`
+|액세스 키 ID, qjadnl wjdqh
+
+|`+X-Amz-Signature+`
+|요청을 인증하기 위한 서명
+
+|===
+
+===== Request Part
+multipart/form-data 가 아닌 binary 형식으로 전송해야 합니다.
+
+==== 요청
+[source,httprequest,options="nowrap"]
+----
+PUT https://s3.ap-northeast-2.amazonaws.com/maru-s3-bucket/identification-picture/b059a4aa-bc50-4e97-809e-e48f19c6023a?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240809T173821Z&X-Amz-SignedHeaders=host&X-Amz-Expires=59&X-Amz-Credential=AKIATCKAQBAH6AYPJEFO%2F20240809%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=3a0ee6d0bb47718083f30783bda69f39920a3f8c5888afc60130fdc51259585c
+
+----
+
+==== 응답
+
+===== 정상 응답
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+x-amz-id-2: INFGzaG7eZ75x0fsDNoMo8l9VGMEtZqfrT0Y8brKcyIANKjGJh6hGxkhdw+MiDPsXsiK61vjfxRMm+pIpmSUXuef6e8TFdBc
+x-amz-request-id: RJE458Q81A5QR49D
+Date: Fri, 09 Aug 2024 17:43:20 GMT
+x-amz-version-id: g0aKBdMZWCPYmCzIZnRS_x8en5ojLzqp
+x-amz-server-side-encryption: AES256
+ETag: "d41d8cd98f00b204e9800998ecf8427e"
+Server: AmazonS3
+Content-Length: 0
+
+<Response body is empty>
+
+----
+
+===== 토큰이 만료된 경우
+[source,http,options="nowrap"]
+----
+HTTP/1.1 403 Forbidden
+x-amz-request-id: Q5V13J8REGKZF5Q5
+x-amz-id-2: Cfrpnxtd3yfYzJPkZt//xEyJOIBUtN2A/x5PJtzFbXf+Jf+/B907FRHqgpRvzgL/omDKL8ediYn5zeUXQDqfVbR4pUx2bt4I
+Content-Type: application/xml
+Transfer-Encoding: chunked
+Date: Fri, 09 Aug 2024 17:44:00 GMT
+Server: AmazonS3
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Error>
+    <Code>AccessDenied</Code>
+    <Message>Request has expired</Message>
+    <X-Amz-Expires>59</X-Amz-Expires>
+    <Expires>2024-08-09T17:43:55Z</Expires>
+    <ServerTime>2024-08-09T17:44:00Z</ServerTime>
+    <RequestId>Q5V13J8REGKZF5Q5</RequestId>
+    <HostId>Cfrpnxtd3yfYzJPkZt//xEyJOIBUtN2A/x5PJtzFbXf+Jf+/B907FRHqgpRvzgL/omDKL8ediYn5zeUXQDqfVbR4pUx2bt4I</HostId>
+</Error>
+----
+
+===== 계산된 서명값이 일치하지 않는 경우
+- HTTP 메서드가 잘못된 경우
+- 버킷 이름과 객체 키 이름이 올바르지 않은 경우
+- HTTP 헤더가 잘못된 경우
+[source,http,options="nowrap"]
+----
+HTTP/1.1 403 Forbidden
+x-amz-request-id: TQ5M8JP1MGQQA16S
+x-amz-id-2: OHEMIv+uJn9WqNSwktOlci0ik/6NFXGGBE4qiquAqh0Bu4YLbz5oto7yGyZqBjXQg0CGksG27Qs=
+Content-Type: application/xml
+Transfer-Encoding: chunked
+Date: Fri, 09 Aug 2024 17:48:31 GMT
+Server: AmazonS3
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Error>
+    <Code>SignatureDoesNotMatch</Code>
+    <Message>The request signature we calculated does not match the signature you provided. Check your key and signing
+        method.
+    </Message>
+    <AWSAccessKeyId>AKIATCKAQBAH6AYPJEFO</AWSAccessKeyId>
+    <StringToSign>AWS4-HMAC-SHA256
+        20240809T173821Z
+        20240809/ap-northeast-2/s3/aws4_request
+        bd9c66ffe13a1209251eed603e3dbe7b10a96d6211da64205d884a79a1cd2929
+    </StringToSign>
+    <SignatureProvided>431972495f78e9d2616eed3a9c329f426a111a3385a50486bde24a60ad6a0461</SignatureProvided>
+    <StringToSignBytes>41 57 53 34 2d 48 4d 41 43 2d 53 48 41 32 35 36 0a 32 30 32 34 30 38 30 39 54 31 37 33 38 32 31
+        5a 0a 32 30 32 34 30 38 30 39 2f 61 70 2d 6e 6f 72 74 68 65 61 73 74 2d 32 2f 73 33 2f 61 77 73 34 5f 72 65 71
+        75 65 73 74 0a 62 64 39 63 36 36 66 66 65 31 33 61 31 32 30 39 32 35 31 65 65 64 36 30 33 65 33 64 62 65 37 62
+        31 30 61 39 36 64 36 32 31 31 64 61 36 34 32 30 35 64 38 38 34 61 37 39 61 31 63 64 32 39 32 39
+    </StringToSignBytes>
+    <CanonicalRequest>PUT
+        /maru-s3-bucket/identification-picture/b059a4aa-bc50-4e97-809e-e48f19c6023a
+        X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIATCKAQBAH6AYPJEFO%2F20240809%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20240809T173821Z&amp;X-Amz-Expires=36000&amp;X-Amz-SignedHeaders=host
+        host:s3.ap-northeast-2.amazonaws.com
+
+        host
+        UNSIGNED-PAYLOAD
+    </CanonicalRequest>
+    <CanonicalRequestBytes>50 55 54 0a 2f 6d 61 72 75 2d 73 33 2d 62 75 63 6b 65 74 2f 69 64 65 6e 74 69 66 69 63 61 74
+        69 6f 6e 2d 70 69 63 74 75 72 65 2f 62 30 35 39 61 34 61 61 2d 62 63 35 30 2d 34 65 39 37 2d 38 30 39 65 2d 65
+        34 38 66 31 39 63 36 30 32 33 61 0a 58 2d 41 6d 7a 2d 41 6c 67 6f 72 69 74 68 6d 3d 41 57 53 34 2d 48 4d 41 43
+        2d 53 48 41 32 35 36 26 58 2d 41 6d 7a 2d 43 72 65 64 65 6e 74 69 61 6c 3d 41 4b 49 41 54 43 4b 41 51 42 41 48
+        36 41 59 50 4a 45 46 4f 25 32 46 32 30 32 34 30 38 30 39 25 32 46 61 70 2d 6e 6f 72 74 68 65 61 73 74 2d 32 25
+        32 46 73 33 25 32 46 61 77 73 34 5f 72 65 71 75 65 73 74 26 58 2d 41 6d 7a 2d 44 61 74 65 3d 32 30 32 34 30 38
+        30 39 54 31 37 33 38 32 31 5a 26 58 2d 41 6d 7a 2d 45 78 70 69 72 65 73 3d 33 36 30 30 30 26 58 2d 41 6d 7a 2d
+        53 69 67 6e 65 64 48 65 61 64 65 72 73 3d 68 6f 73 74 0a 68 6f 73 74 3a 73 33 2e 61 70 2d 6e 6f 72 74 68 65 61
+        73 74 2d 32 2e 61 6d 61 7a 6f 6e 61 77 73 2e 63 6f 6d 0a 0a 68 6f 73 74 0a 55 4e 53 49 47 4e 45 44 2d 50 41 59
+        4c 4f 41 44
+    </CanonicalRequestBytes>
+    <RequestId>TQ5M8JP1MGQQA16S</RequestId>
+    <HostId>OHEMIv+uJn9WqNSwktOlci0ik/6NFXGGBE4qiquAqh0Bu4YLbz5oto7yGyZqBjXQg0CGksG27Qs=</HostId>
+</Error>
+
+----
+
+=== presigned URL 다운로드
+증명사진, 서류, 공지사항 파일 등을 다운로드할 때 공통적으로 다음 형식을 따라야 합니다.
+다운로드 presigned URL의 토큰은 최대 10시간 동안 유효합니다.
+
+==== 요청 형식
+
+===== Request Header
+|===
+|Name|Description
+
+|`+X-Amz-Algorithm+`
+|서명을 계산하는데 사용되는 알고리즘
+
+|`+X-Amz-Date+`
+|날짜 (ISO 8601)
+
+|`+X-Amz-SignedHeaders+`
+|서명을 계산하는데 사용되는 헤더 목록
+
+|`+X-Amz-Expires+`
+|presigned URL이 유효한 시간 주기. 초단위. 정수 값. 최소 1 에서 최대 604800 (7일)
+
+|`+X-Amz-Credential+`
+|액세스 키 ID, qjadnl wjdqh
+
+|`+X-Amz-Signature+`
+|요청을 인증하기 위한 서명
+
+|===
+
+==== 요청
+[source,httprequest,options="nowrap"]
+----
+GET https://s3.ap-northeast-2.amazonaws.com/maru-s3-bucket/identification-picture/b059a4aa-bc50-4e97-809e-e48f19c6023a?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240809T173821Z&X-Amz-SignedHeaders=host&X-Amz-Expires=36000&X-Amz-Credential=AKIATCKAQBAH6AYPJEFO%2F20240809%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=431972495f78e9d2616eed3a9c329f426a111a3385a50486bde24a60ad6a0461
+
+----
+
+==== 응답
+
+===== 정상 응답
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+x-amz-id-2: D3WOVRzzhZg5XiVoisJLnjc/VqKAUFZT/T24NrZzW4+4tKc2aQBsyy6bj5n/HbKwxniFQho/mh0=
+x-amz-request-id: VWP1KGSZKFH0ADKZ
+Date: Fri, 09 Aug 2024 17:39:48 GMT
+Last-Modified: Fri, 09 Aug 2024 17:38:29 GMT
+ETag: "3449755b8cc5fd62448743f7541e4987"
+x-amz-server-side-encryption: AES256
+Cache-Control: no-cache
+x-amz-version-id: QU9onplQzpB1S2XrBYKSs0jtl64Ex2Lt
+Accept-Ranges: bytes
+Content-Type: image/png
+Server: AmazonS3
+Content-Length: 25099
+
+<파일>
+----
+===== 토큰이 만료된 경우
+[source,http,options="nowrap"]
+----
+HTTP/1.1 403 Forbidden
+x-amz-request-id: Q5V13J8REGKZF5Q5
+x-amz-id-2: Cfrpnxtd3yfYzJPkZt//xEyJOIBUtN2A/x5PJtzFbXf+Jf+/B907FRHqgpRvzgL/omDKL8ediYn5zeUXQDqfVbR4pUx2bt4I
+Content-Type: application/xml
+Transfer-Encoding: chunked
+Date: Fri, 09 Aug 2024 17:44:00 GMT
+Server: AmazonS3
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Error>
+    <Code>AccessDenied</Code>
+    <Message>Request has expired</Message>
+    <X-Amz-Expires>59</X-Amz-Expires>
+    <Expires>2024-08-09T17:43:55Z</Expires>
+    <ServerTime>2024-08-09T17:44:00Z</ServerTime>
+    <RequestId>Q5V13J8REGKZF5Q5</RequestId>
+    <HostId>Cfrpnxtd3yfYzJPkZt//xEyJOIBUtN2A/x5PJtzFbXf+Jf+/B907FRHqgpRvzgL/omDKL8ediYn5zeUXQDqfVbR4pUx2bt4I</HostId>
+</Error>
+----
+
+==== 계산된 서명값이 일치하지 않는 경우
+- HTTP 메서드가 잘못된 경우
+- 버킷 이름과 객체 키 이름이 올바르지 않은 경우
+- HTTP 헤더가 잘못된 경우
+[source,http,options="nowrap"]
+----
+HTTP/1.1 403 Forbidden
+x-amz-request-id: TQ5M8JP1MGQQA16S
+x-amz-id-2: OHEMIv+uJn9WqNSwktOlci0ik/6NFXGGBE4qiquAqh0Bu4YLbz5oto7yGyZqBjXQg0CGksG27Qs=
+Content-Type: application/xml
+Transfer-Encoding: chunked
+Date: Fri, 09 Aug 2024 17:48:31 GMT
+Server: AmazonS3
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Error>
+    <Code>SignatureDoesNotMatch</Code>
+    <Message>The request signature we calculated does not match the signature you provided. Check your key and signing
+        method.
+    </Message>
+    <AWSAccessKeyId>AKIATCKAQBAH6AYPJEFO</AWSAccessKeyId>
+    <StringToSign>AWS4-HMAC-SHA256
+        20240809T173821Z
+        20240809/ap-northeast-2/s3/aws4_request
+        bd9c66ffe13a1209251eed603e3dbe7b10a96d6211da64205d884a79a1cd2929
+    </StringToSign>
+    <SignatureProvided>431972495f78e9d2616eed3a9c329f426a111a3385a50486bde24a60ad6a0461</SignatureProvided>
+    <StringToSignBytes>41 57 53 34 2d 48 4d 41 43 2d 53 48 41 32 35 36 0a 32 30 32 34 30 38 30 39 54 31 37 33 38 32 31
+        5a 0a 32 30 32 34 30 38 30 39 2f 61 70 2d 6e 6f 72 74 68 65 61 73 74 2d 32 2f 73 33 2f 61 77 73 34 5f 72 65 71
+        75 65 73 74 0a 62 64 39 63 36 36 66 66 65 31 33 61 31 32 30 39 32 35 31 65 65 64 36 30 33 65 33 64 62 65 37 62
+        31 30 61 39 36 64 36 32 31 31 64 61 36 34 32 30 35 64 38 38 34 61 37 39 61 31 63 64 32 39 32 39
+    </StringToSignBytes>
+    <CanonicalRequest>PUT
+        /maru-s3-bucket/identification-picture/b059a4aa-bc50-4e97-809e-e48f19c6023a
+        X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIATCKAQBAH6AYPJEFO%2F20240809%2Fap-northeast-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20240809T173821Z&amp;X-Amz-Expires=36000&amp;X-Amz-SignedHeaders=host
+        host:s3.ap-northeast-2.amazonaws.com
+
+        host
+        UNSIGNED-PAYLOAD
+    </CanonicalRequest>
+    <CanonicalRequestBytes>50 55 54 0a 2f 6d 61 72 75 2d 73 33 2d 62 75 63 6b 65 74 2f 69 64 65 6e 74 69 66 69 63 61 74
+        69 6f 6e 2d 70 69 63 74 75 72 65 2f 62 30 35 39 61 34 61 61 2d 62 63 35 30 2d 34 65 39 37 2d 38 30 39 65 2d 65
+        34 38 66 31 39 63 36 30 32 33 61 0a 58 2d 41 6d 7a 2d 41 6c 67 6f 72 69 74 68 6d 3d 41 57 53 34 2d 48 4d 41 43
+        2d 53 48 41 32 35 36 26 58 2d 41 6d 7a 2d 43 72 65 64 65 6e 74 69 61 6c 3d 41 4b 49 41 54 43 4b 41 51 42 41 48
+        36 41 59 50 4a 45 46 4f 25 32 46 32 30 32 34 30 38 30 39 25 32 46 61 70 2d 6e 6f 72 74 68 65 61 73 74 2d 32 25
+        32 46 73 33 25 32 46 61 77 73 34 5f 72 65 71 75 65 73 74 26 58 2d 41 6d 7a 2d 44 61 74 65 3d 32 30 32 34 30 38
+        30 39 54 31 37 33 38 32 31 5a 26 58 2d 41 6d 7a 2d 45 78 70 69 72 65 73 3d 33 36 30 30 30 26 58 2d 41 6d 7a 2d
+        53 69 67 6e 65 64 48 65 61 64 65 72 73 3d 68 6f 73 74 0a 68 6f 73 74 3a 73 33 2e 61 70 2d 6e 6f 72 74 68 65 61
+        73 74 2d 32 2e 61 6d 61 7a 6f 6e 61 77 73 2e 63 6f 6d 0a 0a 68 6f 73 74 0a 55 4e 53 49 47 4e 45 44 2d 50 41 59
+        4c 4f 41 44
+    </CanonicalRequestBytes>
+    <RequestId>TQ5M8JP1MGQQA16S</RequestId>
+    <HostId>OHEMIv+uJn9WqNSwktOlci0ik/6NFXGGBE4qiquAqh0Bu4YLbz5oto7yGyZqBjXQg0CGksG27Qs=</HostId>
+</Error>
+
+----

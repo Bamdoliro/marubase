@@ -8,9 +8,6 @@
 ===== Request Header
 include::{snippets}/notice-controller-test/공지사항_파일을_업로드한다/request-headers.adoc[]
 
-===== Request Body
-include::{snippets}/notice-controller-test/공지사항_파일을_업로드한다/request-parts.adoc[]
-
 ==== 응답
 
 ===== 정상 응답
