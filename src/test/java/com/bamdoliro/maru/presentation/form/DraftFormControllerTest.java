@@ -1,12 +1,10 @@
 package com.bamdoliro.maru.presentation.form;
 
-import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.DraftFormNotFoundException;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.DraftFormFixture;
-import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
@@ -60,10 +58,6 @@ class DraftFormControllerTest extends RestDocsTestSupport {
                                         .type(JsonFieldType.STRING)
                                         .optional()
                                         .description("<<form-type,원서 유형>>"),
-                                fieldWithPath("applicant.identificationPictureUri")
-                                        .type(JsonFieldType.STRING)
-                                        .optional()
-                                        .description("증명사진 URI"),
                                 fieldWithPath("applicant.name")
                                         .type(JsonFieldType.STRING)
                                         .optional()
