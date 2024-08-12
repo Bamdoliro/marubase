@@ -63,7 +63,7 @@ public class FileService {
     private GeneratePresignedUrlRequest getGenerateUploadPresignedUrlRequest(String bucket, String fileName) {
         return new GeneratePresignedUrlRequest(bucket, fileName)
                 .withMethod(HttpMethod.PUT)
-                .withExpiration(getPresignedUrlExpiration(1));
+                .withExpiration(getPresignedUrlExpiration(3));
     }
 
     private GeneratePresignedUrlRequest getGenerateDownloadPresignedUrlRequest(String bucket, String fileName) {
