@@ -245,6 +245,11 @@ class NoticeControllerTest extends RestDocsTestSupport {
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION)
                                         .description("Bearer token")
+                        ),
+                        requestFields(
+                                fieldWithPath("fileName")
+                                        .type(JsonFieldType.STRING)
+                                        .description("파일 이름")
                         )
                 ));
     }
