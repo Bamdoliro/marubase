@@ -47,6 +47,6 @@ class CreateNoticeUseCaseTest {
         assertEquals(response.getId(), savedNotice.getId());
         assertEquals(request.getTitle(), savedNotice.getTitle());
         assertEquals(request.getContent(), savedNotice.getContent());
-        assertEquals(request.getFileUuid(), savedNotice.getFileUuid() != null ? savedNotice.getFileUuid().toString() : null);
+        assertEquals(request.getFileName(), savedNotice.getFileName() != null ? savedNotice.getFileName() : null);
     }
 }

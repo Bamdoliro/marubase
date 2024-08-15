@@ -21,5 +21,5 @@ public class NoticeRequest {
     private String content;
 
     @Nullable
-    private String fileUuid;
+    private String fileName;
 }

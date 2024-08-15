@@ -1270,6 +1270,9 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .optional(),
                                 parameterWithName("type")
                                         .description("<<form-type,원서 유형 (null인 경우 전체 조회)>>")
+                                        .optional(),
+                                parameterWithName("sort")
+                                        .description("정렬 기준 (최종 점수 오름차순인 경우 total-score-asc, 최종 점수 내림차순인 경우 total-score-desc, null인 경우 수험번호 오름차순 조회)")
                                         .optional()
                         )
                 ));

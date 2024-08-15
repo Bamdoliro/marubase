@@ -3,6 +3,7 @@ package com.bamdoliro.maru.presentation.notice;
 import com.bamdoliro.maru.application.notice.*;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.notice.dto.request.NoticeRequest;
+import com.bamdoliro.maru.presentation.notice.dto.request.UploadFileRequest;
 import com.bamdoliro.maru.presentation.notice.dto.response.NoticeResponse;
 import com.bamdoliro.maru.presentation.notice.dto.response.NoticeSimpleResponse;
 import com.bamdoliro.maru.presentation.notice.dto.response.UploadFileResponse;
@@ -39,13 +40,13 @@ public class NoticeController {
                 createNoticeUseCase.execute(request));
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/file")
     public SingleCommonResponse<UploadFileResponse> uploadFile(
-            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
+            @RequestBody @Valid UploadFileRequest request
     ) {
         return SingleCommonResponse.ok(
-                uploadFileUseCase.execute()
+                uploadFileUseCase.execute(request)
         );
     }
 

@@ -8,10 +8,10 @@ public class UploadFileResponse {
 
     private final UrlResponse url;
 
-    private final String fileUuid;
+    private final String fileName;
 
-    public UploadFileResponse(UrlResponse url, String fileUuid) {
+    public UploadFileResponse(UrlResponse url, String fileName) {
         this.url = url;
-        this.fileUuid = fileUuid;
+        this.fileName = fileName;
     }
 }

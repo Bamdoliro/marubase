@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.application.notice;
 
 import com.bamdoliro.maru.infrastructure.s3.FileService;
+import com.bamdoliro.maru.presentation.notice.dto.request.UploadFileRequest;
 import com.bamdoliro.maru.shared.fixture.SharedFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,9 +27,10 @@ public class UploadFileUseCaseTest {
     void 공지사항_파일을_업로드한다() {
         // given
         given(fileService.getPresignedUrl(any(String.class), any(String.class))).willReturn(SharedFixture.createNoticeFileUrlResponse());
+        UploadFileRequest request = new UploadFileRequest("notice-file.pdf");
 
         // when
-        uploadFileUseCase.execute();
+        uploadFileUseCase.execute(request);
 
         // then
         verify(fileService, times(1)).getPresignedUrl(any(String.class), any(String.class));

@@ -12,8 +12,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tbl_notice")
@@ -32,18 +30,18 @@ public class Notice extends BaseTimeEntity {
     private String content;
 
     @Column(unique = true, nullable = true)
-    private UUID fileUuid;
+    private String fileName;
 
     @Builder
-    public Notice(String title, String content, UUID fileUuid) {
+    public Notice(String title, String content, String fileName) {
         this.title = title;
         this.content = content;
-        this.fileUuid = fileUuid;
+        this.fileName = fileName;
     }
 
-    public void update(String title, String content, UUID fileUuid) {
+    public void update(String title, String content, String fileName) {
         this.title = title;
         this.content = content;
-        this.fileUuid = fileUuid;
+        this.fileName = fileName;
     }
 }
