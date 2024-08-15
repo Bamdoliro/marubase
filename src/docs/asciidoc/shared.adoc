@@ -199,7 +199,7 @@ Server: AmazonS3
 |presigned URL이 유효한 시간 주기. 초단위. 정수 값. 최소 1 에서 최대 604800 (7일)
 
 |`+X-Amz-Credential+`
-|액세스 키 ID, qjadnl wjdqh
+|액세스 키 ID, 범위 정보
 
 |`+X-Amz-Signature+`
 |요청을 인증하기 위한 서명
