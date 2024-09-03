@@ -7,8 +7,10 @@ import com.bamdoliro.maru.domain.form.exception.InvalidFormStatusException;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.pdf.GeneratePdfService;
+import com.bamdoliro.maru.infrastructure.s3.FileService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
+import com.bamdoliro.maru.shared.fixture.SharedFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,6 +44,9 @@ class GenerateAdmissionTicketUseCaseTest {
     @Mock
     private GeneratePdfService generatePdfService;
 
+    @Mock
+    private FileService fileService;
+
     @Test
     void 수험표를_생성한다() {
         // given
@@ -50,6 +55,7 @@ class GenerateAdmissionTicketUseCaseTest {
         form.firstPass();
         given(formFacade.getForm(user)).willReturn(form);
         given(processTemplateService.execute(any(String.class), any(Map.class))).willReturn("html");
+        given(fileService.getPresignedUrl(any(String.class), any(String.class))).willReturn(SharedFixture.createFormUrlResponse());
         given(generatePdfService.execute(any(String.class))).willReturn(new ByteArrayOutputStream());
 
         // when
@@ -59,6 +65,7 @@ class GenerateAdmissionTicketUseCaseTest {
         verify(formFacade, times(1)).getForm(user);
         verify(processTemplateService, times(1)).execute(any(String.class), any(Map.class));
         verify(generatePdfService, times(1)).execute(any(String.class));
+        verify(fileService, times(1)).getPresignedUrl(any(String.class), any(String.class));
     }
 
     @Test
