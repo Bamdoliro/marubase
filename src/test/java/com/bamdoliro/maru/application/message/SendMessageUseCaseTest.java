@@ -4,12 +4,17 @@ import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
+import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.domain.user.domain.type.Authority;
 import com.bamdoliro.maru.infrastructure.message.SendMessageService;
 import com.bamdoliro.maru.infrastructure.message.exception.FailedToSendException;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
+import com.bamdoliro.maru.infrastructure.persistence.user.UserRepository;
 import com.bamdoliro.maru.presentation.message.dto.request.SendMessageByStatusRequest;
 import com.bamdoliro.maru.presentation.message.dto.request.SendMessageByTypeRequest;
+import com.bamdoliro.maru.presentation.message.dto.request.SendMessageToAllUserRequest;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
+import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +22,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
@@ -37,6 +43,9 @@ public class SendMessageUseCaseTest {
 
     @Mock
     private CalculateFormScoreService calculateFormScoreService;
+
+    @Mock
+    private UserRepository userRepository;
 
     @Test
     void 원서를_최종제출한_학생들에게_메시지를_보낸다() {
@@ -273,5 +282,47 @@ public class SendMessageUseCaseTest {
                 () -> sendMessageUseCase.execute(request));
         verify(formRepository, times(1)).findMeisterTalentFirstRoundForm();
         verify(sendMessageService, never()).execute(anyList(), anyString(), anyString());
+    }
+
+    @Test
+    void 어드민을_제외한_전체_유저에게_메시지를_보낸다() {
+
+        //given
+        List<User> userList = new ArrayList<>();
+        userList.add(UserFixture.createUser());
+        userList.add(UserFixture.createUser());
+        userList.add(UserFixture.createAdminUser());
+        List<String> phoneNumberList = userList.stream()
+                .filter(user -> user.getAuthority() == Authority.USER)
+                .map(User::getPhoneNumber)
+                .toList();
+
+        when(userRepository.findAll()).thenReturn(userList);
+        SendMessageToAllUserRequest request = new SendMessageToAllUserRequest("부산소마고 공지사항", "부산소마고 공지사항입니다.");
+
+        //when
+        sendMessageUseCase.execute(request);
+
+        //then
+        verify(userRepository, times(1)).findAll();
+        verify(sendMessageService, times(1)).execute(phoneNumberList, request.getText(), request.getTitle());
+    }
+
+    @Test
+    void 어드민이_아닌_유저가_아무도_없다면_오류가_발생한다() {
+
+        //given
+        List<User> userList = new ArrayList<>();
+        when(userRepository.findAll()).thenReturn(userList);
+        SendMessageToAllUserRequest request = new SendMessageToAllUserRequest("부산소마고 공지사항", "부산소마고 공지사항입니다.");
+        willThrow(new FailedToSendException()).given(sendMessageService).execute(anyList(), anyString(), anyString());
+
+        //when
+        Assertions.assertThrows(FailedToSendException.class,
+                () -> sendMessageUseCase.execute(request));
+
+        //then
+        verify(userRepository, times(1)).findAll(); // UserRepository의 findAll 메소드가 호출되었는지 검증
+        verify(sendMessageService, times(1)).execute(anyList(), anyString(), anyString()); // sendMessageService의 execute 메소드가 호출되었는지 검증
     }
 }
