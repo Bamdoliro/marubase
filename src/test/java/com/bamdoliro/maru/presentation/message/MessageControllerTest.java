@@ -3,8 +3,10 @@ package com.bamdoliro.maru.presentation.message;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.infrastructure.message.exception.FailedToSendException;
 import com.bamdoliro.maru.presentation.message.dto.request.SendMessageByStatusRequest;
 import com.bamdoliro.maru.presentation.message.dto.request.SendMessageByTypeRequest;
+import com.bamdoliro.maru.presentation.message.dto.request.SendMessageToAllUserRequest;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
@@ -167,5 +169,48 @@ public class MessageControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("isChangeToRegular").type(JsonFieldType.BOOLEAN).description("만약 마이스터 -> 일반 전형이면 true 아니면 false")
                         )
                 ));
+    }
+
+    @Test
+    void 어드민을_제외한_전체_유저에게_메시지를_발송한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+
+        SendMessageToAllUserRequest request = new SendMessageToAllUserRequest("부산소마고 공지사항", "테스트임니다..");
+        willDoNothing().given(sendMessageUseCase).execute(request);
+
+        mockMvc.perform(post("/message/broadcast")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request)))
+                .andExpect(status().isNoContent())
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        ),
+                        requestFields(
+                                fieldWithPath("title").type(JsonFieldType.STRING).description("문자 메시지 제목"),
+                                fieldWithPath("text").type(JsonFieldType.STRING).description("문자 메시지 내용")
+                        )
+                ));
+    }
+
+    @Test
+    void 어드민을_제외한_유저가_아무도_없으면_오류가_발생한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+
+        SendMessageToAllUserRequest request = new SendMessageToAllUserRequest("부산소마고 공지사항", "테스트임니다..");
+
+        willThrow(new FailedToSendException()).given(sendMessageUseCase).execute(any(SendMessageToAllUserRequest.class));
+
+        mockMvc.perform(post("/message/broadcast")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request)))
+                .andExpect(status().isInternalServerError())
+                .andDo(restDocs.document());
     }
 }
