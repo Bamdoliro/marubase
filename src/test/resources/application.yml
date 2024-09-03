@@ -1,0 +1,63 @@
+spring:
+  profiles:
+    active: test
+
+  data:
+    redis:
+      host:localhost
+      port:6379
+      timeout:6
+    h2:
+      console:
+        enabled: true
+        path: /h2-console
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:db;MODE=MYSQL
+    username: sa
+    password:
+  jpa:
+    generate-ddl: 'true'
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+
+
+  cloud:
+    aws:
+      s3:
+        bucket: ${BUCKET_NAME}
+      stack:
+        auto: false
+      region:
+        static: ${S3_REGION}
+      credentials:
+        instance-profile: true
+        access-key: ${S3_ACCESS_KEY}
+        secret-key: ${S3_SECRET_KEY}
+
+  logging:
+    level:
+      com.amazonaws.util.EC2MetadataUtils: error
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
+jwt:
+  refresh-expiration-time: 1296000000 # 15일
+  access-expiration-time: 3600000 # 1시간
+  prefix: Bearer
+  secret-key: ${JWT_SECRET}
+
+neis:
+  key: ${NEIS_KEY}
+
+message:
+  api-key: ${MESSAGE_API_KEY}
+  api-secret: ${MESSAGE_API_SECRET}
+  api-domain: ${MESSAGE_API_DOMAIN}
+  from: ${MESSAGE_FROM}
