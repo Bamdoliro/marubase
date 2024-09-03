@@ -3,12 +3,11 @@ package com.bamdoliro.maru.application.form;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.FormNotFoundException;
-import com.bamdoliro.maru.domain.form.exception.InvalidFromStatusException;
+import com.bamdoliro.maru.domain.form.exception.InvalidFormStatusException;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.pdf.GeneratePdfService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
-import com.bamdoliro.maru.infrastructure.thymeleaf.Templates;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,6 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.never;
@@ -71,7 +69,7 @@ class GenerateAdmissionTicketUseCaseTest {
         given(formFacade.getForm(user)).willReturn(form);
 
         // when and then
-        assertThrows(InvalidFromStatusException.class, () -> generateAdmissionTicketUseCase.execute(user));
+        assertThrows(InvalidFormStatusException.class, () -> generateAdmissionTicketUseCase.execute(user));
 
         verify(formFacade, times(1)).getForm(user);
         verify(processTemplateService, never()).execute(any(String.class), any(Map.class));

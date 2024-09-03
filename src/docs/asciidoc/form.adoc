@@ -588,3 +588,23 @@ include::{snippets}/form-controller-test/선택한_원서의_원서url을_조회
 
 ===== 정상 응답
 include::{snippets}/form-controller-test/선택한_원서의_원서url을_조회한다/http-response.adoc[]
+
+
+
+=== 2차 합격 자동 처리
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/자동으로_2차_합격_여부를_결정한다/request-headers.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/자동으로_2차_합격_여부를_결정한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/자동으로_2차_합격_여부를_결정한다/http-response.adoc[]
+
+===== 최종 점수가 없는 원서가 있을 경우
+include::{snippets}/form-controller-test/자동으로_2차_합격_여부를_결정할_때_최종_점수가_없는_원서가_존재하면_에러가_발생한다/http-response.adoc[]

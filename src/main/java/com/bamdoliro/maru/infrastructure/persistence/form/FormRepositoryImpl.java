@@ -84,28 +84,83 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                                                 .and(form.type.eq(FormType.SPECIAL_ADMISSION).not())
                                 )
                 )
-                .orderBy(
-                        form.score.firstRoundScore.desc()
-                )
+                .orderBy(form.score.firstRoundScore.desc())
                 .fetch();
     }
 
     @Override
-    public List<Form> findReceivedRegularOrSupernumeraryForm() {
+    public List<Form> findReceivedRegularForm() {
         return queryFactory
                 .selectFrom(form)
                 .where(
                         form.status.eq(FormStatus.RECEIVED)
                                 .and(
                                         form.type.eq(FormType.REGULAR)
-                                                .or(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION))
-                                                .or(form.type.eq(FormType.SPECIAL_ADMISSION))
                                                 .or(form.changedToRegular.isTrue())
                                 )
                 )
-                .orderBy(
-                        form.score.firstRoundScore.desc()
+                .orderBy(form.score.firstRoundScore.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<Form> findReceivedSupernumeraryForm() {
+        return queryFactory
+                .selectFrom(form)
+                .where(
+                        form.status.eq(FormStatus.RECEIVED)
+                                .and(
+                                        form.type.eq(FormType.SPECIAL_ADMISSION)
+                                                .or(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION))
+                                )
                 )
+                .orderBy(form.score.firstRoundScore.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<Form> findFirstPassedSpecialForm() {
+        return queryFactory
+                .selectFrom(form)
+                .where(
+                        form.status.eq(FormStatus.FIRST_PASSED)
+                                .and(
+                                        form.type.eq(FormType.REGULAR).not()
+                                                .and(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION).not())
+                                                .and(form.type.eq(FormType.SPECIAL_ADMISSION).not())
+                                )
+                )
+                .orderBy(form.score.totalScore.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<Form> findFirstPassedRegularForm() {
+        return queryFactory
+                .selectFrom(form)
+                .where(
+                        form.status.eq(FormStatus.FIRST_PASSED)
+                                .and(
+                                        form.type.eq(FormType.REGULAR)
+                                                .or(form.changedToRegular.isTrue())
+                                )
+                )
+                .orderBy(form.score.totalScore.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<Form> findFirstPassedSupernumeraryForm() {
+        return queryFactory
+                .selectFrom(form)
+                .where(
+                        form.status.eq(FormStatus.FIRST_PASSED)
+                                .and(
+                                        form.type.eq(FormType.SPECIAL_ADMISSION)
+                                                .or(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION))
+                                )
+                )
+                .orderBy(form.score.totalScore.desc())
                 .fetch();
     }
 

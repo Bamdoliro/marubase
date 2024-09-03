@@ -3,9 +3,8 @@ package com.bamdoliro.maru.domain.form.exception;
 import com.bamdoliro.maru.domain.form.exception.error.FormErrorProperty;
 import com.bamdoliro.maru.shared.error.MaruException;
 
-public class InvalidFromStatusException extends MaruException {
-
-    public InvalidFromStatusException() {
-        super(FormErrorProperty.INVALID_FORM_STATUS);
+public class MissingTotalScoreException extends MaruException {
+    public MissingTotalScoreException() {
+        super(FormErrorProperty.MISSING_TOTAL_SCORE);
     }
 }

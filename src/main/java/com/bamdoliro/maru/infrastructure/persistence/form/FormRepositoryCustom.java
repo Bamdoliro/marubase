@@ -16,7 +16,11 @@ public interface FormRepositoryCustom {
     List<Form> findByType(FormType type);
     List<Form> findByCategory(FormType.Category category);
     List<Form> findReceivedSpecialForm();
-    List<Form> findReceivedRegularOrSupernumeraryForm();
+    List<Form> findReceivedRegularForm();
+    List<Form> findReceivedSupernumeraryForm();
+    List<Form> findFirstPassedSpecialForm();
+    List<Form> findFirstPassedRegularForm();
+    List<Form> findFirstPassedSupernumeraryForm();
     List<Form> findFirstRoundForm();
     List<Form> findMeisterTalentFirstRoundForm();
     List<Form> findNotExistsMeisterTalentAndChangedToRegularFirstRoundForm();

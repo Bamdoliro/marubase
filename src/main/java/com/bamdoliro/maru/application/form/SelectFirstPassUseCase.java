@@ -6,6 +6,7 @@ import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import com.bamdoliro.maru.shared.constants.FixedNumber;
+import com.bamdoliro.maru.shared.variable.AdmissionCapacity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,12 +35,16 @@ public class SelectFirstPassUseCase {
             int gap = FixedNumber.MEISTER_TALENT - meisterTalentFormList.size();
             regularCount += gap;
             meisterTalentCount -= gap;
+            AdmissionCapacity.regular += gap;
+            AdmissionCapacity.meisterTalent -= gap;
         }
 
         if (socialIntegrationFormList.size() < FixedNumber.SOCIAL_INTEGRATION) {
             int gap = FixedNumber.SOCIAL_INTEGRATION - socialIntegrationFormList.size();
             regularCount += gap;
             socialIntegrationCount -= gap;
+            AdmissionCapacity.regular += gap;
+            AdmissionCapacity.socialIntegration -= gap;
         }
 
         regularCount = calculateMultiple(regularCount);
@@ -73,22 +78,29 @@ public class SelectFirstPassUseCase {
         }
 
         formRepository.flush();
-        List<Form> regularOrSupernumeraryFormList = formRepository.findReceivedRegularOrSupernumeraryForm();
+        List<Form> regularOrSupernumeraryFormList = formRepository.findReceivedRegularForm();
 
         for (Form form : regularOrSupernumeraryFormList) {
-            if (form.getType().isRegular() && regularCount > 0) {
+            if (regularCount > 0) {
                 form.firstPass();
                 regularCount--;
-            } else if (
+            } else {
+                form.firstFail();
+            }
+        }
+
+        formRepository.flush();
+        List<Form> supernumeraryFormList = formRepository.findReceivedSupernumeraryForm();
+
+        for (Form form : supernumeraryFormList) {
+            if (
                     form.getType().isNationalVeteransEducation() &&
-                            regularCount > 0 &&
                             nationalVeteransEducationCount > 0
             ) {
                 form.firstPass();
                 nationalVeteransEducationCount--;
             } else if (
                     form.getType().isSpecialAdmission() &&
-                            regularCount > 0 &&
                             specialAdmissionCount > 0
             ) {
                 form.firstPass();
