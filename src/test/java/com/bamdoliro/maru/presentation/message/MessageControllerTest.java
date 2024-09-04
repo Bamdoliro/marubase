@@ -180,7 +180,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
         SendMessageToAllUserRequest request = new SendMessageToAllUserRequest("부산소마고 공지사항", "테스트임니다..");
         willDoNothing().given(sendMessageUseCase).execute(request);
 
-        mockMvc.perform(post("/message/broadcast")
+        mockMvc.perform(post("/message/all")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
@@ -206,7 +206,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
 
         willThrow(new FailedToSendException()).given(sendMessageUseCase).execute(any(SendMessageToAllUserRequest.class));
 
-        mockMvc.perform(post("/message/broadcast")
+        mockMvc.perform(post("/message/all")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))

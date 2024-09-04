@@ -38,7 +38,7 @@ public class MessageController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping("/broadcast")
+    @PostMapping("/all")
     public void sendMessageToAllUser(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestBody @Valid SendMessageToAllUserRequest request
