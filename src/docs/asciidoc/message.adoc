@@ -43,3 +43,25 @@ include::{snippets}/message-controller-test/마이스터전형에서_일반전�
 
 ===== 마이스터전형 1차 합격자들에게 메시지를 보내는 경우
 include::{snippets}/message-controller-test/마이스터_전형_1차_합격자들에게_메시지를_보낸다/http-request.adoc[]https://xxx[]
+
+=== 어드민을 제외한 모든 유저에게 메시지 보내기
+어드민을 제외한 모든 유저에게 메시지를 보낼 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/message-controller-test/어드민을_제외한_전체_유저에게_메시지를_발송한다/request-headers.adoc[]
+
+===== Request Body
+include::{snippets}/message-controller-test/어드민을_제외한_전체_유저에게_메시지를_발송한다/request-fields.adoc[]
+
+==== 요청
+include::{snippets}/message-controller-test/어드민을_제외한_전체_유저에게_메시지를_발송한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/message-controller-test/어드민을_제외한_전체_유저에게_메시지를_발송한다/http-response.adoc[]
+
+===== 어드민을 제외한 유저가 아무도 없는 경우
+include::{snippets}/message-controller-test/어드민을_제외한_유저가_아무도_없으면_오류가_발생한다/http-response.adoc[]
