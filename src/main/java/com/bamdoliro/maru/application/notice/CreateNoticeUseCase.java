@@ -14,8 +14,9 @@ public class CreateNoticeUseCase {
     private final NoticeRepository noticeRepository;
 
     public IdResponse execute(NoticeRequest request) {
+        String fileName = request.getFileName();
         Notice notice = noticeRepository.save(
-                new Notice(request.getTitle(), request.getContent(), request.getFileUrl())
+                new Notice(request.getTitle(), request.getContent(), fileName)
         );
 
         return new IdResponse(notice);

@@ -16,7 +16,7 @@
 |환경         |DNS |비고
 |local   | link:[http://localhost:8080/] |API 문서 제공
 |dev   | link:[https://api.dev.maru.bamdoliro.com] |API 문서 제공
-|prod   | link:[] |API 문서 미제공
+|prod   | link:[https://maru-base.com] |API 문서 미제공
 |====
 
 === 응답형식

@@ -43,7 +43,7 @@ public class SendMessageUseCaseTest {
 
         //given
         Form form = FormFixture.createForm(FormType.REGULAR);
-        form.submit("https://maru.bamdoliro.com/pdf/1");
+        form.submit();
         given(formRepository.findByStatus(FormStatus.FINAL_SUBMITTED)).willReturn(List.of(form));
         SendMessageByStatusRequest request = new SendMessageByStatusRequest("부산소마고 공지사항", "테스트입니다", FormStatus.FINAL_SUBMITTED);
 

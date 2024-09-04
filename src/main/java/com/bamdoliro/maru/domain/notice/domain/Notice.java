@@ -29,19 +29,19 @@ public class Notice extends BaseTimeEntity {
     @Column(nullable = false, length = 1024)
     private String content;
 
-    @Column(nullable = true, length = 150)
-    private String fileUrl;
+    @Column(unique = true, nullable = true)
+    private String fileName;
 
     @Builder
-    public Notice(String title, String content, String fileUrl) {
+    public Notice(String title, String content, String fileName) {
         this.title = title;
         this.content = content;
-        this.fileUrl = fileUrl;
+        this.fileName = fileName;
     }
 
-    public void update(String title, String content, String fileUrl) {
+    public void update(String title, String content, String fileName) {
         this.title = title;
         this.content = content;
-        this.fileUrl = fileUrl;
+        this.fileName = fileName;
     }
 }

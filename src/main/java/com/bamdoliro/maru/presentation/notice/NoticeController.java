@@ -2,10 +2,11 @@ package com.bamdoliro.maru.presentation.notice;
 
 import com.bamdoliro.maru.application.notice.*;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.infrastructure.s3.dto.response.UploadResponse;
 import com.bamdoliro.maru.presentation.notice.dto.request.NoticeRequest;
+import com.bamdoliro.maru.presentation.notice.dto.request.UploadFileRequest;
 import com.bamdoliro.maru.presentation.notice.dto.response.NoticeResponse;
 import com.bamdoliro.maru.presentation.notice.dto.response.NoticeSimpleResponse;
+import com.bamdoliro.maru.presentation.notice.dto.response.UploadFileResponse;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.auth.Authority;
 import com.bamdoliro.maru.shared.response.CommonResponse;
@@ -16,7 +17,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RequestMapping("/notice")
@@ -40,14 +40,13 @@ public class NoticeController {
                 createNoticeUseCase.execute(request));
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/file")
-    public SingleCommonResponse<UploadResponse> uploadFile(
+    public SingleCommonResponse<UploadFileResponse> uploadFile(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
-            @RequestPart("file") MultipartFile file
+            @RequestBody @Valid UploadFileRequest request
     ) {
         return SingleCommonResponse.ok(
-                uploadFileUseCase.execute(file)
+                uploadFileUseCase.execute(request)
         );
     }
 

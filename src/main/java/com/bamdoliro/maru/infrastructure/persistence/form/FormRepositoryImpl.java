@@ -233,7 +233,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 .select(new QFormUrlVo(
                         form.examinationNumber,
                         form.applicant.name,
-                        form.formUrl
+                        form.user.uuid
                 ))
                 .from(form)
                 .where(form.id.in(idList))

@@ -8,8 +8,11 @@
 ===== Request Header
 include::{snippets}/notice-controller-test/공지사항_파일을_업로드한다/request-headers.adoc[]
 
-===== Request Body
-include::{snippets}/notice-controller-test/공지사항_파일을_업로드한다/request-parts.adoc[]
+==== Request Body
+include::{snippets}/notice-controller-test/공지사항_파일을_업로드한다/request-fields.adoc[]
+
+==== 요청
+include::{snippets}/notice-controller-test/공지사항_파일을_업로드한다/http-request.adoc[]
 
 ==== 응답
 

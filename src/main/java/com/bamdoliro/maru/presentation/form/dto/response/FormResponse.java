@@ -9,7 +9,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class FormResponse {
-
     private Long id;
     private Long examinationNumber;
     private ApplicantResponse applicant;
@@ -21,15 +20,15 @@ public class FormResponse {
     private FormType type;
     private FormStatus status;
 
-    public FormResponse(Form form) {
+    public FormResponse(Form form, String identificationPictureUri, String formUrl) {
         this.id = form.getId();
         this.examinationNumber = form.getExaminationNumber();
-        this.applicant = new ApplicantResponse(form.getApplicant());
+        this.applicant = new ApplicantResponse(form.getApplicant(), identificationPictureUri);
         this.parent = new ParentResponse(form.getParent());
         this.education = new EducationResponse(form.getEducation());
         this.grade = new GradeResponse(form.getGrade());
         this.document = new DocumentResponse(form.getDocument());
-        this.formUrl = form.getFormUrl();
+        this.formUrl = formUrl;
         this.type = form.getType();
         this.status = form.getStatus();
     }

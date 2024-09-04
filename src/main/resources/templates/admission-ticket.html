@@ -125,7 +125,7 @@
             <tr>
                 <td class="ba center" style="width: 33%" rowspan="6">
                     <img
-                            th:src="${form.applicant.identificationPictureUri}"
+                            th:src="${identificationPictureUri}"
                             alt="증명사진"/>
                 </td>
                 <th scope="row" class="ba" style="width:28%;">수험번호</th>
@@ -191,6 +191,11 @@
                 <td class="ba">신체검사</td>
                 <td class="ba" th:text="${physicalExamination}"></td>
                 <td class="ba">검사장</td>
+            </tr>
+            <tr>
+                <td class="ba">합격발표일</td>
+                <td class="ba" th:text="${announcementOfSecondPass}"></td>
+                <td class="ba">본교 홈페이지</td>
             </tr>
         </table>
         <div class="red more">

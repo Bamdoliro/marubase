@@ -37,9 +37,6 @@ include::{snippets}/form-controller-test/원서를_제출할_때_잘못된_형�
 ===== Request Header
 include::{snippets}/form-controller-test/원서를_최종_제출한다/request-headers.adoc[]
 
-===== Request Body
-include::{snippets}/form-controller-test/원서를_최종_제출한다/request-fields.adoc[]
-
 ==== 요청
 include::{snippets}/form-controller-test/원서를_최종_제출한다/http-request.adoc[]
 
@@ -264,9 +261,6 @@ include::{snippets}/form-controller-test/원서를_수정할_때_반려된_원�
 ===== Request Header
 include::{snippets}/form-controller-test/증명_사진을_업로드한다/request-headers.adoc[]
 
-===== Request Part
-include::{snippets}/form-controller-test/증명_사진을_업로드한다/request-parts.adoc[]
-
 ==== 요청
 include::{snippets}/form-controller-test/증명_사진을_업로드한다/http-request.adoc[]
 
@@ -301,9 +295,6 @@ include::{snippets}/form-controller-test/증명_사진을_업로드할_때_콘�
 
 ===== Request Header
 include::{snippets}/form-controller-test/원서_서류를_업로드한다/request-headers.adoc[]
-
-===== Request Part
-include::{snippets}/form-controller-test/원서_서류를_업로드한다/request-parts.adoc[]
 
 ==== 요청
 include::{snippets}/form-controller-test/원서_서류를_업로드한다/http-request.adoc[]
