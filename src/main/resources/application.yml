@@ -85,29 +85,6 @@ debug: false
 spring:
   config:
     activate:
-      on-profile: local
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-
-  datasource:
-    url: jdbc:postgresql://localhost:5432/maru
-    driver-class-name: org.postgresql.Driver
-    username: bamdoliro
-    password: bamdoliro
-
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      password: bamdoliro
-
-debug: false
----
-spring:
-  config:
-    activate:
       on-profile: test
 
   jpa:
