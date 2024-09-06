@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            font-family: SUIT, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        table {
+            border: none;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: center;
+            line-height: normal;
+        }
+
+        caption {
+            padding-bottom: 6px;
+        }
+
+        tr {
+            vertical-align: middle;
+        }
+
+        td {
+            padding: 8px 8px;
+            text-align: left;
+            background-color: white;
+        }
+
+        th {
+            background-color: #ECF2FA;
+            font-weight: 500;
+            padding: 8px 0;
+            letter-spacing: 6px;
+            text-indent: 6px;
+        }
+
+        .ba {
+            border: #000000 1px solid;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .big {
+            font-weight: 500;
+            font-size: 20px;
+        }
+
+        .letter-spacing-10 {
+            letter-spacing: 10px;
+            text-indent: 10px;
+        }
+
+        .letter-spacing-25 {
+            letter-spacing: 25px;
+            text-indent: 25px;
+        }
+
+        .admission-ticket-container {
+            width: 55%;
+            float: left;
+            padding: 50px 30px;
+        }
+
+        .admission-ticket {
+            width: 100%;
+        }
+
+        .information-container {
+            height: 297mm;
+            width: 45%;
+            float: right;
+            padding: 50px 30px;
+            background-color: #F8F8F9;
+        }
+
+        .information {
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .left {
+            text-align: left;
+        }
+
+        .red {
+            color: #F44336;
+        }
+
+        .more {
+            padding-top: 4px;
+        }
+
+        .title {
+            font-weight: 600;
+            font-size: 24px;
+            padding-bottom: 12px;
+        }
+    </style>
+    <title>수험표</title>
+</head>
+<body>
+<main class="container">
+    <section class="admission-ticket-container">
+        <table class="admission-ticket">
+            <tr class="ba">
+                <td colspan="3" class="ba center" style="height: 48px;">
+                    <p th:text='${year+"학년도"}'></p>
+                    <p>부산소프트웨어마이스터고등학교 입학전형</p>
+                    <p class="big letter-spacing-10">접수증</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="ba center" style="width: 33%" rowspan="5">
+                    <img
+                            th:src="${identificationPictureUri}"
+                            alt="증명사진"/>
+                </td>
+                <th scope="row" class="ba">접수번호</th>
+                <td class="ba" style="border: #000000 1px solid" th:text="${form.id}"></td>
+            </tr>
+            <tr>
+                <th scope="row" class="ba">전형구분</th>
+                <td class="ba" th:text="${form.type.getCategory().description}"></td>
+            </tr>
+            <tr>
+                <th scope="row" class="ba">생년월일</th>
+                <td class="ba" th:text="${#temporals.format(form.applicant.birthday, 'YYYY년 MM월 dd일')}"></td>
+            </tr>
+            <tr>
+                <th scope="row" class="ba letter-spacing-25">성명</th>
+                <td class="ba" th:text="${form.applicant.name}"></td>
+            </tr>
+            <tr>
+                <th scope="row" class="ba">출신학교</th>
+                <td class="ba" th:text="${form.education.school.name}"></td>
+            </tr>
+            <tr>
+                <td colspan="3" class="ba center big">
+                    <p>부산소프트웨어마이스터고등학교장</p>
+                </td>
+            </tr>
+        </table>
+    </section>
+    <section class="information-container">
+        <p class="title">1단계 합격자 결과 발표</p>
+        <table class="information ba">
+            <caption class="big left">1. 일정</caption>
+            <tr>
+                <th scope="colgroup" class="ba" style="width: 40%">구분</th>
+                <th scope="colgroup" class="ba" style="width: 40%">시각</th>
+                <th scope="colgroup" class="ba" style="width: 20%">장소</th>
+            </tr>
+            <tr>
+                <td class="ba" style="word-break: keep-all;">1단계 합격자 결과 발표</td>
+                <td class="ba" th:text="${announcement_of_first_pass}"></td>
+                <td class="ba">본교홈페이지</td>
+            </tr>
+        </table>
+        <div class="red more">
+            <p>※ 서류전형 합격자는 일반전형 및 특별전형 각각 모집정원의 130% 이내입니다.</p>
+        </div>
+    </section>
+</main>
+</body>
+</html>
