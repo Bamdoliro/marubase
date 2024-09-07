@@ -4,7 +4,6 @@ import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.AchievementLevel;
 import com.bamdoliro.maru.domain.form.domain.value.Subject;
 import com.bamdoliro.maru.domain.form.domain.value.SubjectMap;
-import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.pdf.GeneratePdfService;
@@ -24,10 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -72,10 +68,25 @@ public class ExportFormUseCase {
 
     private List<SubjectVO> getSubjectList(Form form) {
         List<SubjectVO> value = new ArrayList<>();
+        List<String> careerElectiveCourses = List.of("음악", "미술", "체육");
         Map<String, List<Subject>> subjectMap = form.getGrade()
                 .getSubjectListValue()
                 .stream()
-                .collect(Collectors.groupingBy(Subject::getSubjectName));
+                .filter(subject -> !careerElectiveCourses.contains(subject.getSubjectName()))
+                .collect(Collectors.groupingBy(
+                        Subject::getSubjectName,
+                        LinkedHashMap::new,
+                        Collectors.toList()
+                ));
+        careerElectiveCourses.forEach(course -> {
+            List<Subject> subjects = form.getGrade().getSubjectListValue()
+                    .stream()
+                    .filter(subject -> course.equals(subject.getSubjectName()))
+                    .collect(Collectors.toList());
+            if (!subjects.isEmpty()) {
+                subjectMap.put(course, subjects);
+            }
+        });
 
         subjectMap.forEach((key, values) -> {
             SubjectVO subject = new SubjectVO(key);
@@ -84,7 +95,7 @@ public class ExportFormUseCase {
                     subject.score = v.getOriginalScore();
                 } else {
                     try {
-                        SubjectVO.class.getField("achievementLevel" + v.toString())
+                        SubjectVO.class.getField("achievementLevel" + v)
                                 .set(subject, v.getAchievementLevel());
                     } catch (IllegalAccessException | NoSuchFieldException e) {
                         throw new RuntimeException(e);
