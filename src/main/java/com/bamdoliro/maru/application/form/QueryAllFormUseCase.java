@@ -25,13 +25,14 @@ public class QueryAllFormUseCase {
                 .filter(form -> Objects.isNull(category) || form.getType().categoryEquals(category))
                 .toList());
 
-        if (sort != null && formList.stream().anyMatch(form -> form.getScore().getTotalScore() == null)) {
-            throw new MissingTotalScoreException();
-        }
-        if ("total-score-asc".equals(sort)) {
-            formList.sort(Comparator.comparing(form -> form.getScore().getTotalScore(), Comparator.naturalOrder()));
-        } else if ("total-score-desc".equals(sort)) {
-            formList.sort(Comparator.comparing(form -> form.getScore().getTotalScore(), Comparator.reverseOrder()));
+        if (sort != null) {
+            switch (sort) {
+                case "total-score-asc" ->
+                        formList.sort(Comparator.comparing(form -> form.getScore().getTotalScore(), Comparator.nullsLast(Comparator.naturalOrder())));
+                case "total-score-desc" ->
+                        formList.sort(Comparator.comparing(form -> form.getScore().getTotalScore(), Comparator.nullsLast(Comparator.reverseOrder())));
+                case "form-id" -> formList.sort(Comparator.comparing(Form::getId));
+            }
         }
 
         return formList.stream()
