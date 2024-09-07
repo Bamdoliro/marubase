@@ -103,7 +103,7 @@ public class ExportFormUseCase {
                     Templates.FORM,
                     Templates.GRADE_TABLE,
                     Templates.DOCUMENT,
-                    Templates.NO_SMOKING
+                    Templates.WRITTEN_OATH
             );
         }
 
@@ -111,8 +111,8 @@ public class ExportFormUseCase {
                 Templates.FORM,
                 Templates.GRADE_TABLE,
                 Templates.DOCUMENT,
-                Templates.RECOMMENDATION,
-                Templates.NO_SMOKING
+                Templates.WRITTEN_OATH,
+                Templates.RECOMMENDATION
         );
     }
 }
