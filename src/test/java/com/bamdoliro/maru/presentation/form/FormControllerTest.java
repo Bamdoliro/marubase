@@ -1475,7 +1475,7 @@ class FormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 접수증를을발급받을_때_원서상태가_최종제출이_아니라면_에러가_발생한다() throws Exception {
+    void 접수증을_발급받을_때_원서상태가_최종제출이_아니라면_에러가_발생한다() throws Exception {
         User user = UserFixture.createUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
