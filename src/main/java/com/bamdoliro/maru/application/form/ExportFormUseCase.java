@@ -4,7 +4,6 @@ import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.AchievementLevel;
 import com.bamdoliro.maru.domain.form.domain.value.Subject;
 import com.bamdoliro.maru.domain.form.domain.value.SubjectMap;
-import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.pdf.GeneratePdfService;
@@ -69,15 +68,25 @@ public class ExportFormUseCase {
 
     private List<SubjectVO> getSubjectList(Form form) {
         List<SubjectVO> value = new ArrayList<>();
+        List<String> careerElectiveCourses = List.of("음악", "미술", "체육");
         Map<String, List<Subject>> subjectMap = form.getGrade()
                 .getSubjectListValue()
                 .stream()
+                .filter(subject -> !careerElectiveCourses.contains(subject.getSubjectName()))
                 .collect(Collectors.groupingBy(
                         Subject::getSubjectName,
                         LinkedHashMap::new,
                         Collectors.toList()
                 ));
-
+        careerElectiveCourses.forEach(course -> {
+            List<Subject> subjects = form.getGrade().getSubjectListValue()
+                    .stream()
+                    .filter(subject -> course.equals(subject.getSubjectName()))
+                    .collect(Collectors.toList());
+            if (!subjects.isEmpty()) {
+                subjectMap.put(course, subjects);
+            }
+        });
 
         subjectMap.forEach((key, values) -> {
             SubjectVO subject = new SubjectVO(key);
