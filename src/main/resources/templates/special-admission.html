@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        @page {
+            size: A4;
+            margin: 70px;
+        }
+
+        * {
+            font-family: SUIT, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        table {
+            border: none;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 14px;
+            text-align: center;
+            line-height: normal;
+        }
+        caption {
+            font-weight: bold;
+            font-size: 24px;
+            line-height: 48px;
+            text-align: center;
+        }
+        tr {
+            vertical-align: middle;
+        }
+
+        td {
+            padding: 2px 0;
+            font-size: 12px;
+        }
+
+        th {
+            background-color: #ECF2FA;
+            font-weight: 500;
+            padding: 2px 0;
+            font-size: 12px;
+        }
+        .format {
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .ba {
+            border: #000000 1px solid;
+        }
+
+        .left {
+            text-align: left;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .text-box {
+            padding: 15px 10px;
+            vertical-align: text-top;
+        }
+
+        .middle {
+            font-size: 16px;
+            line-height: 160%;
+        }
+        .old-school {
+            font-weight: bold;
+            font-size: 17px;
+            margin-left: 100px;
+        }
+        .seal {
+            font-size: 9px;
+            color: #BBBCC2;
+            margin-left: 100px;
+            padding: 10px;
+            border: #BBBCC2 1px dashed;
+        }
+        .school {
+            font-weight: bold;
+            font-size: 21px;
+        }
+        .sign {
+            margin-right: 50px;
+        }
+        .guide {
+            font-size: 8px;
+            font-weight: bold;
+        }
+
+        .indent {
+            text-indent: 18px;
+            font-size: 14px;
+            word-break: keep-all;
+        }
+        .padding {
+            padding: 16px;
+        }
+    </style>
+    <title>원서</title>
+</head>
+<body>
+<table>
+    <p class="format">[서식5]</p>
+    <caption th:text='${year+"학년도 고등학교 특례 입학 대상자 심사 원서"}'>2025학년도 고등학교 특례 입학 대상자 심사 원서</caption>
+</table>
+<table>
+    <colgroup>
+        <col style="width: 8.00%;"/>
+        <col style="width: 5.37%;"/>
+        <col style="width: 30.37%;"/>
+        <col style="width: 4.79%;"/>
+        <col style="width: 6.42%;"/>
+        <col style="width: 11.16%;"/>
+        <col style="width: 22.32%;"/>
+    </colgroup>
+    <tr>
+        <th rowspan="4" class="ba" style="border-bottom: none;">지원자</th>
+        <th rowspan="2" class="ba">성명</th>
+        <td class="ba">한글</td>
+        <th rowspan="2" class="ba">성별</th>
+        <td rowspan="2" class="ba">ㅤ</td>
+        <th class="ba">생년월일</th>
+        <td class="ba">ㅤ</td>
+    </tr>
+    <tr>
+        <td class="ba">영문</td>
+        <th class="ba">휴대전화</th>
+        <td class="ba">ㅤ</td>
+    </tr>
+    <tr>
+        <th class="ba">주소</th>
+        <td colspan="5" class="ba">ㅤ</td>
+    </tr>
+    <tr>
+        <th class="ba" style="border-bottom: none;">학교</th>
+        <td colspan="5" class="ba" style="border-bottom: none;">ㅤ</td>
+    </tr>
+</table>
+<table>
+    <colgroup>
+        <col style="width: 8.00%;"/>
+        <col style="width: 5.37%"/>
+        <col style="width: 19.16%"/>
+        <col style="width: 5.32%"/>
+        <col style="width: 17.00%;"/>
+        <col style="width: 11.16%"/>
+        <col style="width: 22.37%"/>
+    </colgroup>
+    <tr>
+        <th rowspan="2" class="ba">보호자</th>
+        <th rowspan="2" class="ba">성명</th>
+        <td class="ba">ㅤ</td>
+        <th rowspan="2" class="ba">관계</th>
+        <td class="ba">ㅤ</td>
+        <th class="ba">휴대전화</th>
+        <td class="ba">ㅤ</td>
+    </tr>
+    <tr>
+        <td class="ba">ㅤ</td>
+        <td class="ba">ㅤ</td>
+        <th class="ba">휴대전화</th>
+        <td class="ba">ㅤ</td>
+    </tr>
+</table>
+<table>
+    <colgroup>
+        <col style="width: 8.00%;"/>
+        <col style="width: 5.37%;"/>
+        <col style="width: 5.89%;"/>
+        <col style="width: 18.63%;"/>
+        <col style="width: 27.16%;"/>
+        <col style="width: 23.42%;"/>
+    </colgroup>
+    <tr>
+        <th rowspan="6" class="ba" style="border-top: none;">지원자<br>학력</th>
+        <th class="ba" style="border-top: none;">국내<br>학력</th>
+        <td class="ba" colspan="4" style="border-top: none;">ㅤ</td>
+    </tr>
+    <tr>
+        <th rowspan="5" class="ba" style="height: 17.43%">외국<br>학력</th>
+        <th class="ba" style="height: 3.06%">국가</th>
+        <th class="ba" style="height: 3.58%">학교명</th>
+        <th class="ba" style="height: 3.58%">재학기간</th>
+        <th class="ba" style="height: 3.58%">외국 재학학년<p class="guide">(반드시 현지 학년으로 표시)</p></th>
+    </tr>
+    <tr>
+        <td class="ba">ㅤ</td>
+        <td class="ba">ㅤ</td>
+        <td class="ba">20&nbsp;&nbsp;.&nbsp;&nbsp;.&nbsp;&nbsp;. ~ 20&nbsp;&nbsp;.&nbsp;&nbsp;.&nbsp;&nbsp;.<br> (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)년 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)개월</td>
+        <td class="ba">(&nbsp;&nbsp;&nbsp;&nbsp;)학년~(&nbsp;&nbsp;&nbsp;&nbsp;)학년<br> (졸업, 수료, 재학)</td>
+    </tr>
+    <tr>
+        <td class="ba">ㅤ</td>
+        <td class="ba">ㅤ</td>
+        <td class="ba">20&nbsp;&nbsp;.&nbsp;&nbsp;.&nbsp;&nbsp;. ~ 20&nbsp;&nbsp;.&nbsp;&nbsp;.&nbsp;&nbsp;.<br> (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)년 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)개월</td>
+        <td class="ba">(&nbsp;&nbsp;&nbsp;&nbsp;)학년~(&nbsp;&nbsp;&nbsp;&nbsp;)학년<br> (졸업, 수료, 재학)</td>
+    </tr>
+    <tr>
+        <td class="ba">ㅤ</td>
+        <td class="ba">ㅤ</td>
+        <td class="ba">20&nbsp;&nbsp;.&nbsp;&nbsp;.&nbsp;&nbsp;. ~ 20&nbsp;&nbsp;.&nbsp;&nbsp;.&nbsp;&nbsp;.<br> (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)년 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)개월</td>
+        <td class="ba">(&nbsp;&nbsp;&nbsp;&nbsp;)학년~(&nbsp;&nbsp;&nbsp;&nbsp;)학년<br> (졸업, 수료, 재학)</td>
+    </tr>
+    <tr>
+        <td class="ba">ㅤ</td>
+        <td class="ba">ㅤ</td>
+        <td class="ba">20&nbsp;&nbsp;.&nbsp;&nbsp;.&nbsp;&nbsp;. ~ 20&nbsp;&nbsp;.&nbsp;&nbsp;.&nbsp;&nbsp;.<br> (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)년 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)개월</td>
+        <td class="ba">(&nbsp;&nbsp;&nbsp;&nbsp;)학년~(&nbsp;&nbsp;&nbsp;&nbsp;)학년<br> (졸업, 수료, 재학)</td>
+    </tr>
+</table>
+<div style="height: 18px;"></div>
+<table>
+    <colgroup>
+        <col style="width: 11.16%; height: 10.60%;" />
+        <col style="width: 5.89%;"/>
+        <col style="width: 15.16%;"/>
+        <col style="width: 15.16%;"/>
+        <col style="width: 20.53%;"/>
+        <col style="width: 20.53%;"/>
+    </colgroup>
+    <p class="format">※ 유형 [2-가], 유형 [2-나], 유형 [2-다] 해당자만 작성함</p>
+    <tr>
+        <th rowspan="4" class="ba">국외체류<br>거주기간</th>
+        <th class="ba">구분</th>
+        <th class="ba">출국일자</th>
+        <th class="ba">입국일자</th>
+        <th class="ba">거주기간</th>
+        <th class="ba">실체류기간</th>
+    </tr>
+    <tr>
+        <th class="ba">본인</th>
+        <td class="ba right">.&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;</td>
+        <td class="ba right">.&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;</td>
+        <td class="ba">(&nbsp;&nbsp;&nbsp;&nbsp;)년 (&nbsp;&nbsp;&nbsp;&nbsp;)개월 (&nbsp;&nbsp;&nbsp;&nbsp;)일</td>
+        <td class="ba">(&nbsp;&nbsp;&nbsp;&nbsp;)년 (&nbsp;&nbsp;&nbsp;&nbsp;)개월 (&nbsp;&nbsp;&nbsp;&nbsp;)일</td>
+    </tr>
+    <tr>
+        <th class="ba">부</th>
+        <td class="ba right">.&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;</td>
+        <td class="ba right">.&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;</td>
+        <td class="ba">(&nbsp;&nbsp;&nbsp;&nbsp;)년 (&nbsp;&nbsp;&nbsp;&nbsp;)개월 (&nbsp;&nbsp;&nbsp;&nbsp;)일</td>
+        <td class="ba">(&nbsp;&nbsp;&nbsp;&nbsp;)년 (&nbsp;&nbsp;&nbsp;&nbsp;)개월 (&nbsp;&nbsp;&nbsp;&nbsp;)일</td>
+    </tr>
+    <tr>
+        <th class="ba">모</th>
+        <td class="ba right">.&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;</td>
+        <td class="ba right">.&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;</td>
+        <td class="ba">(&nbsp;&nbsp;&nbsp;&nbsp;)년 (&nbsp;&nbsp;&nbsp;&nbsp;)개월 (&nbsp;&nbsp;&nbsp;&nbsp;)일</td>
+        <td class="ba">(&nbsp;&nbsp;&nbsp;&nbsp;)년 (&nbsp;&nbsp;&nbsp;&nbsp;)개월 (&nbsp;&nbsp;&nbsp;&nbsp;)일</td>
+    </tr>
+</table>
+<table>
+    <colgroup>
+        <col style="width: 8.00%; height: 3.58%;" />
+        <col style="width: 25.96%;"/>
+        <col style="width: 9.55%;"/>
+        <col style="width: 19.85%;"/>
+    </colgroup>
+    <tr>
+        <th class="ba" style="border-top: none;">전·편입학 일자</th>
+        <td class="ba" style="border-top: none;">&nbsp;&nbsp;&nbsp;년&nbsp;&nbsp;&nbsp;월&nbsp;&nbsp;&nbsp;일&nbsp;&nbsp;중학교 (&nbsp;&nbsp;&nbsp;)학년으로 편입</td>
+        <th class="ba" style="border-top: none;">전·편입학 근거</th>
+        <td class="ba" style="border-top: none;">제82조 제3항<br> 제2호 (&nbsp;&nbsp;&nbsp;&nbsp;)목 해당자</td>
+    </tr>
+</table>
+<div style="height: 18px;"></div>
+<table>
+    <tr>
+        <td class="ba text-box middle left padding" colspan="4">
+            <div style="height: 24px;"></div>
+            <p class="indent">본인은 2025학년도 부산광역시 고등학교 입학전형 특례 대상자로 심사받고자 보호자 연서로 원서를 제출합니다.</p>
+            <div style="height: 15px;"></div>
+            <p class="middle center" th:text="${#dates.format(#dates.createNow(),'YYYY. MM. dd.')}">2024. 9. 5.</p>
+            <div style="height: 15px;"></div>
+            <p class="middle center">
+                <span class="sign">학&nbsp;&nbsp;&nbsp;생 성명</span>
+                <span th:text="${form.applicant.name}"></span>&nbsp;&nbsp;&nbsp;
+                <span>서명 또는</span>
+            </p>
+            <div style="height: 15px;"></div>
+            <p class="middle center">
+                <span class="sign">보호자 성명</span>
+                <span th:text="${form.parent.name}"></span>&nbsp;&nbsp;&nbsp;
+                <span>서명 또는</span>
+            </p>
+            <div style="height: 15px;"></div>
+            <p class="indent center">관련 증빙서류에 따라 위 사실이 틀림없음을 확인함</p>
+            <div style="height: 30px;"></div>
+            <p class="old-school center">중학교장 <span class="seal">직인</span></p>
+            <div style="height: 30px;"></div>
+            <p class="school center">부산광역시교육감 귀하</p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
