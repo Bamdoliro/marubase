@@ -24,10 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -75,7 +72,12 @@ public class ExportFormUseCase {
         Map<String, List<Subject>> subjectMap = form.getGrade()
                 .getSubjectListValue()
                 .stream()
-                .collect(Collectors.groupingBy(Subject::getSubjectName));
+                .collect(Collectors.groupingBy(
+                        Subject::getSubjectName,
+                        LinkedHashMap::new,
+                        Collectors.toList()
+                ));
+
 
         subjectMap.forEach((key, values) -> {
             SubjectVO subject = new SubjectVO(key);
@@ -84,7 +86,7 @@ public class ExportFormUseCase {
                     subject.score = v.getOriginalScore();
                 } else {
                     try {
-                        SubjectVO.class.getField("achievementLevel" + v.toString())
+                        SubjectVO.class.getField("achievementLevel" + v)
                                 .set(subject, v.getAchievementLevel());
                     } catch (IllegalAccessException | NoSuchFieldException e) {
                         throw new RuntimeException(e);
