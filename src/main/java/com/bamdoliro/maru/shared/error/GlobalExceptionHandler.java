@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(GlobalErrorProperty.BAD_REQUEST.getStatus())
-                .body(new ErrorResponse(GlobalErrorProperty.BAD_REQUEST, e.getMessage()));
+                .body(new ErrorResponse(GlobalErrorProperty.BAD_REQUEST, e.getBindingResult().getFieldErrors().get(0).getDefaultMessage()));
     }
 
     @ExceptionHandler(FileSizeLimitExceededException.class)
