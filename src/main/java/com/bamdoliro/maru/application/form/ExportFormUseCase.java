@@ -103,7 +103,7 @@ public class ExportFormUseCase {
                     Templates.FORM,
                     Templates.GRADE_TABLE,
                     Templates.DOCUMENT,
-                    Templates.NO_SMOKING
+                    Templates.WRITTEN_OATH
             );
         }
 

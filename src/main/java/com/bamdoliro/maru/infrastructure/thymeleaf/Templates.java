@@ -11,4 +11,5 @@ public class Templates {
     public static final String NO_SMOKING = "no-smoking";
     public static final String ADMISSION_TICKET = "admission-ticket";
     public static final String GRADE_TABLE = "grade-table";
+    public static final String WRITTEN_OATH = "written-oath";
 }
