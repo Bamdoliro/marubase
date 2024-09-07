@@ -170,4 +170,25 @@ class QueryAllFormUseCaseTest {
 
         verify(formRepository, times(1)).findByStatus(null);
     }
+
+    @Test
+    void 접수번호가_높은_순으로_조회한다() {
+        // given
+        List<Form> formList = List.of(
+                FormFixture.createForm(FormType.REGULAR),
+                FormFixture.createForm(FormType.SPECIAL_ADMISSION),
+                FormFixture.createForm(FormType.MEISTER_TALENT),
+                FormFixture.createForm(FormType.MULTI_CHILDREN)
+        );
+
+        given(formRepository.findByStatus(null)).willReturn(formList);
+
+        // when
+        List<FormSimpleResponse> returnedFormList = queryAllFormUseCase.execute(null, FormType.Category.SOCIAL_INTEGRATION, "form-id");
+
+        // then
+        assertEquals(1, returnedFormList.size());
+
+        verify(formRepository, times(1)).findByStatus(null);
+    }
 }
