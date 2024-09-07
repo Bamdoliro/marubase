@@ -420,6 +420,27 @@ include::{snippets}/form-controller-test/수험표를_발급받을_때_원서를
 ===== 불합격한 경우
 include::{snippets}/form-controller-test/수험표를_발급받을_때_불합격자라면_에러가_발생한다/http-response.adoc[]
 
+=== 접수증 발급
+원서를 최종 제출한 유저는 접수증을 발급받을 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/접수증을_발급받는다/request-headers.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/접수증을_발급받는다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/접수증을_발급받는다/http-response.adoc[]
+
+===== 원서를 접수하지 않은 경우
+include::{snippets}/form-controller-test/접수증을_발급받을_때_원서를_접수하지_않았다면_에러가_발생한다/http-response.adoc[]
+
+===== 최종 제출이 아닌 경우
+include::{snippets}/form-controller-test/접수증을_발급받을_때_원서상태가_최종제출이_아니라면_에러가_발생한다/http-response.adoc[]
 
 === 2차 전형 점수 양식 다운로드
 어드민은 2차 전형 점수 양식을 다운로드 받을 수 있습니다.
