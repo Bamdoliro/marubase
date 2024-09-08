@@ -3,6 +3,7 @@ package com.bamdoliro.maru.infrastructure.persistence.form;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
+import com.bamdoliro.maru.domain.form.domain.value.QSchool;
 import com.bamdoliro.maru.infrastructure.persistence.form.vo.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -283,6 +284,19 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 .where(form.education.school.address.contains(keyword)
                         .or(form.education.school.location.eq(keyword))
                         .and(form.status.in(round)))
+                .fetch();
+    }
+
+    @Override
+    public List<SchoolStatusVo> findNotBusanSchool(List<FormStatus> round) {
+        return queryFactory
+                .select(new QSchoolStatusVo(
+                        form.applicant.name,
+                        form.education.school.name,
+                        form.education.school.address
+                ))
+                .from(form)
+                .where(form.education.school.location.eq("부산광역시").not())
                 .fetch();
     }
 }

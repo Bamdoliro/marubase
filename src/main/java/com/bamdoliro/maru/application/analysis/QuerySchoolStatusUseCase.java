@@ -15,10 +15,17 @@ public class QuerySchoolStatusUseCase {
     private final FormRepository formRepository;
 
     public List<SchoolStatusResponse> execute(SchoolStatusRequest request) {
-        String keyword = request.getIsBusan() ? "부산광역시" : "";
-        keyword += request.getGu() == null ? "" : (" " + request.getGu());
+        if (request.getIsBusan()) {
+            String keyword = "부산광역시";
+            keyword += request.getGu() == null ? "" : (" " + request.getGu());
 
-        return formRepository.findSchoolByAddress(request.getStatusList(), keyword)
+            return formRepository.findSchoolByAddress(request.getStatusList(), keyword)
+                    .stream()
+                    .map(SchoolStatusResponse::new)
+                    .toList();
+        }
+
+        return formRepository.findNotBusanSchool(request.getStatusList())
                 .stream()
                 .map(SchoolStatusResponse::new)
                 .toList();

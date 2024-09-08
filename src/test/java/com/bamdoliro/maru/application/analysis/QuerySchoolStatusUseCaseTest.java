@@ -37,7 +37,7 @@ class QuerySchoolStatusUseCaseTest {
                 new SchoolStatusVo("박이로", "마루중학교", "경기도 밤돌시 이로구 밤돌이로 1")
         );
         List<FormStatus> round = List.of(FormStatus.FIRST_PASSED, FormStatus.FAILED, FormStatus.PASSED);
-        given(formRepository.findSchoolByAddress(round, "")).willReturn(voList);
+        given(formRepository.findNotBusanSchool(round)).willReturn(voList);
         SchoolStatusRequest request = new SchoolStatusRequest(round, false, null);
 
         // when
@@ -45,7 +45,7 @@ class QuerySchoolStatusUseCaseTest {
 
         // then
         Assertions.assertEquals(responseList.size(), voList.size());
-        verify(formRepository, times(1)).findSchoolByAddress(round, "");
+        verify(formRepository, times(1)).findNotBusanSchool(round);
     }
 
     @Test
@@ -98,7 +98,7 @@ class QuerySchoolStatusUseCaseTest {
                 new SchoolStatusVo("박이로", "마루중학교", "경기도 밤돌시 이로구 밤돌이로 1")
         );
         List<FormStatus> round = List.of(FormStatus.FAILED, FormStatus.PASSED);
-        given(formRepository.findSchoolByAddress(round, "")).willReturn(voList);
+        given(formRepository.findNotBusanSchool(round)).willReturn(voList);
         SchoolStatusRequest request = new SchoolStatusRequest(round, false, null);
 
         // when
@@ -106,7 +106,7 @@ class QuerySchoolStatusUseCaseTest {
 
         // then
         Assertions.assertEquals(responseList.size(), voList.size());
-        verify(formRepository, times(1)).findSchoolByAddress(round, "");
+        verify(formRepository, times(1)).findNotBusanSchool(round);
     }
 
     @Test
@@ -159,7 +159,7 @@ class QuerySchoolStatusUseCaseTest {
                 new SchoolStatusVo("박이로", "마루중학교", "경기도 밤돌시 이로구 밤돌이로 1")
         );
         List<FormStatus> round = List.of(FormStatus.PASSED);
-        given(formRepository.findSchoolByAddress(round, "")).willReturn(voList);
+        given(formRepository.findNotBusanSchool(round)).willReturn(voList);
         SchoolStatusRequest request = new SchoolStatusRequest(round, false, null);
 
         // when
@@ -167,7 +167,7 @@ class QuerySchoolStatusUseCaseTest {
 
         // then
         Assertions.assertEquals(responseList.size(), voList.size());
-        verify(formRepository, times(1)).findSchoolByAddress(round, "");
+        verify(formRepository, times(1)).findNotBusanSchool(round);
     }
 
     @Test

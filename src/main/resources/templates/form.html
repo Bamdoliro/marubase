@@ -37,7 +37,10 @@
             line-height: 48px;
             text-align: center;
         }
-
+        .format {
+            font-size: 13px;
+            font-weight: bold;
+        }
         .school {
             font-weight: bold;
             font-size: 18px;
@@ -100,7 +103,8 @@
 </head>
 <body>
 <table>
-    <caption th:text='${year+"학년도 부산소프트웨어마이스터고등학교 전형원서"}'></caption>
+    <p class="format">[서식1]</p>
+    <caption th:text='${year+"학년도 부산소프트웨어마이스터고등학교 입학원서"}'></caption>
     <colgroup>
         <col style="width:6.39%"/>
         <col style="width:1.46%"/>
