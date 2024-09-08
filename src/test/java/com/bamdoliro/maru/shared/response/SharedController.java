@@ -36,6 +36,7 @@ public class SharedController {
                 .certificate(getDocs(Certificate.values()))
                 .formStatus(getDocs(FormStatus.values()))
                 .formType(getDocs(FormType.values()))
+                .formCategory(getDocs(FormType.Category.values()))
                 .gender(getDocs(Gender.values()))
                 .graduationType(getDocs(GraduationType.values()))
                 .fairStatus(getDocs(FairStatus.values()))

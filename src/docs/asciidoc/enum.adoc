@@ -15,6 +15,9 @@ include::{snippets}/enum-controller-test/enums/custom-response-fields-formStatus
 [[form-type]]
 include::{snippets}/enum-controller-test/enums/custom-response-fields-formType.adoc[]
 
+[[form-category]]
+include::{snippets}/enum-controller-test/enums/custom-response-fields-formCategory.adoc[]
+
 [[gender]]
 include::{snippets}/enum-controller-test/enums/custom-response-fields-gender.adoc[]
 

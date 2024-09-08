@@ -62,6 +62,11 @@ public class EnumControllerTest extends RestDocsTestSupport {
                                 enumConvertFieldDescriptor((enumDocs.getFormType()))
                         ),
                         customResponseFields("custom-response",
+                                beneathPath("formCategory").withSubsectionId("formCategory"),
+                                attributes(key("title").value("FormCategory")),
+                                enumConvertFieldDescriptor((enumDocs.getFormCategory()))
+                        ),
+                        customResponseFields("custom-response",
                                 beneathPath("gender").withSubsectionId("gender"),
                                 attributes(key("title").value("Gender")),
                                 enumConvertFieldDescriptor((enumDocs.getGender()))
@@ -111,7 +116,7 @@ public class EnumControllerTest extends RestDocsTestSupport {
     private EnumDocs getData(MvcResult result) throws IOException {
         return objectMapper
                 .readValue(result.getResponse().getContentAsByteArray(),
-                        new TypeReference<EnumDocs>() {
+                        new TypeReference<>() {
                         }
                 );
     }
