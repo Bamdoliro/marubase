@@ -45,7 +45,7 @@ public class GenerateProofOfApplicationUseCase {
     }
 
     private void validateFormStatus(Form form) {
-        if (form.isSubmitted()) {
+        if (!form.isFinalSubmitted() && !form.isApproved() && !form.isReceived()) {
             throw new InvalidFormStatusException();
         }
     }

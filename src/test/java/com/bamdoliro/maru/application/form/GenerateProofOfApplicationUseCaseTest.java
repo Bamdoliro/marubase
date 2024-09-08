@@ -68,7 +68,7 @@ public class GenerateProofOfApplicationUseCaseTest {
     }
 
     @Test
-    void 접수증을_생성할_때_상태가_최종제출이_아닌_사용자라면_에러가_발생한다() {
+    void 접수증을_생성할_때_상태가_최종제출_또는_승인_또는_접수_아닌_사용자라면_에러가_발생한다() {
         // given
         User user = UserFixture.createUser();
         Form form = FormFixture.createForm(FormType.MULTI_CHILDREN);

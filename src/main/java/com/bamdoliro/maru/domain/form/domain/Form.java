@@ -145,9 +145,11 @@ public class Form extends BaseTimeEntity {
         return status.equals(FormStatus.REJECTED);
     }
 
-    public boolean isSubmitted() {
-        return status.equals(FormStatus.SUBMITTED);
-    }
+    public boolean isSubmitted() { return status.equals(FormStatus.SUBMITTED); }
+
+    public boolean isFinalSubmitted() { return status.equals(FormStatus.FINAL_SUBMITTED); }
+
+    public boolean isApproved() { return status.equals(FormStatus.APPROVED); }
 
     public boolean isReceived() {
         return isFirstPassed() != null || status.equals(FormStatus.RECEIVED);
