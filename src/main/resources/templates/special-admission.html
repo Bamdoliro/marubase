@@ -105,6 +105,9 @@
         .padding {
             padding: 16px;
         }
+        .bold {
+            font-weight: bold;
+        }
     </style>
     <title>원서</title>
 </head>
@@ -126,14 +129,14 @@
     <tr>
         <th rowspan="4" class="ba" style="border-bottom: none;">지원자</th>
         <th rowspan="2" class="ba">성명</th>
-        <td class="ba">한글</td>
+        <td class="ba left">(한글)</td>
         <th rowspan="2" class="ba">성별</th>
         <td rowspan="2" class="ba">ㅤ</td>
         <th class="ba">생년월일</th>
         <td class="ba">ㅤ</td>
     </tr>
     <tr>
-        <td class="ba">영문</td>
+        <td class="ba left">(영문)</td>
         <th class="ba">휴대전화</th>
         <td class="ba">ㅤ</td>
     </tr>
@@ -184,7 +187,7 @@
     <tr>
         <th rowspan="6" class="ba" style="border-top: none;">지원자<br>학력</th>
         <th class="ba" style="border-top: none;">국내<br>학력</th>
-        <td class="ba" colspan="4" style="border-top: none;">ㅤ</td>
+        <td class="ba right" colspan="4" style="border-top: none;">.&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;. 까지 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)학교 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)학년  (졸업, 수료, 재학)</td>
     </tr>
     <tr>
         <th rowspan="5" class="ba" style="height: 17.43%">외국<br>학력</th>
@@ -278,7 +281,7 @@
     <tr>
         <td class="ba text-box middle left padding" colspan="4">
             <div style="height: 24px;"></div>
-            <p class="indent">본인은 2025학년도 부산광역시 고등학교 입학전형 특례 대상자로 심사받고자 보호자 연서로 원서를 제출합니다.</p>
+            <p class="indent bold">본인은 2025학년도 부산광역시 고등학교 입학전형 특례 대상자로 심사받고자 보호자 연서로 원서를 제출합니다.</p>
             <div style="height: 15px;"></div>
             <p class="middle center" th:text="${#dates.format(#dates.createNow(),'YYYY. MM. dd.')}">2024. 9. 5.</p>
             <div style="height: 15px;"></div>
@@ -294,7 +297,7 @@
                 <span>서명 또는</span>
             </p>
             <div style="height: 15px;"></div>
-            <p class="indent center">관련 증빙서류에 따라 위 사실이 틀림없음을 확인함</p>
+            <p class="indent center bold">관련 증빙서류에 따라 위 사실이 틀림없음을 확인함</p>
             <div style="height: 30px;"></div>
             <p class="old-school center">중학교장 <span class="seal">직인</span></p>
             <div style="height: 30px;"></div>
