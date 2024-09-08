@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        @page {
+            size: A4;
+            margin: 70px;
+        }
+
+        * {
+            font-family: SUIT, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        table {
+            border: none;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 14px;
+            text-align: center;
+            line-height: normal;
+        }
+        tr {
+            vertical-align: middle;
+        }
+
+        td {
+            padding: 8px 0;
+        }
+
+        th {
+            background-color: #ECF2FA;
+            font-weight: 500;
+            padding: 8px 0;
+        }
+        .format {
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .ba {
+            border: #000000 1px solid;
+        }
+
+        .title {
+            font-weight: bold;
+            font-size: 36px;
+            line-height: 48px;
+            text-align: center;
+            letter-spacing: 40px;
+            margin-left: 74px;
+        }
+        .subtitle {
+            font-size: 22px;
+            line-height: 2;
+        }
+        .left {
+            text-align: left;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .text-box {
+            padding: 15px 10px;
+            vertical-align: text-top;
+        }
+
+        .middle {
+            font-size: 18px;
+            line-height: 160%;
+        }
+
+        .indent {
+            text-indent: 18px;
+            font-size: 21px;
+            word-break: keep-all;
+            line-height: 2;
+        }
+        .padding {
+            padding: 16px;
+        }
+    </style>
+    <title>원서</title>
+</head>
+<body>
+<table>
+    <p class="format">[서식6]</p>
+    <div style="height: 14px"></div>
+    <td class="ba text-box middle left padding" colspan="4">
+        <div style="height: 72px"></div>
+        <div class="title">확인서</div>
+        <div style="height: 64px"></div>
+        <p class="subtitle center">성&nbsp;&nbsp;&nbsp;&nbsp;명 :</p>
+        <p class="subtitle center" style="margin-left: 164px">생년월일 :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;년   &nbsp;&nbsp;&nbsp;&nbsp;월   &nbsp;&nbsp;&nbsp;&nbsp;일</p>
+        <div style="height: 44px;"></div>
+        <p class="indent">○ 주&nbsp;&nbsp;&nbsp;소 : </p>
+        <p class="indent">○ 연락처 : </p>
+        <p class="indent">○ 외국 학교명 : </p>
+        <div style="height: 16px;"></div>
+        <p class="indent" style="margin-left: 40px">(시트명 :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;, 행 번호 :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</p>
+        <div style="height: 32px;"></div>
+        <p class="indent">위 학생의 특례 신입학 학적 서류는 외국 학교의 재적학교장이 발급한 학적 서류임을 확인하며,
+            만약 위·변조 서류로 확인될 경우에는 입학 취소 등 모든 행정처분에 따를 것을 확인합니다.</p>
+        <div style="height: 32px;"></div>
+        <p class="middle center" th:text="${#dates.format(#dates.createNow(),'YYYY년 MM월 dd일')}">년&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;월&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;일</p>
+        <div style="height: 42px;"></div>
+        <div class="indent"><span style="margin-right: 80px">확생과의 관계(보호자) :</span>
+            <span style="margin-right: 80px">성명 :</span>
+            <span>서명 또는 (인)</span>
+        </div>
+        <div style="height: 42px"></div>
+    </td>
+    </tr>
+</table>
+</body>
+</html>

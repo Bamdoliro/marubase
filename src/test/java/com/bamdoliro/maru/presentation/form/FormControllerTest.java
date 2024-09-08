@@ -1444,6 +1444,77 @@ class FormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
+    void 접수증을_발급받는다() throws Exception {
+        User user = UserFixture.createUser();
+        MockMultipartFile file = new MockMultipartFile(
+                "proof-of-application",
+                "proof-of-application.pdf",
+                MediaType.APPLICATION_PDF_VALUE,
+                "<<file>>".getBytes()
+        );
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(generateAdmissionTicketUseCase.execute(user)).willReturn(new ByteArrayResource(file.getBytes()));
+
+        mockMvc.perform(get("/form/proof-of-application")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_PDF)
+                )
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        )
+                ));
+
+        verify(generateProofOfApplicationUseCase, times(1)).execute(user);
+    }
+
+    @Test
+    void 접수증을_발급받을_때_원서상태가_최종제출이_아니라면_에러가_발생한다() throws Exception {
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        willThrow(new InvalidFormStatusException()).given(generateProofOfApplicationUseCase).execute(user);
+
+        mockMvc.perform(get("/form/proof-of-application")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isConflict())
+
+                .andDo(restDocs.document());
+
+        verify(generateProofOfApplicationUseCase, times(1)).execute(user);
+    }
+
+    @Test
+    void 접수증을_발급받을_때_원서를_접수하지_않았다면_에러가_발생한다() throws Exception {
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        willThrow(new FormNotFoundException()).given(generateProofOfApplicationUseCase).execute(user);
+
+        mockMvc.perform(get("/form/proof-of-application")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+
+                .andExpect(status().isNotFound())
+
+                .andDo(restDocs.document());
+
+        verify(generateProofOfApplicationUseCase, times(1)).execute(user);
+    }
+
+    @Test
     void 정상적으로_2차_전형_점수_양식을_다운로드한다() throws Exception {
         User user = UserFixture.createAdminUser();
         MockMultipartFile file = new MockMultipartFile(

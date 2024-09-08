@@ -116,6 +116,15 @@ public class ExportFormUseCase {
                     Templates.DOCUMENT,
                     Templates.WRITTEN_OATH
             );
+        } else if (form.getType().isSpecialAdmission()) {
+            return List.of(
+                    Templates.FORM,
+                    Templates.GRADE_TABLE,
+                    Templates.DOCUMENT,
+                    Templates.WRITTEN_OATH,
+                    Templates.SPECIAL_ADMISSION,
+                    Templates.CONFIRMATION
+            );
         }
 
         return List.of(

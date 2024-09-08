@@ -61,6 +61,7 @@ public class FormController {
     private final QueryFirstFormResultUseCase queryFirstFormResultUseCase;
     private final QueryFinalFormResultUseCase queryFinalFormResultUseCase;
     private final GenerateAdmissionTicketUseCase generateAdmissionTicketUseCase;
+    private final GenerateProofOfApplicationUseCase generateProofOfApplicationUseCase;
     private final DownloadSecondRoundScoreFormatUseCase downloadSecondRoundScoreFormatUseCase;
     private final UpdateSecondRoundScoreUseCase updateSecondRoundScoreUseCase;
     private final ExportFinalPassedFormUseCase exportFinalPassedFormUseCase;
@@ -221,6 +222,15 @@ public class FormController {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(generateAdmissionTicketUseCase.execute(user));
+    }
+
+    @GetMapping("/proof-of-application")
+    public ResponseEntity<Resource> generateProfOfApplication(
+            @AuthenticationPrincipal(authority = Authority.USER) User user
+    ) {
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(generateProofOfApplicationUseCase.execute(user));
     }
 
     @GetMapping("/second-round/format")
