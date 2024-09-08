@@ -1269,7 +1269,7 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("<<form-status,원서 상태 (null인 경우 전체 조회)>>")
                                         .optional(),
                                 parameterWithName("type")
-                                        .description("<<form-type,원서 유형 (null인 경우 전체 조회)>>")
+                                        .description("<<form-category,원서 카테고리 (null인 경우 전체 조회)>>")
                                         .optional(),
                                 parameterWithName("sort")
                                         .description("정렬 기준 (total-score-asc인 경우 최종 점수 오름차순, total-score-desc인 경우 최종 점수 내림차순, form-id인 경우 접수 번호순, null인 경우 수험번호 오름차순 조회)")
