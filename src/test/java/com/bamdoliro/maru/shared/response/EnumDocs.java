@@ -18,6 +18,7 @@ public class EnumDocs {
     Map<String, String> certificate;
     Map<String, String> formStatus;
     Map<String, String> formType;
+    Map<String, String> formCategory;
     Map<String, String> gender;
     Map<String, String> graduationType;
     Map<String, String> fairStatus;
