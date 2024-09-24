@@ -112,7 +112,7 @@ public class SelectFirstPassUseCase {
     }
 
     private void changeToRegularAndCalculateGradeAgain(Form form) {
-        form.changeToRegular(calculateFormScoreService);
+        form.changeToRegularFirstRound(calculateFormScoreService);
     }
 
     private List<Form> classifyFormsByType(List<Form> formList, FormTypeFilter filter) {
