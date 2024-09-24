@@ -82,7 +82,7 @@ public class ExportSecondRoundResultUseCase {
             schoolCell.setCellStyle(defaultCellStyle);
 
             Cell schoolCodeCell = row.createCell(9);
-            schoolCodeCell.setCellValue(Integer.parseInt(form.getEducation().getSchool().getCode()));
+            schoolCodeCell.setCellValue(form.getEducation().getSchool().getCode());
             schoolCodeCell.setCellStyle(defaultCellStyle);
 
             Cell subjectGradeScoreCell = row.createCell(10);
