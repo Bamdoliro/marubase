@@ -29,12 +29,14 @@ public class CalculateFormScoreService {
 
     public void execute(Form form) {
         Double subjectGradeScore = calculateSubjectGradeScore(form);
+        Double thirdGradeFirstSemesterSubjectGradeScore = form.getGrade().getSubjectList().getSubjectMap().getScoreOf(3, 1);
         Integer attendanceScore = calculateAttendanceScore(form);
         Integer volunteerScore = calculateVolunteerScore(form);
         Integer bonusScore = calculateBonusScore(form);
 
         form.updateScore(new Score(
                 subjectGradeScore,
+                thirdGradeFirstSemesterSubjectGradeScore,
                 attendanceScore,
                 volunteerScore,
                 bonusScore

@@ -3,7 +3,6 @@ package com.bamdoliro.maru.infrastructure.persistence.form;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
-import com.bamdoliro.maru.domain.form.domain.value.QSchool;
 import com.bamdoliro.maru.infrastructure.persistence.form.vo.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -131,7 +130,14 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                                                 .and(form.type.eq(FormType.SPECIAL_ADMISSION).not())
                                 )
                 )
-                .orderBy(form.score.totalScore.desc())
+                .orderBy(form.score.totalScore.desc(),
+                        form.score.subjectGradeScore.desc(),
+                        form.score.depthInterviewScore.desc(),
+                        form.score.ncsScore.desc(),
+                        form.score.thirdGradeFirstSemesterSubjectGradeScore.desc(),
+                        form.score.attendanceScore.desc(),
+                        form.score.volunteerScore.desc()
+                )
                 .fetch();
     }
 
@@ -146,7 +152,14 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                                                 .or(form.changedToRegular.isTrue())
                                 )
                 )
-                .orderBy(form.score.totalScore.desc())
+                .orderBy(form.score.totalScore.desc(),
+                        form.score.subjectGradeScore.desc(),
+                        form.score.depthInterviewScore.desc(),
+                        form.score.ncsScore.desc(),
+                        form.score.thirdGradeFirstSemesterSubjectGradeScore.desc(),
+                        form.score.attendanceScore.desc(),
+                        form.score.volunteerScore.desc()
+                )
                 .fetch();
     }
 
@@ -161,7 +174,14 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                                                 .or(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION))
                                 )
                 )
-                .orderBy(form.score.totalScore.desc())
+                .orderBy(form.score.totalScore.desc(),
+                        form.score.subjectGradeScore.desc(),
+                        form.score.depthInterviewScore.desc(),
+                        form.score.ncsScore.desc(),
+                        form.score.thirdGradeFirstSemesterSubjectGradeScore.desc(),
+                        form.score.attendanceScore.desc(),
+                        form.score.volunteerScore.desc()
+                )
                 .fetch();
     }
 
