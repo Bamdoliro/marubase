@@ -78,9 +78,9 @@ public class SelectFirstPassUseCase {
         }
 
         formRepository.flush();
-        List<Form> regularOrSupernumeraryFormList = formRepository.findReceivedRegularForm();
+        List<Form> regularFormList = formRepository.findReceivedRegularForm();
 
-        for (Form form : regularOrSupernumeraryFormList) {
+        for (Form form : regularFormList) {
             if (regularCount > 0) {
                 form.firstPass();
                 regularCount--;
