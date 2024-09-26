@@ -7,7 +7,7 @@ import com.bamdoliro.maru.presentation.notice.dto.response.UploadFileResponse;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
 
-import java.util.UUID;
+import java.util.*;
 
 @RequiredArgsConstructor
 @UseCase
@@ -15,9 +15,13 @@ public class UploadFileUseCase {
 
     private final FileService fileService;
 
-    public UploadFileResponse execute(UploadFileRequest request) {
-        String  fileName = UUID.randomUUID() + "_" + request.getFileName();
+    public List<UploadFileResponse> execute(UploadFileRequest request) {
+        List<String> fileNameList = request.getFileNameList().stream()
+                .map(fileName -> UUID.randomUUID() + "_" + fileName).toList();
 
-        return new UploadFileResponse(fileService.getPresignedUrl(FolderConstant.NOTICE_FILE, fileName), fileName);
+        return fileNameList.stream().map(fileName -> new UploadFileResponse(
+                fileService.getPresignedUrl(FolderConstant.NOTICE_FILE, fileName),
+                fileName
+        )).toList();
     }
 }

@@ -41,7 +41,7 @@ public class NoticeController {
     }
 
     @PostMapping("/file")
-    public SingleCommonResponse<UploadFileResponse> uploadFile(
+    public ListCommonResponse<UploadFileResponse> uploadFile(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestBody @Valid UploadFileRequest request
     ) {

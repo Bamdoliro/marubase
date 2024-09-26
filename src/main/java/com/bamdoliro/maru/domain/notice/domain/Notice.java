@@ -1,16 +1,13 @@
 package com.bamdoliro.maru.domain.notice.domain;
 
 import com.bamdoliro.maru.shared.entity.BaseTimeEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,19 +26,21 @@ public class Notice extends BaseTimeEntity {
     @Column(nullable = false, length = 1024)
     private String content;
 
-    @Column(unique = true, nullable = true)
-    private String fileName;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "tbl_notice_file",
+            joinColumns = @JoinColumn(name = "notice_id"))
+    private List<String> fileNameList;
 
     @Builder
-    public Notice(String title, String content, String fileName) {
+    public Notice(String title, String content, List<String> fileNameList) {
         this.title = title;
         this.content = content;
-        this.fileName = fileName;
+        this.fileNameList = fileNameList;
     }
 
-    public void update(String title, String content, String fileName) {
+    public void update(String title, String content, List<String> fileName) {
         this.title = title;
         this.content = content;
-        this.fileName = fileName;
+        this.fileNameList = fileName;
     }
 }
