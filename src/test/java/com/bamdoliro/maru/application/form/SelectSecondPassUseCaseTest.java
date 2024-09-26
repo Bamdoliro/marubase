@@ -13,6 +13,7 @@ import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RandomUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -71,6 +72,11 @@ public class SelectSecondPassUseCaseTest {
             }
             formRepository.save(form);
         });
+    }
+
+    @AfterEach
+    void tearDown() {
+        formRepository.deleteAll();
     }
 
     @Test
