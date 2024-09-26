@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @RequiredArgsConstructor
 @UseCase
@@ -30,6 +31,8 @@ public class SelectFirstPassUseCase {
         List<Form> specialFormList = formRepository.findReceivedSpecialForm();
         List<Form> meisterTalentFormList = classifyFormsByType(specialFormList, FormType::isMeister);
         List<Form> socialIntegrationFormList = classifyFormsByType(specialFormList, FormType::isSocial);
+        List<Form> equalOpportunityFormList = classifyFormsByType(specialFormList, FormType::isEqualOpportunity);
+        List<Form> societyDiversityFormList = classifyFormsByType(specialFormList, FormType::isSocietyDiversity);
 
         if (meisterTalentFormList.size() < FixedNumber.MEISTER_TALENT) {
             int gap = FixedNumber.MEISTER_TALENT - meisterTalentFormList.size();
@@ -55,58 +58,38 @@ public class SelectFirstPassUseCase {
         int equalOpportunityCount = (int) Math.round(socialIntegrationCount * 0.5);
         int societyDiversityCount = equalOpportunityCount;
 
-
-        for (Form form : socialIntegrationFormList) {
-            if (form.getType().isEqualOpportunity() && equalOpportunityCount > 0) {
-                form.firstPass();
-                equalOpportunityCount--;
-            } else if (form.getType().isSocietyDiversity() && societyDiversityCount > 0) {
-                form.firstPass();
-                societyDiversityCount--;
-            } else {
-                changeToRegularAndCalculateGradeAgain(form);
-            }
-        }
-
-        for (Form form : meisterTalentFormList) {
-            if (meisterTalentCount > 0) {
-                form.firstPass();
-                meisterTalentCount--;
-            } else {
-                changeToRegularAndCalculateGradeAgain(form);
-            }
-        }
+        processForms(equalOpportunityFormList, equalOpportunityCount, this::changeToRegularAndCalculateGradeAgain);
+        processForms(societyDiversityFormList, societyDiversityCount, this::changeToRegularAndCalculateGradeAgain);
+        processForms(meisterTalentFormList, meisterTalentCount, this::changeToRegularAndCalculateGradeAgain);
 
         formRepository.flush();
         List<Form> regularFormList = formRepository.findReceivedRegularForm();
 
-        for (Form form : regularFormList) {
-            if (regularCount > 0) {
-                form.firstPass();
-                regularCount--;
-            } else {
-                form.firstFail();
-            }
-        }
+        processForms(regularFormList, regularCount, Form::firstFail);
 
         formRepository.flush();
         List<Form> supernumeraryFormList = formRepository.findReceivedSupernumeraryForm();
+        List<Form> nationalVeteransFormList = classifyFormsByType(supernumeraryFormList, FormType::isNationalVeteransEducation);
+        List<Form> specialAdmissionFormList = classifyFormsByType(supernumeraryFormList, FormType::isSpecialAdmission);
 
-        for (Form form : supernumeraryFormList) {
-            if (
-                    form.getType().isNationalVeteransEducation() &&
-                            nationalVeteransEducationCount > 0
-            ) {
+        processForms(nationalVeteransFormList, nationalVeteransEducationCount, Form::firstFail);
+        processForms(specialAdmissionFormList, specialAdmissionCount, Form::firstFail);
+    }
+
+    private void processForms(List<Form> formList, int count, Consumer<Form> action) {
+        if (formList.isEmpty())
+            return;
+
+        Double lastScore = formList.get(Math.min(count, formList.size())-1).getScore().getFirstRoundScore();
+
+        for (Form form: formList) {
+            if (count > 0) {
                 form.firstPass();
-                nationalVeteransEducationCount--;
-            } else if (
-                    form.getType().isSpecialAdmission() &&
-                            specialAdmissionCount > 0
-            ) {
+                count--;
+            } else if (form.getScore().getFirstRoundScore().equals(lastScore)) {
                 form.firstPass();
-                specialAdmissionCount--;
             } else {
-                form.firstFail();
+                action.accept(form);
             }
         }
     }
@@ -122,7 +105,7 @@ public class SelectFirstPassUseCase {
     }
 
     private int calculateMultiple(int count) {
-        return (int) Math.round(count * FixedNumber.MULTIPLE);
+        return (int) Math.ceil(count * FixedNumber.MULTIPLE);
     }
 }
 
