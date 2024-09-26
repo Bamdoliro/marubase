@@ -54,7 +54,7 @@ public class Score {
     }
 
     public Score(Double subjectGradeScore, Integer attendanceScore, Integer volunteerScore, Integer bonusScore) {
-        this.subjectGradeScore = subjectGradeScore;
+        this.subjectGradeScore = MathUtil.roundTo(subjectGradeScore, 3);
         this.attendanceScore = attendanceScore;
         this.volunteerScore = volunteerScore;
         this.bonusScore = bonusScore;
