@@ -8,11 +8,11 @@ import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import com.bamdoliro.maru.shared.constants.FixedNumber;
-import com.bamdoliro.maru.shared.variable.AdmissionCapacity;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @RequiredArgsConstructor
 @UseCase
@@ -25,63 +25,58 @@ public class SelectSecondPassUseCase {
     public void execute() {
         validate();
 
-        int regularCount = AdmissionCapacity.regular;
-        int meisterTalentCount = AdmissionCapacity.meisterTalent;
-        int socialIntegrationCount = AdmissionCapacity.socialIntegration;
+        int regularCount = FixedNumber.REGULAR;
+        int meisterTalentCount = FixedNumber.MEISTER_TALENT;
+        int socialIntegrationCount = FixedNumber.SOCIAL_INTEGRATION;
         int nationalVeteransEducationCount = FixedNumber.NATIONAL_VETERANS_EDUCATION;
         int specialAdmissionCount = FixedNumber.SPECIAL_ADMISSION;
-        int equalOpportunityCount = (int) Math.round(socialIntegrationCount * 0.5);
-        int societyDiversityCount = equalOpportunityCount;
 
         List<Form> specialFormList = formRepository.findFirstPassedSpecialForm();
         List<Form> meisterTalentFormList = classifyFormsByType(specialFormList, FormType::isMeister);
         List<Form> socialIntegrationFormList = classifyFormsByType(specialFormList, FormType::isSocial);
+        List<Form> equalOpportunityFormList = classifyFormsByType(specialFormList, FormType::isEqualOpportunity);
+        List<Form> societyDiversityFormList = classifyFormsByType(specialFormList, FormType::isSocietyDiversity);
 
-        for (Form form : socialIntegrationFormList) {
-            if (form.getType().isEqualOpportunity() && equalOpportunityCount > 0) {
-                form.pass();
-                equalOpportunityCount--;
-            } else if (form.getType().isSocietyDiversity() && societyDiversityCount > 0) {
-                form.pass();
-                societyDiversityCount--;
-            } else {
-                changeToRegularAndCalculateScoreAgain(form);
-            }
+        if (meisterTalentFormList.size() < FixedNumber.MEISTER_TALENT) {
+            int gap = FixedNumber.MEISTER_TALENT - meisterTalentFormList.size();
+            regularCount += gap;
+            meisterTalentCount -= gap;
         }
 
-        for (Form form : meisterTalentFormList) {
-            if (meisterTalentCount > 0) {
-                form.pass();
-                meisterTalentCount--;
-            } else {
-                changeToRegularAndCalculateScoreAgain(form);
-            }
+        if (socialIntegrationFormList.size() < FixedNumber.SOCIAL_INTEGRATION) {
+            int gap = FixedNumber.SOCIAL_INTEGRATION - socialIntegrationFormList.size();
+            regularCount += gap;
+            socialIntegrationCount -= gap;
         }
+
+        int equalOpportunityCount = (int) Math.round(socialIntegrationCount * 0.5);
+        int societyDiversityCount = equalOpportunityCount;
+
+        processForms(equalOpportunityFormList, equalOpportunityCount, this::changeToRegularAndCalculateScoreAgain);
+        processForms(societyDiversityFormList, societyDiversityCount, this::changeToRegularAndCalculateScoreAgain);
+        processForms(meisterTalentFormList, meisterTalentCount, this::changeToRegularAndCalculateScoreAgain);
 
         formRepository.flush();
         List<Form> regularFormList = formRepository.findFirstPassedRegularForm();
 
-        for (Form form : regularFormList) {
-            if (regularCount > 0) {
-                form.pass();
-                regularCount--;
-            } else {
-                form.fail();
-            }
-        }
+        processForms(regularFormList, regularCount, Form::fail);
 
         formRepository.flush();
         List<Form> supernumeraryFormList = formRepository.findFirstPassedSupernumeraryForm();
+        List<Form> nationalVeteransEducationFormList = classifyFormsByType(supernumeraryFormList, FormType::isNationalVeteransEducation);
+        List<Form> specialAdmissionFormList = classifyFormsByType(supernumeraryFormList, FormType::isSpecialAdmission);
 
-        for (Form form : supernumeraryFormList) {
-            if (form.getType().isNationalVeteransEducation() && nationalVeteransEducationCount > 0) {
+        processForms(nationalVeteransEducationFormList, nationalVeteransEducationCount, Form::fail);
+        processForms(specialAdmissionFormList, specialAdmissionCount, Form::fail);
+    }
+
+    private void processForms(List<Form> formList, int count, Consumer<Form> action) {
+        for (Form form: formList) {
+            if (count > 0) {
                 form.pass();
-                nationalVeteransEducationCount--;
-            } else if (form.getType().isSpecialAdmission() && specialAdmissionCount > 0) {
-                form.pass();
-                specialAdmissionCount--;
+                count--;
             } else {
-                form.fail();
+                action.accept(form);
             }
         }
     }
