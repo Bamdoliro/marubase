@@ -5,6 +5,7 @@ import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.s3.exception.FailedToSaveException;
 import com.bamdoliro.maru.presentation.notice.dto.request.NoticeRequest;
 import com.bamdoliro.maru.presentation.notice.dto.request.UploadFileRequest;
+import com.bamdoliro.maru.presentation.notice.dto.response.DownloadFileResponse;
 import com.bamdoliro.maru.presentation.notice.dto.response.NoticeResponse;
 import com.bamdoliro.maru.presentation.notice.dto.response.NoticeSimpleResponse;
 import com.bamdoliro.maru.presentation.notice.dto.response.UploadFileResponse;
@@ -36,7 +37,7 @@ class NoticeControllerTest extends RestDocsTestSupport {
 
     @Test
     void 공지사항을_생성한다() throws Exception {
-        NoticeRequest request = new NoticeRequest("오늘 급식 맛있엇나용?", "토요일인데요", "notice-file.pdf");
+        NoticeRequest request = new NoticeRequest("오늘 급식 맛있엇나용?", "토요일인데요", List.of("notice-file.pdf", "notice-file.hwp"));
         given(createNoticeUseCase.execute(any(NoticeRequest.class))).willReturn(SharedFixture.createIdResponse());
 
         User user = UserFixture.createAdminUser();
@@ -64,9 +65,9 @@ class NoticeControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("content")
                                         .type(JsonFieldType.STRING)
                                         .description("1024글자 이내의 내용"),
-                                fieldWithPath("fileName")
-                                        .type(JsonFieldType.STRING)
-                                        .description("파일 이름 (파일이 없는 경우 null)")
+                                fieldWithPath("fileNameList")
+                                        .type(JsonFieldType.ARRAY)
+                                        .description("파일 이름 목록 (파일이 없는 경우 null)")
                         )
                 ));
 
@@ -76,7 +77,7 @@ class NoticeControllerTest extends RestDocsTestSupport {
     @Test
     void 공지사항을_수정한다() throws Exception {
         Long id = 1L;
-        NoticeRequest request = new NoticeRequest("이거 맞나", "아님 말고...", "notice-file.pdf");
+        NoticeRequest request = new NoticeRequest("이거 맞나", "아님 말고...", List.of("notice-file.pdf", "notice-file.hwp"));
         willDoNothing().given(updateNoticeUseCase).execute(id, request);
 
         User user = UserFixture.createAdminUser();
@@ -107,9 +108,9 @@ class NoticeControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("content")
                                         .type(JsonFieldType.STRING)
                                         .description("1024글자 이내의 내용"),
-                                fieldWithPath("fileName")
-                                        .type(JsonFieldType.STRING)
-                                        .description("파일 이름 (파일이 없는 경우 null)")
+                                fieldWithPath("fileNameList")
+                                        .type(JsonFieldType.ARRAY)
+                                        .description("파일 이름 목록 (파일이 없는 경우 null)")
                         )
                 ));
     }
@@ -117,7 +118,7 @@ class NoticeControllerTest extends RestDocsTestSupport {
     @Test
     void 공지사항을_수정할_때_공지사항이_없으면_에러가_발생한다() throws Exception {
         Long id = 1L;
-        NoticeRequest request = new NoticeRequest("이거 맞나", "아님 말고...", "notice-file.pdf");
+        NoticeRequest request = new NoticeRequest("이거 맞나", "아님 말고...", List.of("notice-file.pdf", "notice-file.hwp"));
         willThrow(new NoticeNotFoundException()).given(updateNoticeUseCase).execute(eq(1L), any(NoticeRequest.class));
 
         User user = UserFixture.createAdminUser();
@@ -158,7 +159,16 @@ class NoticeControllerTest extends RestDocsTestSupport {
     @Test
     void 공지사항을_불러온다() throws Exception {
         Long id = 1L;
-        NoticeResponse response = new NoticeResponse(NoticeFixture.createNotice(), "https://maru.bamdoliro.com/notice-file.pdf");
+        NoticeResponse response = new NoticeResponse(NoticeFixture.createNotice(), List.of(
+                new DownloadFileResponse(
+                        SharedFixture.createNoticeFileUrlResponse().getDownloadUrl(),
+                        "notice-file.pdf"
+                ),
+                new DownloadFileResponse(
+                        SharedFixture.createNoticeFileUrlResponse().getDownloadUrl(),
+                        "notice-file.pdf"
+                )
+        ));
         given(queryNoticeUseCase.execute(id)).willReturn(response);
 
         mockMvc.perform(get("/notice/{notice-id}", id)
@@ -224,14 +234,23 @@ class NoticeControllerTest extends RestDocsTestSupport {
 
     @Test
     void 공지사항_파일을_업로드한다() throws Exception {
-        UploadFileRequest request = new UploadFileRequest("공지사항 파일");
+        UploadFileRequest request = new UploadFileRequest(List.of(
+                "공지사항 파일.pdf",
+                "공지사항 파일.hwp"
+        ));
         User user = UserFixture.createAdminUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(uploadFileUseCase.execute(request)).willReturn(new UploadFileResponse(
-                SharedFixture.createNoticeFileUrlResponse(),
-                "공지사항 파일"
+        given(uploadFileUseCase.execute(request)).willReturn(List.of(
+                new UploadFileResponse(
+                        SharedFixture.createNoticeFileUrlResponse(),
+                        "공지사항 파일.pdf"
+                ),
+                new UploadFileResponse(
+                        SharedFixture.createNoticeFileUrlResponse(),
+                        "공지사항 파일.hwp"
+                )
         ));
 
         mockMvc.perform(multipart("/notice/file")
@@ -247,16 +266,19 @@ class NoticeControllerTest extends RestDocsTestSupport {
                                         .description("Bearer token")
                         ),
                         requestFields(
-                                fieldWithPath("fileName")
-                                        .type(JsonFieldType.STRING)
-                                        .description("파일 이름")
+                                fieldWithPath("fileNameList")
+                                        .type(JsonFieldType.ARRAY)
+                                        .description("파일 이름 목록(최대 3개)")
                         )
                 ));
     }
 
     @Test
     void 공지사항_파일_업로드가_실패한다() throws Exception {
-        UploadFileRequest request = new UploadFileRequest("공지사항 파일");
+        UploadFileRequest request = new UploadFileRequest(List.of(
+                "공지사항 파일.pdf",
+                "공지사항 파일.hwp"
+        ));
         User user = UserFixture.createAdminUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);

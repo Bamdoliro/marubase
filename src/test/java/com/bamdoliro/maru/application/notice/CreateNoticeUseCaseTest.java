@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,7 +34,7 @@ class CreateNoticeUseCaseTest {
     void 유저가_공지사항을_생성한다() {
         // given
         Notice notice = NoticeFixture.createNotice();
-        NoticeRequest request = new NoticeRequest(notice.getTitle(), notice.getContent(), UUID.randomUUID().toString());
+        NoticeRequest request = new NoticeRequest(notice.getTitle(), notice.getContent(), List.of(UUID.randomUUID().toString()));
         ArgumentCaptor<Notice> captor = ArgumentCaptor.forClass(Notice.class);
 
         given(noticeRepository.save(any(Notice.class))).willReturn(notice);
@@ -47,6 +48,6 @@ class CreateNoticeUseCaseTest {
         assertEquals(response.getId(), savedNotice.getId());
         assertEquals(request.getTitle(), savedNotice.getTitle());
         assertEquals(request.getContent(), savedNotice.getContent());
-        assertEquals(request.getFileName(), savedNotice.getFileName() != null ? savedNotice.getFileName() : null);
+        assertEquals(request.getFileNameList(), savedNotice.getFileNameList() != null ? savedNotice.getFileNameList() : null);
     }
 }
