@@ -67,6 +67,10 @@ public class CalculateFormScoreService {
         return REGULAR_TYPE_DEFAULT_SCORE + score;
     }
 
+    public Double calculateDepthInterviewScoreToRegular(Form form) {
+        return (form.getScore().getDepthInterviewScore() / 200) * 120;
+    }
+
     private Double calculateSpecialScore(Form form) {
         double score;
 

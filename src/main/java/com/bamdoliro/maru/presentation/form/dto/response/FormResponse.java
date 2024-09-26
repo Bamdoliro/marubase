@@ -19,6 +19,7 @@ public class FormResponse {
     private String formUrl;
     private FormType type;
     private FormStatus status;
+    private boolean isChangedToRegular;
 
     public FormResponse(Form form, String identificationPictureUri, String formUrl) {
         this.id = form.getId();
@@ -31,5 +32,6 @@ public class FormResponse {
         this.formUrl = formUrl;
         this.type = form.getType();
         this.status = form.getStatus();
+        this.isChangedToRegular = form.getChangedToRegular();
     }
 }

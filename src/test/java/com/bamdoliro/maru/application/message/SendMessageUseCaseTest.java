@@ -244,7 +244,7 @@ public class SendMessageUseCaseTest {
         when(formRepository.findChangedToRegularFirstRoundForm()).thenReturn(List.of(form));
 
         form.firstPass();
-        form.changeToRegular(calculateFormScoreService);
+        form.changeToRegularFirstRound(calculateFormScoreService);
         SendMessageByTypeRequest request = new SendMessageByTypeRequest("부산소마고 공지사항", "헤헤", FormType.REGULAR, true);
 
         //when

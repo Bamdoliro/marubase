@@ -12,11 +12,13 @@ public class FormResultResponse {
     private String name;
     private String type;
     private boolean isPassed;
+    private boolean isChangedToRegular;
 
     public FormResultResponse(Form form, boolean isPassed) {
         this.id = form.getId();
         this.name = form.getApplicant().getName();
         this.type = form.getType().getDescription();
         this.isPassed = isPassed;
+        this.isChangedToRegular= form.getChangedToRegular();
     }
 }
