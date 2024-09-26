@@ -2,6 +2,7 @@ package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
+import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.service.AssignExaminationNumberService;
 import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.domain.user.domain.User;
@@ -94,7 +95,19 @@ public class SelectSecondPassUseCaseTest {
             log.info("score: {}", form.getScore().getTotalScore());
             log.info("status: {}", form.getStatus());
         });
-        int passedFormCount = (int)formList.stream().filter(Form::isPassedNow).count();
+        int passedFormCount = (int) formList.stream().filter(Form::isPassedNow).count();
         assertEquals(FixedNumber.TOTAL, passedFormCount);
+    }
+
+    @Test
+    void 마이스터전형_또는_사회통합전형에서_불합격을_한다면_일반전형으로_다시_지원한다() {
+        selectSecondPassUseCase.execute();
+
+        List<Form> failedFormList = formRepository.findByType(FormType.REGULAR)
+                .stream()
+                .filter(form -> form.isFailedNow() || form.isFirstFailedNow())
+                .toList();
+
+        assertEquals((long) formRepository.findAll().size() -  FixedNumber.TOTAL, failedFormList.size());
     }
 }

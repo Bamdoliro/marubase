@@ -191,12 +191,31 @@ public class Form extends BaseTimeEntity {
         return status.equals(FormStatus.FAILED);
     }
 
-    public void changeToRegular(CalculateFormScoreService calculateFormScoreService) {
+    public void changeToRegularFirstRound(CalculateFormScoreService calculateFormScoreService) {
         this.changedToRegular = true;
         this.type = FormType.REGULAR;
 
         Double subjectGradeScore = calculateFormScoreService.calculateSubjectGradeScore(this);
         this.score.updateSubjectScore(subjectGradeScore);
+    }
+
+    public void changeToRegularSecondRound(CalculateFormScoreService calculateFormScoreService) {
+        this.changedToRegular = true;
+
+        if (type.isMeister()) {
+            this.type = FormType.REGULAR;
+            Double subjectGradeScore = calculateFormScoreService.calculateSubjectGradeScore(this);
+            this.score.updateSubjectScore(subjectGradeScore);
+
+            this.score.updateSecondRoundMeisterScoreToRegular();
+        } else if (type.isSocial()){
+            this.type = FormType.REGULAR;
+            Double subjectGradeScore = calculateFormScoreService.calculateSubjectGradeScore(this);
+            this.score.updateSubjectScore(subjectGradeScore);
+
+            Double depthInterviewScore = calculateFormScoreService.calculateDepthInterviewScoreToRegular(this);
+            this.score.updateSecondRoundSocialScoreToRegular(depthInterviewScore);
+        }
     }
 
     public void update(Applicant applicant, Parent parent, Education education, Grade grade, Document document, FormType type) {

@@ -4,6 +4,7 @@ import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.MissingTotalScoreException;
+import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import com.bamdoliro.maru.shared.constants.FixedNumber;
@@ -18,6 +19,7 @@ import java.util.List;
 public class SelectSecondPassUseCase {
 
     private final FormRepository formRepository;
+    private final CalculateFormScoreService calculateFormScoreService;
 
     @Transactional
     public void execute() {
@@ -43,7 +45,7 @@ public class SelectSecondPassUseCase {
                 form.pass();
                 societyDiversityCount--;
             } else {
-                form.fail();
+                changeToRegularAndCalculateScoreAgain(form);
             }
         }
 
@@ -52,7 +54,7 @@ public class SelectSecondPassUseCase {
                 form.pass();
                 meisterTalentCount--;
             } else {
-                form.fail();
+                changeToRegularAndCalculateScoreAgain(form);
             }
         }
 
@@ -82,6 +84,10 @@ public class SelectSecondPassUseCase {
                 form.fail();
             }
         }
+    }
+
+    private void changeToRegularAndCalculateScoreAgain(Form form) {
+        form.changeToRegularSecondRound(calculateFormScoreService);
     }
 
     private void validate() {

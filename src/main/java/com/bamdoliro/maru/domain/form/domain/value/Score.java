@@ -66,4 +66,14 @@ public class Score {
         this.ncsScore = ncsScore;
         this.totalScore = firstRoundScore + depthInterviewScore + ncsScore;
     }
+
+    public void updateSecondRoundMeisterScoreToRegular() {
+        this.codingTestScore = null;
+        this.totalScore = firstRoundScore + depthInterviewScore + ncsScore;
+    }
+
+    public void updateSecondRoundSocialScoreToRegular(Double depthInterviewScore) {
+        this.depthInterviewScore = depthInterviewScore;
+        this.totalScore = firstRoundScore + depthInterviewScore + ncsScore;
+    }
 }
