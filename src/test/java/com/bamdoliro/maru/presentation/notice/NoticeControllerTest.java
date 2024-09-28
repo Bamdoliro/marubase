@@ -242,7 +242,7 @@ class NoticeControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(uploadFileUseCase.execute(request)).willReturn(List.of(
+        given(uploadFileUseCase.execute(any(UploadFileRequest.class))).willReturn(List.of(
                 new UploadFileResponse(
                         SharedFixture.createNoticeFileUrlResponse(),
                         "공지사항 파일.pdf"
@@ -253,7 +253,7 @@ class NoticeControllerTest extends RestDocsTestSupport {
                 )
         ));
 
-        mockMvc.perform(multipart("/notice/file")
+        mockMvc.perform(post("/notice/file")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
