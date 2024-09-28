@@ -17,11 +17,14 @@ public class UploadFileUseCase {
 
     public List<UploadFileResponse> execute(UploadFileRequest request) {
         List<String> fileNameList = request.getFileNameList().stream()
-                .map(fileName -> UUID.randomUUID() + "_" + fileName).toList();
+                .map(fileName -> UUID.randomUUID() + "_" + fileName)
+                .toList();
 
-        return fileNameList.stream().map(fileName -> new UploadFileResponse(
-                fileService.getPresignedUrl(FolderConstant.NOTICE_FILE, fileName),
-                fileName
-        )).toList();
+        return fileNameList.stream()
+                .map(fileName -> new UploadFileResponse(
+                        fileService.getPresignedUrl(FolderConstant.NOTICE_FILE, fileName),
+                        fileName
+                ))
+                .toList();
     }
 }
