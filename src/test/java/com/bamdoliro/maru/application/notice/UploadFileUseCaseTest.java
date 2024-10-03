@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -27,7 +29,7 @@ public class UploadFileUseCaseTest {
     void 공지사항_파일을_업로드한다() {
         // given
         given(fileService.getPresignedUrl(any(String.class), any(String.class))).willReturn(SharedFixture.createNoticeFileUrlResponse());
-        UploadFileRequest request = new UploadFileRequest("notice-file.pdf");
+        UploadFileRequest request = new UploadFileRequest(List.of("notice-file.pdf"));
 
         // when
         uploadFileUseCase.execute(request);
