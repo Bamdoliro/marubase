@@ -10,11 +10,11 @@ public class NoticeSimpleResponse {
 
     private final Long id;
     private final String title;
-    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
     public NoticeSimpleResponse(Notice notice) {
         this.id = notice.getId();
         this.title = notice.getTitle();
-        this.createdAt = notice.getCreatedAt();
+        this.updatedAt = notice.getUpdatedAt();
     }
 }
