@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(MockitoExtension.class)
 class CalculateFormScoreServiceTest {
@@ -26,6 +27,7 @@ class CalculateFormScoreServiceTest {
 
         // then
         assertEquals(195.886, form.getScore().getSubjectGradeScore());
+        assertEquals(4.714, form.getScore().getThirdGradeFirstSemesterSubjectGradeScore());
         assertEquals(15, form.getScore().getAttendanceScore());
         assertEquals(0, form.getScore().getVolunteerScore());
         assertEquals(2, form.getScore().getBonusScore());
@@ -41,6 +43,7 @@ class CalculateFormScoreServiceTest {
 
         // then
         assertEquals(117.531, form.getScore().getSubjectGradeScore());
+        assertEquals(4.714, form.getScore().getThirdGradeFirstSemesterSubjectGradeScore());
         assertEquals(15, form.getScore().getAttendanceScore());
         assertEquals(0, form.getScore().getVolunteerScore());
         assertEquals(2, form.getScore().getBonusScore());
@@ -56,6 +59,7 @@ class CalculateFormScoreServiceTest {
 
         // then
         assertEquals(156.000, form.getScore().getSubjectGradeScore());
+        assertNull(form.getScore().getThirdGradeFirstSemesterSubjectGradeScore());
         assertEquals(14, form.getScore().getAttendanceScore());
         assertEquals(14, form.getScore().getVolunteerScore());
         assertEquals(2, form.getScore().getBonusScore());

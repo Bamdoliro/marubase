@@ -33,12 +33,23 @@ public class CalculateFormScoreService {
         Integer volunteerScore = calculateVolunteerScore(form);
         Integer bonusScore = calculateBonusScore(form);
 
-        form.updateScore(new Score(
-                subjectGradeScore,
-                attendanceScore,
-                volunteerScore,
-                bonusScore
-        ));
+        if (form.getEducation().isQualificationExamination()) {
+            form.updateScore(new Score(
+                    subjectGradeScore,
+                    attendanceScore,
+                    volunteerScore,
+                    bonusScore
+            ));
+        } else {
+            Double thirdGradeFirstSemesterSubjectGradeScore = form.getGrade().getSubjectList().getSubjectMap().getScoreOf(3, 1);
+            form.updateScore(new Score(
+                    subjectGradeScore,
+                    thirdGradeFirstSemesterSubjectGradeScore,
+                    attendanceScore,
+                    volunteerScore,
+                    bonusScore
+            ));
+        }
     }
 
     public Double calculateSubjectGradeScore(Form form) {

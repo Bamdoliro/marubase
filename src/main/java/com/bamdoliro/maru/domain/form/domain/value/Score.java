@@ -17,6 +17,9 @@ public class Score {
     @Column(nullable = false)
     private Double subjectGradeScore;
 
+    @Column(nullable = true)
+    private Double thirdGradeFirstSemesterSubjectGradeScore;
+
     @Column(nullable = false)
     private Integer attendanceScore;
 
@@ -40,6 +43,15 @@ public class Score {
 
     @Column(nullable = true)
     private Double totalScore;
+
+    public Score(Double subjectGradeScore, Double thirdGradeFirstSemesterSubjectGradeScore, Integer attendanceScore, Integer volunteerScore, Integer bonusScore) {
+        this.subjectGradeScore = MathUtil.roundTo(subjectGradeScore, 3);
+        this.thirdGradeFirstSemesterSubjectGradeScore = MathUtil.roundTo(thirdGradeFirstSemesterSubjectGradeScore, 3);
+        this.attendanceScore = attendanceScore;
+        this.volunteerScore = volunteerScore;
+        this.bonusScore = bonusScore;
+        this.firstRoundScore = MathUtil.roundTo(subjectGradeScore + attendanceScore + volunteerScore + bonusScore, 3);
+    }
 
     public Score(Double subjectGradeScore, Integer attendanceScore, Integer volunteerScore, Integer bonusScore) {
         this.subjectGradeScore = MathUtil.roundTo(subjectGradeScore, 3);

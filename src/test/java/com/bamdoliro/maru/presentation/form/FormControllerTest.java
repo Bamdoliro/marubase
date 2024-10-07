@@ -1892,7 +1892,7 @@ class FormControllerTest extends RestDocsTestSupport {
         mockMvc.perform(patch("/form/second-round/select")
                 .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader()))
 
-                .andExpect(status().isPreconditionFailed())
+                .andExpect(status().isConflict())
 
                 .andDo(restDocs.document());
 

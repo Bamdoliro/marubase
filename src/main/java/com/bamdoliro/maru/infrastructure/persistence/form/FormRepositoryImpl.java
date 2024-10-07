@@ -130,7 +130,14 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                                                 .and(form.type.eq(FormType.SPECIAL_ADMISSION).not())
                                 )
                 )
-                .orderBy(form.score.totalScore.desc())
+                .orderBy(form.score.totalScore.desc(),
+                        form.score.subjectGradeScore.desc(),
+                        form.score.depthInterviewScore.desc(),
+                        form.score.ncsScore.desc(),
+                        form.score.thirdGradeFirstSemesterSubjectGradeScore.desc().nullsLast(),
+                        form.score.attendanceScore.desc(),
+                        form.score.volunteerScore.desc()
+                )
                 .fetch();
     }
 
@@ -145,7 +152,14 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                                                 .or(form.changedToRegular.isTrue())
                                 )
                 )
-                .orderBy(form.score.totalScore.desc())
+                .orderBy(form.score.totalScore.desc(),
+                        form.score.subjectGradeScore.desc(),
+                        form.score.depthInterviewScore.desc(),
+                        form.score.ncsScore.desc(),
+                        form.score.thirdGradeFirstSemesterSubjectGradeScore.desc().nullsLast(),
+                        form.score.attendanceScore.desc(),
+                        form.score.volunteerScore.desc()
+                )
                 .fetch();
     }
 
@@ -160,7 +174,14 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                                                 .or(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION))
                                 )
                 )
-                .orderBy(form.score.totalScore.desc())
+                .orderBy(form.score.totalScore.desc(),
+                        form.score.subjectGradeScore.desc(),
+                        form.score.depthInterviewScore.desc(),
+                        form.score.ncsScore.desc(),
+                        form.score.thirdGradeFirstSemesterSubjectGradeScore.desc().nullsLast(),
+                        form.score.attendanceScore.desc(),
+                        form.score.volunteerScore.desc()
+                )
                 .fetch();
     }
 
