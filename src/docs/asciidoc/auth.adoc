@@ -50,7 +50,7 @@ include::{snippets}/auth-controller-test/액세스_토큰으로_액세스_토큰
 ===== 리프레시 토큰을 보내지 않은 경우
 include::{snippets}/auth-controller-test/액세스_토큰을_재발급할_때_리프레시_토큰을_보내지_않으면_에러가_발생한다/http-response.adoc[]
 
-===== 서명 알고리즘이 유효하지 않은 경우
+===== 서명 알고리즘이 불일치 하는 경우
 include::{snippets}/auth-controller-test/토큰의_서명_알고리즘이_불일치하면_에러가_발생한다/http-response.adoc[]
 
 === 로그아웃
