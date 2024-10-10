@@ -3,7 +3,6 @@ package com.bamdoliro.maru.domain.auth.service;
 import com.bamdoliro.maru.domain.auth.domain.Token;
 import com.bamdoliro.maru.domain.auth.domain.type.TokenType;
 import com.bamdoliro.maru.domain.auth.exception.ExpiredTokenException;
-import com.bamdoliro.maru.domain.auth.exception.InvalidSignatureAlgorithmException;
 import com.bamdoliro.maru.domain.auth.exception.InvalidTokenException;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.service.UserFacade;
@@ -86,8 +85,6 @@ public class TokenService {
                     .getBody();
         } catch (ExpiredJwtException e) {
             throw new ExpiredTokenException();
-        } catch (InvalidSignatureAlgorithmException e) {
-            throw e;
         } catch (Exception e) {
             throw new InvalidTokenException();
         }
@@ -102,7 +99,7 @@ public class TokenService {
         String algorithm = (String) headerMap.get("alg");
 
         if (!algorithm.equals(SignatureAlgorithm.HS256.getValue())) {
-            throw new InvalidSignatureAlgorithmException();
+            throw new InvalidTokenException();
         }
     }
 
