@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.presentation.auth;
 
 import com.bamdoliro.maru.domain.auth.exception.ExpiredTokenException;
+import com.bamdoliro.maru.domain.auth.exception.InvalidSignatureAlgorithmException;
 import com.bamdoliro.maru.domain.auth.exception.InvalidTokenException;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.exception.PasswordMismatchException;
@@ -181,6 +182,22 @@ class AuthControllerTest extends RestDocsTestSupport {
                 .andDo(restDocs.document());
 
         verify(refreshTokenUseCase, never()).execute(anyString());
+    }
+
+    @Test
+    void 토큰의_서명_알고리즘이_불일치하면_에러가_발생한다() throws Exception {
+        String accessToken = AuthFixture.createAccessTokenString();
+        doThrow(new InvalidSignatureAlgorithmException()).when(refreshTokenUseCase).execute(accessToken);
+
+        mockMvc.perform(patch("/auth")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Refresh-Token", accessToken)
+                )
+
+                .andExpect(status().isUnauthorized())
+
+                .andDo(restDocs.document());
     }
 
     @Test
