@@ -73,8 +73,8 @@
     <tr>
         <th scope="row" class="ba" style="width:15%;">성명</th>
         <td class="ba" style="width:35%;" th:text="${form.applicant.name}"></td>
-        <th scope="row" class="ba" style="width:15%;">접수번호</th>
-        <td class="ba" style="width:35%;" th:text="${form.id}"></td>
+        <th scope="row" class="ba" style="width:15%;">수험번호</th>
+        <td class="ba" style="width:35%;" th:text="${form.getExaminationNumber()}"></td>
     </tr>
     <tr>
         <th scope="row" class="ba">출신중학교</th>
