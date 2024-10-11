@@ -184,6 +184,22 @@ class AuthControllerTest extends RestDocsTestSupport {
     }
 
     @Test
+    void 토큰의_서명_알고리즘이_불일치하면_에러가_발생한다() throws Exception {
+        String accessToken = AuthFixture.createAccessTokenString();
+        doThrow(new InvalidTokenException()).when(refreshTokenUseCase).execute(accessToken);
+
+        mockMvc.perform(patch("/auth")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Refresh-Token", accessToken)
+                )
+
+                .andExpect(status().isUnauthorized())
+
+                .andDo(restDocs.document());
+    }
+
+    @Test
     void 유저가_로그아웃한다() throws Exception {
         User user = UserFixture.createUser();
 
