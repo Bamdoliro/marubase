@@ -33,7 +33,6 @@
 
         td {
             padding: 8px 8px;
-            text-align: left;
             background-color: white;
         }
 
@@ -44,7 +43,9 @@
             letter-spacing: 6px;
             text-indent: 6px;
         }
-
+        .container {
+            padding: 40px 68px;
+        }
         .ba {
             border: #000000 1px solid;
         }
@@ -70,27 +71,49 @@
 
         .admission-ticket-container {
             width: 55%;
-            float: left;
-            padding: 50px 30px;
+            margin: 0 auto;
         }
 
         .admission-ticket {
             width: 100%;
         }
-
         .information-container {
-            height: 297mm;
-            width: 45%;
-            float: right;
-            padding: 50px 30px;
-            background-color: #F8F8F9;
-        }
 
-        .information {
+        }
+        .information-container-list {
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 140%;
+            letter-spacing: -0.2px;
+            padding: 2px;
+        }
+        .information-container-indent {
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 140%;
+            letter-spacing: -0.2px;
+            text-indent: 20px;
+            padding: 2px;
+        }
+        .information-container-table  {
+            text-align: center;
             width: 100%;
-            margin-top: 12px;
         }
-
+        .information-container-table th {
+            font-size: 10px;
+            font-weight: 600;
+            line-height: 140%;
+            text-indent: 0;
+            padding: 0;
+            border: #000000 1px solid;
+        }
+        .information-container-table td {
+            font-size: 10px;
+            font-weight: 500;
+            line-height: 140%;
+            letter-spacing: -0.2px;
+            border: #000000 1px solid;
+        }
         .left {
             text-align: left;
         }
@@ -98,26 +121,19 @@
         .red {
             color: #F44336;
         }
-
-        .more {
-            padding-top: 4px;
-        }
-
-        .title {
-            font-weight: 600;
-            font-size: 24px;
-            padding-bottom: 12px;
+        .background-blue {
+            background-color: #E0E6F5;
         }
     </style>
     <title>수험표</title>
 </head>
 <body>
 <main class="container">
-    <section class="admission-ticket-container">
+    <div class="admission-ticket-container">
         <table class="admission-ticket">
             <tr class="ba">
                 <td colspan="3" class="ba center" style="height: 48px;">
-                    <p th:text='${year+"학년도"}'></p>
+                    <p th:text='${year+"학년도"}'>2025학년도</p>
                     <p>부산소프트웨어마이스터고등학교 입학전형</p>
                     <p class="big letter-spacing-10">수험표</p>
                 </td>
@@ -129,27 +145,27 @@
                             alt="증명사진"/>
                 </td>
                 <th scope="row" class="ba" style="width:28%;">수험번호</th>
-                <td class="ba" style="width:39%;" th:text="${form.examinationNumber}"></td>
+                <td class="ba left" style="width:39%;" th:text="${form.examinationNumber}"></td>
             </tr>
             <tr>
                 <th scope="row" class="ba">전형구분</th>
-                <td class="ba" th:text="${form.type.getCategory().description}"></td>
+                <td class="ba left" th:text="${form.type.getCategory().description}"></td>
             </tr>
             <tr>
                 <th scope="row" class="ba">생년월일</th>
-                <td class="ba" th:text="${#temporals.format(form.applicant.birthday, 'YYYY년 MM월 dd일')}"></td>
+                <td class="ba left" th:text="${#temporals.format(form.applicant.birthday, 'YYYY년 MM월 dd일')}"></td>
             </tr>
             <tr>
-                <th scope="row" class="ba letter-spacing-25">성명</th>
-                <td class="ba" th:text="${form.applicant.name}"></td>
+                <th scope="row" class="ba"><span style="margin-right: 40px">성</span>명</th>
+                <td class="ba left" th:text="${form.applicant.name}"></td>
             </tr>
             <tr>
                 <th scope="row" class="ba">출신학교</th>
-                <td class="ba" th:text="${form.education.school.name}"></td>
+                <td class="ba left" th:text="${form.education.school.name}"></td>
             </tr>
             <tr>
                 <th scope="row" class="ba">접수번호</th>
-                <td class="ba" th:text="${form.id}"></td>
+                <td class="ba left" th:text="${form.id}"></td>
             </tr>
             <tr>
                 <td colspan="3" class="ba center big">
@@ -157,53 +173,127 @@
                 </td>
             </tr>
         </table>
-    </section>
-    <section class="information-container">
-        <p class="title">2단계 전형 안내</p>
-        <div class="information">
-            <p class="big left">1. 장소</p>
-            <p>부산광역시 가락대로 1393</p>
-            <p>부산소프트웨어마이스터고등학교</p>
+    </div>
+    <div style="height: 40px"></div>
+    <div class="information-container">
+        <div>
+            <div class="information-container-list">1. 2단계 전형 안내</div>
+            <div class="information-container-indent">가. 장소:부산 강서구 가락대로 1393 부산소프트웨어마이스터고등학교</div>
+            <div class="information-container-indent">나. 전형 안내</div>
+            <table class="information-container-table" style="width: 658px">
+                <colgroup>
+                    <col style="width: 24.29%">
+                    <col style="width: 24.29%">
+                    <col style="width: 12.15%">
+                    <col style="width: 39.27%">
+                </colgroup>
+                <tr style="height: 22px">
+                    <th style="border-left: none">구분</th>
+                    <th>일정</th>
+                    <th>장소</th>
+                    <th style="border-right: none">비고</th>
+                </tr>
+                <tr style="height: 53px">
+                    <td style="border-left: none">코딩 테스트<br>(마이스터인재전형 지원자)</td>
+                    <td>2024. 10. 25.(금) 09:30</td>
+                    <td>본교 평가장</td>
+                    <td style="border-right: none" rowspan="4">
+                        <div class="left" style="margin-bottom: 10px">• 코딩 테스트는 '마이스터인재전형' 지원자만 실시함</div>
+                        <div class="left" style="margin-bottom: 10px">• 수험표 반드시 지참</div>
+                        <div class="left">• 불참자는 불합격 처리함</div>
+                    </td>
+                </tr>
+                <tr style="height: 35px">
+                    <td style="border-left: none">NCS 인적성검사</td>
+                    <td>2024. 10. 25.(금) 11:00</td>
+                    <td>본교 평가장</td>
+                </tr>
+                <tr style="height: 35px">
+                    <td style="border-left: none">심층면접</td>
+                    <td>2024. 10. 25.(금) 13:00</td>
+                    <td>본교 평가장</td>
+                </tr>
+                <tr style="height: 35px">
+                    <td style="border-left: none">신체검사</td>
+                    <td>2024. 10. 25.(금) 15:00</td>
+                    <td>본교 평가장</td>
+                </tr>
+                <tr style="height: 35px">
+                    <td class="background-blue" style="border-left: none">합격자 발표</td>
+                    <td class="background-blue">2024. 10. 31.(목) 15:00</td>
+                    <td class="background-blue">본교 홈페이지</td>
+                    <td class="background-blue" style="border-right: none">
+                        <div class="left">• 예비소집일 별도 안내 예정</div>
+                    </td>
+                </tr>
+                <tr style="height: 35px">
+                    <td class="background-blue" style="border-left: none">입학등록기간</td>
+                    <td class="background-blue">2024. 12. 16.(월)-12. 18.(수)</td>
+                    <td class="background-blue">본교 행정실</td>
+                    <td class="background-blue" style="border-right: none">
+                        <div class="left">• 우편, 등기, 직접 제출</div>
+                    </td>
+                </tr>
+            </table>
         </div>
-        <table class="information ba">
-            <caption class="big left">2. 일정</caption>
-            <tr>
-                <th scope="colgroup" class="ba" style="width: 40%">구분</th>
-                <th scope="colgroup" class="ba" style="width: 40%">시각</th>
-                <th scope="colgroup" class="ba" style="width: 20%">장소</th>
-            </tr>
-            <tr>
-                <td class="ba" style="word-break: keep-all;">코딩 테스트 (마이스터 인재전형 지원자)</td>
-                <td class="ba" th:text="${codingTest}"></td>
-                <td class="ba">평가장</td>
-            </tr>
-            <tr>
-                <td class="ba">NCS 인적성 검사</td>
-                <td class="ba" th:text="${ncs}"></td>
-                <td class="ba">검사장</td>
-            </tr>
-            <tr>
-                <td class="ba">심층면접</td>
-                <td class="ba" th:text="${depthInterview}"></td>
-                <td class="ba">면접장</td>
-            </tr>
-            <tr>
-                <td class="ba">신체검사</td>
-                <td class="ba" th:text="${physicalExamination}"></td>
-                <td class="ba">검사장</td>
-            </tr>
-            <tr>
-                <td class="ba">합격발표일</td>
-                <td class="ba" th:text="${announcementOfSecondPass}"></td>
-                <td class="ba">본교 홈페이지</td>
-            </tr>
-        </table>
-        <div class="red more">
-            <p>※ 코딩테스트는 '마이스터인재전형' 지원자만 실시합니다.</p>
-            <p>※ 수험표는 반드시 지참하여야 합니다.</p>
-            <p>※ 불참자는 불합격 처리합니다.</p>
+        <div>
+            <div class="information-container-list">1. 2단계 전형 유의사항</div>
+            <div class="information-container-indent">가. 고시장 입실 시간</div>
+            <table class="information-container-table" style="width: 658px">
+                <colgroup>
+                    <col style="width: 38.46%">
+                    <col style="width: 28.34%">
+                    <col style="width: 22.47%">
+                    <col style="width: 10.73%">
+                </colgroup>
+                <tr style="height: 22px">
+                    <th style="border-left: none">구분</th>
+                    <th>일정</th>
+                    <th>장소</th>
+                    <th style="border-right: none">비고</th>
+                </tr>
+                <tr style="height: 27px">
+                    <td style="border-left: none">마이스터인재전형</td>
+                    <td>2024. 10. 25.(금) 09:00</td>
+                    <td>본교 평가장</td>
+                    <td style="border-right: none">ㅤ</td>
+                </tr>
+                <tr style="height: 27px">
+                    <td style="border-left: none">일반 전형, 사회통합전형</td>
+                    <td>2024. 10. 25.(금) 10:30</td>
+                    <td>본교 평가장</td>
+                    <td style="border-right: none">ㅤ</td>
+                </tr>
+            </table>
+            <div class="information-container-indent">나. 수험생 외의 인원은 고시장 출입이 불가합니다.</div>
+            <div class="information-container-indent red">다. 점심식사 제공 안함, 개별 도시락 반드시 지참 바랍니다.</div>
+            <div class="information-container-indent">라. 필수 휴대 품목과 휴대 가능 품목, 휴대 금지 품목을 반드시 확인하기 바랍니다.</div>
+            <table class="information-container-table" style="width: 658px">
+                <colgroup>
+                    <col style="width: 24.29%;">
+                    <col style="width: 75.71%;">
+                </colgroup>
+                <tr>
+                    <td style="border-left: none">필수 휴대 품목</td>
+                    <td class="left" style="border-right: none">수험표, 컴퓨터용 사인펜, 흑색 또는 청색 볼펜 등</td>
+                </tr>
+                <tr>
+                    <td style="border-left: none">휴대 가능 품목</td>
+                    <td class="left" style="border-right: none">컴퓨터용 사인펜, 연필(흑색), 지우개, 샤프연필, 샤프심,<br> 아날로그 시계(블루투스 등 통신기능 및 전자식 화면표시(LCD, LED)가 없는 시계 등</td>
+                </tr>
+                <tr>
+                    <td style="border-left: none">휴대 금지 품목</td>
+                    <td class="left" style="border-right: none">
+                        <div>휴대용 전화기, 노트북, 태블릿 PC, 스마트 센서 등의 웨어러블 기기, 통신기기 등</div>
+                        <br>
+                        <div>☞ 휴대 금지 물품을 불가피하게 반입한 경우 전형 시작 전에 감독관의 지시에 따라 제출해야 하며 <br>
+                            <span style="margin-left: 14px">미제출 시 부정행위 간주됩니다.</span></div>
+                    </td>
+                </tr>
+            </table>
         </div>
-    </section>
+
+    </div>
 </main>
 </body>
 </html>
