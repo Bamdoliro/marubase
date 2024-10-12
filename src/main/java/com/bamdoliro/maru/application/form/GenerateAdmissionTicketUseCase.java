@@ -32,16 +32,19 @@ public class GenerateAdmissionTicketUseCase {
         Form form = formFacade.getForm(user);
         validateFormStatus(form);
 
-        Map<String, Object> formMap = Map.of(
-                "form", form,
-                "year", Schedule.getAdmissionYear(),
-                "codingTest", Schedule.toLocaleString(CODING_TEST),
-                "ncs", Schedule.toLocaleString(NCS),
-                "depthInterview", Schedule.toLocaleString(DEPTH_INTERVIEW),
-                "physicalExamination", Schedule.toLocaleString(PHYSICAL_EXAMINATION),
-                "announcementOfSecondPass", Schedule.toLocaleString(ANNOUNCEMENT_OF_SECOND_PASS),
-                "identificationPictureUri", fileService.getPresignedUrl(FolderConstant.IDENTIFICATION_PICTURE, user.getUuid().toString()).getDownloadUrl()
-        );
+        Map<String, Object> formMap = Map.ofEntries(
+                Map.entry("form", form),
+                Map.entry("year", Schedule.getAdmissionYear()),
+                Map.entry("codingTest", Schedule.toLocaleString(CODING_TEST)),
+                Map.entry("ncs", Schedule.toLocaleString(NCS)),
+                Map.entry("depthInterview", Schedule.toLocaleString(DEPTH_INTERVIEW)),
+                Map.entry("physicalExamination", Schedule.toLocaleString(PHYSICAL_EXAMINATION)),
+                Map.entry("announcementOfSecondPass", Schedule.toLocaleString(ANNOUNCEMENT_OF_SECOND_PASS)),
+                Map.entry("meisterTalentEntranceTime", Schedule.toLocaleString(MEISTER_TALENT_ENTRANCE_TIME)),
+                Map.entry("meisterTalentExclusionEntranceTime", Schedule.toLocaleString(MEISTER_TALENT_EXCLUSION_ENTRANCE_TIME)),
+                Map.entry("entranceRegistrationTime", Schedule.toLocaleString(ENTRANCE_REGISTRATION_PERIOD_START, ENTRANCE_REGISTRATION_PERIOD_END)),
+                Map.entry("identificationPictureUri", fileService.getPresignedUrl(FolderConstant.IDENTIFICATION_PICTURE, user.getUuid().toString()).getDownloadUrl())
+                );
         String html = processTemplateService.execute(Templates.ADMISSION_TICKET, formMap);
         ByteArrayOutputStream outputStream = generatePdfService.execute(html);
 
