@@ -24,9 +24,10 @@ public class AssignExaminationNumberService {
     }
 
     private Long getStartNumber(FormType type) {
-        return switch (type.getMainCategory()) {
-            case REGULAR -> 2000L;
-            case SPECIAL -> 3000L;
+        return switch (type.getCategory()) {
+            case REGULAR -> 1000L;
+            case MEISTER_TALENT -> 2000L;
+            case SOCIAL_INTEGRATION -> 3000L;
             case SUPERNUMERARY -> 4000L;
             default -> 0L;
         };
