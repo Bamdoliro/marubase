@@ -137,7 +137,8 @@
             </tr>
             <tr>
                 <th scope="row" class="ba">대상구분</th>
-                <td class="ba" th:text="${form.type.getDescription()}"></td>
+                <td class="ba" th:unless="${form.type.isNationalVeteransEducation()}" th:text="${form.type.getDescription()}"></td>
+                <td class="ba" th:if="${form.type.isNationalVeteransEducation()}">국가보훈대상자</td>
             </tr>
             <tr>
                 <th scope="row" class="ba">생년월일</th>
