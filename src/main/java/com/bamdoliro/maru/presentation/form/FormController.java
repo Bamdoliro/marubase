@@ -225,7 +225,7 @@ public class FormController {
     }
 
     @GetMapping("/proof-of-application")
-    public ResponseEntity<Resource> generateProfOfApplication(
+    public ResponseEntity<Resource> generateProofOfApplication(
             @AuthenticationPrincipal(authority = Authority.USER) User user
     ) {
         return ResponseEntity.ok()
