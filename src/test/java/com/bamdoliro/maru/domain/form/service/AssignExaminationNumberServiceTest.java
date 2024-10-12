@@ -10,8 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.swing.text.html.Option;
-
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,14 +29,14 @@ class AssignExaminationNumberServiceTest {
     void 수험번호를_부여한다() {
         // given
         Form form = FormFixture.createForm(FormType.REGULAR);
-        given(formRepository.findMaxExaminationNumber(2000L, 3000L)).willReturn(Optional.of(2005L));
+        given(formRepository.findMaxExaminationNumber(1000L, 2000L)).willReturn(Optional.of(1005L));
 
         // when
         assignExaminationNumberService.execute(form);
 
         // then
-        assertEquals(2006L, form.getExaminationNumber());
-        verify(formRepository).findMaxExaminationNumber(2000L, 3000L);
+        assertEquals(1006L, form.getExaminationNumber());
+        verify(formRepository).findMaxExaminationNumber(1000L, 2000L);
     }
 
     @Test
