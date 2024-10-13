@@ -22,7 +22,7 @@ public class Schedule {
     public static final LocalDateTime MEISTER_TALENT_ENTRANCE_TIME = LocalDateTime.of(2024, 10, 25, 9, 0);
     public static final LocalDateTime MEISTER_TALENT_EXCLUSION_ENTRANCE_TIME = LocalDateTime.of(2024, 10, 25, 10, 30);
 
-    public static final String SELECT_FIRST_PASS_CRON = "0 0 1 20 10 ?";
+    public static final String SELECT_FIRST_PASS_CRON = "0 55 14 21 10 ?";
 
     public static int getAdmissionYear() {
         return START.plusYears(1L).getYear();
