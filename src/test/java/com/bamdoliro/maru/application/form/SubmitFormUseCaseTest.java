@@ -47,7 +47,8 @@ class SubmitFormUseCaseTest {
         SubmitFormRequest request = FormFixture.createFormRequest(FormType.REGULAR);
         User user = UserFixture.createUser();
 
-        given(formRepository.existsByUserId(user.getId())).willReturn(false);
+        given(formRepository.findByUser(user)).willReturn(Optional.empty());
+
         willDoNothing().given(assignExaminationNumberService).execute(any(Form.class));
         willDoNothing().given(calculateFormScoreService).execute(any(Form.class));
 
@@ -56,7 +57,7 @@ class SubmitFormUseCaseTest {
 
         // then
 
-        verify(formRepository, times(1)).existsByUserId(user.getId());
+        verify(formRepository, times(1)).findByUser(user);
         verify(calculateFormScoreService, times(1)).execute(any(Form.class));
         verify(assignExaminationNumberService, times(1)).execute(any(Form.class));
         verify(formRepository, times(1)).save(any(Form.class));
@@ -69,16 +70,15 @@ class SubmitFormUseCaseTest {
         User user = UserFixture.createUser();
         Form form = FormFixture.createForm(FormType.REGULAR);
 
-        given(formRepository.existsByUserId(user.getId())).willReturn(true);
         given(formRepository.findByUser(user)).willReturn(Optional.of(form));
 
         // when and then
         assertThrows(FormAlreadySubmittedException.class, () -> submitFormUseCase.execute(user, request));
 
-        verify(formRepository, times(1)).existsByUserId(user.getId());
+        verify(formRepository, times(1)).findByUser(user);
         verify(calculateFormScoreService, never()).execute(any(Form.class));
         verify(assignExaminationNumberService, never()).execute(any(Form.class));
-        verify(formRepository, never()).deleteByUser(any(User.class));
+        verify(formRepository, never()).delete(any(Form.class));
         verify(formRepository, never()).save(any(Form.class));
     }
 
@@ -90,17 +90,16 @@ class SubmitFormUseCaseTest {
         Form form = FormFixture.createForm(FormType.REGULAR);
         form.reject();
 
-        given(formRepository.existsByUserId(user.getId())).willReturn(true);
         given(formRepository.findByUser(user)).willReturn(Optional.of(form));
 
         //when
         submitFormUseCase.execute(user, request);
 
         //then
-        verify(formRepository, times(1)).existsByUserId(user.getId());
+        verify(formRepository, times(1)).findByUser(user);
         verify(calculateFormScoreService, times(1)).execute(any(Form.class));
         verify(assignExaminationNumberService, times(1)).execute(any(Form.class));
-        verify(formRepository, times(1)).deleteByUser(any(User.class));
+        verify(formRepository, times(1)).delete(any(Form.class));
         verify(formRepository, times(1)).save(any(Form.class));
     }
 }
