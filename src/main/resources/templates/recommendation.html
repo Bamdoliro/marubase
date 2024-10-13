@@ -101,8 +101,8 @@
     <tr>
         <th scope="row" class="ba" style="width:15%;">성명</th>
         <td class="ba" style="width:35%;" th:text="${form.applicant.name}"></td>
-        <th scope="row" class="ba" style="width:15%;">접수번호</th>
-        <td class="ba" style="width:35%;" th:text="${form.id}"></td>
+        <th scope="row" class="ba" style="width:15%;">수험번호</th>
+        <td class="ba" style="width:35%;" th:text="${form.getExaminationNumber()}"></td>
     </tr>
     <tr>
         <th scope="row" class="ba">출신중학교</th>
@@ -119,9 +119,8 @@
                 </tr>
                 <tr>
                     <th scope="colgroup" class="ba" style="width: 30%">전형 유형</th>
-                    <th scope="col" class="ba" style="width: 23.3%">마이스터인재전형</th>
-                    <th scope="col" class="ba" style="width: 23.3%">사회통합전형</th>
-                    <th scope="col" class="ba" style="width: 23.3%">정원외</th>
+                    <th scope="col" class="ba" style="width: 35%">마이스터인재전형</th>
+                    <th scope="col" class="ba" style="width: 35%">사회통합전형</th>
                 </tr>
                 <tr>
                     <th scope="row" class="ba">
@@ -131,8 +130,6 @@
                         th:text="${form.education.school.isBusan() && form.type.isMeister() ? 'O' : null}"></td>
                     <td class="ba"
                         th:text="${form.education.school.isBusan() && form.type.isSocial() ? 'O' : null}"></td>
-                    <td class="ba"
-                        th:text="${form.education.school.isBusan() && form.type.isSupernumerary() ? 'O' : null}"></td>
                 </tr>
                 <tr>
                     <th scope="row" class="ba">
@@ -142,8 +139,6 @@
                         th:text="${!form.education.school.isBusan() && form.type.isMeister() ? 'O' : null}"></td>
                     <td class="ba"
                         th:text="${!form.education.school.isBusan() && form.type.isSocial() ? 'O' : null}"></td>
-                    <td class="ba"
-                        th:text="${!form.education.school.isBusan() && form.type.isSupernumerary() ? 'O' : null}"></td>
                 </tr>
             </table>
             <div style="height: 72px;"></div>
