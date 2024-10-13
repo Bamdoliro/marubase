@@ -123,7 +123,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="ba center" style="width: 33%" rowspan="5">
+                <td class="ba center" style="width: 33%" rowspan="6">
                     <img
                             th:src="${identificationPictureUri}"
                             alt="증명사진"/>
@@ -133,7 +133,12 @@
             </tr>
             <tr>
                 <th scope="row" class="ba">전형구분</th>
-                <td class="ba" th:text="${form.type.getCategory().description}"></td>
+                <td class="ba" th:text="${form.type.getMainCategory().description}"></td>
+            </tr>
+            <tr>
+                <th scope="row" class="ba">대상구분</th>
+                <td class="ba" th:unless="${form.type.isNationalVeteransEducation()}" th:text="${form.type.getDescription()}"></td>
+                <td class="ba" th:if="${form.type.isNationalVeteransEducation()}">국가보훈대상자</td>
             </tr>
             <tr>
                 <th scope="row" class="ba">생년월일</th>
