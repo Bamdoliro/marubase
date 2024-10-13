@@ -27,10 +27,6 @@
             vertical-align: middle;
         }
 
-        td {
-            padding: 8px 0;
-        }
-
         caption {
             font-weight: bold;
             font-size: 24px;
@@ -181,18 +177,22 @@
         <td class="ba" colspan="17" th:text="${form.parent.address.toString()}"></td>
     </tr>
     <tr>
-        <td style="height: 16px"></td>
+        <td style="height: 14px"></td>
     </tr>
     <tr>
-        <th scope="row" class="ba" colspan="4">전형 구분</th>
+        <th scope="row" class="ba" colspan="2">전형 구분</th>
         <td class="ba" colspan="5" th:if="${form.type.isRegular()}">일반전형</td>
-        <td class="ba" colspan="5" th:unless="${form.type.isRegular()}">특별전형</td>
-        <th scope="row" class="ba" colspan="6">특별전형 대상</th>
-        <td class="ba disabled" colspan="6" th:if="${form.type.isRegular()}">-</td>
-        <td class="ba" colspan="6" th:unless="${form.type.isRegular()}" th:text="${form.type.getDescription()}"></td>
+        <td class="ba" colspan="5" th:if="${form.type.isSpecial()}">특별전형</td>
+        <td class="ba" colspan="5" th:if="${form.type.isSupernumerary()}">정원 외 전형</td>
+        <th scope="row" class="ba" colspan="3">대상 구분</th>
+        <td class="ba" colspan="5" th:unless="${form.type.isNationalVeteransEducation()}" th:text="${form.type.getDescription()}"></td>
+        <td class="ba disabled" colspan="5" th:if="${form.type.isNationalVeteransEducation()}" th:text="${form.type.getDescription()}">-</td>
+        <th scope="row" class="ba" colspan="4">국가보훈대상자 중<br/>교육지원대상자</th>
+        <td th:if="${form.type.isNationalVeteransEducation()}" class="ba"  colspan="2"><input type="checkbox" checked/></td>
+        <td th:unless="${form.type.isNationalVeteransEducation()}" class="ba"  colspan="2"><input type="checkbox"/></td>
     </tr>
     <tr>
-        <td style="height: 16px"></td>
+        <td style="height: 14px"></td>
     </tr>
     <tr>
         <th scope="rowgroup" class="ba" rowspan="2">학년</th>
@@ -390,15 +390,24 @@
             th:text="${form.grade.getTotalVolunteerTime()}"></td>
     </tr>
     <tr>
-        <td style="height: 16px"></td>
+        <td style="height: 14px"></td>
     </tr>
     <tr>
         <td class="ba text-box" colspan="21">
+            <p class="center medium">
+                <b>〈개인정보 수집 이용 및 제공 동의서></b><br/><br/>
+            </p>
             <p class="left small">
-                「개인정보보호법」 제15조(개인정보의 수집·이용)에 의거 개인정보 제공에 동의하고 <span th:text="${year}"></span>학년도 귀교 제1학년에 입학하고자 소정의 서류를 갖추어 지원하며, 교칙을 준수하고 다른
-                마이스터 고등학교에 이중 지원을 하지 않을 것을 서약합니다.<br/>
-                ※ 위의 기록사항에 대한 개인정보 수집&#183;이용 동의 내용, 이용 보유기간 5년<br/>
-                ※ 개인정보 수집을 거부할 수 있으며, 미동의 시 고등학교 입학 원서 접수를 할 수 없습니다.
+                ※ 개인정보의 수집 이용 및 제공 목적: 2025학년도 부산소프트웨어마이스터고등학교 입학전형 업무 수행<br/>
+                ※ 수집하려는 개인정보의 항목: 성명, 생년월일, 사진, 전화번호(자택, 본인, 보호자), 주소, 출신중학교, 학교생활기록부 자료, 사회통합전형 대상자 등의 자격 확인 증빙자료 등<br/>
+                ※ 개인정보의 보관 기간: 5년<br/>
+            </p>
+            <p class="center medium">
+                위 내용에 대한 동의를 거부할 수 있으나 동의 거부 시 입학 원서를 접수 할 수 없음<br/><br/>
+                <b>개인정보 활용에&nbsp;&nbsp;&nbsp;&nbsp; 동의함&nbsp;<input type="checkbox"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 동의하지 않음&nbsp;<input type="checkbox"/></b><br/><br/>
+            </p>
+            <p class="left medium">
+                본인은 2025학년도 귀고 입학전형에 응시하고자 소정의 서류를 갖추어 지원하며 교칙을 준수하고, 다른 마이스터고등학교에 이중 지원을 하지 않을 것을 서약합니다.
             </p>
             <div class="space"></div>
             <p class="middle" th:text="${#dates.format(#dates.createNow(),'YYYY년 MM월 dd일')}"></p>
