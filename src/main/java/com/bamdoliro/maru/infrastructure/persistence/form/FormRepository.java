@@ -14,6 +14,8 @@ public interface FormRepository extends JpaRepository<Form, Long>, FormRepositor
 
     Optional<Form> findByUser(User user);
 
+    void deleteByUser(User user);
+
     @Query("SELECT MAX(f.examinationNumber) " +
             "FROM Form f " +
             "WHERE f.examinationNumber BETWEEN :minValue AND :maxValue")
