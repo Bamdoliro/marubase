@@ -11,6 +11,8 @@ import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @UseCase
 public class SubmitFormUseCase {
@@ -39,9 +41,10 @@ public class SubmitFormUseCase {
     }
 
     private void validateOnlyOneFormPerUser(User user) {
-        if (formRepository.existsByUserId(user.getId())) {
-            if (formRepository.findByUser(user).get().isRejected()) {
-                formRepository.deleteByUser(user);
+        Optional<Form> form = formRepository.findByUser(user);
+        if (form.isPresent()) {
+            if (form.get().isRejected()) {
+                formRepository.delete(form.get());
                 return;
             }
             throw new FormAlreadySubmittedException();
