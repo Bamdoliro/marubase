@@ -40,6 +40,10 @@ public class SubmitFormUseCase {
 
     private void validateOnlyOneFormPerUser(User user) {
         if (formRepository.existsByUserId(user.getId())) {
+            if (formRepository.findByUser(user).get().isRejected()) {
+                formRepository.deleteByUser(user);
+                return;
+            }
             throw new FormAlreadySubmittedException();
         }
     }
