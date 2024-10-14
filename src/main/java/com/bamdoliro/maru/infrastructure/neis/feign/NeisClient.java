@@ -10,7 +10,6 @@ public interface NeisClient {
     @GetMapping(value = "/schoolInfo?Type=json&pSize=10")
     String getSchoolInfo(
             @RequestParam("Key") String key,
-            @RequestParam("SCHUL_NM") String schoolName,
-            @RequestParam(name = "SCHUL_KND_SC_NM", required = false) String schoolType
+            @RequestParam("SCHUL_NM") String schoolName
     );
 }
