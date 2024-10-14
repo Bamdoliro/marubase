@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -20,10 +21,17 @@ public class SearchSchoolService {
     private final ObjectMapper objectMapper;
 
     public List<SchoolResponse> execute(String q) throws JsonProcessingException {
-        String htmlResponse = neisClient.getSchoolInfo(neisProperties.getKey(), q);
-        NeisSchoolResponse response = objectMapper.readValue(htmlResponse, NeisSchoolResponse.class);
+        String htmlResponse1 = neisClient.getSchoolInfo(neisProperties.getKey(), q, "중학교");
+        String htmlResponse2 = neisClient.getSchoolInfo(neisProperties.getKey(), q, "각종학교(중)");
 
-        return response.getSchoolInfo().stream()
+        NeisSchoolResponse response1 = objectMapper.readValue(htmlResponse1, NeisSchoolResponse.class);
+        NeisSchoolResponse response2 = objectMapper.readValue(htmlResponse2, NeisSchoolResponse.class);
+
+        List<NeisSchoolResponse.SchoolInfo.Row> combinedSchoolInfo = new ArrayList<>();
+        combinedSchoolInfo.addAll(response1.getSchoolInfo());
+        combinedSchoolInfo.addAll(response2.getSchoolInfo());
+
+        return combinedSchoolInfo.stream()
                 .map(s -> SchoolResponse.builder()
                         .name(s.getSchoolName())
                         .location(s.getLocation())
