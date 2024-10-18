@@ -36,9 +36,10 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(queryNumberOfApplicantsUseCase.execute()).willReturn(AnalysisFixture.createNumberOfApplicantsResponseList());
+        given(queryNumberOfApplicantsUseCase.execute(any(String.class))).willReturn(AnalysisFixture.createNumberOfApplicantsResponseList());
 
         mockMvc.perform(get("/analysis/number-of-applicants")
+                        .param("type", "CURRENT")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -46,6 +47,10 @@ class AnalysisControllerTest extends RestDocsTestSupport {
                 .andDo(restDocs.document(
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        ),
+                        queryParameters(
+                                parameterWithName("type")
+                                        .description("CURRENT(지원전형) / ORIGINAL(최종 전형)")
                         )
                 ));
     }
@@ -71,7 +76,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
                         ),
                         queryParameters(
                                 parameterWithName("statusList")
-                                        .description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)")
+                                        .description("조회할 원서 상태 목록(전체 조회면, RECEIVED, FIRST_PASSED, FAILED, PASSED, 1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)")
                         )
                 ));
     }
@@ -97,7 +102,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
                         ),
                         queryParameters(
                                 parameterWithName("statusList")
-                                        .description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)")
+                                        .description("조회할 원서 상태 목록(전체 조회면, RECEIVED, FIRST_PASSED, FAILED, PASSED, 1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)")
                         )
                 ));
     }
@@ -123,7 +128,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
                         ),
                         queryParameters(
                                 parameterWithName("statusList")
-                                        .description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)")
+                                        .description("조회할 원서 상태 목록(전체 조회면, RECEIVED, FIRST_PASSED, FAILED, PASSED, 1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)")
                         )
                 ));
     }
@@ -136,6 +141,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         multiValueMap.put("statusList", List.of("FIRST_PASSED", "FAILED", "PASSED"));
         multiValueMap.add("mainCategory", "REGULAR");
+        multiValueMap.add("type", "CURRENT");
         given(queryGenderRatioUseCase.execute(any(GenderRatioRequest.class))).willReturn(AnalysisFixture.createGenderRatioResponse(
                 FormType.Category.valueOf(Objects.requireNonNull(multiValueMap.get("mainCategory")).get(0))
         ));
@@ -154,9 +160,11 @@ class AnalysisControllerTest extends RestDocsTestSupport {
                         ),
                         queryParameters(
                                 parameterWithName("statusList")
-                                        .description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)"),
+                                        .description("조회할 원서 상태 목록(전체 조회면, RECEIVED, FIRST_PASSED, FAILED, PASSED, 1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)"),
                                 parameterWithName("mainCategory")
-                                        .description("메인 카테고리(FormType.Category 참고)")
+                                        .description("메인 카테고리(FormType.Category 참고)"),
+                                parameterWithName("type")
+                                        .description("CURRENT(지원전형) / ORIGINAL(최종 전형)")
                         )
                 ));
     }
@@ -186,7 +194,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
                         ),
                         queryParameters(
                                 parameterWithName("statusList")
-                                        .description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)"),
+                                        .description("조회할 원서 상태 목록(전체 조회면, RECEIVED, FIRST_PASSED, FAILED, PASSED, 1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)"),
                                 parameterWithName("isBusan")
                                         .description("부산 지역 학교 검색 여부(true면 부산, false면 부산 외 다른 모든 타지역)"),
                                 parameterWithName("gu")
@@ -220,7 +228,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
                         ),
                         queryParameters(
                                 parameterWithName("statusList")
-                                        .description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)"),
+                                        .description("조회할 원서 상태 목록(전체 조회면, RECEIVED, FIRST_PASSED, FAILED, PASSED, 1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)"),
                                 parameterWithName("isBusan")
                                         .description("부산 지역 학교 검색 여부(true면 부산, false면 부산 외 다른 모든 타지역)"),
                                 parameterWithName("gu")
@@ -254,7 +262,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
                         ),
                         queryParameters(
                                 parameterWithName("statusList")
-                                        .description("조회할 원서 상태 목록(1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)"),
+                                        .description("조회할 원서 상태 목록(전체 조회면, RECEIVED, FIRST_PASSED, FAILED, PASSED, 1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)"),
                                 parameterWithName("isBusan")
                                         .description("부산 지역 학교 검색 여부(true면 부산, false면 부산 외 다른 모든 타지역)"),
                                 parameterWithName("gu")

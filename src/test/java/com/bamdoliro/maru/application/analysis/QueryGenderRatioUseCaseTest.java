@@ -41,7 +41,7 @@ class QueryGenderRatioUseCaseTest {
 
         given(formRepository.findByCategory(FormType.Category.REGULAR)).willReturn(formList);
         List<FormStatus> round = List.of(FormStatus.FIRST_PASSED, FormStatus.FAILED, FormStatus.PASSED);
-        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.REGULAR);
+        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.REGULAR, "CURRENT");
 
         // when
         List<GenderRatioResponse> responseList = queryGenderRatioUseCase.execute(request);
@@ -79,7 +79,7 @@ class QueryGenderRatioUseCaseTest {
                         .filter(form -> form.getType().categoryEquals(FormType.Category.SOCIAL_INTEGRATION))
                         .toList());
         List<FormStatus> round = List.of(FormStatus.FIRST_PASSED, FormStatus.FAILED, FormStatus.PASSED);
-        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.SPECIAL);
+        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.SPECIAL, "CURRENT");
 
         // when
         List<GenderRatioResponse> responseList = queryGenderRatioUseCase.execute(request);
@@ -115,7 +115,7 @@ class QueryGenderRatioUseCaseTest {
                         .filter(form -> form.getType().categoryEquals(FormType.Category.SPECIAL_ADMISSION))
                         .toList());
         List<FormStatus> round = List.of(FormStatus.FIRST_PASSED, FormStatus.FAILED, FormStatus.PASSED);
-        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.SUPERNUMERARY);
+        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.SUPERNUMERARY, "CURRENT");
 
         // when
         List<GenderRatioResponse> responseList = queryGenderRatioUseCase.execute(request);
@@ -143,7 +143,7 @@ class QueryGenderRatioUseCaseTest {
 
         given(formRepository.findByCategory(FormType.Category.REGULAR)).willReturn(formList);
         List<FormStatus> round = List.of(FormStatus.FAILED, FormStatus.PASSED);
-        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.REGULAR);
+        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.REGULAR, "CURRENT");
 
         // when
         List<GenderRatioResponse> responseList = queryGenderRatioUseCase.execute(request);
@@ -181,7 +181,7 @@ class QueryGenderRatioUseCaseTest {
                         .filter(form -> form.getType().categoryEquals(FormType.Category.SOCIAL_INTEGRATION))
                         .toList());
         List<FormStatus> round = List.of(FormStatus.FAILED, FormStatus.PASSED);
-        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.SPECIAL);
+        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.SPECIAL, "CURRENT");
 
         // when
         List<GenderRatioResponse> responseList = queryGenderRatioUseCase.execute(request);
@@ -217,7 +217,7 @@ class QueryGenderRatioUseCaseTest {
                         .filter(form -> form.getType().categoryEquals(FormType.Category.SPECIAL_ADMISSION))
                         .toList());
         List<FormStatus> round = List.of(FormStatus.FAILED, FormStatus.PASSED);
-        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.SUPERNUMERARY);
+        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.SUPERNUMERARY, "CURRENT");
 
         // when
         List<GenderRatioResponse> responseList = queryGenderRatioUseCase.execute(request);
@@ -245,7 +245,7 @@ class QueryGenderRatioUseCaseTest {
 
         given(formRepository.findByCategory(FormType.Category.REGULAR)).willReturn(formList);
         List<FormStatus> round = List.of(FormStatus.PASSED);
-        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.REGULAR);
+        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.REGULAR, "CURRENT");
 
         // when
         List<GenderRatioResponse> responseList = queryGenderRatioUseCase.execute(request);
@@ -283,7 +283,7 @@ class QueryGenderRatioUseCaseTest {
                         .filter(form -> form.getType().categoryEquals(FormType.Category.SOCIAL_INTEGRATION))
                         .toList());
         List<FormStatus> round = List.of(FormStatus.PASSED);
-        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.SPECIAL);
+        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.SPECIAL, "CURRENT");
 
         // when
         List<GenderRatioResponse> responseList = queryGenderRatioUseCase.execute(request);
@@ -319,7 +319,7 @@ class QueryGenderRatioUseCaseTest {
                         .filter(form -> form.getType().categoryEquals(FormType.Category.SPECIAL_ADMISSION))
                         .toList());
         List<FormStatus> round = List.of(FormStatus.FIRST_PASSED, FormStatus.FAILED, FormStatus.PASSED);
-        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.SUPERNUMERARY);
+        GenderRatioRequest request = new GenderRatioRequest(round, FormType.Category.SUPERNUMERARY, "CURRENT");
 
         // when
         List<GenderRatioResponse> responseList = queryGenderRatioUseCase.execute(request);

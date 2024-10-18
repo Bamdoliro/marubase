@@ -20,4 +20,7 @@ public class GenderRatioRequest {
 
     @NotNull(message = "필수값입니다.")
     private FormType.Category mainCategory;
+
+    @NotNull(message = "필수값입니다.")
+    private String type;
 }

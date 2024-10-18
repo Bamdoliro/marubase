@@ -15,6 +15,7 @@ public interface FormRepositoryCustom {
     List<Form> findByStatus(FormStatus status);
     List<Form> findByType(FormType type);
     List<Form> findByCategory(FormType.Category category);
+    List<Form> findByOriginalCategory(FormType.Category category);
     List<Form> findReceivedSpecialForm();
     List<Form> findReceivedRegularForm();
     List<Form> findReceivedSupernumeraryForm();
@@ -29,6 +30,7 @@ public interface FormRepositoryCustom {
     List<Form> findByFormIdList(List<Long> idList);
     List<FormUrlVo> findFormUrlByFormIdList(List<Long> idList);
     List<NumberOfApplicantsVo> findTypeAndCountGroupByType();
+    List<NumberOfApplicantsVo> findOriginalTypeAndCountGroupByType();
     List<GradeVo> findGradeGroupByTypeAndStatus(List<FormStatus> round);
     List<SchoolStatusVo> findSchoolByAddress(List<FormStatus> round, String keyword);
     List<SchoolStatusVo> findNotBusanSchool(List<FormStatus> round);
