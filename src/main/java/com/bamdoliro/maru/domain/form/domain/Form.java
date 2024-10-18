@@ -24,10 +24,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -64,6 +61,11 @@ public class Form extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private FormType type;
+
+    @Setter
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private FormType originalType;
 
     @Column(nullable = false)
     private Boolean changedToRegular;
@@ -230,10 +232,6 @@ public class Form extends BaseTimeEntity {
 
     public void assignExaminationNumber(Long examinationNumber) {
         this.examinationNumber = examinationNumber;
-    }
-
-    public FormType getOriginalType() {
-        return type;
     }
 
     public boolean tookSecondRound() {

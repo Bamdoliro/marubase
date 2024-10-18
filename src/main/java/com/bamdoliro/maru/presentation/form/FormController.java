@@ -71,6 +71,7 @@ public class FormController {
     private final PassOrFailFormUseCase passOrFailFormUseCase;
     private final QueryFormUrlUseCase queryFormUrlUseCase;
     private final SelectSecondPassUseCase selectSecondPassUseCase;
+    private final UpdateOriginalTypeUseCase updateOriginalTypeUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -312,5 +313,12 @@ public class FormController {
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user
     ) {
         selectSecondPassUseCase.execute();
+    }
+
+    @PatchMapping("/original-type")
+    public void updateOriginalType(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+    ) {
+        updateOriginalTypeUseCase.execute();
     }
 }
