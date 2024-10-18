@@ -38,7 +38,7 @@ class QueryNumberOfApplicantsUseCaseTest {
         given(formRepository.findTypeAndCountGroupByType()).willReturn(voList);
 
         // when
-        List<NumberOfApplicantsResponse> responseList = queryNumberOfApplicantsUseCase.execute();
+        List<NumberOfApplicantsResponse> responseList = queryNumberOfApplicantsUseCase.execute("CURRENT");
 
         // then
         assertEquals(responseList.size(), FormType.values().length);
