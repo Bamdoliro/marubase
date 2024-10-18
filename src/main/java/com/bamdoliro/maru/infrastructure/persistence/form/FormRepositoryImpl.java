@@ -50,6 +50,17 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<Form> findByOriginalCategory(FormType.Category category) {
+        List<FormType> matchingFormTypes = getFormTypesByCategory(category);
+
+        return queryFactory
+                .selectFrom(form)
+                .where(form.originalType.in(matchingFormTypes))
+                .orderBy(form.examinationNumber.asc())
+                .fetch();
+    }
+
     private BooleanExpression eqStatus(FormStatus status) {
         if (Objects.isNull(status)) {
             return null;
@@ -275,6 +286,18 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
     }
 
     @Override
+    public List<NumberOfApplicantsVo> findOriginalTypeAndCountGroupByType() {
+        return queryFactory
+                .select(new QNumberOfApplicantsVo(
+                        form.originalType,
+                        form.count()
+                ))
+                .from(form)
+                .groupBy(form.originalType)
+                .fetch();
+    }
+
+    @Override
     public List<GradeVo> findGradeGroupByTypeAndStatus(List<FormStatus> round) {
         return queryFactory
                 .select(new QGradeVo(
@@ -317,6 +340,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 ))
                 .from(form)
                 .where(form.education.school.location.eq("부산광역시").not())
+                .orderBy(form.applicant.name.asc())
                 .fetch();
     }
 }

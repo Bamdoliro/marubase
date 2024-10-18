@@ -31,10 +31,11 @@ public class AnalysisController {
 
     @GetMapping("/number-of-applicants")
     public ListCommonResponse<NumberOfApplicantsResponse> getNumberOfApplicants(
-            @AuthenticationPrincipal(authority = Authority.ADMIN)User user
+            @AuthenticationPrincipal(authority = Authority.ADMIN)User user,
+            @RequestParam String type
     ) {
         return CommonResponse.ok(
-                queryNumberOfApplicantsUseCase.execute()
+                queryNumberOfApplicantsUseCase.execute(type)
         );
     }
 

@@ -38,9 +38,16 @@ public class QueryGenderRatioUseCase {
         Map<FormType.Category, List<Form>> formLists = subCategories.stream()
                 .collect(Collectors.toMap(
                         category -> category,
-                        category -> formRepository.findByCategory(category).stream()
-                                .filter(form -> request.getStatusList().contains(form.getStatus()))
-                                .collect(Collectors.toList())
+                        category -> {
+                            if (request.getType().equals("ORIGINAL")) {
+                                return formRepository.findByOriginalCategory(category).stream()
+                                        .filter(form -> request.getStatusList().contains(form.getStatus()))
+                                        .toList();
+                            }
+                            return formRepository.findByCategory(category).stream()
+                                    .filter(form -> request.getStatusList().contains(form.getStatus()))
+                                    .toList();
+                        }
                 ));
 
         for(Map.Entry<FormType.Category, List<Form>> entry : formLists.entrySet()) {
