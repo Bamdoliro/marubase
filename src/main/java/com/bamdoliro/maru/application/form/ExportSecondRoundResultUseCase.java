@@ -6,6 +6,7 @@ import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.infrastructure.xlsx.XlsxService;
 import com.bamdoliro.maru.infrastructure.xlsx.constant.XlsxConstant;
 import com.bamdoliro.maru.shared.annotation.UseCase;
+import com.bamdoliro.maru.shared.util.MathUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -86,7 +87,7 @@ public class ExportSecondRoundResultUseCase {
             schoolCodeCell.setCellStyle(defaultCellStyle);
 
             Cell subjectGradeScoreCell = row.createCell(10);
-            subjectGradeScoreCell.setCellValue(form.getScore().getSubjectGradeScore());
+            subjectGradeScoreCell.setCellValue(MathUtil.roundTo(form.getScore().getSubjectGradeScore(), 3));
             subjectGradeScoreCell.setCellStyle(rightCellStyle);
 
             Cell attendanceScoreCell = row.createCell(11);
@@ -118,7 +119,7 @@ public class ExportSecondRoundResultUseCase {
             }
 
             Cell totalScoreCell = row.createCell(17);
-            totalScoreCell.setCellValue(form.getScore().getTotalScore());
+            totalScoreCell.setCellValue(MathUtil.roundTo(form.getScore().getTotalScore(), 3));
             totalScoreCell.setCellStyle(rightCellStyle);
         }
 
