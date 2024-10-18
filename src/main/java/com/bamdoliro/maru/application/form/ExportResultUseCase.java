@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
+import com.bamdoliro.maru.domain.form.domain.value.SubjectMap;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.infrastructure.xlsx.XlsxService;
 import com.bamdoliro.maru.infrastructure.xlsx.constant.XlsxConstant;
@@ -32,9 +33,11 @@ public class ExportResultUseCase {
         CellStyle rightCellStyle = xlsxService.createRightCellStyle(workbook);
         CellStyle emptyCellStyle = xlsxService.createEmptyCellStyle(workbook);
 
+
         for (int index = 0; index < formList.size(); index++) {
             Form form = formList.get(index);
             Row row = sheet.createRow(index + XlsxConstant.FIRST_ROW_INDEX_WITH_TITLE);
+            SubjectMap subjectMap = form.getGrade().getSubjectList().getSubjectMap();
 
             Cell idCell = row.createCell(0);
             idCell.setCellValue(form.getId());
@@ -80,26 +83,50 @@ public class ExportResultUseCase {
             schoolCodeCell.setCellValue(form.getEducation().getSchool().getCode());
             schoolCodeCell.setCellStyle(defaultCellStyle);
 
-            Cell subjectGradeScoreCell = row.createCell(11);
+            Cell subjectCount21 = row.createCell(11);
+            subjectCount21.setCellValue(subjectMap.getSubjectListOf(2,1).size());
+            subjectCount21.setCellStyle(defaultCellStyle);
+
+            Cell subjectTotalScore21 = row.createCell(12);
+            subjectTotalScore21.setCellValue(subjectMap.getSubjectListOf(2,1).totalScore());
+            subjectTotalScore21.setCellStyle(defaultCellStyle);
+
+            Cell subjectCount22 = row.createCell(13);
+            subjectCount22.setCellValue(subjectMap.getSubjectListOf(2,2).size());
+            subjectCount22.setCellStyle(defaultCellStyle);
+
+            Cell subjectTotalScore22 = row.createCell(14);
+            subjectTotalScore22.setCellValue(subjectMap.getSubjectListOf(2,2).totalScore());
+            subjectTotalScore22.setCellStyle(defaultCellStyle);
+
+            Cell subjectCount31 = row.createCell(15);
+            subjectCount31.setCellValue(subjectMap.getSubjectListOf(3,1).size());
+            subjectCount31.setCellStyle(defaultCellStyle);
+
+            Cell subjectTotalScore31 = row.createCell(16);
+            subjectTotalScore31.setCellValue(subjectMap.getSubjectListOf(3,1).totalScore());
+            subjectTotalScore31.setCellStyle(defaultCellStyle);
+
+            Cell subjectGradeScoreCell = row.createCell(17);
             subjectGradeScoreCell.setCellValue(form.getScore().getSubjectGradeScore());
             subjectGradeScoreCell.setCellStyle(rightCellStyle);
 
-            Cell attendanceScoreCell = row.createCell(12);
+            Cell attendanceScoreCell = row.createCell(18);
             attendanceScoreCell.setCellValue(form.getScore().getAttendanceScore());
             attendanceScoreCell.setCellStyle(rightCellStyle);
 
-            Cell volunteerScoreCell = row.createCell(13);
+            Cell volunteerScoreCell = row.createCell(19);
             volunteerScoreCell.setCellValue(form.getScore().getVolunteerScore());
             volunteerScoreCell.setCellStyle(rightCellStyle);
 
-            Cell bonusScoreCell = row.createCell(14);
+            Cell bonusScoreCell = row.createCell(20);
             bonusScoreCell.setCellValue(form.getScore().getBonusScore());
             bonusScoreCell.setCellStyle(rightCellStyle);
 
-            Cell depthInterviewScoreCell = row.createCell(15);
-            Cell ncsScoreCell = row.createCell(16);
-            Cell codingTestScoreCell = row.createCell(17);
-            Cell totalScoreCell = row.createCell(18);
+            Cell depthInterviewScoreCell = row.createCell(21);
+            Cell ncsScoreCell = row.createCell(22);
+            Cell codingTestScoreCell = row.createCell(23);
+            Cell totalScoreCell = row.createCell(24);
             totalScoreCell.setCellStyle(rightCellStyle);
 
             if (form.tookSecondRound()) {
