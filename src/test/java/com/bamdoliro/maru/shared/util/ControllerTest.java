@@ -12,6 +12,7 @@ import com.bamdoliro.maru.application.form.*;
 import com.bamdoliro.maru.application.message.SendMessageUseCase;
 import com.bamdoliro.maru.application.notice.*;
 import com.bamdoliro.maru.application.question.*;
+import com.bamdoliro.maru.application.schedular.ScheduleFirstPassUseCase;
 import com.bamdoliro.maru.application.school.SearchSchoolUseCase;
 import com.bamdoliro.maru.application.user.*;
 import com.bamdoliro.maru.domain.auth.service.TokenService;
@@ -25,6 +26,7 @@ import com.bamdoliro.maru.presentation.form.FormController;
 import com.bamdoliro.maru.presentation.message.MessageController;
 import com.bamdoliro.maru.presentation.notice.NoticeController;
 import com.bamdoliro.maru.presentation.question.QuestionController;
+import com.bamdoliro.maru.presentation.scheduler.SchedulerController;
 import com.bamdoliro.maru.presentation.school.SchoolController;
 import com.bamdoliro.maru.presentation.user.UserController;
 import com.bamdoliro.maru.shared.auth.AuthenticationArgumentResolver;
@@ -50,7 +52,8 @@ import org.springframework.test.web.servlet.MockMvc;
             DraftFormController.class,
             FairController.class,
             MessageController.class,
-            AnalysisController.class})
+            AnalysisController.class,
+            SchedulerController.class})
 public abstract class ControllerTest {
 
     @Autowired
@@ -268,6 +271,9 @@ public abstract class ControllerTest {
 
     @MockBean
     protected QueryAdmissionAndPledgeUseCase queryAdmissionAndPledgeUseCase;
+
+    @MockBean
+    protected ScheduleFirstPassUseCase scheduleFirstPassUseCase;
 
     protected String toJson(Object object) throws JsonProcessingException {
         return objectMapper.writeValueAsString(object);
