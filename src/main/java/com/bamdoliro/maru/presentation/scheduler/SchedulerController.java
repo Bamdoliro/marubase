@@ -21,12 +21,12 @@ public class SchedulerController {
     private final ScheduleFirstPassUseCase scheduleFirstPassUseCase;
 
 
-    @PostMapping("/update-schedule")
+    @PostMapping("/updateSchedule")
     public SingleCommonResponse<ScheduleResponse> updateSchedule(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestBody @Valid ScheduleRequest scheduleRequest) {
 
         return CommonResponse.ok(
-                new ScheduleResponse(scheduleFirstPassUseCase.execute(scheduleRequest.getSchedule_select_first_pass())));
+                new ScheduleResponse(scheduleFirstPassUseCase.execute(scheduleRequest.getScheduleSelectFirstPass())));
     }
 }
