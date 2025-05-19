@@ -28,8 +28,6 @@ class SchedulerControllerTest extends RestDocsTestSupport {
     void 일차_합격_기간을_설정한다() throws Exception {
         User user = UserFixture.createAdminUser();
         ScheduleRequest request = new ScheduleRequest(LocalDateTime.parse("2025-05-22T10:00:00"));
-        String json = toJson(request);
-        System.out.println("결과 : " + json);
 
         given(authenticationArgumentResolver.supportsParameter(any())).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
@@ -57,7 +55,7 @@ class SchedulerControllerTest extends RestDocsTestSupport {
                         responseFields(
                                 fieldWithPath("code").description("응답 코드"),
                                 fieldWithPath("message").description("응답 메시지"),
-                                fieldWithPath("data.scheduleSelectFirstPass").description("일차 합격자 선발 스케줄 설정 여부 (null 가능)")
+                                fieldWithPath("data.scheduleSelectFirstPass").description("일차 합격자 선발 스케줄 설정 여부")
                         )
                 ));
     }
