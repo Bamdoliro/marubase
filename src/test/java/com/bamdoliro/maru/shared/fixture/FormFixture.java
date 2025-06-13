@@ -1,37 +1,11 @@
 package com.bamdoliro.maru.shared.fixture;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
-import com.bamdoliro.maru.domain.form.domain.type.AchievementLevel;
-import com.bamdoliro.maru.domain.form.domain.type.Certificate;
-import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
-import com.bamdoliro.maru.domain.form.domain.type.FormType;
-import com.bamdoliro.maru.domain.form.domain.type.Gender;
-import com.bamdoliro.maru.domain.form.domain.type.GraduationType;
-import com.bamdoliro.maru.domain.form.domain.value.Address;
-import com.bamdoliro.maru.domain.form.domain.value.Applicant;
-import com.bamdoliro.maru.domain.form.domain.value.Attendance;
-import com.bamdoliro.maru.domain.form.domain.value.CertificateList;
-import com.bamdoliro.maru.domain.form.domain.value.Document;
-import com.bamdoliro.maru.domain.form.domain.value.Education;
-import com.bamdoliro.maru.domain.form.domain.value.Grade;
-import com.bamdoliro.maru.domain.form.domain.value.Parent;
-import com.bamdoliro.maru.domain.form.domain.value.PhoneNumber;
-import com.bamdoliro.maru.domain.form.domain.value.School;
-import com.bamdoliro.maru.domain.form.domain.value.Score;
-import com.bamdoliro.maru.domain.form.domain.value.Subject;
-import com.bamdoliro.maru.domain.form.domain.value.SubjectList;
-import com.bamdoliro.maru.domain.form.domain.value.Teacher;
+import com.bamdoliro.maru.domain.form.domain.type.*;
+import com.bamdoliro.maru.domain.form.domain.value.*;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.persistence.form.vo.FormUrlVo;
-import com.bamdoliro.maru.presentation.form.dto.request.ApplicantRequest;
-import com.bamdoliro.maru.presentation.form.dto.request.AttendanceRequest;
-import com.bamdoliro.maru.presentation.form.dto.request.DocumentRequest;
-import com.bamdoliro.maru.presentation.form.dto.request.EducationRequest;
-import com.bamdoliro.maru.presentation.form.dto.request.GradeRequest;
-import com.bamdoliro.maru.presentation.form.dto.request.ParentRequest;
-import com.bamdoliro.maru.presentation.form.dto.request.SubjectRequest;
-import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
-import com.bamdoliro.maru.presentation.form.dto.request.UpdateFormRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.*;
 import com.bamdoliro.maru.presentation.form.dto.response.*;
 
 import java.time.LocalDate;
@@ -40,6 +14,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.bamdoliro.maru.shared.util.RandomUtil.randomDouble;
 import static com.bamdoliro.maru.shared.util.RandomUtil.randomNumber;
 
 public class FormFixture {
@@ -627,6 +602,10 @@ public class FormFixture {
                 new DocumentResponse(
                         "하이난김밤돌",
                         "공부열심히할게용"
+                ),
+                new ScoreResponse(
+                        randomDouble(0.0, 240.0),
+                        randomDouble(80.0, 400.0)
                 ),
                 "https://maru.bamdoliro.com/form.pdf",
                 FormType.REGULAR,

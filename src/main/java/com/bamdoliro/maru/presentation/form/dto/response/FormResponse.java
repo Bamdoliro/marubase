@@ -16,6 +16,7 @@ public class FormResponse {
     private EducationResponse education;
     private GradeResponse grade;
     private DocumentResponse document;
+    private ScoreResponse score;
     private String formUrl;
     private FormType type;
     private FormStatus status;
@@ -29,6 +30,7 @@ public class FormResponse {
         this.education = new EducationResponse(form.getEducation());
         this.grade = new GradeResponse(form.getGrade());
         this.document = new DocumentResponse(form.getDocument());
+        this.score = new ScoreResponse(form.getScore());
         this.formUrl = formUrl;
         this.type = form.getType();
         this.status = form.getStatus();
