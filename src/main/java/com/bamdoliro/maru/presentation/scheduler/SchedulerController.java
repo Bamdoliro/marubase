@@ -28,7 +28,6 @@ public class SchedulerController {
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestBody @Valid ScheduleRequest scheduleRequest) {
 
-        return CommonResponse.ok(
-                new ScheduleResponse(scheduleFirstPassUseCase.execute(scheduleRequest.getScheduleSelectFirstPass())));
+        return CommonResponse.ok(scheduleFirstPassUseCase.execute(scheduleRequest));
     }
 }
