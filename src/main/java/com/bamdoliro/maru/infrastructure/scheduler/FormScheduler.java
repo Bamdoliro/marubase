@@ -1,6 +1,8 @@
 package com.bamdoliro.maru.infrastructure.scheduler;
 
 import com.bamdoliro.maru.application.form.SelectFirstPassUseCase;
+import com.bamdoliro.maru.domain.scheduler.FirstPassSchedule;
+import com.bamdoliro.maru.infrastructure.persistence.scheduler.FirstPassScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,7 @@ public class FormScheduler {
 
     private final SelectFirstPassUseCase selectFirstPassUseCase;
     private final TaskScheduler taskScheduler;
+    private final FirstPassScheduleRepository firstPassScheduleRepository;
 
     private ScheduledFuture<?> scheduledTask;
 
@@ -27,9 +30,21 @@ public class FormScheduler {
             scheduledTask.cancel(false);
         }
 
+        FirstPassSchedule schedule = firstPassScheduleRepository.findById(1L)
+                .orElseGet(() -> new FirstPassSchedule(scheduledTime));
+        schedule.update(scheduledTime);
+        firstPassScheduleRepository.save(schedule);
+
         scheduledTask = taskScheduler.schedule(
                 selectFirstPassUseCase::execute,
                 Timestamp.valueOf(scheduledTime)
         );
+    }
+
+    public void restoreSchedule() {
+        firstPassScheduleRepository.findById(1L)
+                .map(FirstPassSchedule::getScheduledTime)
+                .filter(time -> time != null && time.isAfter(java.time.LocalDateTime.now()))
+                .ifPresent(this::selectFirstPass);
     }
 }
