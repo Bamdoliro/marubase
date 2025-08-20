@@ -17,10 +17,11 @@ public class ScheduleInitializer {
 
     @PostConstruct
     public void init() {
-        firstPassScheduleRepository.findById(1L)
-                .orElseGet(() -> firstPassScheduleRepository.save(
-                        new FirstPassSchedule(LocalDateTime.parse("2025-10-25T15:00:00"))
-                ));
+        if (firstPassScheduleRepository.findById(1L).isEmpty()) {
+            firstPassScheduleRepository.save(
+                    new FirstPassSchedule(LocalDateTime.parse("2025-10-25T15:00:00"))
+            );
+        }
         formScheduler.restoreSchedule();
     }
 }
