@@ -70,9 +70,9 @@ class ExportFormUseCaseTest {
 
         // then
         verify(formFacade, times(1)).getForm(user);
-        verify(processTemplateService, times(4)).execute(any(String.class), any());
-        verify(generatePdfService, times(4)).execute(any(String.class));
-        verify(mergePdfService, times(4)).execute(any(PdfMerger.class), any(ByteArrayOutputStream.class));
+        verify(processTemplateService, times(5)).execute(any(String.class), any());
+        verify(generatePdfService, times(5)).execute(anyString());
+        verify(mergePdfService, times(5)).execute(any(PdfMerger.class), any(ByteArrayOutputStream.class));
         verify(fileService, times(1)).getDownloadPresignedUrl(any(String.class), any(String.class));
     }
 
@@ -93,9 +93,9 @@ class ExportFormUseCaseTest {
 
         // then
         verify(formFacade, times(1)).getForm(user);
-        verify(processTemplateService, times(5)).execute(any(String.class), any());
-        verify(generatePdfService, times(5)).execute(any(String.class));
-        verify(mergePdfService, times(5)).execute(any(PdfMerger.class), any(ByteArrayOutputStream.class));
+        verify(processTemplateService, times(6)).execute(any(String.class), any());
+        verify(generatePdfService, times(6)).execute(any(String.class));
+        verify(mergePdfService, times(6)).execute(any(PdfMerger.class), any(ByteArrayOutputStream.class));
         verify(fileService, times(1)).getDownloadPresignedUrl(any(String.class), any(String.class));
     }
 
