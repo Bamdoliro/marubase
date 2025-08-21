@@ -115,7 +115,8 @@ public class ExportFormUseCase {
                     Templates.FORM,
                     Templates.GRADE_TABLE,
                     Templates.DOCUMENT,
-                    Templates.WRITTEN_OATH
+                    Templates.WRITTEN_OATH,
+                    Templates.PRIVACY_POLICY
             );
         } else if (form.getType().isSpecialAdmission()) {
             return List.of(
@@ -124,7 +125,8 @@ public class ExportFormUseCase {
                     Templates.DOCUMENT,
                     Templates.WRITTEN_OATH,
                     Templates.SPECIAL_ADMISSION,
-                    Templates.CONFIRMATION
+                    Templates.CONFIRMATION,
+                    Templates.PRIVACY_POLICY
             );
         }
 
@@ -133,7 +135,8 @@ public class ExportFormUseCase {
                 Templates.GRADE_TABLE,
                 Templates.DOCUMENT,
                 Templates.WRITTEN_OATH,
-                Templates.RECOMMENDATION
+                Templates.RECOMMENDATION,
+                Templates.PRIVACY_POLICY
         );
     }
 }
