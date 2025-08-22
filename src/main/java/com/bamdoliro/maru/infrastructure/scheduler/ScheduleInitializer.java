@@ -1,6 +1,6 @@
 package com.bamdoliro.maru.infrastructure.scheduler;
 
-import com.bamdoliro.maru.domain.scheduler.FirstPassSchedule;
+import com.bamdoliro.maru.domain.scheduler.domain.FirstPassSchedule;
 import com.bamdoliro.maru.infrastructure.persistence.scheduler.FirstPassScheduleRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class ScheduleInitializer {
 
     @PostConstruct
     public void init() {
-        if (firstPassScheduleRepository.findById(1L).isEmpty()) {
+        if (firstPassScheduleRepository.findTopByOrderByCreatedAtDesc().isEmpty()) {
             firstPassScheduleRepository.save(
                     new FirstPassSchedule(LocalDateTime.parse("2025-10-25T15:00:00"))
             );
