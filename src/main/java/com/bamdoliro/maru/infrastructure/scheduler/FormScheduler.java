@@ -2,6 +2,7 @@ package com.bamdoliro.maru.infrastructure.scheduler;
 
 import com.bamdoliro.maru.application.form.SelectFirstPassUseCase;
 import com.bamdoliro.maru.domain.scheduler.FirstPassSchedule;
+import com.bamdoliro.maru.domain.scheduler.exception.CannotSchedulePastTimeException;
 import com.bamdoliro.maru.infrastructure.persistence.scheduler.FirstPassScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.TaskScheduler;
@@ -23,7 +24,7 @@ public class FormScheduler {
 
     public void selectFirstPass(LocalDateTime scheduledTime) {
         if (scheduledTime.isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("이미 지난 시간입니다");
+            throw new CannotSchedulePastTimeException();
         }
 
         if (scheduledTask != null && !scheduledTask.isCancelled()) {
