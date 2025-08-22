@@ -35,7 +35,7 @@ class SchedulerControllerTest extends RestDocsTestSupport {
         given(scheduleFirstPassUseCase.execute(any(ScheduleRequest.class)))
                 .willReturn(new ScheduleResponse(request.getScheduleSelectFirstPass()));
 
-        mockMvc.perform(post("/schedule/first-pass")
+        mockMvc.perform(post("/schedules")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
