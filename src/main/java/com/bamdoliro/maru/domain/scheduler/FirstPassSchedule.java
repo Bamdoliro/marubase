@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "tbl_schudule")
+@Table(name = "tbl_schedule")
 @Entity
 public class FirstPassSchedule {
 
