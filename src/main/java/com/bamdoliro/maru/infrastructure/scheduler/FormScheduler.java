@@ -1,7 +1,7 @@
 package com.bamdoliro.maru.infrastructure.scheduler;
 
 import com.bamdoliro.maru.application.form.SelectFirstPassUseCase;
-import com.bamdoliro.maru.domain.scheduler.FirstPassSchedule;
+import com.bamdoliro.maru.domain.scheduler.domain.FirstPassSchedule;
 import com.bamdoliro.maru.domain.scheduler.exception.CannotSchedulePastTimeException;
 import com.bamdoliro.maru.infrastructure.persistence.scheduler.FirstPassScheduleRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +31,7 @@ public class FormScheduler {
             scheduledTask.cancel(false);
         }
 
-        FirstPassSchedule schedule = firstPassScheduleRepository.findById(1L)
-                .orElseGet(() -> new FirstPassSchedule(scheduledTime));
-        schedule.update(scheduledTime);
+        FirstPassSchedule schedule = new FirstPassSchedule(scheduledTime);
         firstPassScheduleRepository.save(schedule);
 
         scheduledTask = taskScheduler.schedule(
