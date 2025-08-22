@@ -41,9 +41,9 @@ public class FormScheduler {
     }
 
     public void restoreSchedule() {
-        firstPassScheduleRepository.findById(1L)
+        firstPassScheduleRepository.findTopByOrderByCreatedAtDesc()
                 .map(FirstPassSchedule::getScheduledTime)
-                .filter(time -> time != null && time.isAfter(java.time.LocalDateTime.now()))
+                .filter(time -> time.isAfter(LocalDateTime.now()))
                 .ifPresent(this::selectFirstPass);
     }
 }
