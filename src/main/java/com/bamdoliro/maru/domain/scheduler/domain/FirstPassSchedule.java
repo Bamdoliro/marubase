@@ -1,8 +1,7 @@
-package com.bamdoliro.maru.domain.scheduler;
+package com.bamdoliro.maru.domain.scheduler.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.bamdoliro.maru.shared.entity.BaseTimeEntity;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,19 +12,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tbl_schedule")
 @Entity
-public class FirstPassSchedule {
+public class FirstPassSchedule extends BaseTimeEntity {
 
     @Id
-    private Long id = 1L;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private LocalDateTime scheduledTime;
 
     public FirstPassSchedule(LocalDateTime scheduledTime) {
         this.scheduledTime = scheduledTime;
-    }
-
-    public void update(LocalDateTime newSchedule) {
-        this.scheduledTime = newSchedule;
     }
 
 }
