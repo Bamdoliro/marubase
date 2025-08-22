@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/schedule")
+@RequestMapping("/schedules")
 @RequiredArgsConstructor
 public class SchedulerController {
 
     private final ScheduleFirstPassUseCase scheduleFirstPassUseCase;
 
 
-    @PostMapping("/first-pass")
-    public SingleCommonResponse<ScheduleResponse> updateSchedule(
+    @PostMapping
+    public SingleCommonResponse<ScheduleResponse> createSchedule(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestBody @Valid ScheduleRequest scheduleRequest) {
 
