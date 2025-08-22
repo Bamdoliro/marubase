@@ -1,4 +1,4 @@
-package com.bamdoliro.maru.domain.scheduler.exception;
+package com.bamdoliro.maru.domain.scheduler.exception.error;
 
 import com.bamdoliro.maru.shared.error.ErrorProperty;
 import lombok.Getter;
