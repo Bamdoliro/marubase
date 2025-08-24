@@ -16,4 +16,5 @@ public class Templates {
     public static final String SPECIAL_ADMISSION = "special-admission";
     public static final String CONFIRMATION = "confirmation";
     public static final String REGISTRATION = "registration";
+    public static final String PRIVACY_POLICY = "privacy-policy-agreement";
 }
