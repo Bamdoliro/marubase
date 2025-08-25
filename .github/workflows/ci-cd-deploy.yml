@@ -68,4 +68,6 @@ jobs:
             fi
             mkdir -p /home/ec2-user/action
             source /home/ec2-user/.bashrc
-            nohup java -jar /home/ec2-user/apps/build/libs/maru-0.0.1-SNAPSHOT.jar \ > /home/ec2-user/action/cgb.log 2>&1 &
+            export ENCRYPTION_PASSWORD=${{ secrets.ENCRYPTION_PASSWORD }}
+            export ENCRYPTION_SALT=${{ secrets.ENCRYPTION_SALT }}
+            nohup java -jar /home/ec2-user/apps/build/libs/maru-0.0.1-SNAPSHOT.jar > /home/ec2-user/action/cgb.log 2>&1 &
