@@ -1,0 +1,72 @@
+name: Deploy to AWS EC2
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true &&
+      contains(github.event.pull_request.labels.*.name, 'backend') &&
+      contains(github.event.pull_request.labels.*.name, 'operation')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/chekcout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      - name: Grant permission
+        run: chmod +x ./gradlw
+
+      - name: Build Project in root
+        run: ./gradlw bootJar
+        env: 
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}          
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}          
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          REIDS_HOST: ${{ secrets.REDIS_HOST }}         
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+          S3_REGION: ${{ secrets.S3_REGION }}
+          S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+          S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          NEIS_KEY: ${{ secrets.NEIS_KEY }}
+          MESSAGE_API_KEY: ${{ secrets.MESSAGE_API_KEY }}
+          MESSAGE_API_SECRET: ${{ secrets.MESSAGE_API_SECRET }}
+          MESSAGE_API_DOMAIN: ${{ secrets.MESSAGE_API_DOMAIN }}
+          MESSAGE_FROM: ${{ secrets.MESSAGE_FROM }}      
+          ENCRYPTION_PASSWORD: ${{ secrets.ENCRYPTION_PASSWORD }}
+          ENCRYPTION_SALT: ${{ secrets.ENCRYPTION_SALT }}
+
+      - name: Copy build files to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "./build/libs/maru-0.0.1-SNAPSHOT.jar"
+          target: "/home/ec2-user/apps"
+
+      - name: Run application on EC2
+        uses: appleboy/ssh-action@master
+        with: 
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            if lsof -i:8080 -t >/dev/null; then
+              kill -9 $(lsof -i:8080 -t)
+            fi
+              nohup bash -c "source /home/ec2-user/.bashrc && java -jar /home/ec2-user/apps/marubase/build/libs/maru-0.0.1-SNAPSHOT.jar" > /home/ec2-user/action/cgb.log 2>&1 &
+
