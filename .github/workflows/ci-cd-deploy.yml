@@ -25,7 +25,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build Project in root
-        run: ./gradlew bootJar -x test
+        run: ./gradlew bootJar -x test -x asciidoctor
         env: 
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_PORT: ${{ secrets.DB_PORT }}
