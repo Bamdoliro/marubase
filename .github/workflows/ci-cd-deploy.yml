@@ -8,9 +8,7 @@ on:
 
 jobs:
   deploy:
-    if: github.event.pull_request.merged == true &&
-      contains(github.event.pull_request.labels.*.name, 'backend') &&
-      contains(github.event.pull_request.labels.*.name, 'operation')
+    if: github.event.pull_request.merged == true 
     runs-on: ubuntu-latest
 
     steps:
