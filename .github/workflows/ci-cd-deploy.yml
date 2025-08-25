@@ -66,5 +66,5 @@ jobs:
             if lsof -i:8080 -t >/dev/null; then
               kill -9 $(lsof -i:8080 -t)
             fi
-              nohup bash -c "source /home/ec2-user/.bashrc && java -jar /home/ec2-user/apps/marubase/build/libs/maru-0.0.1-SNAPSHOT.jar" > /home/ec2-user/action/cgb.log 2>&1 &
+              nohup bash -c "source /home/ec2-user/.bashrc && java -jar /home/ec2-user/apps/build/libs/maru-0.0.1-SNAPSHOT.jar" > /home/ec2-user/action/cgb.log 2>&1 &
 
