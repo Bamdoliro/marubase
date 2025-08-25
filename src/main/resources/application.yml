@@ -13,7 +13,7 @@ spring:
 
     generate-ddl: true
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
 
   datasource:
     url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
@@ -70,23 +70,6 @@ message:
   api-secret: ${MESSAGE_API_SECRET}
   api-domain: ${MESSAGE_API_DOMAIN}
   from: ${MESSAGE_FROM}
-
-schedule:
-  start: ${SCHEDULE_START}
-  end: ${SCHEDULE_END}
-  announcement-of-first-pass: ${SCHEDULE_ANNOUNCEMENT_OF_FIRST_PASS}
-  announcement-of-second-pass: ${SCHEDULE_ANNOUNCEMENT_OF_SECOND_PASS}
-  coding_test: ${SCHEDULE_CODING_TEST}
-  ncs: ${SCHEDULE_NCS}
-  depth-interview: ${SCHEDULE_DEPTH_INTERVIEW}
-  physical-examination: ${SCHEDULE_PHYSICAL_EXAMINATION}
-  entrance-registration-period-start: ${SCHEDULE_ENTRANCE_REGISTRATION_PERIOD_START}
-  entrance-registration-period-end: ${SCHEDULE_ENTRANCE_REGISTRATION_PERIOD_END}
-  meister-talent_entrance-time: ${SCHEDULE_MEISTER_TALENT_ENTRANCE_TIME}
-  meister-talent_exclusion-entrance-time: ${SCHEDULE_MEISTER_TALENT_EXCLUSION_ENTRANCE_TIME}
-  admission-and-pledge-start: ${SCHEDULE_ADMISSION_AND_PLEDGE_START}
-  admission-and-pledge-end: ${SCHEDULE_ADMISSION_AND_PLEDGE_END}
-  select-first-pass-cron: ${SCHEDULE_SELECT_FIRST_PASS_CRON}
 
 ---
 spring:

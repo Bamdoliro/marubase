@@ -11,7 +11,7 @@ import com.bamdoliro.maru.infrastructure.s3.dto.request.FileMetadata;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UrlResponse;
 import com.bamdoliro.maru.infrastructure.s3.validator.DefaultFileValidator;
 import com.bamdoliro.maru.shared.annotation.UseCase;
-import com.bamdoliro.maru.shared.config.properties.ScheduleProperties;
+import com.bamdoliro.maru.shared.constants.Schedule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 
@@ -24,7 +24,6 @@ public class UploadAdmissionAndPledgeUseCase {
 
     private final FileService fileService;
     private final FormFacade formFacade;
-    private final ScheduleProperties scheduleProperties;
 
     public UrlResponse execute(User user, FileMetadata fileMetadata) {
         validateApplicationPeriod(LocalDateTime.now());
@@ -37,7 +36,7 @@ public class UploadAdmissionAndPledgeUseCase {
     }
 
     private void validateApplicationPeriod(LocalDateTime now) {
-        if (now.isBefore(scheduleProperties.getAdmissionAndPledgeStart()) || now.isAfter(scheduleProperties.getAdmissionAndPledgeEnd())) {
+        if (now.isBefore(Schedule.ADMISSION_AND_PLEDGE_START) || now.isAfter(Schedule.ADMISSION_AND_PLEDGE_END)) {
             throw new OutOfAdmissionAndPledgePeriodException();
         }
     }

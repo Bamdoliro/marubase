@@ -1,7 +1,7 @@
 package com.bamdoliro.maru.infrastructure.aop.schedule;
 
 import com.bamdoliro.maru.domain.form.exception.OutOfApplicationFormPeriodException;
-import com.bamdoliro.maru.shared.config.properties.ScheduleProperties;
+import com.bamdoliro.maru.shared.constants.Schedule;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -14,12 +14,11 @@ import java.time.LocalDateTime;
 @Component
 public class ScheduleValidationAspect {
 
-    private final ScheduleProperties scheduleProperties;
 
     @Before("@annotation(com.bamdoliro.maru.shared.annotation.ValidateApplicationFormPeriod)")
     public void validateApplicationFormPeriod() {
         LocalDateTime now = LocalDateTime.now();
-        if (now.isBefore(scheduleProperties.getStart()) || now.isAfter(scheduleProperties.getEnd())) {
+        if (now.isBefore(Schedule.START) || now.isAfter(Schedule.END)) {
             throw new OutOfApplicationFormPeriodException();
         }
     }
