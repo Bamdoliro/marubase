@@ -206,7 +206,7 @@ public class FormController {
     public ListCommonResponse<FormSimpleResponse> getFormList(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestParam(name = "status", required = false) FormStatus status,
-            @RequestParam(name = "type", required = false) FormType.Category type,
+            @RequestParam(name = "type", required = false) FormType type,
             @RequestParam(name = "sort", required = false) String sort
     ) {
         return ListCommonResponse.ok(
