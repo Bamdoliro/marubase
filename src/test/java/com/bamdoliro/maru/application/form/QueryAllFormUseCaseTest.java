@@ -68,10 +68,10 @@ class QueryAllFormUseCaseTest {
         given(formRepository.findByStatus(null)).willReturn(formList);
 
         // when
-        List<FormSimpleResponse> returnedFormList = queryAllFormUseCase.execute(null, FormType.Category.SPECIAL, null);
+        List<FormSimpleResponse> returnedFormList = queryAllFormUseCase.execute(null, FormType.MEISTER_TALENT, null);
 
         // then
-        assertEquals(2, returnedFormList.size());
+        assertEquals(1, returnedFormList.size());
 
         verify(formRepository, times(1)).findByStatus(null);
     }
@@ -91,7 +91,7 @@ class QueryAllFormUseCaseTest {
         given(formRepository.findByStatus(null)).willReturn(formList);
 
         // when
-        List<FormSimpleResponse> returnedFormList = queryAllFormUseCase.execute(null, FormType.Category.SOCIAL_INTEGRATION, null);
+        List<FormSimpleResponse> returnedFormList = queryAllFormUseCase.execute(null, FormType.MULTI_CHILDREN, null);
 
         // then
         assertEquals(1, returnedFormList.size());
@@ -190,7 +190,7 @@ class QueryAllFormUseCaseTest {
         given(formRepository.findByStatus(null)).willReturn(formList);
 
         // when
-        List<FormSimpleResponse> returnedFormList = queryAllFormUseCase.execute(null, FormType.Category.SOCIAL_INTEGRATION, "form-id");
+        List<FormSimpleResponse> returnedFormList = queryAllFormUseCase.execute(null, FormType.REGULAR, "form-id");
 
         // then
         assertEquals(1, returnedFormList.size());
