@@ -17,7 +17,7 @@ public class FairFixture {
 
     public static Fair createFair() {
         return new Fair(
-                LocalDateTime.now(),
+                LocalDateTime.now().plusDays(1),
                 120,
                 "부산소프트웨어마이스터고등학교 1층 SRC관",
                 FairType.STUDENT_AND_PARENT,
