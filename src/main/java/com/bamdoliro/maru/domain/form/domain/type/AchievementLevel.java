@@ -11,7 +11,8 @@ public enum AchievementLevel implements EnumProperty {
     B("B", 4, "우", "보통"),
     C("C", 3, "미", "미흡"),
     D("D", 2, "양", null),
-    E("E", 1, "가", null);
+    E("E", 1, "가", null),
+    미이수("미이수", 0, "미이수", "미이수");
 
     private final String description;
     private final int score;
