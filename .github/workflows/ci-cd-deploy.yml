@@ -16,7 +16,7 @@ jobs:
       S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       NEIS_KEY: ${{ secrets.NEIS_KEY }}
-      MAESSAGE_API_KEY: ${{ secrets.MESSAGE_API_KEY }}
+      MESSAGE_API_KEY: ${{ secrets.MESSAGE_API_KEY }}
       MESSAGE_API_SECRET: ${{ secrets.MESSAGE_API_SECRET }}
       MESSAGE_API_DOMAIN: ${{ secrets.MESSAGE_API_DOMAIN }}
       MESSAGE_FROM: ${{ secrets.MESSAGE_FROM }}
