@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ develop ]
 
+env: 
+  S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -57,5 +60,5 @@ jobs:
         aws-region: ap-northeast-2
 
     - name: Upload to S3
-      run: aws s3 cp --region ap-northeast-2 ./maru.zip s3://$AWS_S3_BUCKET_NAME/
+      run: aws s3 cp --region ap-northeast-2 ./maru.zip s3://$S3_BUCKET_NAME/
   
