@@ -10,18 +10,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env: 
-      BUCKET_NAME: ${{ BUCKET_NAME }}
-      S3_REGION: ${{ S3_REGION }}
-      S3_ACCESS_KEY: ${{ S3_ACCESS_KEY }}
-      S3_SECRET_KEY: ${{ S3_SECRET_KEY }}
-      JWT_SECRET: ${{ JWT_SECRET }}
-      NEIS_KEY: ${{ NEIS_KEY }}
-      MAESSAGE_API_KEY: ${{ MESSAGE_API_KEY }}
-      MESSAGE_API_SECRET: ${{ MESSAGE_API_SECRET }}
-      MESSAGE_API_DOMAIN: ${{ MESSAGE_API_DOMAIN }}
-      MESSAGE_FROM: ${{ MESSAGE_FROM }}
-      ENCRYPTION_PASSWORD: ${{ ENCRYPTION_PASSWORD }}
-      ENCRYPTION_SALT: ${{ ENCRYPTION_SALT }}
+      BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+      S3_REGION: ${{ secrets.S3_REGION }}
+      S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+      S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      NEIS_KEY: ${{ secrets.NEIS_KEY }}
+      MAESSAGE_API_KEY: ${{ secrets.MESSAGE_API_KEY }}
+      MESSAGE_API_SECRET: ${{ secrets.MESSAGE_API_SECRET }}
+      MESSAGE_API_DOMAIN: ${{ secrets.MESSAGE_API_DOMAIN }}
+      MESSAGE_FROM: ${{ secrets.MESSAGE_FROM }}
+      ENCRYPTION_PASSWORD: ${{ secrets.ENCRYPTION_PASSWORD }}
+      ENCRYPTION_SALT: ${{ secrets.ENCRYPTION_SALT }}
       
     steps:
     - name: Checkout
