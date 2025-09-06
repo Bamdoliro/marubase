@@ -68,8 +68,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         aws deploy create-deployment \
-        --applicatoin-name maru-bssm \
+        --application-name maru-bssm \
         --deployment-group-name maru-bssm-deploy-group \
-        --file-exists-behavior OVERWIRTE \
+        --file-exists-behavior OVERWRITE \
         --s3-location bucket=maru-bssm-deploy,bundleType=zip,key=maru.zip \
         --region ap-northeast-2
