@@ -14,6 +14,7 @@ else
   echo "> kill -15 $CURRENT_PID"
   kill -15 $CURRENT_PID
   sleep 5
+fi
 
 echo "> new application deploy"
 
