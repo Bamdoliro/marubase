@@ -52,6 +52,22 @@ jobs:
     - name: Upload to S3
       run: aws s3 cp --region ap-northeast-2 ./maru.zip s3://$S3_BUCKET_NAME/
 
+    - name: Cancle previous deployment if exists
+      run: |
+        DEPLOYMENT_ID=$(aws deploy list-deployments) \
+          --application-name maru-bssm \
+          --deployment-group-name maru-bssm-deploy-group \
+          --include-only-statuses InProgress \
+          --query "deployments[0]" --output text \
+          --region ap-northeast-2
+
+        if ["$DEPLOYMENT_ID" != "None"]; then
+          echo "Stopping previous deployment: $DEPLOYMENT_ID"
+          aws deploy stop-deployment --deployment-id $DEPLOYMENT_ID --region ap-northeast-2
+        else
+          echo "No active deployment found"
+        fi
+
     - name: Deploy
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
