@@ -1,96 +1,81 @@
 name: Deploy to AWS EC2
 
 on:
-  pull_request:
-    types: [closed]
-    branches:
-      - develop
+  workflow_dispatch:
+
+env: 
+  S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
 
 jobs:
-  deploy:
-    if: github.event.pull_request.merged == true 
+  build:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v3
 
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'zulu'
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
 
-      - name: Grant permission
-        run: chmod +x ./gradlew
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
 
-      - name: Build Project in root
-        run: ./gradlew bootJar -x test -x asciidoctor
-        env: 
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-          DB_NAME: ${{ secrets.DB_NAME }}          
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}          
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          REIDS_HOST: ${{ secrets.REDIS_HOST }}         
-          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
-          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
-          S3_REGION: ${{ secrets.S3_REGION }}
-          S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
-          S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          NEIS_KEY: ${{ secrets.NEIS_KEY }}
-          MESSAGE_API_KEY: ${{ secrets.MESSAGE_API_KEY }}
-          MESSAGE_API_SECRET: ${{ secrets.MESSAGE_API_SECRET }}
-          MESSAGE_API_DOMAIN: ${{ secrets.MESSAGE_API_DOMAIN }}
-          MESSAGE_FROM: ${{ secrets.MESSAGE_FROM }}      
-          ENCRYPTION_PASSWORD: ${{ secrets.ENCRYPTION_PASSWORD }}
-          ENCRYPTION_SALT: ${{ secrets.ENCRYPTION_SALT }}
-          
-      - name: Install AWS CLI
-        run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install
+    - name: Build with Gradle
+      run: ./gradlew clean build -x test -x asciidoctor
 
-      - name: Get GitHub Runner IP
-        id: ip
-        run: echo "IP=$(curl -s ifconfig.me)" >> $GITHUB_ENV
+    - name: Make Directory
+      run: mkdir -p deploy
+  
+    - name: Copy Jar
+      run: cp ./build/libs/*.jar ./deploy
 
-      - name: Authorize GitHub Actions IP in Security Group
-        run: |
-          aws ec2 authorize-security-group-ingress \
-            --group-id ${{ secrets.SECURITY_GROUP_ID }} \
-            --protocol tcp \
-            --port 22 \
-            --cidr $IP/32
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          IP: ${{ env.IP }}
+    - name: Copy appspec.yml
+      run: cp appspec.yml ./deploy
 
-      - name: Copy build files to EC2
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ec2-user
-          key: ${{ secrets.EC2_SSH_KEY }}
-          source: "./build/libs/maru-0.0.1-SNAPSHOT.jar"
-          target: "/home/ec2-user/apps"
+    - name: Copy script
+      run: cp ./scripts/*.sh ./deploy
+  
+    - name: Make zip file
+      run: zip -r ./maru.zip ./deploy 
+      shell: bash
 
-      - name: Run application on EC2
-        uses: appleboy/ssh-action@master
-        with: 
-          host: ${{ secrets.EC2_HOST }}
-          username: ec2-user
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            if lsof -i:8080 -t >/dev/null; then
-              kill -9 $(lsof -i:8080 -t)
-            fi
-            mkdir -p /home/ec2-user/action
-            source /home/ec2-user/.bashrc
-            # export ENCRYPTION_PASSWORD=${{ secrets.ENCRYPTION_PASSWORD }}
-            # export ENCRYPTION_SALT=${{ secrets.ENCRYPTION_SALT }}
-            nohup env $(cat ~/apps/.env | xargs) java -jar /home/ec2-user/apps/build/libs/maru-0.0.1-SNAPSHOT.jar > /home/ec2-user/action/cgb.log 2>&1 &
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with: 
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 ./maru.zip s3://$S3_BUCKET_NAME/
+
+    - name: Cancle previous deployment if exists
+      run: |
+        DEPLOYMENT_ID=$(aws deploy list-deployments \
+          --application-name maru-bssm \
+          --deployment-group-name maru-bssm-deploy-group \
+          --include-only-statuses InProgress \
+          --query "deployments[0]" --output text \
+          --region ap-northeast-2)
+
+        if ["$DEPLOYMENT_ID" != "None"]; then
+          echo "Stopping previous deployment: $DEPLOYMENT_ID"
+          aws deploy stop-deployment --deployment-id $DEPLOYMENT_ID --region ap-northeast-2
+        else
+          echo "No active deployment found"
+        fi
+
+    - name: Deploy
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        aws deploy create-deployment \
+        --application-name maru-bssm \
+        --deployment-group-name maru-bssm-deploy-group \
+        --file-exists-behavior OVERWRITE \
+        --s3-location bucket=maru-bssm-deploy,bundleType=zip,key=maru.zip \
+        --region ap-northeast-2
