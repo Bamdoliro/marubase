@@ -9,5 +9,3 @@ _|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|
 Contributors - @gimhanul, @hsem4717, @jyj1289, @cabbage16
 SpringBoot - ${spring-boot.version}
 Java - ${java.version}
-
-test to code deploy
