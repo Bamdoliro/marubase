@@ -54,12 +54,12 @@ jobs:
 
     - name: Cancle previous deployment if exists
       run: |
-        DEPLOYMENT_ID=$(aws deploy list-deployments) \
+        DEPLOYMENT_ID=$(aws deploy list-deployments \
           --application-name maru-bssm \
           --deployment-group-name maru-bssm-deploy-group \
           --include-only-statuses InProgress \
           --query "deployments[0]" --output text \
-          --region ap-northeast-2
+          --region ap-northeast-2)
 
         if ["$DEPLOYMENT_ID" != "None"]; then
           echo "Stopping previous deployment: $DEPLOYMENT_ID"
