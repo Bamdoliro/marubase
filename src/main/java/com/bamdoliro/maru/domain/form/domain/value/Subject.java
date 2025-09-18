@@ -62,11 +62,11 @@ public class Subject {
     }
 
     public Integer getScore() {
-        if (achievementLevel == AchievementLevel.미이수) {
+        if (achievementLevel == AchievementLevel.F) {
             if ("국어".equals(subjectName) || "영어".equals(subjectName) || "수학".equals(subjectName)) {
                 return AchievementLevel.C.getScore() * ("수학".equals(subjectName) ? 2 : 1);
             }
-            return AchievementLevel.미이수.getScore();
+            return AchievementLevel.F.getScore();
         }
 
         if (subjectName.equals("수학")) {
