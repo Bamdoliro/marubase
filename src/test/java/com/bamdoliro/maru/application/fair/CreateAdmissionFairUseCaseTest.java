@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.time.temporal.ChronoUnit;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -41,7 +41,9 @@ class CreateAdmissionFairUseCaseTest {
         // then
         verify(fairRepository, times(1)).save(captor.capture());
         Fair savedFair = captor.getValue();
-        assertThat(fair.getStart()).isEqualToIgnoringNanos(savedFair.getStart());
+
+        assertEquals(fair.getStart().truncatedTo(ChronoUnit.SECONDS), savedFair.getStart().truncatedTo(ChronoUnit.SECONDS));
+      
         assertEquals(fair.getPlace(), savedFair.getPlace());
        }
 }
