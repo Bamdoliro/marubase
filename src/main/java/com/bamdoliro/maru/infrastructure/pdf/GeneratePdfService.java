@@ -25,10 +25,10 @@ public class GeneratePdfService {
             "/SUIT-Regular.ttf",
             "/SUIT-Light.ttf"
     );
-    private final ConverterProperties converterProperties = createConverterProperties();
 
     public ByteArrayOutputStream execute(String html) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ConverterProperties converterProperties = createConverterProperties();
         HtmlConverter.convertToPdf(html, outputStream, converterProperties);
         return outputStream;
     }
