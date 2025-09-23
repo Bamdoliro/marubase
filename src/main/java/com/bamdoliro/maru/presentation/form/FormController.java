@@ -145,13 +145,12 @@ public class FormController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("/{form-id}")
+    @PutMapping()
     public void updateForm(
             @AuthenticationPrincipal(authority = Authority.USER) User user,
-            @PathVariable(name = "form-id") Long formId,
             @RequestBody @Valid UpdateFormRequest request
     ) {
-        updateFormUseCase.execute(user, formId, request);
+        updateFormUseCase.execute(user,  request);
     }
 
     @PostMapping( "/identification-picture")

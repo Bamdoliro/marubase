@@ -18,8 +18,8 @@ public class UpdateFormUseCase {
 
     @ValidateApplicationFormPeriod
     @Transactional
-    public void execute(User user, Long id, UpdateFormRequest request) {
-        Form form = formFacade.getForm(id);
+    public void execute(User user, UpdateFormRequest request) {
+        Form form = formFacade.getForm(user);
         form.isApplicant(user);
         validateFormStatus(form);
 
