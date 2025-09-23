@@ -695,10 +695,10 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        willDoNothing().given(updateFormUseCase).execute(user, formId, request);
+        willDoNothing().given(updateFormUseCase).execute(user, request);
 
 
-        mockMvc.perform(put("/forms/{form-id}", formId)
+        mockMvc.perform(put("/forms")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -711,10 +711,6 @@ class FormControllerTest extends RestDocsTestSupport {
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION)
                                         .description("Bearer token")
-                        ),
-                        pathParameters(
-                                parameterWithName("form-id")
-                                        .description("수정할 원서 id")
                         ),
                         requestFields(
                                 fieldWithPath("type")
@@ -853,7 +849,7 @@ class FormControllerTest extends RestDocsTestSupport {
                         )
                 ));
 
-        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        verify(updateFormUseCase, times(1)).execute(any(User.class),  any(UpdateFormRequest.class));
     }
 
     @Test
@@ -864,9 +860,9 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new OutOfApplicationFormPeriodException()).when(updateFormUseCase).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        doThrow(new OutOfApplicationFormPeriodException()).when(updateFormUseCase).execute(any(User.class), any(UpdateFormRequest.class));
 
-        mockMvc.perform(put("/forms/{form-id}", formId)
+        mockMvc.perform(put("/forms")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -877,7 +873,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        verify(updateFormUseCase, times(1)).execute(any(User.class), any(UpdateFormRequest.class));
     }
 
     @Test
@@ -887,10 +883,10 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FormNotFoundException()).when(updateFormUseCase).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        doThrow(new FormNotFoundException()).when(updateFormUseCase).execute(any(User.class), any(UpdateFormRequest.class));
 
 
-        mockMvc.perform(put("/forms/{form-id}", formId)
+        mockMvc.perform(put("/forms")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -901,7 +897,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        verify(updateFormUseCase, times(1)).execute(any(User.class), any(UpdateFormRequest.class));
     }
 
     @Test
@@ -911,10 +907,10 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new AuthorityMismatchException()).when(updateFormUseCase).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        doThrow(new AuthorityMismatchException()).when(updateFormUseCase).execute(any(User.class), any(UpdateFormRequest.class));
 
 
-        mockMvc.perform(put("/forms/{form-id}", formId)
+        mockMvc.perform(put("/forms")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -925,7 +921,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        verify(updateFormUseCase, times(1)).execute(any(User.class), any(UpdateFormRequest.class));
     }
 
     @Test
@@ -935,10 +931,10 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new CannotUpdateNotRejectedFormException()).when(updateFormUseCase).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        doThrow(new CannotUpdateNotRejectedFormException()).when(updateFormUseCase).execute(any(User.class), any(UpdateFormRequest.class));
 
 
-        mockMvc.perform(put("/forms/{form-id}", formId)
+        mockMvc.perform(put("/forms", formId)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -949,7 +945,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        verify(updateFormUseCase, times(1)).execute(any(User.class), any(UpdateFormRequest.class));
     }
 
     @Test
