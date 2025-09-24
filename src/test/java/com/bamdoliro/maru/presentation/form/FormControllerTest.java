@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.presentation.form;
 
+import com.bamdoliro.maru.application.form.ExportFirstScoreUseCase;
 import com.bamdoliro.maru.domain.auth.exception.AuthorityMismatchException;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
@@ -23,6 +24,7 @@ import com.bamdoliro.maru.shared.fixture.SharedFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -44,6 +46,9 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class FormControllerTest extends RestDocsTestSupport {
+
+    @Autowired
+    private ExportFirstScoreUseCase exportFirstScoreUseCase;
 
     @Test
     void 원서를_제출한다() throws Exception {
@@ -2401,5 +2406,35 @@ class FormControllerTest extends RestDocsTestSupport {
                 ));
 
         verify(queryAdmissionAndPledgeUseCase, times(1)).execute(idList);
+    }
+
+    @Test
+    void 성공적으로_1차원서_점수액셀을_다운로드한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+        MockMultipartFile file = new MockMultipartFile(
+                "1차원서점수",
+                "1차원서점수.xlsx",
+                String.valueOf(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")),
+                "<<file>>".getBytes()
+        );
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(exportFirstScoreUseCase.execute()).willReturn(new ByteArrayResource(file.getBytes()));
+
+        mockMvc.perform(get("/forms/xlsx/first-score")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        )
+                ));
+
+        verify(exportFirstScoreUseCase, times(1)).execute();
     }
 }
