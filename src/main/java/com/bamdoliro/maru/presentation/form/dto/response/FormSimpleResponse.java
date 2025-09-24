@@ -26,6 +26,7 @@ public class FormSimpleResponse {
     private Double totalScore;
     private Boolean hasDocument;
     private Boolean firstRoundPassed;
+    private Double firstRoundScore;
     private Boolean secondRoundPassed;
 
     public FormSimpleResponse(Form form) {
@@ -41,6 +42,7 @@ public class FormSimpleResponse {
         this.totalScore = form.getScore().getTotalScore();
         this.hasDocument = form.isReceived();
         this.firstRoundPassed = form.isFirstPassed();
+        this.firstRoundScore = form.getScore().getFirstRoundScore();
         this.secondRoundPassed = form.isPassed();
     }
 }
