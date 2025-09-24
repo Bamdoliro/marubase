@@ -233,7 +233,7 @@ public class Form extends BaseTimeEntity {
         this.document = document;
         this.type = type;
         this.originalType = type;
-        this.status = FormStatus.FINAL_SUBMITTED;
+        this.status = FormStatus.SUBMITTED;
     }
 
     public void assignExaminationNumber(Long examinationNumber) {
