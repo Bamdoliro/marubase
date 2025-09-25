@@ -60,7 +60,7 @@ class UpdateSecondRoundScoreUseCaseTest {
         List<Form> formList = FormFixture.generateBusanFormList(userList);
         formList.forEach(form -> {
             assignExaminationNumberService.execute(form);
-            form.receive();
+            form.approve();
             calculateFormScoreService.execute(form);
             if (form.getExaminationNumber() == 1001 ||
                     form.getExaminationNumber() == 1002 ||
