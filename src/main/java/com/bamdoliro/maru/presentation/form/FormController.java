@@ -55,6 +55,7 @@ public class FormController {
     private final DownloadSecondRoundScoreFormatUseCase downloadSecondRoundScoreFormatUseCase;
     private final UpdateSecondRoundScoreUseCase updateSecondRoundScoreUseCase;
     private final ExportFinalPassedFormUseCase exportFinalPassedFormUseCase;
+    private final ExportFirstScoreUseCase exportFirstScoreUseCase;
     private final ExportFirstRoundResultUseCase exportFirstRoundResultUseCase;
     private final ExportSecondRoundResultUseCase exportSecondRoundResultUseCase;
     private final ExportResultUseCase exportResultUseCase;
@@ -301,6 +302,15 @@ public class FormController {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(exportFirstRoundResultUseCase.execute());
+    }
+
+    @GetMapping("/xlsx/first-score")
+    public ResponseEntity<Resource> exportFirstScoreResult(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+    ) throws IOException {
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(exportFirstScoreUseCase.execute());
     }
 
     @GetMapping("/xlsx/second-round")

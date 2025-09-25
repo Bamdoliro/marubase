@@ -172,6 +172,9 @@ public abstract class ControllerTest {
     protected DownloadSecondRoundScoreFormatUseCase downloadSecondRoundScoreFormatUseCase;
 
     @MockBean
+    protected ExportFirstScoreUseCase exportFirstScoreUseCase;
+
+    @MockBean
     protected UpdateSecondRoundScoreUseCase updateSecondRoundScoreUseCase;
 
     @MockBean
