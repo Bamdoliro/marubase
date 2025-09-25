@@ -29,7 +29,7 @@ public class SelectFirstPassUseCase {
         int nationalVeteransEducationCount = FixedNumber.NATIONAL_VETERANS_EDUCATION;
         int specialAdmissionCount = FixedNumber.SPECIAL_ADMISSION;
 
-        List<Form> specialFormList = formRepository.findReceivedSpecialForm();
+        List<Form> specialFormList = formRepository.findApprovedSpecialForm();
         List<Form> meisterTalentFormList = classifyFormsByType(specialFormList, FormType::isMeister);
         List<Form> socialIntegrationFormList = classifyFormsByType(specialFormList, FormType::isSocial);
         List<Form> equalOpportunityFormList = classifyFormsByType(specialFormList, FormType::isEqualOpportunity);
@@ -60,12 +60,12 @@ public class SelectFirstPassUseCase {
         processForms(meisterTalentFormList, meisterTalentCount, this::changeToRegularAndCalculateGradeAgain);
 
         formRepository.flush();
-        List<Form> regularFormList = formRepository.findReceivedRegularForm();
+        List<Form> regularFormList = formRepository.findApprovedRegularForm();
 
         processForms(regularFormList, regularCount, Form::firstFail);
 
         formRepository.flush();
-        List<Form> supernumeraryFormList = formRepository.findReceivedSupernumeraryForm();
+        List<Form> supernumeraryFormList = formRepository.findApprovedSupernumeraryForm();
         List<Form> nationalVeteransFormList = classifyFormsByType(supernumeraryFormList, FormType::isNationalVeteransEducation);
         List<Form> specialAdmissionFormList = classifyFormsByType(supernumeraryFormList, FormType::isSpecialAdmission);
 

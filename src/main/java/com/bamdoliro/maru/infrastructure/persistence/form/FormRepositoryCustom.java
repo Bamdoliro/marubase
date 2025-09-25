@@ -16,9 +16,9 @@ public interface FormRepositoryCustom {
     List<Form> findByType(FormType type);
     List<Form> findByCategory(FormType.Category category);
     List<Form> findByOriginalCategory(FormType.Category category);
-    List<Form> findReceivedSpecialForm();
-    List<Form> findReceivedRegularForm();
-    List<Form> findReceivedSupernumeraryForm();
+    List<Form> findApprovedSpecialForm();
+    List<Form> findApprovedRegularForm();
+    List<Form> findApprovedSupernumeraryForm();
     List<Form> findFirstPassedSpecialForm();
     List<Form> findFirstPassedRegularForm();
     List<Form> findFirstPassedSupernumeraryForm();
