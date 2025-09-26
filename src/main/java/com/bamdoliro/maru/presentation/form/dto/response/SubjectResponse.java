@@ -13,11 +13,13 @@ public class SubjectResponse {
     private Integer semester;
     private String subjectName;
     private AchievementLevel achievementLevel;
+    private Integer originalScore;
     
     public SubjectResponse(Subject subject) {
         this.grade = subject.getGrade();
         this.semester = subject.getSemester();
         this.subjectName = subject.getSubjectName();
         this.achievementLevel = subject.getAchievementLevel();
+        this.originalScore = subject.getOriginalScore();
     }
 }
