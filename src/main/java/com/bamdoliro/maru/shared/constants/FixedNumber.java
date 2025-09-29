@@ -6,8 +6,8 @@ import lombok.experimental.UtilityClass;
 public class FixedNumber {
 
     public static final int TOTAL = 64;
-    public static final int REGULAR = 36;
-    public static final int MEISTER_TALENT = 22;
+    public static final int REGULAR = 48;
+    public static final int MEISTER_TALENT = 10;
     public static final int SOCIAL_INTEGRATION = 6;
     public static final int NATIONAL_VETERANS_EDUCATION = 2;
     public static final int SPECIAL_ADMISSION = 1;
