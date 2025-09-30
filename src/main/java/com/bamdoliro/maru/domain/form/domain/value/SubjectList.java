@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -24,7 +25,7 @@ public class SubjectList {
     private List<Subject> value;
 
     public static SubjectList of(List<Subject> subjectList) {
-        return new SubjectList(subjectList);
+        return new SubjectList(subjectList == null ? List.of() : subjectList);
     }
 
     public SubjectMap getSubjectMap() {
