@@ -11,7 +11,7 @@ public class Schedule {
 
     public static final LocalDateTime START = LocalDateTime.of(2025, 1, 20, 9, 0);
     public static final LocalDateTime END = LocalDateTime.of(2025, 10, 23, 17, 0);
-    public static final LocalDateTime ANNOUNCEMENT_OF_FIRST_PASS = LocalDateTime.of(2025, 9, 26, 2, 50);
+    public static final LocalDateTime ANNOUNCEMENT_OF_FIRST_PASS = LocalDateTime.of(2025, 10, 27, 15, 0);
     public static final LocalDateTime ANNOUNCEMENT_OF_SECOND_PASS = LocalDateTime.of(2025, 11, 5, 15, 0);
     public static final LocalDateTime CODING_TEST = LocalDateTime.of(2025, 10, 31, 9, 30);
     public static final LocalDateTime NCS = LocalDateTime.of(2025, 10, 31, 11, 0);
@@ -24,7 +24,7 @@ public class Schedule {
     public static final LocalDateTime ADMISSION_AND_PLEDGE_START = LocalDateTime.of(2025, 12, 15, 0, 0);
     public static final LocalDateTime ADMISSION_AND_PLEDGE_END = LocalDateTime.of(2025, 12, 17, 23, 59);
 
-    public static final String SELECT_FIRST_PASS_CRON = "0 0 11 26 9 ?";
+    public static final String SELECT_FIRST_PASS_CRON = "0 55 14 27 10 ?";
 
     public static int getAdmissionYear() {
         return START.plusYears(1L).getYear();
