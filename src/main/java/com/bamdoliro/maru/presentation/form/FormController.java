@@ -268,7 +268,7 @@ public class FormController {
                 .body(downloadSecondRoundScoreFormatUseCase.execute());
     }
 
-    @PostMapping("/second-round/score")
+    @PatchMapping("/second-round/score")
     public ResponseEntity<Resource> updateSecondRoundScore(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestPart(value = "xlsx") MultipartFile file
