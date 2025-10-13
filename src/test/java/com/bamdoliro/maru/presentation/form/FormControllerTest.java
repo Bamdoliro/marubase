@@ -2031,7 +2031,7 @@ class FormControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
         given(downloadSecondRoundScoreFormatUseCase.execute()).willReturn(null);
 
-        mockMvc.perform(multipartPatch("/forms/second-round/score")
+        mockMvc.perform(multipart("/forms/second-round/score")
                         .file(file)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
@@ -2066,7 +2066,7 @@ class FormControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
         doThrow(new InvalidFileException("")).when(updateSecondRoundScoreUseCase).execute(any(MultipartFile.class));
 
-        mockMvc.perform(multipartPatch("/forms/second-round/score")
+        mockMvc.perform(multipart("/forms/second-round/score")
                         .file(file)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
@@ -2092,7 +2092,7 @@ class FormControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
         given(updateSecondRoundScoreUseCase.execute(file)).willReturn(new ByteArrayResource(file.getBytes()));
 
-        mockMvc.perform(multipartPatch("/forms/second-round/score")
+        mockMvc.perform(multipart("/forms/second-round/score")
                         .file(file)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
