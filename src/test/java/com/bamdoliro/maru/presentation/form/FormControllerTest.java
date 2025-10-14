@@ -1687,11 +1687,11 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(queryAllFormUseCase.execute(FormStatus.SUBMITTED, FormType.Category.REGULAR, null)).willReturn(responseList);
+        given(queryAllFormUseCase.execute(FormStatus.SUBMITTED, FormType.REGULAR, null)).willReturn(responseList);
 
         mockMvc.perform(get("/forms")
                         .param("status", FormStatus.SUBMITTED.name())
-                        .param("type", FormType.Category.REGULAR.name())
+                        .param("type", FormType.REGULAR.name())
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                 )
@@ -1716,7 +1716,7 @@ class FormControllerTest extends RestDocsTestSupport {
                         )
                 ));
 
-        verify(queryAllFormUseCase, times(1)).execute(FormStatus.SUBMITTED, FormType.Category.REGULAR, null);
+        verify(queryAllFormUseCase, times(1)).execute(FormStatus.SUBMITTED, FormType.REGULAR, null);
     }
 
     @Test

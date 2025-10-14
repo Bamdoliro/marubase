@@ -19,9 +19,9 @@ public class QueryAllFormUseCase {
 
     private final FormRepository formRepository;
 
-    public List<FormSimpleResponse> execute(FormStatus status, FormType.Category category, String sort) {
+    public List<FormSimpleResponse> execute(FormStatus status, FormType type, String sort) {
         List<Form> formList = new java.util.ArrayList<>(formRepository.findByStatus(status).stream()
-                .filter(form -> Objects.isNull(category) || form.getType().categoryEquals(category))
+                .filter(form -> Objects.isNull(type) || form.getType().equals(type))
                 .toList());
 
         if (sort != null) {
