@@ -45,6 +45,7 @@ spring:
 
   logging:
     level:
+      root: debug
       com.amazonaws.util.EC2MetadataUtils: error
 
   servlet:
