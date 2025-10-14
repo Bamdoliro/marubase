@@ -128,8 +128,8 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("출신 학교 코드 (없는 경우 null)"),
                                 fieldWithPath("education.teacherName")
                                         .type(JsonFieldType.STRING)
-                                        .description("작성 교사 (없는 경우 null)"),
-                                fieldWithPath("education.teacherPhoneNumber")
+                                        .description("출신 학교 전화번호 (없는 경우 null)"),
+                                fieldWithPath("education.schoolPhoneNumber")
                                         .type(JsonFieldType.STRING)
                                         .description("작성 교사 전화번호 (없는 경우 null)"),
                                 fieldWithPath("education.teacherMobilePhoneNumber")
@@ -771,8 +771,8 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("출신 학교 코드"),
                                 fieldWithPath("education.teacherName")
                                         .type(JsonFieldType.STRING)
-                                        .description("작성 교사 (없는 경우 null)"),
-                                fieldWithPath("education.teacherPhoneNumber")
+                                        .description("출신 학교 전화번호 (없는 경우 null)"),
+                                fieldWithPath("education.schoolPhoneNumber")
                                         .type(JsonFieldType.STRING)
                                         .description("작성 교사 전화번호 (없는 경우 null)"),
                                 fieldWithPath("education.teacherMobilePhoneNumber")
