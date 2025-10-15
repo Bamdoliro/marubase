@@ -110,20 +110,22 @@ public class UpdateSecondRoundScoreUseCase {
         Cell isShowCell = row.getCell(6);
         boolean isShow = false;
 
-        if (examinationNumberCell.getCellType() != CellType.NUMERIC) {
-            setErrorCell(examinationNumberCell, "타입 불일치");
+        if (examinationNumberCell == null || examinationNumberCell.getCellType() != CellType.NUMERIC) {
+            if (examinationNumberCell != null) {
+                setErrorCell(examinationNumberCell, "타입 불일치");
+            }
             cellList.add(examinationNumberCell);
         }
-        if (nameCell.getCellType() != CellType.STRING) {
-            setErrorCell(nameCell, "타입 불일치");
+        if (nameCell == null || nameCell.getCellType() != CellType.STRING) {
+            if (nameCell != null) setErrorCell(nameCell, "타입 불일치");
             cellList.add(nameCell);
         }
-        if (typeCell.getCellType() != CellType.STRING) {
-            setErrorCell(typeCell, "타입 불일치");
+        if (typeCell == null || typeCell.getCellType() != CellType.STRING) {
+            if (typeCell != null) setErrorCell(typeCell, "타입 불일치");
             cellList.add(typeCell);
         }
-        if (isShowCell.getCellType() != CellType.FORMULA) {
-            setErrorCell(isShowCell, "타입 불일치");
+        if (isShowCell == null || isShowCell.getCellType() != CellType.FORMULA) {
+            if (isShowCell != null) setErrorCell(isShowCell, "타입 불일치");
             cellList.add(isShowCell);
         } else {
             isShow = isShowCell.getBooleanCellValue();
