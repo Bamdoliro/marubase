@@ -64,6 +64,7 @@ public class UpdateSecondRoundScoreUseCase {
     private List<SecondScoreVo> getSecondScoreVoList(Sheet sheet) {
         List<SecondScoreVo> voList = IntStream.range(1, sheet.getPhysicalNumberOfRows())
                 .mapToObj(sheet::getRow)
+                .filter(row -> row.getCell(0) != null)
                 .map(this::getSecondScoreFrom)
                 .collect(Collectors.toList());
 
