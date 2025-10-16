@@ -24,7 +24,7 @@ public class ScoreResponse {
             return null;
         }
         return BigDecimal.valueOf(value)
-                .setScale(3, RoundingMode.CEILING)
+                .setScale(3, RoundingMode.HALF_UP)
                 .doubleValue();
     }
 
