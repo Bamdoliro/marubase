@@ -16,12 +16,24 @@ public class QuerySchoolStatusUseCase {
     private final FormRepository formRepository;
 
     public List<SchoolStatusResponse> execute(SchoolStatusRequest request) {
-        if (request.getIsBusan()) {
+        Boolean isBusan = request.getIsBusan();
+
+        if(isBusan == null){
+            return formRepository.findAllForms(request.getStatusList())
+                    .stream()
+                    .filter(vo -> vo.getSchoolName() != null && vo.getSchoolAddress() != null)
+                    .map(SchoolStatusResponse::new)
+                    .sorted(Comparator.comparing(SchoolStatusResponse::getApplicantName))
+                    .toList();
+        }
+
+        if (isBusan) {
             String keyword = "부산광역시";
             keyword += request.getGu() == null ? "" : (" " + request.getGu());
 
             return formRepository.findSchoolByAddress(request.getStatusList(), keyword)
                     .stream()
+                    .filter(vo -> vo.getSchoolName() != null && vo.getSchoolAddress() != null)
                     .map(SchoolStatusResponse::new)
                     .sorted(Comparator.comparing(SchoolStatusResponse::getApplicantName))
                     .toList();
@@ -29,6 +41,7 @@ public class QuerySchoolStatusUseCase {
 
         return formRepository.findNotBusanSchool(request.getStatusList())
                 .stream()
+                .filter(vo -> vo.getSchoolName() != null && vo.getSchoolAddress() != null)
                 .map(SchoolStatusResponse::new)
                 .sorted(Comparator.comparing(SchoolStatusResponse::getApplicantName))
                 .toList();
