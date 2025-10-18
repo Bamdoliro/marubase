@@ -343,4 +343,16 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 .from(form)
                 .fetch();
     }
+
+    @Override
+    public List<SchoolStatusVo> findAllForms(){
+        return queryFactory
+                .select(new QSchoolStatusVo(
+                        form.applicant.name,
+                        form.education.school.name,
+                        form.education.school.address
+                ))
+                .from(form)
+                .fetch();
+    }
 }
