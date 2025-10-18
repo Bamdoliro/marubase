@@ -21,6 +21,7 @@ public class QuerySchoolStatusUseCase {
         if(isBusan == null){
             return formRepository.findAllForms()
                     .stream()
+                    .filter(vo -> vo.getSchoolName() != null && vo.getSchoolAddress() != null)
                     .map(SchoolStatusResponse::new)
                     .sorted(Comparator.comparing(SchoolStatusResponse::getApplicantName))
                     .toList();
