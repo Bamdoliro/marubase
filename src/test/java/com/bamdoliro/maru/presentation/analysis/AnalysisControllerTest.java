@@ -276,17 +276,12 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
-        multiValueMap.add("statusList", "");
-        multiValueMap.add("isBusan", "");
-        multiValueMap.add("gu", "");
+        multiValueMap.put("statusList", List.of("FIRST_PASSED", "FAILED", "PASSED"));
+        multiValueMap.add("isBusan", null);
+        multiValueMap.add("gu", null);
+        given(querySchoolStatusUseCase.execute(any(SchoolStatusRequest.class))).willReturn(AnalysisFixture.createSchoolStatusResponse(Objects.requireNonNull(multiValueMap.get("isBusan")), multiValueMap.get("gu")));
 
-        List<String> statusList = List.of("");
-        List<String> isBusanList = List.of("");
-        List<String> guList = List.of("");
-        given(querySchoolStatusUseCase.execute(any(SchoolStatusRequest.class)))
-                .willReturn(AnalysisFixture.createSchoolStatusResponse(isBusanList, guList));
 
         mockMvc.perform(get("/analysis/school-status")
                         .params(multiValueMap)
