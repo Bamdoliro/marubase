@@ -72,6 +72,9 @@ include::{snippets}/analysis-controller-test/부산_특정구_출신_지원자�
 include::{snippets}/analysis-controller-test/부산_특정구_출신_지원자들의_출신학교_통계를_조회한다/query-parameters.adoc[]
 
 ==== 요청
+===== 전체 조회
+include::{snippets}/analysis-controller-test/전체_출신_지원자들의_출신학교_통계를_조회한다/http-request.adoc[]
+
 ===== 부산 특정구 출신
 include::{snippets}/analysis-controller-test/부산_특정구_출신_지원자들의_출신학교_통계를_조회한다/http-request.adoc[]
 
@@ -82,6 +85,9 @@ include::{snippets}/analysis-controller-test/부산_출신_지원자들의_출�
 include::{snippets}/analysis-controller-test/타지역_출신_지원자들의_출신학교_통계를_조회한다/http-request.adoc[]
 
 ==== 응답
+==== 전체 조회 정상 응답
+include::{snippets}/analysis-controller-test/전체_출신_지원자들의_출신학교_통계를_조회한다/http-response.adoc[]
+
 ==== 부산 특정구 출신 정상 응답
 include::{snippets}/analysis-controller-test/부산_특정구_출신_지원자들의_출신학교_통계를_조회한다/http-response.adoc[]
 
