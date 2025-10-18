@@ -19,7 +19,7 @@ public class QuerySchoolStatusUseCase {
         Boolean isBusan = request.getIsBusan();
 
         if(isBusan == null){
-            return formRepository.findAllForms()
+            return formRepository.findAllForms(request.getStatusList())
                     .stream()
                     .filter(vo -> vo.getSchoolName() != null && vo.getSchoolAddress() != null)
                     .map(SchoolStatusResponse::new)
