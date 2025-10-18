@@ -33,6 +33,7 @@ public class QuerySchoolStatusUseCase {
 
             return formRepository.findSchoolByAddress(request.getStatusList(), keyword)
                     .stream()
+                    .filter(vo -> vo.getSchoolName() != null && vo.getSchoolAddress() != null)
                     .map(SchoolStatusResponse::new)
                     .sorted(Comparator.comparing(SchoolStatusResponse::getApplicantName))
                     .toList();
@@ -40,6 +41,7 @@ public class QuerySchoolStatusUseCase {
 
         return formRepository.findNotBusanSchool(request.getStatusList())
                 .stream()
+                .filter(vo -> vo.getSchoolName() != null && vo.getSchoolAddress() != null)
                 .map(SchoolStatusResponse::new)
                 .sorted(Comparator.comparing(SchoolStatusResponse::getApplicantName))
                 .toList();
