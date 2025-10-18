@@ -16,7 +16,7 @@
     @AllArgsConstructor
     public class SchoolStatusRequest {
 
-        @Nullable
+        @NotNull(message = "필수값입니다.")
         private List<FormStatus> statusList;
 
         @Nullable
