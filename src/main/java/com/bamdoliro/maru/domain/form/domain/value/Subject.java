@@ -77,6 +77,12 @@ public class Subject {
     }
 
     public Integer getCount() {
+        if(achievementLevel == AchievementLevel.F) {
+            if(!(subjectName.equals("수학") || subjectName.equals("국어") || subjectName.equals("영어"))){
+                return 0;
+            }
+        }
+
         if (subjectName.equals("수학")) {
             return 2;
         }
