@@ -145,7 +145,7 @@
     </tr>
     <tr>
         <th scope="row" class="ba" colspan="3">생년월일</th>
-        <td class="ba" colspan="5" th:text="${#temporals.format(form.applicant.birthday, 'YYYY년 MM월 dd일')}"></td>
+        <td class="ba" colspan="5" th:text="${#temporals.format(form.applicant.birthday, 'yyyy년 MM월 dd일')}"></td>
         <th scope="row" class="ba" colspan="2">출신학교</th>
         <td class="ba" colspan="7" th:text="${form.education.school.name}"></td>
     </tr>
