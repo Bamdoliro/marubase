@@ -110,6 +110,15 @@ public class ExportFormUseCase {
 
     private List<String> getRequiredTemplates(Form form) {
         if (form.getType().isRegular()) {
+            if (form.getEducation().isQualificationExamination()) {
+                return List.of(
+                        Templates.QUALIFICATION_FORM,
+                        Templates.GRADE_TABLE,
+                        Templates.DOCUMENT,
+                        Templates.WRITTEN_OATH,
+                        Templates.PRIVACY_POLICY
+                );
+            }
             return List.of(
                     Templates.FORM,
                     Templates.GRADE_TABLE,
