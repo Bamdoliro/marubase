@@ -30,6 +30,8 @@ import org.javers.core.diff.changetype.ValueChange;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import java.util.Objects;
+
 
 @RequiredArgsConstructor
 @Aspect
@@ -107,8 +109,8 @@ public class LogAspect {
         diff.getChanges().forEach(change -> {
             if (change instanceof ValueChange valueChange) {
                 String fieldName = valueChange.getPropertyName();
-                String oldValue = valueChange.getLeft().toString();
-                String newValue = valueChange.getRight().toString();
+                String oldValue = Objects.toString(valueChange.getLeft(), "null");
+                String newValue = Objects.toString(valueChange.getRight(), "null");
                 UpdatedField updatedField = UpdatedField.builder()
                         .formUpdateLog(formUpdateLog)
                         .filedName(fieldName)
