@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,11 @@ public class GenerateAllAdmissionTicketUseCase {
     private final FileService fileService;
 
     public ByteArrayResource execute() {
-        List<Form> formList = formRepository.findByStatus(FormStatus.FIRST_PASSED);
+        List<Form> formList = formRepository.findByStatus(FormStatus.FIRST_PASSED)
+                .stream()
+                .sorted(Comparator.comparing(Form::getExaminationNumber, Comparator.nullsLast(Long::compareTo)))
+                .toList();
+
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PdfDocument mergedDocument = new PdfDocument(new PdfWriter(outputStream));
         PdfMerger pdfMerger = new PdfMerger(mergedDocument);
