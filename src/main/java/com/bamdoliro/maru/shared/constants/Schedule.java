@@ -19,8 +19,8 @@ public class Schedule {
     public static final LocalDateTime PHYSICAL_EXAMINATION = LocalDateTime.of(2025, 10, 31,  15, 0);
     public static final LocalDateTime ENTRANCE_REGISTRATION_PERIOD_START = LocalDateTime.of(2025, 11, 16, 0, 0);
     public static final LocalDateTime ENTRANCE_REGISTRATION_PERIOD_END = LocalDateTime.of(2025, 12, 18, 0, 0);
-    public static final LocalDateTime MEISTER_TALENT_ENTRANCE_TIME = LocalDateTime.of(2025, 10, 25, 9, 0);
-    public static final LocalDateTime MEISTER_TALENT_EXCLUSION_ENTRANCE_TIME = LocalDateTime.of(2025, 10, 25, 10, 30);
+    public static final LocalDateTime MEISTER_TALENT_ENTRANCE_TIME = LocalDateTime.of(2025, 10, 31, 9, 0);
+    public static final LocalDateTime MEISTER_TALENT_EXCLUSION_ENTRANCE_TIME = LocalDateTime.of(2025, 10, 31, 10, 30);
     public static final LocalDateTime ADMISSION_AND_PLEDGE_START = LocalDateTime.of(2025, 12, 15, 0, 0);
     public static final LocalDateTime ADMISSION_AND_PLEDGE_END = LocalDateTime.of(2025, 12, 17, 23, 59);
 
