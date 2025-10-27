@@ -35,7 +35,7 @@ public class GenerateAllAdmissionTicketUseCase {
     public ByteArrayResource execute() {
         List<Form> formList = formRepository.findByStatus(FormStatus.FIRST_PASSED)
                 .stream()
-                .sorted(Comparator.comparing(Form::getExaminationNumber))
+                .sorted(Comparator.comparing(Form::getExaminationNumber, Comparator.nullsLast(Long::compareTo)))
                 .toList();
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
