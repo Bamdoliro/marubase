@@ -22,7 +22,7 @@ public class ExportFinalPassedFormUseCase {
     private final XlsxGenerator xlsxGenerator;
 
     public Resource execute() throws IOException {
-        List<Form> formList = formFacade.getSortedFormList(FormStatus.PASSED);
+        List<Form> formList = formFacade.getSortedFormList(FormStatus.ENTERED);
 
         List<Function<Form, Object>> columnList = List.of(
                 Form::getId,
