@@ -37,7 +37,7 @@ public class ExportFinalPassedFormUseCase {
                 form -> form.getEducation().getSchool().getLocation(),
                 form -> form.getEducation().getGraduationTypeToString(),
                 form -> form.getEducation().getSchool().getName(),
-                form -> Integer.parseInt(form.getEducation().getSchool().getCode()),
+                form -> form.getEducation().getSchool().getCode(),
                 form -> form.getParent().getName(),
                 form -> form.getParent().getPhoneNumber().toString(),
                 form -> form.getParent().getAddress().toString(),
