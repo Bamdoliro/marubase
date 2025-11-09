@@ -17,6 +17,9 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class Education {
 
+    @Column(nullable = false, length = 10)
+    private String studentNumber;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 25)
     private GraduationType graduationType;

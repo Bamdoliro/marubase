@@ -108,6 +108,9 @@ class FormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("parent.detailAddress")
                                         .type(JsonFieldType.STRING)
                                         .description("보호자 상세주소"),
+                                fieldWithPath("education.studentNumber")
+                                        .type(JsonFieldType.STRING)
+                                        .description("학년/반/번호"),
                                 fieldWithPath("education.graduationType")
                                         .type(JsonFieldType.STRING)
                                         .description("<<graduation-type,졸업 유형>>"),
@@ -213,7 +216,7 @@ class FormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 중졸_껌정고시_합격자가_원서를_제출한다() throws Exception {
+    void 중졸_검정고시_합격자가_원서를_제출한다() throws Exception {
         SubmitFormRequest request = FormFixture.createQualificationExaminationFormRequest(FormType.MEISTER_TALENT);
         User user = UserFixture.createUser();
 
@@ -751,6 +754,9 @@ class FormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("parent.detailAddress")
                                         .type(JsonFieldType.STRING)
                                         .description("보호자 상세주소"),
+                                fieldWithPath("education.studentNumber")
+                                        .type(JsonFieldType.STRING)
+                                        .description("학년/반/번호"),
                                 fieldWithPath("education.graduationType")
                                         .type(JsonFieldType.STRING)
                                         .description("<<graduation-type,졸업 유형>>"),
