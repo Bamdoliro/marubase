@@ -9,6 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class EducationResponse {
 
+    private String studentNumber;
     private GraduationType graduationType;
     private String graduationYear;
     private String schoolName;
@@ -20,6 +21,7 @@ public class EducationResponse {
     private String teacherMobilePhoneNumber;
 
     public EducationResponse(Education education) {
+        this.studentNumber = education.getStudentNumber();
         this.graduationType = education.getGraduationType();
         this.graduationYear = education.getGraduationYear();
         this.schoolName = education.getSchool().getName();
