@@ -569,6 +569,7 @@ public class FormFixture {
                         "부산소프트웨어마이스터고"
                 ),
                 new EducationResponse(
+                        "20309",
                         GraduationType.EXPECTED,
                         "2021",
                         "비전중학교",
