@@ -32,6 +32,7 @@ public class FairRepositoryImpl implements FairRepositoryCustom {
                                 .and(fair.applicationEndDate.before(now).not()),
                         eqType(type)
                 )
+                .orderBy(fair.start.asc())
                 .fetch();
     }
 
