@@ -110,7 +110,7 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("보호자 상세주소"),
                                 fieldWithPath("education.studentNumber")
                                         .type(JsonFieldType.STRING)
-                                        .description("학년/반/번호"),
+                                        .description("학년/반/번호 \n 2/03/09 검정고시일 경우 검정고시, \n 외국학교의 경우 기타"),
                                 fieldWithPath("education.graduationType")
                                         .type(JsonFieldType.STRING)
                                         .description("<<graduation-type,졸업 유형>>"),
@@ -756,7 +756,7 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("보호자 상세주소"),
                                 fieldWithPath("education.studentNumber")
                                         .type(JsonFieldType.STRING)
-                                        .description("학년/반/번호"),
+                                        .description("학년/반/번호 \n 2/03/09 검정고시일 경우 검정고시, 외국학교의 경우 기타"),
                                 fieldWithPath("education.graduationType")
                                         .type(JsonFieldType.STRING)
                                         .description("<<graduation-type,졸업 유형>>"),
