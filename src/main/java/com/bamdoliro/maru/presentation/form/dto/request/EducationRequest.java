@@ -19,10 +19,6 @@ import lombok.NoArgsConstructor;
 public class EducationRequest {
 
     @NotNull(message = "필수값입니다.")
-    @Size(max = 10, message = "10자 이하여야 합니다.")
-    private String studentNumber;
-
-    @NotNull(message = "필수값입니다.")
     private GraduationType graduationType;
 
     @NotBlank(message = "필수값입니다.")
@@ -59,7 +55,6 @@ public class EducationRequest {
 
     public Education toValue() {
         return new Education(
-                studentNumber,
                 graduationType,
                 graduationYear,
                 new School(
