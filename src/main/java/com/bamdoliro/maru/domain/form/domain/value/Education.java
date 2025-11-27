@@ -21,6 +21,9 @@ public class Education {
     @Column(nullable = false, length = 25)
     private GraduationType graduationType;
 
+    @Column(nullable = false, length = 10)
+    private String studentNumber;
+
     @Column(nullable = false, length = 4)
     private String graduationYear;
 
