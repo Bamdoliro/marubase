@@ -22,6 +22,10 @@ public class EducationRequest {
     private GraduationType graduationType;
 
     @NotBlank(message = "필수값입니다.")
+    @Size(max = 10, message = "10자 이하여야합니다.")
+    private String studentNumber;
+
+    @NotBlank(message = "필수값입니다.")
     @Size(min = 4, max = 4, message = "4자여야 합니다.")
     private String graduationYear;
 
@@ -56,6 +60,7 @@ public class EducationRequest {
     public Education toValue() {
         return new Education(
                 graduationType,
+                studentNumber,
                 graduationYear,
                 new School(
                         schoolName,
