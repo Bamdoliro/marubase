@@ -39,6 +39,7 @@ public class FormFixture {
                 ),
                 new Education(
                         GraduationType.EXPECTED,
+                        "20309",
                         "2021",
                         new School("비전중학교", "경기도", "경기도 비전시 비전구 비전로 1", "7631003"),
                         new Teacher("나교사", new PhoneNumber("0519701234"), new PhoneNumber("01012344321"))
@@ -104,6 +105,7 @@ public class FormFixture {
                 ),
                 new Education(
                         GraduationType.EXPECTED,
+                        "20309",
                         "2021",
                         new School("비전중학교", "경기도", "경기도 비전시 비전구 비전로 1", "7631003"),
                         new Teacher("나교사", new PhoneNumber("0519701234"), new PhoneNumber("01012344321"))
@@ -169,6 +171,7 @@ public class FormFixture {
                 ),
                 new Education(
                         GraduationType.EXPECTED,
+                        "20309",
                         "2021",
                         new School("부산중학교", "부산광역시", "부산광역시 동구 초량로40번길 29", "7631003"),
                         new Teacher("나교사", new PhoneNumber("0519701234"), new PhoneNumber("01012344321"))
@@ -246,6 +249,7 @@ public class FormFixture {
                 ),
                 new Education(
                         GraduationType.EXPECTED,
+                        "20309",
                         "2021",
                         new School("비전중학교", "경기도","경기도 비전시 비전구 비전로 1", "7631003"),
         new Teacher("나교사", new PhoneNumber("0519701234"), new PhoneNumber("01012344321"))
@@ -323,6 +327,7 @@ public class FormFixture {
                 ),
                 new Education(
                         GraduationType.QUALIFICATION_EXAMINATION,
+                        "검정고시",
                         "2021",
                         new School(null, null, null, null),
                         new Teacher(null, null, null)
@@ -390,6 +395,7 @@ public class FormFixture {
                 ),
                 new Education(
                         GraduationType.QUALIFICATION_EXAMINATION,
+                        "검정고시",
                         "2021",
                         null,
                         null
@@ -426,6 +432,7 @@ public class FormFixture {
                 createParentRequest(),
                 new EducationRequest(
                         GraduationType.EXPECTED,
+                        "20309",
                         "2021",
                         "비전중학교",
                         "경기도",
@@ -468,6 +475,7 @@ public class FormFixture {
                 createParentRequest(),
                 new EducationRequest(
                         GraduationType.QUALIFICATION_EXAMINATION,
+                        "검정고시",
                         "2021",
                         null,
                         null,
@@ -504,6 +512,7 @@ public class FormFixture {
                 createParentRequest(),
                 new EducationRequest(
                         GraduationType.EXPECTED,
+                        "20309",
                         "2021",
                         "비전중학교",
                         "경기도",
@@ -561,6 +570,7 @@ public class FormFixture {
                 ),
                 new EducationResponse(
                         GraduationType.EXPECTED,
+                        "20309",
                         "2021",
                         "비전중학교",
                         "경기도",
