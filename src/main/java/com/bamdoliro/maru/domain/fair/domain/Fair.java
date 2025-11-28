@@ -2,7 +2,6 @@ package com.bamdoliro.maru.domain.fair.domain;
 
 import com.bamdoliro.maru.domain.fair.domain.type.FairStatus;
 import com.bamdoliro.maru.domain.fair.domain.type.FairType;
-import com.bamdoliro.maru.infrastructure.persistence.fair.AttendeeRepository;
 import com.bamdoliro.maru.shared.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -57,10 +56,6 @@ public class Fair extends BaseTimeEntity {
         this.type = type;
         this.applicationStartDate = applicationStartDate;
         this.applicationEndDate = applicationEndDate;
-    }
-
-    public Integer getHeadcount(AttendeeRepository attendeeRepository) {
-        return attendeeRepository.countByFair(this);
     }
 
     public FairStatus getStatus(Integer headcount) {
