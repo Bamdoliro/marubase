@@ -2,7 +2,6 @@ package com.bamdoliro.maru.presentation.fair.dto.response;
 
 import com.bamdoliro.maru.domain.fair.domain.Fair;
 import com.bamdoliro.maru.domain.fair.domain.type.FairStatus;
-import com.bamdoliro.maru.infrastructure.persistence.fair.AttendeeRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -20,12 +19,12 @@ public class FairResponse {
     private LocalDate applicationEndDate;
     private FairStatus status;
 
-    public FairResponse(Fair fair, AttendeeRepository attendeeRepository) {
+    public FairResponse(Fair fair, Integer headCount) {
         this.id = fair.getId();
         this.start = fair.getStart();
         this.place = fair.getPlace();
         this.applicationStartDate = fair.getApplicationStartDate();
         this.applicationEndDate = fair.getApplicationEndDate();
-        this.status = fair.getStatus(attendeeRepository);
+        this.status = fair.getStatus(headCount);
     }
 }

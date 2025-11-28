@@ -63,7 +63,7 @@ public class Fair extends BaseTimeEntity {
         return attendeeRepository.countByFair(this);
     }
 
-    public FairStatus getStatus(AttendeeRepository attendeeRepository) {
+    public FairStatus getStatus(Integer headcount) {
         LocalDateTime now = LocalDateTime.now();
         if (now.isAfter(start)) {
             return FairStatus.CLOSED;
@@ -71,7 +71,7 @@ public class Fair extends BaseTimeEntity {
             return FairStatus.APPLICATION_NOT_STARTED;
         } else if (now.toLocalDate().isAfter(applicationEndDate)) {
             return FairStatus.APPLICATION_ENDED;
-        } else if (getHeadcount(attendeeRepository) >= capacity) {
+        } else if (headcount >= capacity) {
             return FairStatus.APPLICATION_EARLY_CLOSED;
         }
 
