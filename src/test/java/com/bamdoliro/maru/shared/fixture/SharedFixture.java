@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.shared.fixture;
 
+import com.bamdoliro.maru.infrastructure.s3.dto.request.FileMetadata;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UrlResponse;
 import com.bamdoliro.maru.shared.response.IdResponse;
 
