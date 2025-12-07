@@ -270,4 +270,38 @@ class AnalysisControllerTest extends RestDocsTestSupport {
                         )
                 ));
     }
+
+    @Test
+    void 전체_출신_지원자들의_출신학교_통계를_조회한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.put("statusList", List.of("FIRST_PASSED", "FAILED", "PASSED"));
+        multiValueMap.add("isBusan", null);
+        multiValueMap.add("gu", null);
+        given(querySchoolStatusUseCase.execute(any(SchoolStatusRequest.class))).willReturn(AnalysisFixture.createSchoolStatusResponse(Objects.requireNonNull(multiValueMap.get("isBusan")), multiValueMap.get("gu")));
+
+
+        mockMvc.perform(get("/analysis/school-status")
+                        .params(multiValueMap)
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        ),
+                        queryParameters(
+                                parameterWithName("statusList")
+                                        .description("조회할 원서 상태 목록(전체 조회면, RECEIVED, FIRST_PASSED, FIRST_FAILED, FAILED, PASSED, 1차 합격자면 FIRST_PASSED, FAILED, PASSED, 2차 전형자면 FAILED, PASSED, 최종 합격자면 PASSED)"),
+                                parameterWithName("isBusan")
+                                        .description("부산 지역 학교 검색 여부(true면 부산, false면 부산 외 다른 모든 타지역)"),
+                                parameterWithName("gu")
+                                        .description("구(isBusan이 true이고, null인 경우 부산지역 전체 조회)")
+                        )
+                ));
+    }
+
 }

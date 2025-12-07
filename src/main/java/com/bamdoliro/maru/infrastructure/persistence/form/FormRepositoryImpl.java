@@ -26,6 +26,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
         return queryFactory
                 .selectFrom(form)
                 .where(eqStatus(status))
+                .orderBy(form.examinationNumber.asc())
                 .fetch();
     }
 
@@ -80,11 +81,11 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
     }
 
     @Override
-    public List<Form> findReceivedSpecialForm() {
+    public List<Form> findApprovedSpecialForm() {
         return queryFactory
                 .selectFrom(form)
                 .where(
-                        form.status.eq(FormStatus.RECEIVED)
+                        form.status.eq(FormStatus.APPROVED)
                                 .and(
                                         form.type.eq(FormType.REGULAR).not()
                                                 .and(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION).not())
@@ -96,11 +97,11 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
     }
 
     @Override
-    public List<Form> findReceivedRegularForm() {
+    public List<Form> findApprovedRegularForm() {
         return queryFactory
                 .selectFrom(form)
                 .where(
-                        form.status.eq(FormStatus.RECEIVED)
+                        form.status.eq(FormStatus.APPROVED)
                                 .and(
                                         form.type.eq(FormType.REGULAR)
                                                 .or(form.changedToRegular.isTrue())
@@ -111,11 +112,11 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
     }
 
     @Override
-    public List<Form> findReceivedSupernumeraryForm() {
+    public List<Form> findApprovedSupernumeraryForm() {
         return queryFactory
                 .selectFrom(form)
                 .where(
-                        form.status.eq(FormStatus.RECEIVED)
+                        form.status.eq(FormStatus.APPROVED)
                                 .and(
                                         form.type.eq(FormType.SPECIAL_ADMISSION)
                                                 .or(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION))
@@ -341,6 +342,19 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
         return queryFactory
                 .select(form.examinationNumber)
                 .from(form)
+                .fetch();
+    }
+
+    @Override
+    public List<SchoolStatusVo> findAllForms(List<FormStatus> round) {
+        return queryFactory
+                .select(new QSchoolStatusVo(
+                        form.applicant.name,
+                        form.education.school.name,
+                        form.education.school.address
+                ))
+                .from(form)
+                .where(form.status.in(round))
                 .fetch();
     }
 }

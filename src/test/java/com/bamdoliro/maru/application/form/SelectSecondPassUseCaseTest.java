@@ -61,7 +61,7 @@ public class SelectSecondPassUseCaseTest {
         formList.addAll(FormFixture.generateOtherRegionFormList(userList.subList(userList.size() / 2, userList.size())));
         formList.forEach(form -> {
             assignExaminationNumberService.execute(form);
-            form.receive();
+            form.approve();
             calculateFormScoreService.execute(form);
             formRepository.save(form);
         });

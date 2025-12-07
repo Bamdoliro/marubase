@@ -430,19 +430,6 @@
         </td>
     </tr>
     <tr>
-        <td class="ba text-box" colspan="21">
-            <p class="left middle">위의 기재 사항은 사실과 상위없음을 확인하고, 귀교의 신입생 입학전형 대상자로 추천합니다.</p>
-            <div class="space"></div>
-            <p class="middle" th:text="${#dates.format(#dates.createNow(),'yyyy년 MM월 dd일')}"></p>
-            <div class="space"></div>
-            <p class="school right space-right">
-                <span th:text="${form.education.school.name}"></span>장&nbsp;&nbsp;
-                <span class="guide">(직인)</span>
-            </p>
-            <p class="school left">부산소프트웨어마이스터고등학교장 귀하</p>
-        </td>
-    </tr>
-    <tr>
         <th scope="row" class="ba" colspan="4">원서작성자</th>
         <td class="ba" colspan="17" th:if="${form.education.isQualificationExamination()}"
             th:text="${form.applicant.phoneNumber.toString()}"></td>

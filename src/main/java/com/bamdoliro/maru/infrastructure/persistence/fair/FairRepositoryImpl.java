@@ -7,7 +7,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -23,15 +22,12 @@ public class FairRepositoryImpl implements FairRepositoryCustom {
 
     @Override
     public List<Fair> findByType(FairType type) {
-        LocalDate now = LocalDate.now();
-
         return queryFactory
                 .selectFrom(fair)
                 .where(
-                        fair.applicationStartDate.after(now).not()
-                                .and(fair.applicationEndDate.before(now).not()),
                         eqType(type)
                 )
+                .orderBy(fair.start.asc())
                 .fetch();
     }
 

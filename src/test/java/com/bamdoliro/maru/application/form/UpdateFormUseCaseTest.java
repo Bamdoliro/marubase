@@ -5,8 +5,10 @@ import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.CannotUpdateNotRejectedFormException;
 import com.bamdoliro.maru.domain.form.exception.FormNotFoundException;
+import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,11 @@ class UpdateFormUseCaseTest {
     @Mock
     private FormFacade formFacade;
 
+    @Mock
+    private CalculateFormScoreService calculateFormScoreService;
+
+    @Mock
+    private FormRepository formRepository;
 
     @Test
     void 원서를_수정한다() {
@@ -39,13 +46,13 @@ class UpdateFormUseCaseTest {
         form.reject();
         User user = form.getUser();
 
-        given(formFacade.getForm(form.getId())).willReturn(form);
+        given(formFacade.getForm(user)).willReturn(form);
 
         // when
-        updateFormUseCase.execute(user, form.getId(), FormFixture.createUpdateFormRequest(FormType.MEISTER_TALENT));
+        updateFormUseCase.execute(user, FormFixture.createUpdateFormRequest(FormType.MEISTER_TALENT));
 
         // then
-        verify(formFacade, times(1)).getForm(form.getId());
+        verify(formFacade, times(1)).getForm(user);
         assertEquals(FormType.MEISTER_TALENT, form.getType());
     }
 
@@ -55,13 +62,13 @@ class UpdateFormUseCaseTest {
         Long formId = 1L;
         User user = UserFixture.createUser();
 
-        willThrow(new FormNotFoundException()).given(formFacade).getForm(formId);
+        willThrow(new FormNotFoundException()).given(formFacade).getForm(user);
 
         // when and then
         assertThrows(FormNotFoundException.class, () ->
-                updateFormUseCase.execute(user, formId, FormFixture.createUpdateFormRequest(FormType.MEISTER_TALENT)));
+                updateFormUseCase.execute(user, FormFixture.createUpdateFormRequest(FormType.MEISTER_TALENT)));
 
-        verify(formFacade, times(1)).getForm(formId);
+        verify(formFacade, times(1)).getForm(user);
     }
 
     @Test
@@ -71,14 +78,14 @@ class UpdateFormUseCaseTest {
         form.reject();
         User otherUser = UserFixture.createUser();
 
-        given(formFacade.getForm(form.getId())).willReturn(form);
+        given(formFacade.getForm(otherUser)).willReturn(form);
 
         // when and then
         assertThrows(AuthorityMismatchException.class, () ->
-                updateFormUseCase.execute(otherUser, form.getId(), FormFixture.createUpdateFormRequest(FormType.MEISTER_TALENT))
+                updateFormUseCase.execute(otherUser, FormFixture.createUpdateFormRequest(FormType.MEISTER_TALENT))
         );
 
-        verify(formFacade, times(1)).getForm(form.getId());
+        verify(formFacade, times(1)).getForm(otherUser);
     }
 
     @Test
@@ -87,13 +94,13 @@ class UpdateFormUseCaseTest {
         Form form = FormFixture.createForm(FormType.REGULAR);
         User user = form.getUser();
 
-        given(formFacade.getForm(form.getId())).willReturn(form);
+        given(formFacade.getForm(user)).willReturn(form);
 
         // when and then
         assertThrows(CannotUpdateNotRejectedFormException.class, () ->
-                updateFormUseCase.execute(user, form.getId(), FormFixture.createUpdateFormRequest(FormType.MEISTER_TALENT))
+                updateFormUseCase.execute(user, FormFixture.createUpdateFormRequest(FormType.MEISTER_TALENT))
         );
 
-        verify(formFacade, times(1)).getForm(form.getId());
+        verify(formFacade, times(1)).getForm(user);
     }
 }

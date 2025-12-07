@@ -2,6 +2,7 @@ package com.bamdoliro.maru.presentation.analysis.dto.response;
 
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.infrastructure.persistence.form.vo.GradeVo;
+import com.bamdoliro.maru.shared.util.MathUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,11 +21,11 @@ public class GradeDistributionResponse {
 
     public GradeDistributionResponse(GradeVo vo) {
         this.type = vo.getType();
-        this.firstRoundMax = vo.getFirstRoundMax();
-        this.firstRoundMin = vo.getFirstRoundMin();
-        this.firstRoundAvg = vo.getFirstRoundAvg();
-        this.totalMax = vo.getTotalMax();
-        this.totalMin = vo.getTotalMin();
-        this.totalAvg = vo.getTotalAvg();
+        this.firstRoundMax = MathUtil.round(vo.getFirstRoundMax());
+        this.firstRoundMin = MathUtil.round(vo.getFirstRoundMin());
+        this.firstRoundAvg = MathUtil.round(vo.getFirstRoundAvg());
+        this.totalMax = MathUtil.round(vo.getTotalMax());
+        this.totalMin = MathUtil.round(vo.getTotalMin());
+        this.totalAvg = MathUtil.round(vo.getTotalAvg());
     }
 }

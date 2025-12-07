@@ -4,6 +4,9 @@ import com.bamdoliro.maru.domain.form.domain.value.Score;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Getter
 @AllArgsConstructor
 public class ScoreResponse {
@@ -12,7 +15,17 @@ public class ScoreResponse {
     private Double totalScore;
 
     public ScoreResponse(Score score) {
-        this.firstRoundScore = score.getFirstRoundScore();
-        this.totalScore = score.getTotalScore();
+        this.firstRoundScore = round(score.getFirstRoundScore());
+        this.totalScore = round(score.getTotalScore());
     }
+
+    private Double round(Double value){
+        if(value == null){
+            return null;
+        }
+        return BigDecimal.valueOf(value)
+                .setScale(3, RoundingMode.HALF_UP)
+                .doubleValue();
+    }
+
 }

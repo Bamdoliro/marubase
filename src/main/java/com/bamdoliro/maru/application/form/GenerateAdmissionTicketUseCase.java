@@ -10,8 +10,7 @@ import com.bamdoliro.maru.infrastructure.s3.constants.FolderConstant;
 import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.Templates;
 import com.bamdoliro.maru.shared.annotation.UseCase;
-import com.bamdoliro.maru.shared.config.properties.ScheduleProperties;
-import com.bamdoliro.maru.shared.service.ScheduleService;
+import com.bamdoliro.maru.shared.constants.Schedule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 
@@ -26,8 +25,6 @@ public class GenerateAdmissionTicketUseCase {
     private final ProcessTemplateService processTemplateService;
     private final GeneratePdfService generatePdfService;
     private final FileService fileService;
-    private final ScheduleService scheduleService;
-    private final ScheduleProperties scheduleProperties;
 
     public ByteArrayResource execute(User user) {
         Form form = formFacade.getForm(user);
@@ -35,15 +32,15 @@ public class GenerateAdmissionTicketUseCase {
 
         Map<String, Object> formMap = Map.ofEntries(
                 Map.entry("form", form),
-                Map.entry("year", scheduleService.getAdmissionYear()),
-                Map.entry("codingTest", ScheduleService.toLocaleString(scheduleProperties.getCodingTest())),
-                Map.entry("ncs", ScheduleService.toLocaleString(scheduleProperties.getNcs())),
-                Map.entry("depthInterview", ScheduleService.toLocaleString(scheduleProperties.getDepthInterview())),
-                Map.entry("physicalExamination", ScheduleService.toLocaleString(scheduleProperties.getPhysicalExamination())),
-                Map.entry("announcementOfSecondPass", ScheduleService.toLocaleString(scheduleProperties.getAnnouncementOfSecondPass())),
-                Map.entry("meisterTalentEntranceTime", ScheduleService.toLocaleString(scheduleProperties.getMeisterTalentEntranceTime())),
-                Map.entry("meisterTalentExclusionEntranceTime", ScheduleService.toLocaleString(scheduleProperties.getMeisterTalentExclusionEntranceTime())),
-                Map.entry("entranceRegistrationTime", ScheduleService.toLocaleString(scheduleProperties.getEntranceRegistrationPeriodStart(), scheduleProperties.getEntranceRegistrationPeriodEnd())),
+                Map.entry("year", Schedule.getAdmissionYear()),
+                Map.entry("codingTest", Schedule.toLocaleString(Schedule.CODING_TEST)),
+                Map.entry("ncs", Schedule.toLocaleString(Schedule.NCS)),
+                Map.entry("depthInterview", Schedule.toLocaleString(Schedule.DEPTH_INTERVIEW)),
+                Map.entry("physicalExamination", Schedule.toLocaleString(Schedule.PHYSICAL_EXAMINATION)),
+                Map.entry("announcementOfSecondPass", Schedule.toLocaleString(Schedule.ANNOUNCEMENT_OF_SECOND_PASS)),
+                Map.entry("meisterTalentEntranceTime", Schedule.toLocaleString(Schedule.MEISTER_TALENT_ENTRANCE_TIME)),
+                Map.entry("meisterTalentExclusionEntranceTime", Schedule.toLocaleString(Schedule.MEISTER_TALENT_EXCLUSION_ENTRANCE_TIME)),
+                Map.entry("entranceRegistrationTime", Schedule.toLocaleString(Schedule.ENTRANCE_REGISTRATION_PERIOD_START, Schedule.ENTRANCE_REGISTRATION_PERIOD_END)),
                 Map.entry("identificationPictureUri", fileService.getDownloadPresignedUrl(FolderConstant.IDENTIFICATION_PICTURE, user.getUuid().toString()))
                 );
         String html = processTemplateService.execute(Templates.ADMISSION_TICKET, formMap);

@@ -19,7 +19,10 @@ public class QueryFairListUseCase {
     public List<FairResponse> execute(FairType type) {
         return fairRepository.findByType(type)
                 .stream()
-                .map((fair) -> new FairResponse(fair, attendeeRepository))
+                .map(fair -> {
+                    Integer headCount = attendeeRepository.countByFair(fair);
+                    return new FairResponse(fair, headCount);
+                })
                 .toList();
     }
 }

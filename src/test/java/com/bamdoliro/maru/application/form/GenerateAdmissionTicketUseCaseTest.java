@@ -9,11 +9,9 @@ import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.pdf.GeneratePdfService;
 import com.bamdoliro.maru.infrastructure.s3.FileService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
-import com.bamdoliro.maru.shared.config.properties.ScheduleProperties;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.SharedFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
-import com.bamdoliro.maru.shared.service.ScheduleService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,8 +19,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayOutputStream;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -49,12 +45,6 @@ class GenerateAdmissionTicketUseCaseTest {
     @Mock
     private FileService fileService;
 
-    @Mock
-    private ScheduleService scheduleService;
-
-    @Mock
-    private ScheduleProperties scheduleProperties;
-
     @Test
     void 수험표를_생성한다() {
         // given
@@ -62,8 +52,6 @@ class GenerateAdmissionTicketUseCaseTest {
         Form form = FormFixture.createForm(FormType.MULTI_CHILDREN);
         form.firstPass();
 
-        given(scheduleService.getAdmissionYear()).willReturn(LocalDate.now().plusYears(1).getYear());
-        givenScheduleProperties();
         given(formFacade.getForm(user)).willReturn(form);
         given(processTemplateService.execute(any(String.class), anyMap())).willReturn("html");
         given(fileService.getDownloadPresignedUrl(any(String.class), any(String.class))).willReturn(SharedFixture.createIdentificationPictureUrlResponse().getDownloadUrl());
@@ -73,8 +61,6 @@ class GenerateAdmissionTicketUseCaseTest {
         generateAdmissionTicketUseCase.execute(user);
 
         // then
-        verify(scheduleService, times(1)).getAdmissionYear();
-        verifyScheduleProperties();
         verify(formFacade, times(1)).getForm(user);
         verify(processTemplateService, times(1)).execute(any(String.class), anyMap());
         verify(generatePdfService, times(1)).execute(any(String.class));
@@ -109,31 +95,5 @@ class GenerateAdmissionTicketUseCaseTest {
         verify(formFacade, times(1)).getForm(user);
         verify(processTemplateService, never()).execute(any(String.class), anyMap());
         verify(generatePdfService, never()).execute(any(String.class));
-    }
-
-    private void givenScheduleProperties() {
-        LocalDateTime now = LocalDateTime.now();
-
-        given(scheduleProperties.getCodingTest()).willReturn(now);
-        given(scheduleProperties.getNcs()).willReturn(now);
-        given(scheduleProperties.getDepthInterview()).willReturn(now);
-        given(scheduleProperties.getPhysicalExamination()).willReturn(now);
-        given(scheduleProperties.getAnnouncementOfSecondPass()).willReturn(now);
-        given(scheduleProperties.getMeisterTalentEntranceTime()).willReturn(now);
-        given(scheduleProperties.getMeisterTalentExclusionEntranceTime()).willReturn(now);
-        given(scheduleProperties.getEntranceRegistrationPeriodStart()).willReturn(now);
-        given(scheduleProperties.getEntranceRegistrationPeriodEnd()).willReturn(now);
-    }
-
-    private void verifyScheduleProperties() {
-        verify(scheduleProperties, times(1)).getCodingTest();
-        verify(scheduleProperties, times(1)).getNcs();
-        verify(scheduleProperties, times(1)).getDepthInterview();
-        verify(scheduleProperties, times(1)).getPhysicalExamination();
-        verify(scheduleProperties, times(1)).getAnnouncementOfSecondPass();
-        verify(scheduleProperties, times(1)).getMeisterTalentEntranceTime();
-        verify(scheduleProperties, times(1)).getMeisterTalentExclusionEntranceTime();
-        verify(scheduleProperties, times(1)).getEntranceRegistrationPeriodStart();
-        verify(scheduleProperties, times(1)).getEntranceRegistrationPeriodEnd();
     }
 }

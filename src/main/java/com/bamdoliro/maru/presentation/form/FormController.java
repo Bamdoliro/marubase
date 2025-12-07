@@ -55,6 +55,7 @@ public class FormController {
     private final DownloadSecondRoundScoreFormatUseCase downloadSecondRoundScoreFormatUseCase;
     private final UpdateSecondRoundScoreUseCase updateSecondRoundScoreUseCase;
     private final ExportFinalPassedFormUseCase exportFinalPassedFormUseCase;
+    private final ExportFirstScoreUseCase exportFirstScoreUseCase;
     private final ExportFirstRoundResultUseCase exportFirstRoundResultUseCase;
     private final ExportSecondRoundResultUseCase exportSecondRoundResultUseCase;
     private final ExportResultUseCase exportResultUseCase;
@@ -145,13 +146,12 @@ public class FormController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("/{form-id}")
+    @PutMapping()
     public void updateForm(
             @AuthenticationPrincipal(authority = Authority.USER) User user,
-            @PathVariable(name = "form-id") Long formId,
             @RequestBody @Valid UpdateFormRequest request
     ) {
-        updateFormUseCase.execute(user, formId, request);
+        updateFormUseCase.execute(user,  request);
     }
 
     @PostMapping( "/identification-picture")
@@ -206,7 +206,7 @@ public class FormController {
     public ListCommonResponse<FormSimpleResponse> getFormList(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestParam(name = "status", required = false) FormStatus status,
-            @RequestParam(name = "type", required = false) FormType.Category type,
+            @RequestParam(name = "type", required = false) FormType type,
             @RequestParam(name = "sort", required = false) String sort
     ) {
         return ListCommonResponse.ok(
@@ -302,6 +302,15 @@ public class FormController {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(exportFirstRoundResultUseCase.execute());
+    }
+
+    @GetMapping("/xlsx/first-score")
+    public ResponseEntity<Resource> exportFirstScoreResult(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+    ) throws IOException {
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(exportFirstScoreUseCase.execute());
     }
 
     @GetMapping("/xlsx/second-round")

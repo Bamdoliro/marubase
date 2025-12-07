@@ -26,7 +26,7 @@ public class Subject {
     private String subjectName;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 2)
+    @Column(nullable = false, length = 10)
     private AchievementLevel achievementLevel;
 
     @Column(nullable = true, name = "score")
@@ -62,6 +62,13 @@ public class Subject {
     }
 
     public Integer getScore() {
+        if (achievementLevel == AchievementLevel.F) {
+            if ("국어".equals(subjectName) || "영어".equals(subjectName) || "수학".equals(subjectName)) {
+                return AchievementLevel.C.getScore() * ("수학".equals(subjectName) ? 2 : 1);
+            }
+            return AchievementLevel.F.getScore();
+        }
+
         if (subjectName.equals("수학")) {
             return achievementLevel.getScore() * 2;
         }
@@ -70,6 +77,12 @@ public class Subject {
     }
 
     public Integer getCount() {
+        if(achievementLevel == AchievementLevel.F) {
+            if(!(subjectName.equals("수학") || subjectName.equals("국어") || subjectName.equals("영어"))){
+                return 0;
+            }
+        }
+
         if (subjectName.equals("수학")) {
             return 2;
         }

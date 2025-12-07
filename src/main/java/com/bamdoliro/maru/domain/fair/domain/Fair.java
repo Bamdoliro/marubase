@@ -2,7 +2,6 @@ package com.bamdoliro.maru.domain.fair.domain;
 
 import com.bamdoliro.maru.domain.fair.domain.type.FairStatus;
 import com.bamdoliro.maru.domain.fair.domain.type.FairType;
-import com.bamdoliro.maru.infrastructure.persistence.fair.AttendeeRepository;
 import com.bamdoliro.maru.shared.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -59,11 +58,7 @@ public class Fair extends BaseTimeEntity {
         this.applicationEndDate = applicationEndDate;
     }
 
-    public Integer getHeadcount(AttendeeRepository attendeeRepository) {
-        return attendeeRepository.countByFair(this);
-    }
-
-    public FairStatus getStatus(AttendeeRepository attendeeRepository) {
+    public FairStatus getStatus(Integer headcount) {
         LocalDateTime now = LocalDateTime.now();
         if (now.isAfter(start)) {
             return FairStatus.CLOSED;
@@ -71,7 +66,7 @@ public class Fair extends BaseTimeEntity {
             return FairStatus.APPLICATION_NOT_STARTED;
         } else if (now.toLocalDate().isAfter(applicationEndDate)) {
             return FairStatus.APPLICATION_ENDED;
-        } else if (getHeadcount(attendeeRepository) >= capacity) {
+        } else if (headcount >= capacity) {
             return FairStatus.APPLICATION_EARLY_CLOSED;
         }
 

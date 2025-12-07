@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.presentation.form;
 
+import com.bamdoliro.maru.application.form.ExportFirstScoreUseCase;
 import com.bamdoliro.maru.domain.auth.exception.AuthorityMismatchException;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
@@ -23,6 +24,7 @@ import com.bamdoliro.maru.shared.fixture.SharedFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -44,6 +46,9 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class FormControllerTest extends RestDocsTestSupport {
+
+    @Autowired
+    private ExportFirstScoreUseCase exportFirstScoreUseCase;
 
     @Test
     void 원서를_제출한다() throws Exception {
@@ -123,8 +128,8 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("출신 학교 코드 (없는 경우 null)"),
                                 fieldWithPath("education.teacherName")
                                         .type(JsonFieldType.STRING)
-                                        .description("작성 교사 (없는 경우 null)"),
-                                fieldWithPath("education.teacherPhoneNumber")
+                                        .description("출신 학교 전화번호 (없는 경우 null)"),
+                                fieldWithPath("education.schoolPhoneNumber")
                                         .type(JsonFieldType.STRING)
                                         .description("작성 교사 전화번호 (없는 경우 null)"),
                                 fieldWithPath("education.teacherMobilePhoneNumber")
@@ -695,10 +700,10 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        willDoNothing().given(updateFormUseCase).execute(user, formId, request);
+        willDoNothing().given(updateFormUseCase).execute(user, request);
 
 
-        mockMvc.perform(put("/forms/{form-id}", formId)
+        mockMvc.perform(put("/forms")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -711,10 +716,6 @@ class FormControllerTest extends RestDocsTestSupport {
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION)
                                         .description("Bearer token")
-                        ),
-                        pathParameters(
-                                parameterWithName("form-id")
-                                        .description("수정할 원서 id")
                         ),
                         requestFields(
                                 fieldWithPath("type")
@@ -770,8 +771,8 @@ class FormControllerTest extends RestDocsTestSupport {
                                         .description("출신 학교 코드"),
                                 fieldWithPath("education.teacherName")
                                         .type(JsonFieldType.STRING)
-                                        .description("작성 교사 (없는 경우 null)"),
-                                fieldWithPath("education.teacherPhoneNumber")
+                                        .description("출신 학교 전화번호 (없는 경우 null)"),
+                                fieldWithPath("education.schoolPhoneNumber")
                                         .type(JsonFieldType.STRING)
                                         .description("작성 교사 전화번호 (없는 경우 null)"),
                                 fieldWithPath("education.teacherMobilePhoneNumber")
@@ -853,7 +854,7 @@ class FormControllerTest extends RestDocsTestSupport {
                         )
                 ));
 
-        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        verify(updateFormUseCase, times(1)).execute(any(User.class),  any(UpdateFormRequest.class));
     }
 
     @Test
@@ -864,9 +865,9 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new OutOfApplicationFormPeriodException()).when(updateFormUseCase).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        doThrow(new OutOfApplicationFormPeriodException()).when(updateFormUseCase).execute(any(User.class), any(UpdateFormRequest.class));
 
-        mockMvc.perform(put("/forms/{form-id}", formId)
+        mockMvc.perform(put("/forms")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -877,7 +878,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        verify(updateFormUseCase, times(1)).execute(any(User.class), any(UpdateFormRequest.class));
     }
 
     @Test
@@ -887,10 +888,10 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FormNotFoundException()).when(updateFormUseCase).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        doThrow(new FormNotFoundException()).when(updateFormUseCase).execute(any(User.class), any(UpdateFormRequest.class));
 
 
-        mockMvc.perform(put("/forms/{form-id}", formId)
+        mockMvc.perform(put("/forms")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -901,7 +902,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        verify(updateFormUseCase, times(1)).execute(any(User.class), any(UpdateFormRequest.class));
     }
 
     @Test
@@ -911,10 +912,10 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new AuthorityMismatchException()).when(updateFormUseCase).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        doThrow(new AuthorityMismatchException()).when(updateFormUseCase).execute(any(User.class), any(UpdateFormRequest.class));
 
 
-        mockMvc.perform(put("/forms/{form-id}", formId)
+        mockMvc.perform(put("/forms")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -925,7 +926,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        verify(updateFormUseCase, times(1)).execute(any(User.class), any(UpdateFormRequest.class));
     }
 
     @Test
@@ -935,10 +936,10 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new CannotUpdateNotRejectedFormException()).when(updateFormUseCase).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        doThrow(new CannotUpdateNotRejectedFormException()).when(updateFormUseCase).execute(any(User.class), any(UpdateFormRequest.class));
 
 
-        mockMvc.perform(put("/forms/{form-id}", formId)
+        mockMvc.perform(put("/forms", formId)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -949,7 +950,7 @@ class FormControllerTest extends RestDocsTestSupport {
 
                 .andDo(restDocs.document());
 
-        verify(updateFormUseCase, times(1)).execute(any(User.class), anyLong(), any(UpdateFormRequest.class));
+        verify(updateFormUseCase, times(1)).execute(any(User.class), any(UpdateFormRequest.class));
     }
 
     @Test
@@ -1686,11 +1687,11 @@ class FormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(queryAllFormUseCase.execute(FormStatus.SUBMITTED, FormType.Category.REGULAR, null)).willReturn(responseList);
+        given(queryAllFormUseCase.execute(FormStatus.SUBMITTED, FormType.REGULAR, null)).willReturn(responseList);
 
         mockMvc.perform(get("/forms")
                         .param("status", FormStatus.SUBMITTED.name())
-                        .param("type", FormType.Category.REGULAR.name())
+                        .param("type", FormType.REGULAR.name())
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                 )
@@ -1715,7 +1716,7 @@ class FormControllerTest extends RestDocsTestSupport {
                         )
                 ));
 
-        verify(queryAllFormUseCase, times(1)).execute(FormStatus.SUBMITTED, FormType.Category.REGULAR, null);
+        verify(queryAllFormUseCase, times(1)).execute(FormStatus.SUBMITTED, FormType.REGULAR, null);
     }
 
     @Test
@@ -2405,5 +2406,35 @@ class FormControllerTest extends RestDocsTestSupport {
                 ));
 
         verify(queryAdmissionAndPledgeUseCase, times(1)).execute(idList);
+    }
+
+    @Test
+    void 성공적으로_1차원서_점수액셀을_다운로드한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+        MockMultipartFile file = new MockMultipartFile(
+                "1차원서점수",
+                "1차원서점수.xlsx",
+                String.valueOf(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")),
+                "<<file>>".getBytes()
+        );
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(exportFirstScoreUseCase.execute()).willReturn(new ByteArrayResource(file.getBytes()));
+
+        mockMvc.perform(get("/forms/xlsx/first-score")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        )
+                ));
+
+        verify(exportFirstScoreUseCase, times(1)).execute();
     }
 }

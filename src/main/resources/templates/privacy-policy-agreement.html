@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        @page {
+            size: A4;
+            margin: 70px;
+        }
+
+        * {
+            font-family: SUIT, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .center-table {
+            width: 100%;
+        }
+
+        table {
+            border: 1px solid black;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 10px;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        tr {
+            vertical-align: middle;
+            font-size:10px;
+            line-height: 1.8;
+        }
+
+        td {
+            padding: 10px 0;
+        }
+
+        th {
+            background-color: #ECF2FA;
+            font-weight: 500;
+            padding: 10px 0;
+            line-height: 1.8;
+        }
+
+        .format {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .ba {
+            border: #000000 1px solid;
+        }
+
+        caption {
+            font-weight: bold;
+            font-size: 28px;
+            line-height: 52px;
+            text-align: center;
+        }
+        .indent {
+            text-indent: 18px;
+            font-size: 19px;
+            word-break: keep-all;
+            line-height: 1.8;
+        }
+        .top-title {
+            font-weight: bold;
+            font-size: 20px;
+            line-height: 42px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        p{
+            font-size: 10px;
+            line-height: 1.8;
+        }
+        .title {
+            font-weight: bold;
+            font-size: 36px;
+            line-height: 52px;
+            text-align: center;
+            letter-spacing: 30px;
+        }
+        .left-title{
+            font-size: 14px;
+            line-height: 1.8;
+            text-align: left;
+        }
+        .context{
+            font-size: 12px;
+            line-height: 1.8;
+            text-align: left;
+        }
+
+        .left {
+            text-align: left;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .text-box {
+            padding: 18px 12px;
+            vertical-align: text-top;
+        }
+
+        .middle {
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .school {
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .sign {
+            margin-right: 100px;
+        }
+
+        .guide {
+            font-size: 11px;
+            color: #BBBCC2;
+            font-weight: 300;
+            margin-right: 40px;
+            line-height: 1.6;
+        }
+
+        .indent {
+            text-indent: 370px;
+            font-size: 19px;
+            word-break: keep-all;
+            line-height: 1.8;
+        }
+
+        .order {
+            text-indent: -4px;
+            margin-left: 18px;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .padding {
+            padding: 18px;
+        }
+
+        input[type="checkbox"] {
+            width: 10px;
+            height: 10px;
+            vertical-align: -2px;
+        }
+
+        br {
+            display: block;
+            margin: 5px 0;
+            line-height: 0;
+        }
+
+        .enter {
+            line-height: 3;
+        }
+    </style>
+    <title>원서</title>
+</head>
+<body>
+<table>
+    <caption><b>개인정보 수집·이용·제공 동의서</b></caption>
+    <table class="center-table">
+        <tr>
+            <td class="text-box middle left padding" colspan="4">
+                <p class="left-title">부산소프트웨어마이스터고등학교는 「초·중등교육법」 제30조의6, 동법 시행령 제81조, 제85조, 제86조,「개인정보 보호법」 제15조, 제17조, 제22조,
+                    제23조, 제24조에 따라 입학전형과 관련된 개인정보를 다음과 같이 수집·이용·제공합니다. 내용을 충분히 숙지하신 후 동의 여부를 체크해 주시기 바랍니다.</p>
+                <div style="height: 20px;"></div>
+                <div class="left-title"> 1. 개인정보 수집·이용 동의</div>
+                <table class="center-table">
+                    <tr>
+                        <th scope="row" class="ba" style="width:15%;">수집 항목</th>
+                        <th scope="row" class="ba" style="width:15%;">수집 목적</th>
+                        <th scope="row" class="ba" style="width:15%;">보유 및 이용기간</th>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="ba">성명, 주민등록번호, 증명사진, 주소, 연락처, 학력사항, 출결·봉사·생활기록부, 환불계좌 등</td>
+                        <td scope="row" class="ba">입학전형 관리(자격 확인, 성적 산출, 합격자 발표 등)</td>
+                        <td scope="row" class=" ba">입학관리 업무 종료 시까지 (단, 법령에 따라 일정 기간 보존 가능)</td>
+                    </tr>
+                </table>
+                <p class="left small">
+                    ※ 위 개인정보 수집·이용에 대한 동의를 거부할 권리가 있으며, 거부 시 입학 지원이 제한될 수 있습니다.
+                </p>
+                <table class="left-table">
+                    <tr>
+                        <td scope="row" class="ba">
+                            동의합니다&nbsp;<input type="checkbox"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 동의하지 않습니다&nbsp;<input
+                                type="checkbox"/>
+                        </td>
+                    </tr>
+                </table>
+                <div style="height: 8px;"></div>
+                <div class="left-title"> 2. 고유식별정보(주민등록번호) 수집·이용 동의</div>
+                <table class="center-table">
+                    <tr>
+                        <th scope="row" class="ba" style="width:15%;">수집 항목</th>
+                        <th scope="row" class="ba" style="width:15%;">수집 목적</th>
+                        <th scope="row" class="ba" style="width:15%;">보유 및 이용기간</th>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="ba">주민등록번호</td>
+                        <td scope="row" class="ba">지원자 본인 확인, 생활기록부 일치 여부 확인 등</td>
+                        <td scope="row" class="ba">입학전형 종료 후 관련 법령에 따라 보존 혹은 파기</td>
+                    </tr>
+                </table>
+                <p class="left small">
+                    ※ 고유식별정보 수집에 동의하지 않을 경우, 본인 확인이 불가능하여 입학 지원이 제한됩니다.
+                </p>
+                <table class="left-table">
+                    <tr>
+                        <td scope="row" class="ba">
+                            동의합니다&nbsp;<input type="checkbox"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 동의하지 않습니다&nbsp;<input
+                                type="checkbox"/>
+                        </td>
+                    </tr>
+                </table>
+                <div style="height: 8px;"></div>
+                <div class="left-title"> 3. 개인정보 제3자 제공 동의</div>
+                <table class="center-table">
+                    <tr>
+                        <th scope="row" class="ba" style="width:15%;">제공받는 자</th>
+                        <th scope="row" class="ba" style="width:15%;">제공 목적</th>
+                        <th scope="row" class="ba" style="width:15%;">제공 항목</th>
+                        <th scope="row" class="ba" style="width:15%;">보유 및 이용기간</th>
+                    </tr>
+                    <tr>
+                        <td scope="row" class="ba">한국교육개발원</td>
+                        <td scope="row" class="ba"> - 전기고∙후기고 이중 지원자 확인<br/>
+                            - 불합격자의 시도교육청 평준화 일반고 배정 지원
+                        </td>
+                        <td scope="row" class="ba">성명, 생년월일, 출신중학교명, 중학교 소속지역, 학년·반·번호, 지원고등학교명, 출신지역, 합격·불합격 여부</td>
+                        <td scope="row" class="ba">(고입 업무 처리 후) <b>1년</b></td>
+                    </tr>
+                </table>
+                <p class="left small">
+                    ※ 개인정보 제공에 동의하지 않을 경우, 입학전형 자격 심사에 제한이 발생할 수 있습니다.
+                </p>
+                <table class="left-table">
+                    <tr>
+                        <td scope="row" class="ba">
+                            동의합니다&nbsp;<input type="checkbox"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 동의하지 않습니다&nbsp;<input
+                                type="checkbox"/>
+                        </td>
+                    </tr>
+                </table>
+                <div style="height: 8px;"></div>
+                <div class="left-title">4. 기타 안내</div>
+                <p class="left small">
+                    · 수집된 개인정보는 「개인정보 보호법」에 따라 보호되며, 목적 외 사용 및 무단 제공되지 않습니다. <br class="enter"/>
+                    · 정보주체는 개인정보의 열람, 정정, 삭제, 처리정지, 파기 등을 요구할 수 있습니다.<br class="enter"/>
+                    · 만 14세 미만 학생의 경우 보호자(법정대리인)의 서명이 필요합니다.<br class="enter"/>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <div class = "middle center" style = "font-size : 14px;">개인정보 보호법 등 관련 법규에 의거하여 입학지원서 개인정보 수집·이용·제공에 동의합니다.</div>
+    <div class="middle center" th:text="${#dates.format(#dates.createNow(),'yyyy년 MM월 dd일')}">202&nbsp;년 &nbsp;&nbsp;월
+        &nbsp;&nbsp;일
+    </div>
+    <p class="middle right">
+        <span class="sign">작성자 성명: </span>
+        <span th:text="${form.applicant.name}"></span>
+        <span class="sign">(인)</span>
+    </p>
+    <p class="middle right">
+        <span class="sign">보호자 성명: </span>
+        <span th:text="${form.parent.name}"></span>
+        <span class="sign">(인)</span>
+    </p>
+    <div class="top-title" ><b>부산소프트웨어마이스터고등학교장 귀하</b></div>
+</table>
+</body>
+</html>

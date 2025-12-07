@@ -7,6 +7,7 @@ import com.bamdoliro.maru.presentation.analysis.dto.response.GradeDistributionRe
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -16,7 +17,7 @@ public class QueryGradeDistributionUseCase {
     private final FormRepository formRepository;
 
     public List<GradeDistributionResponse> execute(GradeDistributionRequest request) {
-        List<GradeDistributionResponse> result = new java.util.ArrayList<>(formRepository.findGradeGroupByTypeAndStatus(request.getStatusList())
+        List<GradeDistributionResponse> result = new ArrayList<>(formRepository.findGradeGroupByTypeAndStatus(request.getStatusList())
                 .stream()
                 .map(GradeDistributionResponse::new)
                 .toList());

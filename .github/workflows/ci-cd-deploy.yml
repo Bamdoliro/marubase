@@ -1,0 +1,81 @@
+name: Deploy to AWS EC2
+
+on:
+  workflow_dispatch:
+
+env: 
+  S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Build with Gradle
+      run: ./gradlew clean build -x test -x asciidoctor
+
+    - name: Make Directory
+      run: mkdir -p deploy
+  
+    - name: Copy Jar
+      run: cp ./build/libs/*.jar ./deploy
+
+    - name: Copy appspec.yml
+      run: cp appspec.yml ./deploy
+
+    - name: Copy script
+      run: cp ./scripts/*.sh ./deploy
+  
+    - name: Make zip file
+      run: zip -r ./maru.zip ./deploy 
+      shell: bash
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with: 
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 ./maru.zip s3://$S3_BUCKET_NAME/
+
+    - name: Cancle previous deployment if exists
+      run: |
+        DEPLOYMENT_ID=$(aws deploy list-deployments \
+          --application-name maru-bssm \
+          --deployment-group-name maru-bssm-deploy-group \
+          --include-only-statuses InProgress \
+          --query "deployments[0]" --output text \
+          --region ap-northeast-2)
+
+        if ["$DEPLOYMENT_ID" != "None"]; then
+          echo "Stopping previous deployment: $DEPLOYMENT_ID"
+          aws deploy stop-deployment --deployment-id $DEPLOYMENT_ID --region ap-northeast-2
+        else
+          echo "No active deployment found"
+        fi
+
+    - name: Deploy
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        aws deploy create-deployment \
+        --application-name maru-bssm \
+        --deployment-group-name maru-bssm-deploy-group \
+        --file-exists-behavior OVERWRITE \
+        --s3-location bucket=maru-bssm-deploy,bundleType=zip,key=maru.zip \
+        --region ap-northeast-2

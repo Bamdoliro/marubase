@@ -15,6 +15,7 @@ public class QueryFairDetailUseCase {
 
     public FairDetailResponse execute(Long fairId) {
         Fair fair = fairFacade.getFairDetail(fairId);
-        return new FairDetailResponse(fair, attendeeRepository);
+        Integer headCount = attendeeRepository.countByFair(fair);
+        return new FairDetailResponse(fair, headCount);
     }
 }
