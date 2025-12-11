@@ -36,7 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @Disabled
@@ -60,216 +60,216 @@ public abstract class ControllerTest {
     protected ObjectMapper objectMapper;
 
 
-    @MockBean
+    @MockitoBean
     protected SignUpUserUseCase signUpUserUseCase;
 
-    @MockBean
+    @MockitoBean
     protected LogInUseCase logInUseCase;
 
-    @MockBean
+    @MockitoBean
     protected UpdatePasswordUseCase updatePasswordUseCase;
 
-    @MockBean
+    @MockitoBean
     protected DeleteUserUseCase deleteUserUseCase;
 
-    @MockBean
+    @MockitoBean
     protected RefreshTokenUseCase refreshTokenUseCase;
 
-    @MockBean
+    @MockitoBean
     protected SendVerificationUseCase sendVerificationUseCase;
 
-    @MockBean
+    @MockitoBean
     protected SearchSchoolUseCase searchSchoolUseCase;
 
-    @MockBean
+    @MockitoBean
     protected CreateQuestionUseCase createQuestionUseCase;
 
-    @MockBean
+    @MockitoBean
     protected UpdateQuestionUseCase updateQuestionUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QueryQuestionListUseCase queryQuestionListUseCase;
 
-    @MockBean
+    @MockitoBean
     protected SubmitFinalFormUseCase submitFinalFormUseCase;
 
-    @MockBean
+    @MockitoBean
     protected SubmitFormUseCase submitFormUseCase;
 
-    @MockBean
+    @MockitoBean
     protected ApproveFormUseCase approveFormUseCase;
 
-    @MockBean
+    @MockitoBean
     protected RejectFormUseCase rejectFormUseCase;
 
-    @MockBean
+    @MockitoBean
     protected ReceiveFormUseCase receiveFormUseCase;
 
-    @MockBean
+    @MockitoBean
     protected EnterFormUseCase enterFormUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QuerySubmittedFormUseCase querySubmittedFormUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QueryFormUseCase queryFormUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QueryFormStatusUseCase queryFormStatusUseCase;
 
-    @MockBean
+    @MockitoBean
     protected UpdateFormUseCase updateFormUseCase;
 
-    @MockBean
+    @MockitoBean
     protected UploadIdentificationPictureUseCase uploadIdentificationPictureUseCase;
 
-    @MockBean
+    @MockitoBean
     protected UploadFormUseCase uploadFormUseCase;
 
-    @MockBean
+    @MockitoBean
     protected ExportFormUseCase exportFormUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QueryAllFormUseCase queryAllFormUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QueryNoticeUseCase queryNoticeUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QueryNoticeListUseCase queryNoticeListUseCase;
 
-    @MockBean
+    @MockitoBean
     protected CreateNoticeUseCase createNoticeUseCase;
 
-    @MockBean
+    @MockitoBean
     protected UploadFileUseCase uploadFileUseCase;
 
-    @MockBean
+    @MockitoBean
     protected UpdateNoticeUseCase updateNoticeUseCase;
 
-    @MockBean
+    @MockitoBean
     protected LogOutUseCase logOutUseCase;
 
-    @MockBean
+    @MockitoBean
     protected DraftFormUseCase draftFormUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QueryDraftFormUseCase queryDraftFormUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QueryFirstFormResultUseCase queryFirstFormResultUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QueryFinalFormResultUseCase queryFinalFormResultUseCase;
 
-    @MockBean
+    @MockitoBean
     protected GenerateAdmissionTicketUseCase generateAdmissionTicketUseCase;
 
-    @MockBean
+    @MockitoBean
     protected GenerateProofOfApplicationUseCase generateProofOfApplicationUseCase;
 
-    @MockBean
+    @MockitoBean
     protected DownloadSecondRoundScoreFormatUseCase downloadSecondRoundScoreFormatUseCase;
 
-    @MockBean
+    @MockitoBean
     protected ExportFirstScoreUseCase exportFirstScoreUseCase;
 
-    @MockBean
+    @MockitoBean
     protected UpdateSecondRoundScoreUseCase updateSecondRoundScoreUseCase;
 
-    @MockBean
+    @MockitoBean
     protected CreateAdmissionFairUseCase createAdmissionFairUseCase;
 
-    @MockBean
+    @MockitoBean
     protected AttendAdmissionFairUseCase attendAdmissionFairUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QueryQuestionUseCase queryQuestionUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QueryFairListUseCase queryFairListUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QueryFairDetailUseCase queryFairDetailUseCase;
 
-    @MockBean
+    @MockitoBean
     protected ExportAttendeeListUseCase exportAttendeeListUseCase;
 
-    @MockBean
+    @MockitoBean
     protected VerifyUseCase verifyUseCase;
 
-    @MockBean
+    @MockitoBean
     protected DeleteNoticeUseCase deleteNoticeUseCase;
 
-    @MockBean
+    @MockitoBean
     protected DeleteQuestionUseCase deleteQuestionUseCase;
 
-    @MockBean
+    @MockitoBean
     protected ExportFinalPassedFormUseCase exportFinalPassedFormUseCase;
 
-    @MockBean
+    @MockitoBean
     protected ExportFirstRoundResultUseCase exportFirstRoundResultUseCase;
 
-    @MockBean
+    @MockitoBean
     protected ExportSecondRoundResultUseCase exportSecondRoundResultUseCase;
 
-    @MockBean
+    @MockitoBean
     protected ExportResultUseCase exportResultUseCase;
 
-    @MockBean
+    @MockitoBean
     protected PassOrFailFormUseCase passOrFailFormUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QueryFormUrlUseCase queryFormUrlUseCase;
 
-    @MockBean
+    @MockitoBean
     protected SelectSecondPassUseCase selectSecondPassUseCase;
 
-    @MockBean
+    @MockitoBean
     protected SendMessageUseCase sendMessageUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QueryNumberOfApplicantsUseCase queryNumberOfApplicantsUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QueryGradeDistributionUseCase queryGradeDistributionUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QueryGenderRatioUseCase queryGenderRatioUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QuerySchoolStatusUseCase querySchoolStatusUseCase;
 
 
-    @MockBean
+    @MockitoBean
     protected TokenService tokenService;
 
-    @MockBean
+    @MockitoBean
     protected SearchSchoolService searchSchoolService;
 
-    @MockBean
+    @MockitoBean
     protected SendMessageService sendMessageService;
 
 
-    @MockBean
+    @MockitoBean
     protected JwtProperties jwtProperties;
 
-    @MockBean
+    @MockitoBean
     protected AuthenticationArgumentResolver authenticationArgumentResolver;
 
-    @MockBean
+    @MockitoBean
     protected AuthenticationExtractor authenticationExtractor;
 
-    @MockBean
+    @MockitoBean
     protected GenerateAllAdmissionTicketUseCase generateAllAdmissionTicketUseCase;
 
-    @MockBean
+    @MockitoBean
     protected DownloadAdmissionAndPledgeFormatUseCase downloadAdmissionAndPledgeFormatUseCase;
 
-    @MockBean
+    @MockitoBean
     protected UploadAdmissionAndPledgeUseCase uploadAdmissionAndPledgeUseCase;
 
-    @MockBean
+    @MockitoBean
     protected QueryAdmissionAndPledgeUseCase queryAdmissionAndPledgeUseCase;
 
     protected String toJson(Object object) throws JsonProcessingException {
