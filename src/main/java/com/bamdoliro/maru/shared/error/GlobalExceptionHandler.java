@@ -14,6 +14,7 @@ import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +22,15 @@ import java.util.Map;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException e) {
+        logHandledException(e);
+
+        return ResponseEntity
+                .status(GlobalErrorProperty.NOT_FOUND.getStatus())
+                .body(new ErrorResponse(GlobalErrorProperty.NOT_FOUND));
+    }
 
     @ExceptionHandler(BindException.class)
     public ResponseEntity<ErrorResponse> handleBindException(BindException e) {

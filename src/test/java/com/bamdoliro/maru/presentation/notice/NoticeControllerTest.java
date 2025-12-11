@@ -281,7 +281,11 @@ class NoticeControllerTest extends RestDocsTestSupport {
 
     @Test
     void 공지사항_파일을_4개_이상_업로드하면_에러가_발생한다() throws Exception {
-        List<FileMetadata> metadataList = Collections.nCopies(4, new FileMetadata());
+        List<FileMetadata> metadataList = Collections.nCopies(4, new FileMetadata(
+                "notice-file.pdf",
+                MediaType.APPLICATION_PDF_VALUE,
+                10 * MB
+        ));
         User user = UserFixture.createAdminUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
