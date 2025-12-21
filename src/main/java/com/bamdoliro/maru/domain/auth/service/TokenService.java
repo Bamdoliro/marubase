@@ -66,8 +66,8 @@ public class TokenService {
         return userFacade.getUser(getUuid(token));
     }
 
-    public String getUuid(String uuid) {
-        return extractAllClaims(uuid).get("uuid", String.class);
+    public String getUuid(String token) {
+        return extractAllClaims(token).get("uuid", String.class);
     }
 
     public String getType(String token) {
