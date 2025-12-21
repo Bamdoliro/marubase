@@ -4,8 +4,6 @@ import com.bamdoliro.maru.domain.auth.domain.Token;
 import com.bamdoliro.maru.domain.auth.domain.type.TokenType;
 import com.bamdoliro.maru.domain.auth.exception.ExpiredTokenException;
 import com.bamdoliro.maru.domain.auth.exception.InvalidTokenException;
-import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.domain.user.service.UserFacade;
 import com.bamdoliro.maru.infrastructure.persistence.auth.TokenRepository;
 import com.bamdoliro.maru.shared.config.properties.JwtProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -31,7 +29,6 @@ public class TokenService {
 
     private final JwtProperties jwtProperties;
     private final TokenRepository tokenRepository;
-    private final UserFacade userFacade;
 
     public String generateAccessToken(String uuid) {
         return generateToken(uuid, TokenType.ACCESS_TOKEN, jwtProperties.getAccessExpirationTime());
@@ -60,10 +57,6 @@ public class TokenService {
                 .setExpiration(new Date(now.getTime() + time))
                 .signWith(getSigningKey(jwtProperties.getSecretKey()), SignatureAlgorithm.HS256)
                 .compact();
-    }
-
-    public User getUser(String token) {
-        return userFacade.getUser(getUuid(token));
     }
 
     public String getUuid(String token) {
