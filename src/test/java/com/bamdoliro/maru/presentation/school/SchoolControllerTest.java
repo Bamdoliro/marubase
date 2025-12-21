@@ -1,9 +1,7 @@
 package com.bamdoliro.maru.presentation.school;
 
-import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.SchoolFixture;
-import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -24,10 +22,8 @@ class SchoolControllerTest extends RestDocsTestSupport {
 
     @Test
     void 학교를_검색한다() throws Exception {
-        User user = UserFixture.createUser();
         given(searchSchoolUseCase.execute(anyString())).willReturn(SchoolFixture.createSchoolListResponse());
         given(jwtProperties.getPrefix()).willReturn("Bearer");
-        given(tokenService.getUser(anyString())).willReturn(user);
 
 
         mockMvc.perform(get("/schools")
@@ -51,10 +47,8 @@ class SchoolControllerTest extends RestDocsTestSupport {
 
     @Test
     void 학교를_검색할_때_결과가_10개_이상이라면_상위_10개만_반환한다() throws Exception {
-        User user = UserFixture.createUser();
         given(searchSchoolUseCase.execute(anyString())).willReturn(SchoolFixture.createSchoolMaxListResponse());
         given(jwtProperties.getPrefix()).willReturn("Bearer");
-        given(tokenService.getUser(anyString())).willReturn(user);
 
 
         mockMvc.perform(get("/schools")
@@ -69,10 +63,8 @@ class SchoolControllerTest extends RestDocsTestSupport {
 
     @Test
     void 학교를_검색할_때_결과가_없다면_빈_리스트를_반환한다() throws Exception {
-        User user = UserFixture.createUser();
         given(searchSchoolUseCase.execute(anyString())).willReturn(List.of());
         given(jwtProperties.getPrefix()).willReturn("Bearer");
-        given(tokenService.getUser(anyString())).willReturn(user);
 
 
         mockMvc.perform(get("/schools")
