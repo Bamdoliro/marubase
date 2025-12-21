@@ -31,7 +31,7 @@ public class RefreshTokenUseCase {
     }
 
     private void validate(String token) {
-        if (!Objects.equals(tokenService.getType(token), TokenType.REFRESH_TOKEN.name())) {
+        if (tokenService.getType(token) != TokenType.REFRESH_TOKEN) {
             throw new InvalidTokenException();
         }
     }
