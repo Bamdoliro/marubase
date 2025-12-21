@@ -70,8 +70,10 @@ public class TokenService {
         return extractAllClaims(token).get("uuid", String.class);
     }
 
-    public String getType(String token) {
-        return extractAllClaims(token).get("type", String.class);
+    public TokenType getType(String token) {
+        return TokenType.valueOf(
+                extractAllClaims(token).get("type", String.class)
+        );
     }
 
     private Claims extractAllClaims(String token) {

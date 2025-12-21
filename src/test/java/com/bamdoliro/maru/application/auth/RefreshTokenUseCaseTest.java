@@ -42,7 +42,7 @@ class RefreshTokenUseCaseTest {
         // given
         Token refreshToken = AuthFixture.createRefreshToken();
         String accessToken = AuthFixture.createAccessTokenString();
-        given(tokenService.getType(refreshToken.getToken())).willReturn(TokenType.REFRESH_TOKEN.name());
+        given(tokenService.getType(refreshToken.getToken())).willReturn(TokenType.REFRESH_TOKEN);
         given(tokenService.getUuid(refreshToken.getToken())).willReturn(refreshToken.getUuid());
         given(tokenRepository.findById(refreshToken.getUuid())).willReturn(Optional.of(refreshToken));
         given(tokenService.generateAccessToken(refreshToken.getUuid())).willReturn(accessToken);
@@ -75,7 +75,7 @@ class RefreshTokenUseCaseTest {
         // given
         String loggedOutRefreshToken = "로그아웃.리프레시.토큰";
         Token refreshToken = AuthFixture.createRefreshToken();
-        given(tokenService.getType(loggedOutRefreshToken)).willReturn(TokenType.REFRESH_TOKEN.name());
+        given(tokenService.getType(loggedOutRefreshToken)).willReturn(TokenType.REFRESH_TOKEN);
         given(tokenService.getUuid(loggedOutRefreshToken)).willReturn(refreshToken.getUuid());
         given(tokenRepository.findById(refreshToken.getUuid())).willReturn(Optional.of(refreshToken));
 
@@ -87,7 +87,7 @@ class RefreshTokenUseCaseTest {
     void 액세스_토큰으로_재발급을_시도하면_에러가_발생한다() {
         // given
         String accessToken = "이것은.액세스.토큰";
-        given(tokenService.getType(accessToken)).willReturn(TokenType.ACCESS_TOKEN.name());
+        given(tokenService.getType(accessToken)).willReturn(TokenType.ACCESS_TOKEN);
 
         // when and then
         assertThrows(InvalidTokenException.class, () -> refreshTokenUseCase.execute(accessToken));
