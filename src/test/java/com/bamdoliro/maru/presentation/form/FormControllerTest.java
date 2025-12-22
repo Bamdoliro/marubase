@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.presentation.form;
 
 import com.bamdoliro.maru.application.form.ExportFirstScoreUseCase;
+import com.bamdoliro.maru.application.form.ExportSubjectGradeDetailUseCase;
 import com.bamdoliro.maru.domain.auth.exception.AuthorityMismatchException;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
@@ -49,6 +50,9 @@ class FormControllerTest extends RestDocsTestSupport {
 
     @Autowired
     private ExportFirstScoreUseCase exportFirstScoreUseCase;
+
+    @Autowired
+    private ExportSubjectGradeDetailUseCase exportSubjectGradeDetailUseCase;
 
     @Test
     void 원서를_제출한다() throws Exception {
@@ -2436,5 +2440,35 @@ class FormControllerTest extends RestDocsTestSupport {
                 ));
 
         verify(exportFirstScoreUseCase, times(1)).execute();
+    }
+
+    @Test
+    void 정상적으로_과목별_성적_상세를_다운로드한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+        MockMultipartFile file = new MockMultipartFile(
+                "과목별성적상세",
+                "과목별성적상세.xlsx",
+                String.valueOf(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")),
+                "<<file>>".getBytes()
+        );
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(exportSubjectGradeDetailUseCase.execute()).willReturn(new ByteArrayResource(file.getBytes()));
+
+        mockMvc.perform(get("/forms/xlsx/subject-grade-detail")
+                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .accept("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+
+                .andExpect(status().isOk())
+
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION)
+                                        .description("Bearer token")
+                        )
+                ));
+
+        verify(exportSubjectGradeDetailUseCase, times(1)).execute();
     }
 }

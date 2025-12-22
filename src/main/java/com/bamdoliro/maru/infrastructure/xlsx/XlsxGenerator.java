@@ -43,6 +43,35 @@ public class XlsxGenerator {
         return xlsxService.convertToByteArrayResource(workbook);
     }
 
+    public Resource executeWithDynamicHeaders(List<String> headers, List<Form> formList, List<Function<Form, Object>> columnList, List<String> styleList) throws IOException {
+        Workbook workbook = new org.apache.poi.xssf.usermodel.XSSFWorkbook();
+        Sheet sheet = workbook.createSheet();
+
+        Map<String, CellStyle> styleMap = Map.of(
+                "default", xlsxService.createDefaultCellStyle(workbook),
+                "right", xlsxService.createRightCellStyle(workbook),
+                "empty", xlsxService.createEmptyCellStyle(workbook),
+                "date", xlsxService.createDateCellStyle(workbook)
+        );
+
+        Row headerRow = sheet.createRow(0);
+        for (int i = 0; i < headers.size(); i++) {
+            createCell(headerRow, i, headers.get(i), styleMap.get("default"));
+        }
+
+        for (int index = 0; index < formList.size(); index++) {
+            Form form = formList.get(index);
+            Row row = sheet.createRow(index + 1);
+            int columnIndex = 0;
+
+            for (Function<Form, Object> column : columnList) {
+                createCell(row, columnIndex, column.apply(form), styleMap.get(styleList.get(columnIndex++)));
+            }
+        }
+
+        return xlsxService.convertToByteArrayResource(workbook);
+    }
+
     private void createCell(Row row, int cellIndex, Object value, CellStyle style) {
         Cell cell = row.createCell(cellIndex);
         if (value instanceof Integer)

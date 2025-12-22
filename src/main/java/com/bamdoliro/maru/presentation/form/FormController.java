@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -59,6 +61,7 @@ public class FormController {
     private final ExportFirstRoundResultUseCase exportFirstRoundResultUseCase;
     private final ExportSecondRoundResultUseCase exportSecondRoundResultUseCase;
     private final ExportResultUseCase exportResultUseCase;
+    private final ExportSubjectGradeDetailUseCase exportSubjectGradeDetailUseCase;
     private final PassOrFailFormUseCase passOrFailFormUseCase;
     private final QueryFormUrlUseCase queryFormUrlUseCase;
     private final SelectSecondPassUseCase selectSecondPassUseCase;
@@ -329,6 +332,22 @@ public class FormController {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(exportResultUseCase.execute());
+    }
+
+    @GetMapping("/xlsx/subject-grade-detail")
+    public ResponseEntity<Resource> exportSubjectGradeDetail(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+    )  throws IOException {
+        String filename = "합격자성적상세.xlsx";
+        String encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8)
+                .replace("+", "%20");
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .header("Content-Disposition",
+                        "attachment; filename=\"export.xlsx\"; filename*=UTF-8''" + encodedFilename)
+                .body(exportSubjectGradeDetailUseCase.execute());
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
