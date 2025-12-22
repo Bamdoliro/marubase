@@ -745,3 +745,20 @@ include::{snippets}/form-controller-test/자동으로_2차_합격_여부를_결�
 
 ===== 최종 점수가 없는 원서가 있을 경우
 include::{snippets}/form-controller-test/자동으로_2차_합격_여부를_결정할_때_최종_점수가_없는_원서가_존재하면_에러가_발생한다/http-response.adoc[]
+
+
+=== 과목별 성적 상세 엑셀 다운로드
+어드민은 합격자들의 과목별 성적 상세 정보를 엑셀로 다운로드 받을 수 있습니다.
+
+==== 요청 형식
+
+===== Request Header
+include::{snippets}/form-controller-test/정상적으로_과목별_성적_상세를_다운로드한다/request-headers.adoc[]
+
+==== 요청
+include::{snippets}/form-controller-test/정상적으로_과목별_성적_상세를_다운로드한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/form-controller-test/정상적으로_과목별_성적_상세를_다운로드한다/http-response.adoc[]
