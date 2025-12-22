@@ -205,6 +205,9 @@ public abstract class ControllerTest {
     protected DeleteQuestionUseCase deleteQuestionUseCase;
 
     @MockitoBean
+    protected ExportSubjectGradeDetailUseCase exportSubjectGradeDetailUseCase;
+
+    @MockitoBean
     protected ExportFinalPassedFormUseCase exportFinalPassedFormUseCase;
 
     @MockitoBean
