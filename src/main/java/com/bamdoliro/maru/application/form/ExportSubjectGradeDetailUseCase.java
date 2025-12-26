@@ -8,6 +8,7 @@ import com.bamdoliro.maru.infrastructure.xlsx.XlsxGenerator;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -24,8 +25,9 @@ public class ExportSubjectGradeDetailUseCase {
     private final FormFacade formFacade;
     private final XlsxGenerator xlsxGenerator;
 
+    @Transactional(readOnly = true)
     public Resource execute() throws IOException {
-        List<Form> formList = formFacade.getSortedFormList(FormStatus.ENTERED);
+        List<Form> formList = formFacade.getSortedFormList(FormStatus.PASSED);
 
         Set<String> allSubjects = extractAllSubjects(formList);
 
