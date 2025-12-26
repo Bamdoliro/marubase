@@ -25,7 +25,7 @@ public class ExportSubjectGradeDetailUseCase {
     private final XlsxGenerator xlsxGenerator;
 
     public Resource execute() throws IOException {
-        List<Form> formList = formFacade.getSortedFormList(FormStatus.ENTERED);
+        List<Form> formList = formFacade.getSortedFormList(FormStatus.PASSED);
 
         Set<String> allSubjects = extractAllSubjects(formList);
 
