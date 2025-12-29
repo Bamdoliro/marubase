@@ -8,6 +8,7 @@ import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -20,7 +21,7 @@ public class QueryAllFormUseCase {
     private final FormRepository formRepository;
 
     public List<FormSimpleResponse> execute(FormStatus status, FormType type, String sort) {
-        List<Form> formList = new java.util.ArrayList<>(formRepository.findByStatus(status).stream()
+        List<Form> formList = new ArrayList<>(formRepository.findByStatus(status).stream()
                 .filter(form -> Objects.isNull(type) || form.getType().equals(type))
                 .toList());
 
