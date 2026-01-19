@@ -217,7 +217,7 @@ class FormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    void 중졸_껌정고시_합격자가_원서를_제출한다() throws Exception {
+    void 중졸_검정고시_합격자가_원서를_제출한다() throws Exception {
         SubmitFormRequest request = FormFixture.createQualificationExaminationFormRequest(FormType.MEISTER_TALENT);
         User user = UserFixture.createUser();
 
@@ -646,7 +646,7 @@ class FormControllerTest extends RestDocsTestSupport {
                         .accept(MediaType.APPLICATION_JSON)
                 )
 
-                .andExpect(status().isUnauthorized())
+                .andExpect(status().isForbidden())
 
                 .andDo(restDocs.document());
     }
@@ -926,7 +926,7 @@ class FormControllerTest extends RestDocsTestSupport {
                         .content(toJson(FormFixture.createUpdateFormRequest(FormType.REGULAR)))
                 )
 
-                .andExpect(status().isUnauthorized())
+                .andExpect(status().isForbidden())
 
                 .andDo(restDocs.document());
 
