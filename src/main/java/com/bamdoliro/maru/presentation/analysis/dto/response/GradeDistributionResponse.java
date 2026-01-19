@@ -21,11 +21,11 @@ public class GradeDistributionResponse {
 
     public GradeDistributionResponse(GradeVo vo) {
         this.type = vo.getType();
-        this.firstRoundMax = MathUtil.round(vo.getFirstRoundMax());
-        this.firstRoundMin = MathUtil.round(vo.getFirstRoundMin());
-        this.firstRoundAvg = MathUtil.round(vo.getFirstRoundAvg());
-        this.totalMax = MathUtil.round(vo.getTotalMax());
-        this.totalMin = MathUtil.round(vo.getTotalMin());
-        this.totalAvg = MathUtil.round(vo.getTotalAvg());
+        this.firstRoundMax = MathUtil.roundTo(vo.getFirstRoundMax(), 3);
+        this.firstRoundMin = MathUtil.roundTo(vo.getFirstRoundMin(), 3);
+        this.firstRoundAvg = MathUtil.roundTo(vo.getFirstRoundAvg(), 3);
+        this.totalMax = MathUtil.roundTo(vo.getTotalMax(), 3);
+        this.totalMin = MathUtil.roundTo(vo.getTotalMin(),3);
+        this.totalAvg = MathUtil.roundTo(vo.getTotalAvg(), 3);
     }
 }

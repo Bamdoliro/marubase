@@ -8,17 +8,12 @@ import java.math.RoundingMode;
 @UtilityClass
 public class MathUtil {
 
-    public static Double roundTo(double value, int place) {
-        String format = "%." + place + "f";
-        return Double.parseDouble(String.format(format, value));
-    }
-
-    public static Double round(Double value){
+    public static Double roundTo(Double value, int place){
         if(value == null){
             return null;
         }
         return BigDecimal.valueOf(value)
-                .setScale(3, RoundingMode.HALF_UP)
+                .setScale(place, RoundingMode.HALF_UP)
                 .doubleValue();
     }
 
