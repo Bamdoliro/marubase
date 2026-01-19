@@ -91,7 +91,7 @@ public class JwtControllerTest extends RestDocsTestSupport {
                         .header(HttpHeaders.AUTHORIZATION, jwtProperties.getPrefix() + " 이것은.이상한.토큰")
                         .contentType(MediaType.APPLICATION_JSON)
                 )
-                .andExpect(status().isUnauthorized())
+                .andExpect(status().isForbidden())
                 .andDo(restDocs.document());
     }
 
