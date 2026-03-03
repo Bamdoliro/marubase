@@ -40,6 +40,8 @@ public class ExportFirstRoundResultUseCase {
                 form -> form.getApplicant().getName(),
                 form -> form.getApplicant().getGender().getDescription(),
                 form -> form.getApplicant().getBirthday().format(DateTimeFormatter.BASIC_ISO_DATE),
+                form -> form.getApplicant().getPhoneNumber().toString(),
+                form -> form.getParent().getPhoneNumber().toString(),
                 form -> form.getEducation().getSchool().getLocation(),
                 form -> form.getEducation().getGraduationTypeToString(),
                 form -> form.getEducation().getSchool().getName(),
@@ -52,6 +54,8 @@ public class ExportFirstRoundResultUseCase {
         );
 
         List<String> styleList = List.of(
+                "default",
+                "default",
                 "default",
                 "default",
                 "default",
