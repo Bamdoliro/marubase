@@ -129,3 +129,33 @@ caption {
     font-weight: 600;
 }
 
+/* 공통 스타일 추가 */
+.sign {
+    margin-right: 100px;
+}
+
+.order {
+    text-indent: -4px;
+    margin-left: 18px;
+    font-size: 16px;
+}
+
+.space {
+    height: 8px;
+}
+
+.space-right {
+    padding-right: 50px;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.center-table {
+    width: 100%;
+}
+
+.box {
+    padding: 16px;
+}

@@ -4,9 +4,13 @@ spring:
       on-profile: test
 
   jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
     properties:
       hibernate:
         format_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
 
     generate-ddl: true
     hibernate:
@@ -29,6 +33,11 @@ spring:
       host: localhost
       port: 6379
       password: bamdoliro
+
+  jasypt:
+    encryptor:
+      key: test-encryption-password
+      salt: test-encryption-salt
 
 cloud:
   aws:
