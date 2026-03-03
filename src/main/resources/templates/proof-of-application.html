@@ -2,33 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8"/>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <style>
         @page {
             size: A4;
             margin: 0;
         }
 
-        * {
-            font-family: SUIT, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        table {
-            border: none;
-            border-collapse: collapse;
-            font-size: 14px;
-            text-align: center;
-            line-height: normal;
-        }
-
         caption {
             padding-bottom: 6px;
-        }
-
-        tr {
-            vertical-align: middle;
         }
 
         td {
@@ -38,34 +20,8 @@
         }
 
         th {
-            background-color: #ECF2FA;
-            font-weight: 500;
-            padding: 8px 0;
             letter-spacing: 6px;
             text-indent: 6px;
-        }
-
-        .ba {
-            border: #000000 1px solid;
-        }
-
-        .center {
-            text-align: center;
-        }
-
-        .big {
-            font-weight: 500;
-            font-size: 20px;
-        }
-
-        .letter-spacing-10 {
-            letter-spacing: 10px;
-            text-indent: 10px;
-        }
-
-        .letter-spacing-25 {
-            letter-spacing: 25px;
-            text-indent: 25px;
         }
 
         .admission-ticket-container {
@@ -91,13 +47,6 @@
             margin-top: 12px;
         }
 
-        .left {
-            text-align: left;
-        }
-
-        .red {
-            color: #F44336;
-        }
 
         .more {
             padding-top: 4px;
