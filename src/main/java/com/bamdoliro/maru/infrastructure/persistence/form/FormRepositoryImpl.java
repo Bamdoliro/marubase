@@ -4,6 +4,7 @@ import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.infrastructure.persistence.form.vo.*;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -86,11 +87,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 .selectFrom(form)
                 .where(
                         form.status.eq(FormStatus.APPROVED)
-                                .and(
-                                        form.type.eq(FormType.REGULAR).not()
-                                                .and(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION).not())
-                                                .and(form.type.eq(FormType.SPECIAL_ADMISSION).not())
-                                )
+                                .and(isSpecialType())
                 )
                 .orderBy(form.score.firstRoundScore.desc())
                 .fetch();
@@ -102,10 +99,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 .selectFrom(form)
                 .where(
                         form.status.eq(FormStatus.APPROVED)
-                                .and(
-                                        form.type.eq(FormType.REGULAR)
-                                                .or(form.changedToRegular.isTrue())
-                                )
+                                .and(isRegularType())
                 )
                 .orderBy(form.score.firstRoundScore.desc())
                 .fetch();
@@ -117,10 +111,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 .selectFrom(form)
                 .where(
                         form.status.eq(FormStatus.APPROVED)
-                                .and(
-                                        form.type.eq(FormType.SPECIAL_ADMISSION)
-                                                .or(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION))
-                                )
+                                .and(isSupernumeraryType())
                 )
                 .orderBy(form.score.firstRoundScore.desc())
                 .fetch();
@@ -132,20 +123,9 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 .selectFrom(form)
                 .where(
                         form.status.eq(FormStatus.FIRST_PASSED)
-                                .and(
-                                        form.type.eq(FormType.REGULAR).not()
-                                                .and(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION).not())
-                                                .and(form.type.eq(FormType.SPECIAL_ADMISSION).not())
-                                )
+                                .and(isSpecialType())
                 )
-                .orderBy(form.score.totalScore.desc(),
-                        form.score.subjectGradeScore.desc(),
-                        form.score.depthInterviewScore.desc(),
-                        form.score.ncsScore.desc(),
-                        form.score.thirdGradeFirstSemesterSubjectGradeScore.desc().nullsLast(),
-                        form.score.attendanceScore.desc(),
-                        form.score.volunteerScore.desc()
-                )
+                .orderBy(firstPassedOrder())
                 .fetch();
     }
 
@@ -155,19 +135,9 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 .selectFrom(form)
                 .where(
                         form.status.eq(FormStatus.FIRST_PASSED)
-                                .and(
-                                        form.type.eq(FormType.REGULAR)
-                                                .or(form.changedToRegular.isTrue())
-                                )
+                                .and(isRegularType())
                 )
-                .orderBy(form.score.totalScore.desc(),
-                        form.score.subjectGradeScore.desc(),
-                        form.score.depthInterviewScore.desc(),
-                        form.score.ncsScore.desc(),
-                        form.score.thirdGradeFirstSemesterSubjectGradeScore.desc().nullsLast(),
-                        form.score.attendanceScore.desc(),
-                        form.score.volunteerScore.desc()
-                )
+                .orderBy(firstPassedOrder())
                 .fetch();
     }
 
@@ -177,19 +147,8 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 .selectFrom(form)
                 .where(
                         form.status.eq(FormStatus.FIRST_PASSED)
-                                .and(
-                                        form.type.eq(FormType.SPECIAL_ADMISSION)
-                                                .or(form.type.eq(FormType.NATIONAL_VETERANS_EDUCATION))
-                                )
-                )
-                .orderBy(form.score.totalScore.desc(),
-                        form.score.subjectGradeScore.desc(),
-                        form.score.depthInterviewScore.desc(),
-                        form.score.ncsScore.desc(),
-                        form.score.thirdGradeFirstSemesterSubjectGradeScore.desc().nullsLast(),
-                        form.score.attendanceScore.desc(),
-                        form.score.volunteerScore.desc()
-                )
+                                .and(isSupernumeraryType())
+                ).orderBy(firstPassedOrder())
                 .fetch();
     }
 
@@ -197,8 +156,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
     public List<Form> findFirstRoundForm() {
         return queryFactory
                 .selectFrom(form)
-                .where(form.status.eq(FormStatus.FIRST_PASSED)
-                        .or(form.status.eq(FormStatus.FIRST_FAILED))
+                .where(form.status.in(FormStatus.FIRST_PASSED, FormStatus.FIRST_FAILED)
                 )
                 .fetch();
     }
@@ -239,8 +197,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
     public List<Form> findSecondRoundForm() {
         return queryFactory
                 .selectFrom(form)
-                .where(form.status.eq(FormStatus.FAILED)
-                        .or(form.status.eq(FormStatus.PASSED))
+                .where(form.status.in(FormStatus.FAILED, FormStatus.PASSED)
                 )
                 .fetch();
     }
@@ -333,7 +290,8 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                         form.education.school.address
                 ))
                 .from(form)
-                .where(form.education.school.location.eq("부산광역시").not())
+                .where(form.education.school.location.eq("부산광역시").not()
+                        .and(form.status.in(round)))
                 .fetch();
     }
 
@@ -357,4 +315,37 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 .where(form.status.in(round))
                 .fetch();
     }
+
+    private OrderSpecifier<?>[] firstPassedOrder() {
+        return new OrderSpecifier<?>[]{
+                form.score.totalScore.desc(),
+                form.score.subjectGradeScore.desc(),
+                form.score.depthInterviewScore.desc(),
+                form.score.ncsScore.desc(),
+                form.score.thirdGradeFirstSemesterSubjectGradeScore.desc().nullsLast(),
+                form.score.attendanceScore.desc(),
+                form.score.volunteerScore.desc()
+        };
+    }
+
+    private BooleanExpression isSpecialType() {
+        return form.type.notIn(
+                FormType.REGULAR,
+                FormType.NATIONAL_VETERANS_EDUCATION,
+                FormType.SPECIAL_ADMISSION
+        );
+    }
+
+    private BooleanExpression isRegularType() {
+        return form.type.eq(FormType.REGULAR)
+                .or(form.changedToRegular.isTrue());
+    }
+
+    private BooleanExpression isSupernumeraryType() {
+        return form.type.in(
+                FormType.SPECIAL_ADMISSION,
+                FormType.NATIONAL_VETERANS_EDUCATION
+        );
+    }
+
 }
