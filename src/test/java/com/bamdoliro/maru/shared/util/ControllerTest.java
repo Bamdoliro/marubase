@@ -20,8 +20,10 @@ import com.bamdoliro.maru.infrastructure.neis.SearchSchoolService;
 import com.bamdoliro.maru.presentation.analysis.AnalysisController;
 import com.bamdoliro.maru.presentation.auth.AuthController;
 import com.bamdoliro.maru.presentation.fair.FairController;
+import com.bamdoliro.maru.presentation.form.AdminFormController;
 import com.bamdoliro.maru.presentation.form.DraftFormController;
 import com.bamdoliro.maru.presentation.form.FormController;
+import com.bamdoliro.maru.presentation.form.UserFormController;
 import com.bamdoliro.maru.presentation.message.MessageController;
 import com.bamdoliro.maru.presentation.notice.NoticeController;
 import com.bamdoliro.maru.presentation.question.QuestionController;
@@ -46,6 +48,8 @@ import org.springframework.test.web.servlet.MockMvc;
             SchoolController.class,
             QuestionController.class,
             FormController.class,
+            UserFormController.class,
+            AdminFormController.class,
             NoticeController.class,
             DraftFormController.class,
             FairController.class,
