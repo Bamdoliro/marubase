@@ -1,0 +1,160 @@
+@page {
+    size: A4;
+    margin: 70px;
+}
+
+* {
+    font-family: SUIT, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+table {
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 14px;
+    text-align: center;
+    line-height: normal;
+}
+
+tr {
+    vertical-align: middle;
+}
+
+td {
+    padding: 8px 0;
+}
+
+th {
+    background-color: #ECF2FA;
+    font-weight: 500;
+    padding: 8px 0;
+}
+
+caption {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 40px;
+    text-align: center;
+}
+
+.ba {
+    border: #000000 1px solid;
+}
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+.center {
+    text-align: center;
+}
+
+.text-box {
+    padding: 15px 10px;
+    vertical-align: text-top;
+}
+
+.small {
+    font-size: 11px;
+}
+
+.middle {
+    font-size: 18px;
+    line-height: 160%;
+}
+
+.big {
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.format {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.school {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.guide {
+    font-size: 11px;
+    color: #BBBCC2;
+    font-weight: 300;
+}
+
+.indent {
+    text-indent: 18px;
+    font-size: 19px;
+    word-break: keep-all;
+}
+
+.disabled {
+    color: #f3f3f3;
+    background-color: #f3f3f3;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 48px;
+    text-align: center;
+    letter-spacing: 30px;
+}
+
+.padding {
+    padding: 16px;
+}
+
+.letter-spacing-10 {
+    letter-spacing: 10px;
+    text-indent: 10px;
+}
+
+.letter-spacing-25 {
+    letter-spacing: 25px;
+    text-indent: 25px;
+}
+
+.red {
+    color: #F44336;
+    font-weight: 600;
+}
+
+.sign {
+    margin-right: 100px;
+}
+
+.order {
+    text-indent: -4px;
+    margin-left: 18px;
+    font-size: 16px;
+}
+
+.space {
+    height: 8px;
+}
+
+.space-right {
+    padding-right: 50px;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.center-table {
+    width: 100%;
+}
+
+.box {
+    padding: 16px;
+}

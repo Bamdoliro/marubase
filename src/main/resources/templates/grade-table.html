@@ -2,30 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="css/common.css"/>
     <style>
         @page {
             size: A4;
             margin: 50px;
         }
 
-        * {
-            font-family: SUIT, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         table {
-            border: none;
-            border-collapse: collapse;
-            width: 100%;
             font-size: 12px;
-            text-align: center;
             margin-top: 8px;
-        }
-
-        tr {
-            vertical-align: middle;
         }
 
         td {
@@ -33,10 +19,9 @@
         }
 
         .title {
+            font-size: 20px;
+            letter-spacing: 20px;
             font-weight: bold;
-            font-size: 24px;
-            line-height: 48px;
-            text-align: center;
         }
 
         caption {
@@ -45,18 +30,7 @@
         }
 
         th {
-            background-color: #ECF2FA;
-            font-weight: 500;
             padding: 6px 0;
-        }
-
-        .ba {
-            border: #000000 1px solid;
-        }
-
-        .disabled {
-            color: #f3f3f3;
-            background-color: #f3f3f3;
         }
     </style>
     <title>원서</title>

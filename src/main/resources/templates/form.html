@@ -2,97 +2,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="css/common.css"/>
     <style>
-        @page {
-            size: A4;
-            margin: 70px;
-        }
-
-        * {
-            font-family: SUIT, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         table {
-            border: none;
-            border-collapse: collapse;
-            width: 100%;
             font-size: 12px;
-            text-align: center;
-        }
-
-        tr {
-            vertical-align: middle;
         }
 
         caption {
-            font-weight: bold;
             font-size: 24px;
-            line-height: 48px;
-            text-align: center;
-        }
-        .format {
-            font-size: 13px;
-            font-weight: bold;
         }
         .school {
-            font-weight: bold;
             font-size: 18px;
-        }
-
-        th {
-            background-color: #ECF2FA;
-            font-weight: 500;
-            padding: 8px 0;
-        }
-
-        .ba {
-            border: #000000 1px solid;
-        }
-
-        .left {
-            text-align: left;
-        }
-
-        .right {
-            text-align: right;
         }
 
         .text-box {
             padding: 4px 8px;
         }
 
-        .small {
-            font-size: 11px;
-        }
-
         .middle {
             font-size: 14px;
-        }
-
-        .space {
-            height: 8px;
-        }
-
-        .space-right {
-            padding-right: 50px;
-        }
-
-        .guide {
-            font-size: 11px;
-            color: #BBBCC2;
-            font-weight: 300;
-        }
-
-        .inline {
-            display: inline-block;
-        }
-
-        .disabled {
-            color: #f3f3f3;
-            background-color: #f3f3f3;
         }
     </style>
     <title>원서</title>
@@ -439,7 +367,7 @@
                 <span th:text="${form.education.school.name}"></span>장&nbsp;&nbsp;
                 <span class="guide">(직인)</span>
             </p>
-            <p class="school left">부산소프트웨어마이스터고등학교장 귀하</p>
+            <p class="school">부산소프트웨어마이스터고등학교장 귀하</p>
         </td>
     </tr>
     <tr>
