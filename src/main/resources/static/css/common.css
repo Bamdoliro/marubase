@@ -35,8 +35,8 @@ th {
 
 caption {
     font-weight: bold;
-    font-size: 28px;
-    line-height: 48px;
+    font-size: 20px;
+    line-height: 40px;
     text-align: center;
 }
 
@@ -129,7 +129,6 @@ caption {
     font-weight: 600;
 }
 
-/* 공통 스타일 추가 */
 .sign {
     margin-right: 100px;
 }
