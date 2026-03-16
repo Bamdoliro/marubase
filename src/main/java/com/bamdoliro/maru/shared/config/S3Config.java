@@ -2,6 +2,7 @@ package com.bamdoliro.maru.shared.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.bamdoliro.maru.shared.config.properties.S3Properties;
@@ -19,14 +20,26 @@ public class S3Config {
     @Value("${spring.cloud.aws.region.static}")
     private String region;
 
+    @Value("${spring.cloud.aws.s3.endpoint}")
+    private String endpoint;
+
     @Bean
     public AmazonS3Client amazonS3Client() {
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(
                 s3Properties.getAccessKey(), s3Properties.getSecretKey());
-        return (AmazonS3Client) AmazonS3ClientBuilder.standard()
-                .withRegion(region)
+
+        AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-                .enablePathStyleAccess()
-                .build();
+                .enablePathStyleAccess();
+
+        if (!endpoint.isEmpty()) {
+            builder.withEndpointConfiguration(
+                    new AwsClientBuilder.EndpointConfiguration(endpoint, region)
+            );
+        } else {
+            builder.withRegion(region);
+        }
+
+        return (AmazonS3Client) builder.build();
     }
 }
