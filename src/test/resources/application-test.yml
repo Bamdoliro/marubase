@@ -8,9 +8,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        jdbc:
-          lob:
-            non_contextual_creation: true
 
     generate-ddl: true
     hibernate:
@@ -34,23 +31,18 @@ spring:
       port: 6379
       password: bamdoliro
 
-  jasypt:
-    encryptor:
-      key: test-encryption-password
-      salt: test-encryption-salt
-
-cloud:
-  aws:
-    s3:
-      bucket: ${BUCKET_NAME}
-    stack:
-      auto: false
-    region:
-      static: ${S3_REGION}
-    credentials:
-      instance-profile: true
-      access-key: ${S3_ACCESS_KEY}
-      secret-key: ${S3_SECRET_KEY}
+  cloud:
+    aws:
+      s3:
+        bucket: ${BUCKET_NAME}
+      stack:
+        auto: false
+      region:
+        static: ${S3_REGION}
+      credentials:
+        instance-profile: true
+        access-key: ${S3_ACCESS_KEY}
+        secret-key: ${S3_SECRET_KEY}
 
   logging:
     level:
