@@ -61,6 +61,17 @@ jobs:
       uses: supercharge/redis-github-action@1.1.0
       with:
         redis-version: 6
+    - name: Start localstack
+      uses: LocalStack/setup-localstack@v0.2.3
+      with:
+        image-tag: latest
+        services: s3
+    - name: Create s3 Bucket
+      run: awslocal s3 mb s3://maru-s3-test-bucket
+      env:
+        AWS_ACCESS_KEY_ID: test
+        AWS_SECRET_ACCESS_KEY: test
+        AWS_DEFAULT_REGION: us-east-1
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:
