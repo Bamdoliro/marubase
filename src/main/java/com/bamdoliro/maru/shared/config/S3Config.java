@@ -20,7 +20,7 @@ public class S3Config {
     @Value("${spring.cloud.aws.region.static}")
     private String region;
 
-    @Value("${spring.cloud.aws.s3.endpoint}")
+    @Value("${spring.cloud.aws.s3.endpoint:}")
     private String endpoint;
 
     @Bean
