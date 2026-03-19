@@ -22,7 +22,7 @@ class ScheduleValidationAspectTest {
     @Test
     void 날짜_및_시간_검증에_성공한다() {
         try (MockedStatic<LocalDateTime> mockedLocalDateTime = mockStatic(LocalDateTime.class)) {
-            mockedLocalDateTime.when(LocalDateTime::now).thenReturn(Schedule.START.plusSeconds(1));
+            mockedLocalDateTime.when(LocalDateTime::now).thenReturn(Schedule.APPLICATION_FORM_START.plusSeconds(1));
 
             scheduleValidationAspect.validateApplicationFormPeriod();
         }
@@ -31,7 +31,7 @@ class ScheduleValidationAspectTest {
     @Test
     void 날짜_및_시간_검증에_실패하면_에러가_발생한다() {
         try (MockedStatic<LocalDateTime> mockedLocalDateTime = mockStatic(LocalDateTime.class)) {
-            mockedLocalDateTime.when(LocalDateTime::now).thenReturn(Schedule.START.minusSeconds(1));
+            mockedLocalDateTime.when(LocalDateTime::now).thenReturn(Schedule.APPLICATION_FORM_START.minusSeconds(1));
 
             assertThrows(OutOfApplicationFormPeriodException.class, () -> scheduleValidationAspect.validateApplicationFormPeriod());
         }
