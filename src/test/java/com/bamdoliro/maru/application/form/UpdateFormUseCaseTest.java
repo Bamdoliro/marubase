@@ -8,7 +8,6 @@ import com.bamdoliro.maru.domain.form.exception.FormNotFoundException;
 import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
@@ -35,9 +34,6 @@ class UpdateFormUseCaseTest {
 
     @Mock
     private CalculateFormScoreService calculateFormScoreService;
-
-    @Mock
-    private FormRepository formRepository;
 
     @Test
     void 원서를_수정한다() {
