@@ -3,7 +3,7 @@ package com.bamdoliro.maru.shared.config;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
-import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.bamdoliro.maru.shared.config.properties.S3Properties;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class S3Config {
     private String endpoint;
 
     @Bean
-    public AmazonS3Client amazonS3Client() {
+    public AmazonS3 amazonS3() {
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(
                 s3Properties.getAccessKey(), s3Properties.getSecretKey());
 
@@ -40,6 +40,6 @@ public class S3Config {
             builder.withRegion(region);
         }
 
-        return (AmazonS3Client) builder.build();
+        return builder.build();
     }
 }
