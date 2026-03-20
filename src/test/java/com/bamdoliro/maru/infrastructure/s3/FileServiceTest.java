@@ -1,6 +1,6 @@
 package com.bamdoliro.maru.infrastructure.s3;
 
-import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.bamdoliro.maru.infrastructure.s3.dto.request.FileMetadata;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UrlResponse;
@@ -28,7 +28,7 @@ class FileServiceTest {
     private FileService fileService;
 
     @Mock
-    private AmazonS3Client amazonS3Client;
+    private AmazonS3 amazonS3;
 
     @Test
     void Presigned_URL을_생성한다() throws Exception {
@@ -39,7 +39,7 @@ class FileServiceTest {
                 MediaType.IMAGE_PNG_VALUE,
                 MB
         );
-        given(amazonS3Client.generatePresignedUrl(any(GeneratePresignedUrlRequest.class))).willReturn(new URL(url));
+        given(amazonS3.generatePresignedUrl(any(GeneratePresignedUrlRequest.class))).willReturn(new URL(url));
 
         // when
         UrlResponse response = fileService.getPresignedUrl("folder", "uuid", fileMetadata, metadata ->
@@ -47,6 +47,6 @@ class FileServiceTest {
         );
 
         // then
-        verify(amazonS3Client, times(2)).generatePresignedUrl(any(GeneratePresignedUrlRequest.class));
+        verify(amazonS3, times(2)).generatePresignedUrl(any(GeneratePresignedUrlRequest.class));
     }
 }

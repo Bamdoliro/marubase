@@ -1,7 +1,7 @@
 package com.bamdoliro.maru.infrastructure.s3;
 
 import com.amazonaws.HttpMethod;
-import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.*;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UrlResponse;
@@ -18,7 +18,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class FileService {
 
-    private final AmazonS3Client amazonS3Client;
+    private final AmazonS3 amazonS3;
 
     @Value("${spring.cloud.aws.s3.bucket}")
     private String bucket;
@@ -28,14 +28,14 @@ public class FileService {
         String fullFileName = createFileName(folder, fileName);
         GeneratePresignedUrlRequest request = getGenerateUploadPresignedUrlRequest(bucket, fullFileName, fileMetadata);
 
-        return amazonS3Client.generatePresignedUrl(request).toString();
+        return amazonS3.generatePresignedUrl(request).toString();
     }
 
     public String getDownloadPresignedUrl(String folder, String fileName) {
         String fullFileName = createFileName(folder, fileName);
         GeneratePresignedUrlRequest request = getGenerateDownloadPresignedUrlRequest(bucket, fullFileName);
 
-        return request != null ? amazonS3Client.generatePresignedUrl(request).toString() : null;
+        return request != null ? amazonS3.generatePresignedUrl(request).toString() : null;
     }
 
     public UrlResponse getPresignedUrl(String folder, String fileName, FileMetadata metadata, FileValidator validator) {
@@ -58,7 +58,7 @@ public class FileService {
 
     private GeneratePresignedUrlRequest getGenerateDownloadPresignedUrlRequest(String bucket, String fileName) {
         try {
-            amazonS3Client.getObjectMetadata(bucket, fileName);
+            amazonS3.getObjectMetadata(bucket, fileName);
 
             return new GeneratePresignedUrlRequest(bucket, fileName)
                     .withMethod(HttpMethod.GET)
