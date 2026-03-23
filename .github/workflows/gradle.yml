@@ -64,8 +64,10 @@ jobs:
     - name: Start localstack
       uses: LocalStack/setup-localstack@v0.2.3
       with:
-        image-tag: latest
+        image-tag: "latest"
         services: s3
+      env:
+        LOCALSTACK_AUTH_TOKEN: ${{secrets.LOCAL_STACK_SECRET_KEY}}
     - name: Create s3 Bucket
       run: awslocal s3 mb s3://maru-s3-test-bucket
       env:
@@ -76,3 +78,4 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         arguments: build
+#test
