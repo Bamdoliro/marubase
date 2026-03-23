@@ -64,7 +64,7 @@ jobs:
     - name: Start localstack
       uses: LocalStack/setup-localstack@v0.2.3
       with:
-        image-tag: latest
+        image-tag: "3.6"
         services: s3
     - name: Create s3 Bucket
       run: awslocal s3 mb s3://maru-s3-test-bucket
