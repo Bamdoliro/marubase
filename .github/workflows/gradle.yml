@@ -67,7 +67,7 @@ jobs:
         image-tag: "latest"
         services: s3
       env:
-        LOCAL_STACK_SECRET_KEY: ${{secrets.LOCAL_STACK_SECRET_KEY}}
+        LOCALSTACK_AUTH_TOKEN: ${{secrets.LOCAL_STACK_SECRET_KEY}}
     - name: Create s3 Bucket
       run: awslocal s3 mb s3://maru-s3-test-bucket
       env:
