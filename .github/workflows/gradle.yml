@@ -59,11 +59,4 @@ jobs:
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v3
       with:
-        arguments: build --build-cache --profile
-
-    - name: Upload profile report
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: gradle-profile
-        path: build/reports/profile/
+        arguments: build --build-cache
