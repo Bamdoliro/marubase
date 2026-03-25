@@ -39,6 +39,7 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
+        cache: 'gradle'
     - name: Start Redis
       uses: supercharge/redis-github-action@1.1.0
       with:
