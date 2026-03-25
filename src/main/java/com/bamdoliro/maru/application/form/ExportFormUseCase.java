@@ -82,7 +82,7 @@ public class ExportFormUseCase {
             List<Subject> subjects = form.getGrade().getSubjectListValue()
                     .stream()
                     .filter(subject -> course.equals(subject.getSubjectName()))
-                    .collect(Collectors.toList());
+                    .toList();
             if (!subjects.isEmpty()) {
                 subjectMap.put(course, subjects);
             }
