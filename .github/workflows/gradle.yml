@@ -33,13 +33,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
     - name: Set up JDK 21
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v3
       with:
         java-version: '21'
         distribution: 'temurin'
-        cache: 'gradle'
     - name: Start Redis
       uses: supercharge/redis-github-action@1.1.0
       with:
@@ -47,7 +46,7 @@ jobs:
     - name: Start localstack
       uses: LocalStack/setup-localstack@v0.2.3
       with:
-        image-tag: "3.8.1"
+        image-tag: "latest"
         services: s3
       env:
         LOCALSTACK_AUTH_TOKEN: ${{secrets.LOCAL_STACK_SECRET_KEY}}
@@ -58,6 +57,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: test
         AWS_DEFAULT_REGION: us-east-1
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@v3
+      uses: gradle/gradle-build-action@v2
       with:
-        arguments: build --build-cache
+        arguments: build
+#test
