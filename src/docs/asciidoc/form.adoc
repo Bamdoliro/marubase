@@ -6,31 +6,31 @@
 ==== 요청 형식
 
 ===== Request Header
-include::{snippets}/form-controller-test/원서를_제출한다/request-headers.adoc[]
+include::{snippets}/user-form-controller-test/원서를_제출한다/request-headers.adoc[]
 
 ===== Request Body
-include::{snippets}/form-controller-test/원서를_제출한다/request-fields.adoc[]
+include::{snippets}/user-form-controller-test/원서를_제출한다/request-fields.adoc[]
 
 ==== 요청
 ===== 졸업 예정 / 졸업 예시
-include::{snippets}/form-controller-test/원서를_제출한다/http-request.adoc[]
+include::{snippets}/user-form-controller-test/원서를_제출한다/http-request.adoc[]
 
 ===== 중졸 검정고시 합격자 예시
-include::{snippets}/form-controller-test/중졸_껌정고시_합격자가_원서를_제출한다/http-request.adoc[]
+include::{snippets}/user-form-controller-test/중졸_검정고시_합격자가_원서를_제출한다/http-request.adoc[]
 
 ==== 응답
 
 ===== 정상 응답
-include::{snippets}/form-controller-test/원서를_제출한다/http-response.adoc[]
+include::{snippets}/user-form-controller-test/원서를_제출한다/http-response.adoc[]
 
 ===== 원서 접수 기간이 아닌 경우
-include::{snippets}/form-controller-test/원서를_제출할_때_원서_접수_기간이_아니면_에러가_발생한다/http-response.adoc[]
+include::{snippets}/user-form-controller-test/원서를_제출할_때_원서_접수_기간이_아니면_에러가_발생한다/http-response.adoc[]
 
 ===== 이미 원서를 제출한 경우
-include::{snippets}/form-controller-test/원서를_제출할_때_이미_제출한_원서가_있으면_에러가_발생한다/http-response.adoc[]
+include::{snippets}/user-form-controller-test/원서를_제출할_때_이미_제출한_원서가_있으면_에러가_발생한다/http-response.adoc[]
 
 ===== 요청 형식이 틀린 경우
-include::{snippets}/form-controller-test/원서를_제출할_때_잘못된_형식의_요청을_보내면_에러가_발생한다/http-response.adoc[]
+include::{snippets}/user-form-controller-test/원서를_제출할_때_잘못된_형식의_요청을_보내면_에러가_발생한다/http-response.adoc[]
 
 === 원서 최종 제출
 지원자는 원서를 제출한 후 원서를 최종 제출할 수 있습니다.
@@ -38,21 +38,21 @@ include::{snippets}/form-controller-test/원서를_제출할_때_잘못된_형�
 ==== 요청 형식
 
 ===== Request Header
-include::{snippets}/form-controller-test/원서를_최종_제출한다/request-headers.adoc[]
+include::{snippets}/user-form-controller-test/원서를_최종_제출한다/request-headers.adoc[]
 
 ==== 요청
-include::{snippets}/form-controller-test/원서를_최종_제출한다/http-request.adoc[]
+include::{snippets}/user-form-controller-test/원서를_최종_제출한다/http-request.adoc[]
 
 ==== 응답
 
 ===== 정상 응답
-include::{snippets}/form-controller-test/원서를_최종_제출한다/http-response.adoc[]
+include::{snippets}/user-form-controller-test/원서를_최종_제출한다/http-response.adoc[]
 
 ===== 원서 접수 기간이 아닌 경우
-include::{snippets}/form-controller-test/원서를_최종_제출할_때_원서_접수_기간이_아니면_에러가_발생한다/http-response.adoc[]
+include::{snippets}/user-form-controller-test/원서를_최종_제출할_때_원서_접수_기간이_아니면_에러가_발생한다/http-response.adoc[]
 
 ===== 이미 원서를 제출한 경우
-include::{snippets}/form-controller-test/원서를_최종_제출할_때_이미_제출한_원서라면_에러가_발생한다/http-response.adoc[]
+include::{snippets}/user-form-controller-test/원서를_최종_제출할_때_이미_제출한_원서라면_에러가_발생한다/http-response.adoc[]
 
 === 원서 임시 저장
 지원자는 원서를 중간중간 임시 저장할 수 있습니다.
