@@ -38,6 +38,7 @@ public class SearchSchoolService {
                         .address((s.getAddress()))
                         .code(s.getStandardSchoolCode())
                         .build())
+                .limit(10)
                 .toList();
     }
 }
