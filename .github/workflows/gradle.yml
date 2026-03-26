@@ -35,7 +35,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 21
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         java-version: '21'
         distribution: 'temurin'
@@ -46,7 +46,7 @@ jobs:
     - name: Start localstack
       uses: LocalStack/setup-localstack@v0.2.3
       with:
-        image-tag: "latest"
+        image-tag: "3.0.0"
         services: s3
       env:
         LOCALSTACK_AUTH_TOKEN: ${{secrets.LOCAL_STACK_SECRET_KEY}}
@@ -60,4 +60,5 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         arguments: build
+        cache-read-only: false
 #test
