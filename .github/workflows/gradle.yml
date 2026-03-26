@@ -59,4 +59,3 @@ jobs:
         AWS_DEFAULT_REGION: us-east-1
     - name: Build with Gradle
       run: ./gradlew build
-#test
