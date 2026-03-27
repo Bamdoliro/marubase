@@ -46,7 +46,7 @@ jobs:
     - name: Start localstack
       uses: LocalStack/setup-localstack@v0.2.3
       with:
-        image-tag: "latest"
+        image-tag: "3.8.1"
         services: s3
       env:
         LOCALSTACK_AUTH_TOKEN: ${{secrets.LOCAL_STACK_SECRET_KEY}}
