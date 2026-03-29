@@ -27,7 +27,7 @@ jobs:
       run: ./gradlew clean build -x test -x asciidoctor
 
     - name: Make Directory
-      run: mkdir -p deploy
+      run: mkdir -p deploy/scripts
   
     - name: Copy Jar
       run: cp ./build/libs/*.jar ./deploy
@@ -36,7 +36,7 @@ jobs:
       run: cp appspec.yml ./deploy
 
     - name: Copy script
-      run: cp ./scripts/*.sh ./deploy
+      run: cp ./scripts/*.sh ./deploy/scripts/
   
     - name: Make zip file
       run: zip -r ./maru.zip ./deploy 
@@ -55,8 +55,8 @@ jobs:
     - name: Cancle previous deployment if exists
       run: |
         DEPLOYMENT_ID=$(aws deploy list-deployments \
-          --application-name maru-bssm \
-          --deployment-group-name maru-bssm-deploy-group \
+          --application-name maru \
+          --deployment-group-name maru-deploy-group \
           --include-only-statuses InProgress \
           --query "deployments[0]" --output text \
           --region ap-northeast-2)
@@ -74,8 +74,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         aws deploy create-deployment \
-        --application-name maru-bssm \
-        --deployment-group-name maru-bssm-deploy-group \
+        --application-name maru \
+        --deployment-group-name maru-deploy-group \
         --file-exists-behavior OVERWRITE \
-        --s3-location bucket=maru-bssm-deploy,bundleType=zip,key=maru.zip \
+        --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=maru.zip \
         --region ap-northeast-2
