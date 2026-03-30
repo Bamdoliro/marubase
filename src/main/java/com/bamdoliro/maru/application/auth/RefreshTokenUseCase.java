@@ -27,6 +27,7 @@ public class RefreshTokenUseCase {
 
         return TokenResponse.builder()
                 .accessToken(tokenService.generateAccessToken(token.getUuid()))
+                .refreshToken(refreshToken)
                 .build();
     }
 
