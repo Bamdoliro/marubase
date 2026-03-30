@@ -279,6 +279,9 @@ public abstract class ControllerTest {
     @MockitoBean
     protected QueryAdmissionAndPledgeUseCase queryAdmissionAndPledgeUseCase;
 
+    @MockitoBean
+    protected CookieUtil cookieUtil;
+
     protected String toJson(Object object) throws JsonProcessingException {
         return objectMapper.writeValueAsString(object);
     }
