@@ -39,7 +39,7 @@ jobs:
       run: cp ./scripts/*.sh ./deploy/scripts/
   
     - name: Make zip file
-      run: zip -r ./maru.zip ./deploy 
+      run: cd deploy && zip -r ../maru.zip .
       shell: bash
 
     - name: Configure AWS credentials
