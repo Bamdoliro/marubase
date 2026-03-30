@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@RequestMapping("/analysis")
+@RequestMapping("/admin/analysis")
 @RestController
 public class AnalysisController {
     private final QueryNumberOfApplicantsUseCase queryNumberOfApplicantsUseCase;

@@ -1,27 +1,15 @@
 package com.bamdoliro.maru.presentation.fair;
 
 import com.bamdoliro.maru.application.fair.AttendAdmissionFairUseCase;
-import com.bamdoliro.maru.application.fair.CreateAdmissionFairUseCase;
-import com.bamdoliro.maru.application.fair.ExportAttendeeListUseCase;
-import com.bamdoliro.maru.application.fair.QueryFairDetailUseCase;
 import com.bamdoliro.maru.application.fair.QueryFairListUseCase;
 import com.bamdoliro.maru.domain.fair.domain.type.FairType;
-import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.fair.dto.request.AttendAdmissionFairRequest;
-import com.bamdoliro.maru.presentation.fair.dto.request.CreateFairRequest;
-import com.bamdoliro.maru.presentation.fair.dto.response.FairDetailResponse;
 import com.bamdoliro.maru.presentation.fair.dto.response.FairResponse;
-import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
-import com.bamdoliro.maru.shared.auth.Authority;
 import com.bamdoliro.maru.shared.response.CommonResponse;
 import com.bamdoliro.maru.shared.response.ListCommonResponse;
-import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,27 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-
 @RequiredArgsConstructor
 @RequestMapping("/fairs")
 @RestController
 public class FairController {
 
-    private final CreateAdmissionFairUseCase createAdmissionFairUseCase;
     private final AttendAdmissionFairUseCase attendAdmissionFairUseCase;
     private final QueryFairListUseCase queryFairListUseCase;
-    private final QueryFairDetailUseCase queryFairDetailUseCase;
-    private final ExportAttendeeListUseCase exportAttendeeListUseCase;
-
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    public void createAdmissionFair(
-            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
-            @RequestBody @Valid CreateFairRequest request
-    ) {
-        createAdmissionFairUseCase.execute(request);
-    }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{fair-id}")
@@ -71,23 +45,4 @@ public class FairController {
         );
     }
 
-    @GetMapping("/{fair-id}")
-    public SingleCommonResponse<FairDetailResponse> getFairDetail(
-            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
-            @PathVariable(name = "fair-id") Long fairId
-    ) {
-        return CommonResponse.ok(
-                queryFairDetailUseCase.execute(fairId)
-        );
-    }
-
-    @GetMapping("/{fair-id}/export")
-    public ResponseEntity<Resource> exportFairAttendeeList(
-            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
-            @PathVariable(name = "fair-id") Long fairId
-    ) throws IOException {
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-                .body(exportAttendeeListUseCase.execute(fairId));
-    }
 }
