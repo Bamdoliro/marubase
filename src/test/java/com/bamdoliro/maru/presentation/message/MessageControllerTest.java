@@ -35,7 +35,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
         SendMessageByStatusRequest request = new SendMessageByStatusRequest("부산소마고 공지사항", "테스트임니다...", FormStatus.FINAL_SUBMITTED);
         willDoNothing().given(sendMessageUseCase).execute(request);
 
-        mockMvc.perform(post("/messages/status")
+        mockMvc.perform(post("/admin/messages/status")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
@@ -62,7 +62,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
 
         willThrow(new RuntimeException("원서를 찾을 수 없음")).given(sendMessageUseCase).execute(any(SendMessageByStatusRequest.class));
 
-        mockMvc.perform(post("/messages/status")
+        mockMvc.perform(post("/admin/messages/status")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
@@ -88,7 +88,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
         SendMessageByTypeRequest request = new SendMessageByTypeRequest("부산소마고 공지사항", "추카추카", FormType.REGULAR, false);
         willDoNothing().given(sendMessageUseCase).execute(request);
 
-        mockMvc.perform(post("/messages/type")
+        mockMvc.perform(post("/admin/messages/type")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
@@ -115,7 +115,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
         SendMessageByTypeRequest request = new SendMessageByTypeRequest("부산소마고 공지사항", "추카추카", FormType.MEISTER_TALENT, false);
         willDoNothing().given(sendMessageUseCase).execute(request);
 
-        mockMvc.perform(post("/messages/type")
+        mockMvc.perform(post("/admin/messages/type")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
@@ -133,7 +133,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
         SendMessageByTypeRequest request = new SendMessageByTypeRequest("부산소마고 공지사항", "추카추카", FormType.REGULAR, true);
         willDoNothing().given(sendMessageUseCase).execute(request);
 
-        mockMvc.perform(post("/messages/type")
+        mockMvc.perform(post("/admin/messages/type")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
@@ -152,7 +152,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
 
         willThrow(new RuntimeException("원서를 찾을 수 없음")).given(sendMessageUseCase).execute(any(SendMessageByTypeRequest.class));
 
-        mockMvc.perform(post("/messages/type")
+        mockMvc.perform(post("/admin/messages/type")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
@@ -179,7 +179,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
         SendMessageToAllUserRequest request = new SendMessageToAllUserRequest("부산소마고 공지사항", "테스트임니다..");
         willDoNothing().given(sendMessageUseCase).execute(request);
 
-        mockMvc.perform(post("/messages/all")
+        mockMvc.perform(post("/admin/messages/all")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
@@ -205,7 +205,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
 
         willThrow(new FailedToSendException()).given(sendMessageUseCase).execute(any(SendMessageToAllUserRequest.class));
 
-        mockMvc.perform(post("/messages/all")
+        mockMvc.perform(post("/admin/messages/all")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))

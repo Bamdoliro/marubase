@@ -19,13 +19,16 @@ import com.bamdoliro.maru.infrastructure.message.SendMessageService;
 import com.bamdoliro.maru.infrastructure.neis.SearchSchoolService;
 import com.bamdoliro.maru.presentation.analysis.AnalysisController;
 import com.bamdoliro.maru.presentation.auth.AuthController;
+import com.bamdoliro.maru.presentation.fair.AdminFairController;
 import com.bamdoliro.maru.presentation.fair.FairController;
 import com.bamdoliro.maru.presentation.form.AdminFormController;
 import com.bamdoliro.maru.presentation.form.DraftFormController;
 import com.bamdoliro.maru.presentation.form.FormController;
 import com.bamdoliro.maru.presentation.form.UserFormController;
 import com.bamdoliro.maru.presentation.message.MessageController;
+import com.bamdoliro.maru.presentation.notice.AdminNoticeController;
 import com.bamdoliro.maru.presentation.notice.NoticeController;
+import com.bamdoliro.maru.presentation.question.AdminQuestionController;
 import com.bamdoliro.maru.presentation.question.QuestionController;
 import com.bamdoliro.maru.presentation.school.SchoolController;
 import com.bamdoliro.maru.presentation.user.UserController;
@@ -47,12 +50,15 @@ import org.springframework.test.web.servlet.MockMvc;
             SharedController.class,
             SchoolController.class,
             QuestionController.class,
+            AdminQuestionController.class,
             FormController.class,
             UserFormController.class,
             AdminFormController.class,
             NoticeController.class,
+            AdminNoticeController.class,
             DraftFormController.class,
             FairController.class,
+            AdminFairController.class,
             MessageController.class,
             AnalysisController.class})
 public abstract class ControllerTest {
