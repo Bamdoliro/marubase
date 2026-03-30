@@ -38,7 +38,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
         given(queryNumberOfApplicantsUseCase.execute(any(String.class))).willReturn(AnalysisFixture.createNumberOfApplicantsResponseList());
 
-        mockMvc.perform(get("/analysis/number-of-applicants")
+        mockMvc.perform(get("/admin/analysis/number-of-applicants")
                         .param("type", "CURRENT")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
@@ -62,7 +62,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
         given(queryGradeDistributionUseCase.execute(any(GradeDistributionRequest.class))).willReturn(AnalysisFixture.createGradeDistributionResponseList());
 
-        mockMvc.perform(get("/analysis/grade-distribution")
+        mockMvc.perform(get("/admin/analysis/grade-distribution")
                         .param("statusList", "FIRST_PASSED", "FAILED", "PASSED")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
@@ -88,7 +88,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
         given(queryGradeDistributionUseCase.execute(any(GradeDistributionRequest.class))).willReturn(AnalysisFixture.createGradeDistributionResponseList());
 
-        mockMvc.perform(get("/analysis/grade-distribution")
+        mockMvc.perform(get("/admin/analysis/grade-distribution")
                         .param("statusList", "FAILED", "PASSED")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
@@ -114,7 +114,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
         given(queryGradeDistributionUseCase.execute(any(GradeDistributionRequest.class))).willReturn(AnalysisFixture.createGradeDistributionResponseList());
 
-        mockMvc.perform(get("/analysis/grade-distribution")
+        mockMvc.perform(get("/admin/analysis/grade-distribution")
                         .param("statusList", "PASSED")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
@@ -143,10 +143,10 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         multiValueMap.add("mainCategory", "REGULAR");
         multiValueMap.add("type", "CURRENT");
         given(queryGenderRatioUseCase.execute(any(GenderRatioRequest.class))).willReturn(AnalysisFixture.createGenderRatioResponse(
-                FormType.Category.valueOf(Objects.requireNonNull(multiValueMap.get("mainCategory")).get(0))
+                FormType.Category.valueOf(Objects.requireNonNull(multiValueMap.get("mainCategory")).getFirst())
         ));
 
-        mockMvc.perform(get("/analysis/gender-ratio")
+        mockMvc.perform(get("/admin/analysis/gender-ratio")
                         .params(multiValueMap)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
@@ -180,7 +180,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         multiValueMap.add("gu", "사상구");
         given(querySchoolStatusUseCase.execute(any(SchoolStatusRequest.class))).willReturn(AnalysisFixture.createSchoolStatusResponse(Objects.requireNonNull(multiValueMap.get("isBusan")), multiValueMap.get("gu")));
 
-        mockMvc.perform(get("/analysis/school-status")
+        mockMvc.perform(get("/admin/analysis/school-status")
                         .params(multiValueMap)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
@@ -214,7 +214,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         multiValueMap.add("gu", null);
         given(querySchoolStatusUseCase.execute(any(SchoolStatusRequest.class))).willReturn(AnalysisFixture.createSchoolStatusResponse(Objects.requireNonNull(multiValueMap.get("isBusan")), multiValueMap.get("gu")));
 
-        mockMvc.perform(get("/analysis/school-status")
+        mockMvc.perform(get("/admin/analysis/school-status")
                         .params(multiValueMap)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
@@ -248,7 +248,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         multiValueMap.add("gu", null);
         given(querySchoolStatusUseCase.execute(any(SchoolStatusRequest.class))).willReturn(AnalysisFixture.createSchoolStatusResponse(Objects.requireNonNull(multiValueMap.get("isBusan")), multiValueMap.get("gu")));
 
-        mockMvc.perform(get("/analysis/school-status")
+        mockMvc.perform(get("/admin/analysis/school-status")
                         .params(multiValueMap)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
@@ -283,7 +283,7 @@ class AnalysisControllerTest extends RestDocsTestSupport {
         given(querySchoolStatusUseCase.execute(any(SchoolStatusRequest.class))).willReturn(AnalysisFixture.createSchoolStatusResponse(Objects.requireNonNull(multiValueMap.get("isBusan")), multiValueMap.get("gu")));
 
 
-        mockMvc.perform(get("/analysis/school-status")
+        mockMvc.perform(get("/admin/analysis/school-status")
                         .params(multiValueMap)
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
