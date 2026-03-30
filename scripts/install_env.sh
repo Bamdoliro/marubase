@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 mkdir -p /home/ubuntu/apps
 
-aws ssm get-parameters-by-path \
+/usr/local/bin/aws ssm get-parameters-by-path \
   --path "/maru" \
   --with-decryption \
   --region ap-northeast-2 \
