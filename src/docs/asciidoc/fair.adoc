@@ -6,18 +6,18 @@
 ==== 요청 형식
 
 ===== Request Header
-include::{snippets}/fair-controller-test/입학설명회_일정을_만든다/request-headers.adoc[]
+include::{snippets}/admin-fair-controller-test/입학설명회_일정을_만든다/request-headers.adoc[]
 
 ===== Request Body
-include::{snippets}/fair-controller-test/입학설명회_일정을_만든다/request-fields.adoc[]
+include::{snippets}/admin-fair-controller-test/입학설명회_일정을_만든다/request-fields.adoc[]
 
 ===== 요청
-include::{snippets}/fair-controller-test/입학설명회_일정을_만든다/http-request.adoc[]
+include::{snippets}/admin-fair-controller-test/입학설명회_일정을_만든다/http-request.adoc[]
 
 ==== 응답
 
 ===== 정상 응답
-include::{snippets}/fair-controller-test/입학설명회_일정을_만든다/http-response.adoc[]
+include::{snippets}/admin-fair-controller-test/입학설명회_일정을_만든다/http-response.adoc[]
 
 
 === 입학설명회 참석 신청
@@ -71,21 +71,21 @@ include::{snippets}/fair-controller-test/입학설명회_일정을_불러온다/
 ==== 요청 형식
 
 ===== Request Header
-include::{snippets}/fair-controller-test/입학설명회를_상세히_불러온다/request-headers.adoc[]
+include::{snippets}/admin-fair-controller-test/입학설명회를_상세히_불러온다/request-headers.adoc[]
 
 ===== Path Parameter
-include::{snippets}/fair-controller-test/입학설명회를_상세히_불러온다/path-parameters.adoc[]
+include::{snippets}/admin-fair-controller-test/입학설명회를_상세히_불러온다/path-parameters.adoc[]
 
 ===== 요청
-include::{snippets}/fair-controller-test/입학설명회를_상세히_불러온다/http-request.adoc[]
+include::{snippets}/admin-fair-controller-test/입학설명회를_상세히_불러온다/http-request.adoc[]
 
 ==== 응답
 
 ===== 정상 응답
-include::{snippets}/fair-controller-test/입학설명회를_상세히_불러온다/http-response.adoc[]
+include::{snippets}/admin-fair-controller-test/입학설명회를_상세히_불러온다/http-response.adoc[]
 
 ===== 입학설명회가 없는 경우
-include::{snippets}/fair-controller-test/입학설명회를_상세히_불러올_때_해당_입학설명회가_없으면_에러가_발생한다/http-response.adoc[]
+include::{snippets}/admin-fair-controller-test/입학설명회를_상세히_불러올_때_해당_입학설명회가_없으면_에러가_발생한다/http-response.adoc[]
 
 
 === 입학설명회 신청자 명단 엑셀 다운로드
@@ -94,18 +94,18 @@ include::{snippets}/fair-controller-test/입학설명회를_상세히_불러올_
 ==== 요청 형식
 
 ===== Request Header
-include::{snippets}/fair-controller-test/입학설명회_신청자_명단을_엑셀로_다운받는다/request-headers.adoc[]
+include::{snippets}/admin-fair-controller-test/입학설명회_신청자_명단을_엑셀로_다운받는다/request-headers.adoc[]
 
 ===== Path Parameter
-include::{snippets}/fair-controller-test/입학설명회_신청자_명단을_엑셀로_다운받는다/path-parameters.adoc[]
+include::{snippets}/admin-fair-controller-test/입학설명회_신청자_명단을_엑셀로_다운받는다/path-parameters.adoc[]
 
 ===== 요청
-include::{snippets}/fair-controller-test/입학설명회_신청자_명단을_엑셀로_다운받는다/http-request.adoc[]
+include::{snippets}/admin-fair-controller-test/입학설명회_신청자_명단을_엑셀로_다운받는다/http-request.adoc[]
 
 ==== 응답
 
 ===== 정상 응답
-include::{snippets}/fair-controller-test/입학설명회_신청자_명단을_엑셀로_다운받는다/http-response.adoc[]
+include::{snippets}/admin-fair-controller-test/입학설명회_신청자_명단을_엑셀로_다운받는다/http-response.adoc[]
 
 ===== 입학설명회가 없는 경우
-include::{snippets}/fair-controller-test/입학설명회_신청자_명단을_엑셀로_다운받을_때_입학설명회가_없으면_에러가_발생한다/http-response.adoc[]
+include::{snippets}/admin-fair-controller-test/입학설명회_신청자_명단을_엑셀로_다운받을_때_입학설명회가_없으면_에러가_발생한다/http-response.adoc[]
