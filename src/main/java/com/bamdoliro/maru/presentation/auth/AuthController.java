@@ -41,13 +41,9 @@ public class AuthController {
 
     @PatchMapping
     public SingleCommonResponse<TokenResponse> refreshToken(
-            @CookieValue(value = "refreshToken", required = false) String refreshTokenFromCookie,
-            @RequestHeader(value = "Refresh-Token", required = false) String refreshTokenFromHeader,
+            @CookieValue(value = "refreshToken") String refreshToken,
             HttpServletResponse response
     ) {
-        String refreshToken = refreshTokenFromCookie != null
-                ? refreshTokenFromCookie
-                : refreshTokenFromHeader;
 
         TokenResponse tokenResponse = refreshTokenUseCase.execute(refreshToken);
 

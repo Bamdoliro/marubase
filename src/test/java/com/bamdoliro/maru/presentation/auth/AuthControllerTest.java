@@ -10,7 +10,6 @@ import com.bamdoliro.maru.presentation.auth.dto.response.TokenResponse;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -169,7 +168,6 @@ class AuthControllerTest extends RestDocsTestSupport {
                 .andDo(restDocs.document());
     }
 
-    @Disabled("프론트 마이그레이션 기간동안은 잠시 disabled")
     @Test
     void 액세스_토큰을_재발급할_때_리프레시_토큰을_보내지_않으면_에러가_발생한다() throws Exception {
 
