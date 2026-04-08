@@ -10,6 +10,7 @@ import com.bamdoliro.maru.presentation.auth.dto.response.TokenResponse;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -24,6 +25,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
@@ -123,14 +126,14 @@ class AuthControllerTest extends RestDocsTestSupport {
         mockMvc.perform(patch("/auth")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Refresh-Token", refreshToken)
+                        .cookie(new Cookie("refreshToken", refreshToken))
                 )
 
                 .andExpect(status().is2xxSuccessful())
 
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName("Refresh-Token")
+                        requestCookies(
+                                cookieWithName("refreshToken")
                                         .description("리프레시 토큰")
                         )
                 ));
@@ -144,7 +147,7 @@ class AuthControllerTest extends RestDocsTestSupport {
         mockMvc.perform(patch("/auth")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Refresh-Token", expiredRefreshToken)
+                        .cookie(new Cookie("refreshToken", expiredRefreshToken))
                 )
 
                 .andExpect(status().isUnauthorized())
@@ -160,7 +163,7 @@ class AuthControllerTest extends RestDocsTestSupport {
         mockMvc.perform(patch("/auth")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Refresh-Token", accessToken)
+                        .cookie(new Cookie("refreshToken", accessToken))
                 )
 
                 .andExpect(status().isUnauthorized())
@@ -191,7 +194,7 @@ class AuthControllerTest extends RestDocsTestSupport {
         mockMvc.perform(patch("/auth")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Refresh-Token", accessToken)
+                        .cookie(new Cookie("refreshToken", accessToken))
                 )
 
                 .andExpect(status().isUnauthorized())
