@@ -7,8 +7,6 @@ import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.auth.dto.request.LogInRequest;
 import com.bamdoliro.maru.presentation.auth.dto.response.TokenResponse;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
-import com.bamdoliro.maru.shared.response.CommonResponse;
-import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import com.bamdoliro.maru.shared.util.CookieUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -27,7 +25,7 @@ public class AuthController {
     private final CookieUtil cookieUtil;
 
     @PostMapping
-    public SingleCommonResponse<TokenResponse> logIn(
+    public void logIn(
             @RequestBody @Valid LogInRequest request,
             HttpServletResponse response
     ) {
@@ -35,12 +33,10 @@ public class AuthController {
 
         cookieUtil.addAccessTokenCookie(response, tokenResponse.getAccessToken());
         cookieUtil.addRefreshTokenCookie(response, tokenResponse.getRefreshToken());
-
-        return CommonResponse.ok(tokenResponse);
     }
 
     @PatchMapping
-    public SingleCommonResponse<TokenResponse> refreshToken(
+    public void refreshToken(
             @CookieValue(value = "refreshToken") String refreshToken,
             HttpServletResponse response
     ) {
@@ -49,7 +45,6 @@ public class AuthController {
 
         cookieUtil.addAccessTokenCookie(response, tokenResponse.getAccessToken());
 
-        return CommonResponse.ok(tokenResponse);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
