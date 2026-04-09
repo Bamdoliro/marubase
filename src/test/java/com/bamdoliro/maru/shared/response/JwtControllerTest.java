@@ -9,6 +9,7 @@ import com.bamdoliro.maru.domain.user.exception.UserNotFoundException;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -17,8 +18,8 @@ import org.springframework.http.MediaType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,12 +34,13 @@ public class JwtControllerTest extends RestDocsTestSupport {
         mockMvc.perform(get("/shared/jwt")
                         .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("accessToken", AuthFixture.createAccessTokenString()))
                 )
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION)
-                                        .description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
                         )
                 ));
     }
@@ -49,7 +51,7 @@ public class JwtControllerTest extends RestDocsTestSupport {
         doThrow(new ExpiredTokenException()).when(authenticationArgumentResolver).resolveArgument(any(), any(), any(), any());
 
         mockMvc.perform(get("/shared/jwt")
-                        .header(HttpHeaders.AUTHORIZATION, jwtProperties.getPrefix() + " " + AuthFixture.createAccessTokenString())
+                        .cookie(new Cookie("accessToken", AuthFixture.createAccessTokenString()))
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isUnauthorized())
@@ -62,7 +64,7 @@ public class JwtControllerTest extends RestDocsTestSupport {
         doThrow(new InvalidTokenException()).when(authenticationArgumentResolver).resolveArgument(any(), any(), any(), any());
 
         mockMvc.perform(get("/shared/jwt")
-                        .header(HttpHeaders.AUTHORIZATION, jwtProperties.getPrefix() + " 이것은.이상한.토큰")
+                        .cookie(new Cookie("accessToken", "이것은.이상한.토큰"))
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isUnauthorized())
@@ -75,7 +77,7 @@ public class JwtControllerTest extends RestDocsTestSupport {
         doThrow(new EmptyTokenException()).when(authenticationArgumentResolver).resolveArgument(any(), any(), any(), any());
 
         mockMvc.perform(get("/shared/jwt")
-                        .header(HttpHeaders.AUTHORIZATION, jwtProperties.getPrefix() + " 이것은.이상한.토큰")
+                        .cookie(new Cookie("accessToken", "이것은.이상한.토큰"))
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isUnauthorized())
@@ -88,7 +90,7 @@ public class JwtControllerTest extends RestDocsTestSupport {
         doThrow(new AuthorityMismatchException()).when(authenticationArgumentResolver).resolveArgument(any(), any(), any(), any());
 
         mockMvc.perform(get("/shared/jwt")
-                        .header(HttpHeaders.AUTHORIZATION, jwtProperties.getPrefix() + " 이것은.이상한.토큰")
+                        .cookie(new Cookie("accessToken", "이것은.이상한.토큰"))
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isForbidden())
@@ -101,7 +103,7 @@ public class JwtControllerTest extends RestDocsTestSupport {
         doThrow(new UserNotFoundException()).when(authenticationArgumentResolver).resolveArgument(any(), any(), any(), any());
 
         mockMvc.perform(get("/shared/jwt")
-                        .header(HttpHeaders.AUTHORIZATION, jwtProperties.getPrefix() + " 이것은.이상한.토큰")
+                        .cookie(new Cookie("accessToken", "이것은.이상한.토큰"))
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNotFound())

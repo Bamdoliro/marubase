@@ -5,8 +5,8 @@
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/user-form-controller-test/원서를_제출한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/user-form-controller-test/원서를_제출한다/request-cookies.adoc[]
 
 ===== Request Body
 include::{snippets}/user-form-controller-test/원서를_제출한다/request-fields.adoc[]
@@ -37,8 +37,8 @@ include::{snippets}/user-form-controller-test/원서를_제출할_때_잘못된_
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/user-form-controller-test/원서를_최종_제출한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/user-form-controller-test/원서를_최종_제출한다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/user-form-controller-test/원서를_최종_제출한다/http-request.adoc[]
@@ -59,8 +59,8 @@ include::{snippets}/user-form-controller-test/원서를_최종_제출할_때_이
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/draft-form-controller-test/원서를_임시저장한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/draft-form-controller-test/원서를_임시저장한다/request-cookies.adoc[]
 
 ===== Request Body
 include::{snippets}/draft-form-controller-test/원서를_임시저장한다/request-fields.adoc[]
@@ -78,8 +78,8 @@ include::{snippets}/draft-form-controller-test/원서를_임시저장한다/http
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/draft-form-controller-test/임시저장된_원서를_조회한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/draft-form-controller-test/임시저장된_원서를_조회한다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/draft-form-controller-test/임시저장된_원서를_조회한다/http-request.adoc[]
@@ -98,8 +98,8 @@ include::{snippets}/draft-form-controller-test/임시저장된_원서를_조회�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-form-controller-test/원서를_승인한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/원서를_승인한다/request-cookies.adoc[]
 
 ===== Path Parameter
 include::{snippets}/admin-form-controller-test/원서를_승인한다/path-parameters.adoc[]
@@ -120,8 +120,8 @@ include::{snippets}/admin-form-controller-test/원서를_승인할_때_원서가
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-form-controller-test/원서를_반려한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/원서를_반려한다/request-cookies.adoc[]
 
 ===== Path Parameter
 include::{snippets}/admin-form-controller-test/원서를_반려한다/path-parameters.adoc[]
@@ -141,8 +141,8 @@ include::{snippets}/admin-form-controller-test/원서를_반려할_때_원서가
 최종합격한 유저는 입학등록원을 제출한 후 원서를 입학등록상태로 변경할 수 있습니다.
 
 ==== 요청 형식
-===== Request Header
-include::{snippets}/user-form-controller-test/원서의_상태를_입학등록원_제출로_변경한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/user-form-controller-test/원서의_상태를_입학등록원_제출로_변경한다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/user-form-controller-test/원서의_상태를_입학등록원_제출로_변경한다/http-request.adoc[]
@@ -163,8 +163,8 @@ include::{snippets}/user-form-controller-test/원서를_입학등록_상태로_�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-form-controller-test/원서를_접수한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/원서를_접수한다/request-cookies.adoc[]
 
 ===== Path Parameter
 include::{snippets}/admin-form-controller-test/원서를_접수한다/path-parameters.adoc[]
@@ -186,8 +186,8 @@ include::{snippets}/admin-form-controller-test/원서를_접수할_때_원서가
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-form-controller-test/검토해야_하는_원서를_조회한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/검토해야_하는_원서를_조회한다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/admin-form-controller-test/검토해야_하는_원서를_조회한다/http-request.adoc[]
@@ -204,8 +204,8 @@ include::{snippets}/admin-form-controller-test/검토해야_하는_원서가_없
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/form-controller-test/원서를_상세_조회한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/form-controller-test/원서를_상세_조회한다/request-cookies.adoc[]
 
 ===== Path Parameter
 include::{snippets}/form-controller-test/원서를_상세_조회한다/path-parameters.adoc[]
@@ -230,8 +230,8 @@ include::{snippets}/form-controller-test/원서를_상세_조회할_때_본인�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/user-form-controller-test/원서_상태를_조회한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/user-form-controller-test/원서_상태를_조회한다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/user-form-controller-test/원서_상태를_조회한다/http-request.adoc[]
@@ -250,8 +250,8 @@ include::{snippets}/user-form-controller-test/원서_상태를_조회할_때_원
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/user-form-controller-test/원서를_수정한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/user-form-controller-test/원서를_수정한다/request-cookies.adoc[]
 
 
 ===== Request Body
@@ -286,8 +286,8 @@ include::{snippets}/user-form-controller-test/원서를_수정할_때_반려된_
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/user-form-controller-test/증명_사진을_업로드한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/user-form-controller-test/증명_사진을_업로드한다/request-cookies.adoc[]
 
 ===== Request Body
 include::{snippets}/user-form-controller-test/증명_사진을_업로드한다/request-fields.adoc[]
@@ -324,8 +324,8 @@ include::{snippets}/user-form-controller-test/증명_사진을_업로드할_때_
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/user-form-controller-test/원서_서류를_업로드한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/user-form-controller-test/원서_서류를_업로드한다/request-cookies.adoc[]
 
 ===== Request Body
 include::{snippets}/user-form-controller-test/원서_서류를_업로드한다/request-fields.adoc[]
@@ -357,8 +357,8 @@ include::{snippets}/user-form-controller-test/원서_서류를_업로드할_때_
 최종합격한 지원자는 입학등록원 및 금연서약서 양식을 다운로드 받을 수 있습니다.
 
 ==== 요청 형식
-===== Request Header
-include::{snippets}/user-form-controller-test/최종합격자가_입학등록원_및_금연서약서_양식을_다운받는다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/user-form-controller-test/최종합격자가_입학등록원_및_금연서약서_양식을_다운받는다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/user-form-controller-test/최종합격자가_입학등록원_및_금연서약서_양식을_다운받는다/http-request.adoc[]
@@ -382,8 +382,8 @@ include::{snippets}/user-form-controller-test/입학등록원_및_금연서약�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/user-form-controller-test/입학등록원_및_금연서약서를_업로드한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/user-form-controller-test/입학등록원_및_금연서약서를_업로드한다/request-cookies.adoc[]
 
 ===== Request Body
 include::{snippets}/user-form-controller-test/입학등록원_및_금연서약서를_업로드한다/request-fields.adoc[]
@@ -412,8 +412,8 @@ include::{snippets}/user-form-controller-test/입학등록원_및_금연서약�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/user-form-controller-test/원서를_pdf로_다운받는다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/user-form-controller-test/원서를_pdf로_다운받는다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/user-form-controller-test/원서를_pdf로_다운받는다/http-request.adoc[]
@@ -437,8 +437,8 @@ include::{snippets}/user-form-controller-test/원서를_pdf로_다운받을_때_
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-form-controller-test/원서를_전체_조회한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/원서를_전체_조회한다/request-cookies.adoc[]
 
 ===== Query Parameter
 include::{snippets}/admin-form-controller-test/원서를_전체_조회한다/query-parameters.adoc[]
@@ -454,8 +454,8 @@ include::{snippets}/admin-form-controller-test/원서를_전체_조회한다/htt
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/user-form-controller-test/원서의_1차_결과를_확인한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/user-form-controller-test/원서의_1차_결과를_확인한다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/user-form-controller-test/원서의_1차_결과를_확인한다/http-request.adoc[]
@@ -474,8 +474,8 @@ include::{snippets}/user-form-controller-test/원서의_1차_결과를_확인할
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/user-form-controller-test/원서의_최종_결과를_확인한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/user-form-controller-test/원서의_최종_결과를_확인한다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/user-form-controller-test/원서의_최종_결과를_확인한다/http-request.adoc[]
@@ -494,8 +494,8 @@ include::{snippets}/user-form-controller-test/원서의_최종_결과를_확인�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/user-form-controller-test/수험표를_발급받는다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/user-form-controller-test/수험표를_발급받는다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/user-form-controller-test/수험표를_발급받는다/http-request.adoc[]
@@ -516,8 +516,8 @@ include::{snippets}/user-form-controller-test/수험표를_발급받을_때_불�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-form-controller-test/수험표_전체를_발급받는다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/수험표_전체를_발급받는다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/admin-form-controller-test/수험표_전체를_발급받는다/http-request.adoc[]
@@ -532,8 +532,8 @@ include::{snippets}/admin-form-controller-test/수험표_전체를_발급받는�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/user-form-controller-test/접수증을_발급받는다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/user-form-controller-test/접수증을_발급받는다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/user-form-controller-test/접수증을_발급받는다/http-request.adoc[]
@@ -554,8 +554,8 @@ include::{snippets}/user-form-controller-test/접수증을_발급받을_때_원�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-form-controller-test/정상적으로_2차_전형_점수_양식을_다운로드한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/정상적으로_2차_전형_점수_양식을_다운로드한다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/admin-form-controller-test/정상적으로_2차_전형_점수_양식을_다운로드한다/http-request.adoc[]
@@ -572,8 +572,8 @@ include::{snippets}/admin-form-controller-test/정상적으로_2차_전형_점�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-form-controller-test/정상적으로_2차_전형_점수를_입력한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/정상적으로_2차_전형_점수를_입력한다/request-cookies.adoc[]
 
 ===== Request Part
 include::{snippets}/admin-form-controller-test/정상적으로_2차_전형_점수를_입력한다/request-parts.adoc[]
@@ -599,8 +599,8 @@ include::{snippets}/admin-form-controller-test/입력한_2차_전형_점수의_�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-form-controller-test/정상적으로_최종_합격자를_다운로드한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/정상적으로_최종_합격자를_다운로드한다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/admin-form-controller-test/정상적으로_최종_합격자를_다운로드한다/http-request.adoc[]
@@ -617,8 +617,8 @@ include::{snippets}/admin-form-controller-test/정상적으로_최종_합격자�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-form-controller-test/정상적으로_1차전형_결과를_다운로드한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/정상적으로_1차전형_결과를_다운로드한다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/admin-form-controller-test/정상적으로_1차전형_결과를_다운로드한다/http-request.adoc[]
@@ -635,8 +635,8 @@ include::{snippets}/admin-form-controller-test/정상적으로_1차전형_결과
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-form-controller-test/정상적으로_2차전형_결과를_다운로드한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/정상적으로_2차전형_결과를_다운로드한다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/admin-form-controller-test/정상적으로_2차전형_결과를_다운로드한다/http-request.adoc[]
@@ -653,8 +653,8 @@ include::{snippets}/admin-form-controller-test/정상적으로_2차전형_결과
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-form-controller-test/정상적으로_입학전형_전체_결과를_다운로드한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/정상적으로_입학전형_전체_결과를_다운로드한다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/admin-form-controller-test/정상적으로_입학전형_전체_결과를_다운로드한다/http-request.adoc[]
@@ -671,8 +671,8 @@ include::{snippets}/admin-form-controller-test/정상적으로_입학전형_전�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-form-controller-test/정상적으로_2차_합격_여부를_입력한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/정상적으로_2차_합격_여부를_입력한다/request-cookies.adoc[]
 
 ===== Request Body
 include::{snippets}/admin-form-controller-test/정상적으로_2차_합격_여부를_입력한다/request-fields.adoc[]
@@ -695,8 +695,8 @@ include::{snippets}/admin-form-controller-test/어드민이_2차_합격_여부�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-form-controller-test/선택한_원서의_원서url을_조회한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/선택한_원서의_원서url을_조회한다/request-cookies.adoc[]
 
 ===== Query Parameter
 include::{snippets}/admin-form-controller-test/선택한_원서의_원서url을_조회한다/query-parameters.adoc[]
@@ -713,8 +713,8 @@ include::{snippets}/admin-form-controller-test/선택한_원서의_원서url을_
 어드민은 선택한 원서의 입학등록원 및 금연서약서 url을 조회할 수 있습니다.
 
 ==== 요청 형식
-===== Request Header
-include::{snippets}/admin-form-controller-test/선택한_원서들의_입학등록원_및_금연서약서url을_조회한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/선택한_원서들의_입학등록원_및_금연서약서url을_조회한다/request-cookies.adoc[]
 
 ===== Query Parameter
 include::{snippets}/admin-form-controller-test/선택한_원서들의_입학등록원_및_금연서약서url을_조회한다/query-parameters.adoc[]
@@ -730,8 +730,8 @@ include::{snippets}/admin-form-controller-test/선택한_원서들의_입학등�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-form-controller-test/자동으로_2차_합격_여부를_결정한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/자동으로_2차_합격_여부를_결정한다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/admin-form-controller-test/자동으로_2차_합격_여부를_결정한다/http-request.adoc[]
@@ -750,8 +750,8 @@ include::{snippets}/admin-form-controller-test/자동으로_2차_합격_여부�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-form-controller-test/정상적으로_과목별_성적_상세를_다운로드한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/정상적으로_과목별_성적_상세를_다운로드한다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/admin-form-controller-test/정상적으로_과목별_성적_상세를_다운로드한다/http-request.adoc[]

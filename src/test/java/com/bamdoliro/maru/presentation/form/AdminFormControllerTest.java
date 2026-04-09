@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -26,8 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 import static org.mockito.BDDMockito.*;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -49,12 +48,15 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         willDoNothing().given(approveFormUseCase).execute(formId);
 
         mockMvc.perform(patch("/admin/forms/{form-id}/approve", formId)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNoContent())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")),
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        ),
                         pathParameters(parameterWithName("form-id").description("승인할 원서의 id"))
                 ));
 
@@ -71,7 +73,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         doThrow(new FormNotFoundException()).when(approveFormUseCase).execute(formId);
 
         mockMvc.perform(patch("/admin/forms/{form-id}/approve", formId)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNotFound())
@@ -90,12 +92,15 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         willDoNothing().given(rejectFormUseCase).execute(formId);
 
         mockMvc.perform(patch("/admin/forms/{form-id}/reject", formId)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNoContent())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")),
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        ),
                         pathParameters(parameterWithName("form-id").description("반려할 원서의 id"))
                 ));
 
@@ -112,7 +117,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         doThrow(new FormNotFoundException()).when(rejectFormUseCase).execute(formId);
 
         mockMvc.perform(patch("/admin/forms/{form-id}/reject", formId)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNotFound())
@@ -131,12 +136,15 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         willDoNothing().given(receiveFormUseCase).execute(formId);
 
         mockMvc.perform(patch("/admin/forms/{form-id}/receive", formId)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNoContent())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")),
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        ),
                         pathParameters(parameterWithName("form-id").description("접수할 원서의 id"))
                 ));
 
@@ -153,7 +161,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         doThrow(new FormNotFoundException()).when(receiveFormUseCase).execute(formId);
 
         mockMvc.perform(patch("/admin/forms/{form-id}/receive", formId)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNotFound())
@@ -175,12 +183,15 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         ));
 
         mockMvc.perform(get("/admin/forms/review")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        )
                 ));
     }
 
@@ -193,7 +204,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         given(querySubmittedFormUseCase.execute()).willReturn(List.of());
 
         mockMvc.perform(get("/admin/forms/review")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
@@ -217,12 +228,15 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         mockMvc.perform(get("/admin/forms")
                         .param("status", FormStatus.SUBMITTED.name())
                         .param("type", FormType.REGULAR.name())
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")),
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        ),
                         queryParameters(
                                 parameterWithName("status").description("<<form-status,원서 상태 (null인 경우 전체 조회)>>").optional(),
                                 parameterWithName("type").description("<<form-category,원서 카테고리 (null인 경우 전체 조회)>>").optional(),
@@ -246,11 +260,14 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         given(generateAllAdmissionTicketUseCase.execute()).willReturn(new ByteArrayResource(file.getBytes()));
 
         mockMvc.perform(get("/admin/forms/admission-tickets")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_PDF))
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        )
                 ));
 
         verify(generateAllAdmissionTicketUseCase, times(1)).execute();
@@ -270,11 +287,14 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         given(downloadSecondRoundScoreFormatUseCase.execute()).willReturn(new ByteArrayResource(file.getBytes()));
 
         mockMvc.perform(get("/admin/forms/second-round/format")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        )
                 ));
 
         verify(downloadSecondRoundScoreFormatUseCase, times(1)).execute();
@@ -295,11 +315,14 @@ class AdminFormControllerTest extends RestDocsTestSupport {
 
         mockMvc.perform(multipartPatch("/admin/forms/second-round/score")
                         .file(file)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isNoContent())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")),
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        ),
                         requestParts(partWithName("xlsx").description("2차 전형 점수 양식 엑셀 파일"))
                 ));
 
@@ -321,7 +344,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
 
         mockMvc.perform(multipartPatch("/admin/forms/second-round/score")
                         .file(file)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isBadRequest())
                 .andDo(restDocs.document());
@@ -344,7 +367,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
 
         mockMvc.perform(multipartPatch("/admin/forms/second-round/score")
                         .file(file)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isBadRequest())
                 .andDo(restDocs.document());
@@ -366,11 +389,14 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         given(exportFinalPassedFormUseCase.execute()).willReturn(new ByteArrayResource(file.getBytes()));
 
         mockMvc.perform(get("/admin/forms/xlsx/final-passed")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        )
                 ));
 
         verify(exportFinalPassedFormUseCase, times(1)).execute();
@@ -390,11 +416,14 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         given(exportFinalPassedFormUseCase.execute()).willReturn(new ByteArrayResource(file.getBytes()));
 
         mockMvc.perform(get("/admin/forms/xlsx/first-round")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        )
                 ));
 
         verify(exportFirstRoundResultUseCase, times(1)).execute();
@@ -414,11 +443,14 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         given(exportFinalPassedFormUseCase.execute()).willReturn(new ByteArrayResource(file.getBytes()));
 
         mockMvc.perform(get("/admin/forms/xlsx/second-round")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        )
                 ));
 
         verify(exportSecondRoundResultUseCase, times(1)).execute();
@@ -438,11 +470,14 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         given(exportFinalPassedFormUseCase.execute()).willReturn(new ByteArrayResource(file.getBytes()));
 
         mockMvc.perform(get("/admin/forms/xlsx/result")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        )
                 ));
 
         verify(exportResultUseCase, times(1)).execute();
@@ -462,11 +497,14 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         given(exportFirstScoreUseCase.execute()).willReturn(new ByteArrayResource(file.getBytes()));
 
         mockMvc.perform(get("/admin/forms/xlsx/first-score")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        )
                 ));
 
         verify(exportFirstScoreUseCase, times(1)).execute();
@@ -486,11 +524,14 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         given(exportSubjectGradeDetailUseCase.execute()).willReturn(new ByteArrayResource(file.getBytes()));
 
         mockMvc.perform(get("/admin/forms/xlsx/subject-grade-detail")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        )
                 ));
 
         verify(exportSubjectGradeDetailUseCase, times(1)).execute();
@@ -513,12 +554,15 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         ));
 
         mockMvc.perform(patch("/admin/forms/second-round/result")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 .andExpect(status().isNoContent())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")),
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        ),
                         requestFields(
                                 fieldWithPath("formList").type(JsonFieldType.ARRAY).description("2차 전형 결과를 입력할 원서 목록"),
                                 fieldWithPath("formList[].formId").type(JsonFieldType.NUMBER).description("원서 id"),
@@ -542,7 +586,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         ));
 
         mockMvc.perform(patch("/admin/forms/second-round/result")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 .andExpect(status().isNotFound())
@@ -567,12 +611,15 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         ));
 
         mockMvc.perform(get("/admin/forms/form-url")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .param("id-list", "1,2,3,4,5")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")),
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        ),
                         queryParameters(parameterWithName("id-list").description("조회할 원서 id 목록"))
                 ));
 
@@ -595,12 +642,15 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         ));
 
         mockMvc.perform(get("/admin/forms/admission-and-pledges")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .param("id-list", "1,2,3,4,5")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")),
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        ),
                         queryParameters(parameterWithName("id-list").description("조회할 원서 id 목록"))
                 ));
 
@@ -616,10 +666,13 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         willDoNothing().given(selectSecondPassUseCase).execute();
 
         mockMvc.perform(patch("/admin/forms/second-round/select")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader()))
+                        .cookie(AuthFixture.createAuthCookie()))
                 .andExpect(status().isNoContent())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        )
                 ));
 
         verify(selectSecondPassUseCase, times(1)).execute();
@@ -634,7 +687,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         willThrow(new MissingTotalScoreException()).given(selectSecondPassUseCase).execute();
 
         mockMvc.perform(patch("/admin/forms/second-round/select")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader()))
+                        .cookie(AuthFixture.createAuthCookie()))
                 .andExpect(status().isConflict())
                 .andDo(restDocs.document());
 

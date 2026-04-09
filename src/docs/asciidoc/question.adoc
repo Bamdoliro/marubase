@@ -5,8 +5,8 @@
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-question-controller-test/자주묻는질문을_생성한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-question-controller-test/자주묻는질문을_생성한다/request-cookies.adoc[]
 
 ===== Request Body
 include::{snippets}/admin-question-controller-test/자주묻는질문을_생성한다/request-fields.adoc[]
@@ -24,8 +24,8 @@ include::{snippets}/admin-question-controller-test/자주묻는질문을_생성�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-question-controller-test/자주묻는질문을_수정한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-question-controller-test/자주묻는질문을_수정한다/request-cookies.adoc[]
 
 ===== Path Parameter
 include::{snippets}/admin-question-controller-test/자주묻는질문을_수정한다/path-parameters.adoc[]
@@ -87,8 +87,8 @@ include::{snippets}/question-controller-test/자주묻는질문을_id로_불러�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/admin-question-controller-test/자주묻는질문을_삭제한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/admin-question-controller-test/자주묻는질문을_삭제한다/request-cookies.adoc[]
 
 ===== Path Parameter
 include::{snippets}/admin-question-controller-test/자주묻는질문을_삭제한다/path-parameters.adoc[]

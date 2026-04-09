@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.shared.fixture;
 
 import com.bamdoliro.maru.domain.auth.domain.Token;
+import jakarta.servlet.http.Cookie;
 
 public class AuthFixture {
 
@@ -28,5 +29,9 @@ public class AuthFixture {
 
     public static String createAuthHeader() {
         return "Bearer thisis.access.token";
+    }
+
+    public static Cookie createAuthCookie() {
+        return new Cookie("accessToken", "thisis.access.token");
     }
 }

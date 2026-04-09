@@ -5,8 +5,8 @@
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/school-controller-test/학교를_검색한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/school-controller-test/학교를_검색한다/request-cookies.adoc[]
 
 ===== Query Parameter
 include::{snippets}/school-controller-test/학교를_검색한다/query-parameters.adoc[]

@@ -12,13 +12,12 @@ import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import static org.mockito.BDDMockito.*;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -36,13 +35,14 @@ public class MessageControllerTest extends RestDocsTestSupport {
         willDoNothing().given(sendMessageUseCase).execute(request);
 
         mockMvc.perform(post("/admin/messages/status")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 .andExpect(status().isNoContent())
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
                         ),
                         requestFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("문자 메시지 제목"),
@@ -63,13 +63,14 @@ public class MessageControllerTest extends RestDocsTestSupport {
         willThrow(new RuntimeException("원서를 찾을 수 없음")).given(sendMessageUseCase).execute(any(SendMessageByStatusRequest.class));
 
         mockMvc.perform(post("/admin/messages/status")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 .andExpect(status().isInternalServerError())
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
                         ),
                         requestFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("문자 메시지 제목"),
@@ -89,13 +90,14 @@ public class MessageControllerTest extends RestDocsTestSupport {
         willDoNothing().given(sendMessageUseCase).execute(request);
 
         mockMvc.perform(post("/admin/messages/type")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 .andExpect(status().isNoContent())
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
                         ),
                         requestFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("문자 메시지 제목"),
@@ -116,7 +118,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
         willDoNothing().given(sendMessageUseCase).execute(request);
 
         mockMvc.perform(post("/admin/messages/type")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 .andExpect(status().isNoContent())
@@ -134,7 +136,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
         willDoNothing().given(sendMessageUseCase).execute(request);
 
         mockMvc.perform(post("/admin/messages/type")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 .andExpect(status().isNoContent())
@@ -153,13 +155,14 @@ public class MessageControllerTest extends RestDocsTestSupport {
         willThrow(new RuntimeException("원서를 찾을 수 없음")).given(sendMessageUseCase).execute(any(SendMessageByTypeRequest.class));
 
         mockMvc.perform(post("/admin/messages/type")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 .andExpect(status().isInternalServerError())
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
                         ),
                         requestFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("문자 메시지 제목"),
@@ -180,13 +183,14 @@ public class MessageControllerTest extends RestDocsTestSupport {
         willDoNothing().given(sendMessageUseCase).execute(request);
 
         mockMvc.perform(post("/admin/messages/all")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 .andExpect(status().isNoContent())
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
                         ),
                         requestFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("문자 메시지 제목"),
@@ -206,7 +210,7 @@ public class MessageControllerTest extends RestDocsTestSupport {
         willThrow(new FailedToSendException()).given(sendMessageUseCase).execute(any(SendMessageToAllUserRequest.class));
 
         mockMvc.perform(post("/admin/messages/all")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 .andExpect(status().isInternalServerError())

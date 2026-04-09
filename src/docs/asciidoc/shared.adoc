@@ -5,9 +5,9 @@
 
 ==== 요청 형식
 
-===== Request Header
-*Bearer* prefix를 붙여서 토큰을 전송합니다.
-include::{snippets}/jwt-controller-test/인증에_성공한다/request-headers.adoc[]
+===== Request Cookie
+**Cookie**를 통해 토큰을 전송합니다.*
+include::{snippets}/jwt-controller-test/인증에_성공한다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/jwt-controller-test/인증에_성공한다/http-request.adoc[]

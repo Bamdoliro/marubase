@@ -22,15 +22,14 @@ import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import static com.bamdoliro.maru.shared.constants.FileConstant.MB;
 import static org.mockito.BDDMockito.*;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -48,14 +47,17 @@ class UserFormControllerTest extends RestDocsTestSupport {
         willDoNothing().given(submitFormUseCase).execute(user, request);
 
         mockMvc.perform(post("/forms")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request))
                 )
                 .andExpect(status().isCreated())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")),
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
+                        ),
                         requestFields(
                                 fieldWithPath("type").type(JsonFieldType.STRING).description("<<form-type,원서 유형>>"),
                                 fieldWithPath("applicant.name").type(JsonFieldType.STRING).description("지원자 이름"),
@@ -114,7 +116,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         willDoNothing().given(submitFormUseCase).execute(user, request);
 
         mockMvc.perform(post("/forms")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request))
@@ -133,7 +135,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new OutOfApplicationFormPeriodException()).when(submitFormUseCase).execute(any(User.class), any(SubmitFormRequest.class));
 
         mockMvc.perform(post("/forms")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request))
@@ -154,7 +156,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new FormAlreadySubmittedException()).when(submitFormUseCase).execute(any(User.class), any(SubmitFormRequest.class));
 
         mockMvc.perform(post("/forms")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request))
@@ -172,7 +174,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
         mockMvc.perform(post("/forms")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request))
@@ -192,13 +194,16 @@ class UserFormControllerTest extends RestDocsTestSupport {
         willDoNothing().given(submitFinalFormUseCase).execute(any(User.class));
 
         mockMvc.perform(patch("/forms")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNoContent())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
+                        )
                 ));
 
         verify(submitFinalFormUseCase, times(1)).execute(any(User.class));
@@ -213,7 +218,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new OutOfApplicationFormPeriodException()).when(submitFinalFormUseCase).execute(any(User.class));
 
         mockMvc.perform(patch("/forms")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -232,7 +237,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new FormAlreadySubmittedException()).when(submitFinalFormUseCase).execute(any(User.class));
 
         mockMvc.perform(patch("/forms")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -251,12 +256,15 @@ class UserFormControllerTest extends RestDocsTestSupport {
         given(queryFormStatusUseCase.execute(user)).willReturn(FormFixture.createFormSimpleResponse(FormStatus.APPROVED));
 
         mockMvc.perform(get("/forms/status")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
+                        )
                 ));
 
         verify(queryFormStatusUseCase, times(1)).execute(user);
@@ -271,7 +279,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         given(queryFormStatusUseCase.execute(user)).willThrow(new FormNotFoundException());
 
         mockMvc.perform(get("/forms/status")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNotFound())
@@ -288,14 +296,17 @@ class UserFormControllerTest extends RestDocsTestSupport {
         willDoNothing().given(updateFormUseCase).execute(user, request);
 
         mockMvc.perform(put("/forms")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request))
                 )
                 .andExpect(status().isNoContent())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")),
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
+                        ),
                         requestFields(
                                 fieldWithPath("type").type(JsonFieldType.STRING).description("<<form-type,원서 유형>>"),
                                 fieldWithPath("applicant.name").type(JsonFieldType.STRING).description("지원자 이름"),
@@ -356,7 +367,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new OutOfApplicationFormPeriodException()).when(updateFormUseCase).execute(any(User.class), any(UpdateFormRequest.class));
 
         mockMvc.perform(put("/forms")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request))
@@ -376,7 +387,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new FormNotFoundException()).when(updateFormUseCase).execute(any(User.class), any(UpdateFormRequest.class));
 
         mockMvc.perform(put("/forms")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(FormFixture.createUpdateFormRequest(FormType.REGULAR)))
@@ -396,7 +407,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new AuthorityMismatchException()).when(updateFormUseCase).execute(any(User.class), any(UpdateFormRequest.class));
 
         mockMvc.perform(put("/forms")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(FormFixture.createUpdateFormRequest(FormType.REGULAR)))
@@ -416,7 +427,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new CannotUpdateNotRejectedFormException()).when(updateFormUseCase).execute(any(User.class), any(UpdateFormRequest.class));
 
         mockMvc.perform(put("/forms")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(FormFixture.createUpdateFormRequest(FormType.REGULAR)))
@@ -437,14 +448,17 @@ class UserFormControllerTest extends RestDocsTestSupport {
         given(uploadIdentificationPictureUseCase.execute(any(User.class), any(FileMetadata.class))).willReturn(SharedFixture.createIdentificationPictureUrlResponse());
 
         mockMvc.perform(post("/forms/identification-picture")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(metadata))
                 )
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")),
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
+                        ),
                         requestFields(
                                 fieldWithPath("fileName").description("파일 이름"),
                                 fieldWithPath("mediaType").description("미디어 타입"),
@@ -465,7 +479,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new OutOfApplicationFormPeriodException()).when(uploadIdentificationPictureUseCase).execute(any(User.class), any(FileMetadata.class));
 
         mockMvc.perform(post("/forms/identification-picture")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(metadata))
@@ -486,7 +500,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new InvalidFormStatusException()).when(uploadIdentificationPictureUseCase).execute(any(User.class), any(FileMetadata.class));
 
         mockMvc.perform(post("/forms/identification-picture")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(metadata))
@@ -507,7 +521,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new EmptyFileException()).when(uploadIdentificationPictureUseCase).execute(any(User.class), any(FileMetadata.class));
 
         mockMvc.perform(post("/forms/identification-picture")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(metadata))
@@ -528,7 +542,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new FileSizeLimitExceededException(2)).when(uploadIdentificationPictureUseCase).execute(any(User.class), any(FileMetadata.class));
 
         mockMvc.perform(post("/forms/identification-picture")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(metadata))
@@ -549,7 +563,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new MediaTypeMismatchException()).when(uploadIdentificationPictureUseCase).execute(any(User.class), any(FileMetadata.class));
 
         mockMvc.perform(post("/forms/identification-picture")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(metadata))
@@ -570,14 +584,17 @@ class UserFormControllerTest extends RestDocsTestSupport {
         given(uploadFormUseCase.execute(any(User.class), any(FileMetadata.class))).willReturn(SharedFixture.createFormUrlResponse());
 
         mockMvc.perform(post("/forms/form-document")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(metadata))
                 )
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")),
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
+                        ),
                         requestFields(
                                 fieldWithPath("fileName").description("파일 이름"),
                                 fieldWithPath("mediaType").description("미디어 타입"),
@@ -598,7 +615,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new InvalidFormStatusException()).when(uploadFormUseCase).execute(any(User.class), any(FileMetadata.class));
 
         mockMvc.perform(post("/forms/form-document")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(metadata))
@@ -619,7 +636,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new OutOfApplicationFormPeriodException()).when(uploadFormUseCase).execute(any(User.class), any(FileMetadata.class));
 
         mockMvc.perform(post("/forms/form-document")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(metadata))
@@ -640,7 +657,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new EmptyFileException()).when(uploadFormUseCase).execute(any(User.class), any(FileMetadata.class));
 
         mockMvc.perform(post("/forms/form-document")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(metadata))
@@ -661,7 +678,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new FileSizeLimitExceededException(20)).when(uploadFormUseCase).execute(any(User.class), any(FileMetadata.class));
 
         mockMvc.perform(post("/forms/form-document")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(metadata))
@@ -682,7 +699,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new MediaTypeMismatchException()).when(uploadFormUseCase).execute(any(User.class), any(FileMetadata.class));
 
         mockMvc.perform(post("/forms/form-document")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(metadata))
@@ -703,12 +720,15 @@ class UserFormControllerTest extends RestDocsTestSupport {
         given(downloadAdmissionAndPledgeFormatUseCase.execute(user)).willReturn(new ByteArrayResource(file.getBytes()));
 
         mockMvc.perform(get("/forms/admission-and-pledge")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_PDF)
                 )
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
+                        )
                 ));
 
         verify(downloadAdmissionAndPledgeFormatUseCase, times(1)).execute(user);
@@ -723,7 +743,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new InvalidFormStatusException()).when(downloadAdmissionAndPledgeFormatUseCase).execute(user);
 
         mockMvc.perform(get("/forms/admission-and-pledge")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isConflict())
@@ -741,7 +761,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new FailedToExportPdfException()).when(downloadAdmissionAndPledgeFormatUseCase).execute(user);
 
         mockMvc.perform(get("/forms/admission-and-pledge")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isInternalServerError())
@@ -760,14 +780,17 @@ class UserFormControllerTest extends RestDocsTestSupport {
         given(uploadAdmissionAndPledgeUseCase.execute(any(User.class), any(FileMetadata.class))).willReturn(SharedFixture.createAdmissionAndPledgeUrlResponse());
 
         mockMvc.perform(post("/forms/admission-and-pledge")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(metadata))
                 )
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")),
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
+                        ),
                         requestFields(
                                 fieldWithPath("fileName").description("파일 이름"),
                                 fieldWithPath("mediaType").description("미디어 타입"),
@@ -788,7 +811,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new OutOfAdmissionAndPledgePeriodException()).when(uploadAdmissionAndPledgeUseCase).execute(any(User.class), any(FileMetadata.class));
 
         mockMvc.perform(post("/forms/admission-and-pledge")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(metadata))
@@ -809,7 +832,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new InvalidFormStatusException()).when(uploadAdmissionAndPledgeUseCase).execute(any(User.class), any(FileMetadata.class));
 
         mockMvc.perform(post("/forms/admission-and-pledge")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(metadata))
@@ -830,7 +853,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new FileSizeLimitExceededException(20)).when(uploadAdmissionAndPledgeUseCase).execute(any(User.class), any(FileMetadata.class));
 
         mockMvc.perform(post("/forms/admission-and-pledge")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(metadata))
@@ -851,7 +874,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new MediaTypeMismatchException()).when(uploadAdmissionAndPledgeUseCase).execute(any(User.class), any(FileMetadata.class));
 
         mockMvc.perform(post("/forms/admission-and-pledge")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(metadata))
@@ -871,12 +894,15 @@ class UserFormControllerTest extends RestDocsTestSupport {
         willDoNothing().given(enterFormUseCase).execute(user);
 
         mockMvc.perform(patch("/forms/enter")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNoContent())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
+                        )
                 ));
     }
 
@@ -889,7 +915,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new InvalidFormStatusException()).when(enterFormUseCase).execute(user);
 
         mockMvc.perform(patch("/forms/enter")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isConflict())
@@ -907,7 +933,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new FormNotFoundException()).when(enterFormUseCase).execute(user);
 
         mockMvc.perform(patch("/forms/enter")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNotFound())
@@ -926,12 +952,15 @@ class UserFormControllerTest extends RestDocsTestSupport {
         given(exportFormUseCase.execute(user)).willReturn(new ByteArrayResource(file.getBytes()));
 
         mockMvc.perform(get("/forms/export")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_PDF)
                 )
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
+                        )
                 ));
 
         verify(exportFormUseCase, times(1)).execute(user);
@@ -946,7 +975,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new FormNotFoundException()).when(exportFormUseCase).execute(user);
 
         mockMvc.perform(get("/forms/export")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNotFound())
@@ -964,7 +993,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new FormAlreadySubmittedException()).when(exportFormUseCase).execute(user);
 
         mockMvc.perform(get("/forms/export")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isConflict())
@@ -982,7 +1011,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         doThrow(new FailedToExportPdfException()).when(exportFormUseCase).execute(user);
 
         mockMvc.perform(get("/forms/export")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isInternalServerError())
@@ -1001,12 +1030,15 @@ class UserFormControllerTest extends RestDocsTestSupport {
         given(queryFirstFormResultUseCase.execute(user)).willReturn(new FormResultResponse(form, true));
 
         mockMvc.perform(get("/forms/result/first")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
+                        )
                 ));
 
         verify(queryFirstFormResultUseCase, times(1)).execute(user);
@@ -1021,7 +1053,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         willThrow(new FormNotFoundException()).given(queryFirstFormResultUseCase).execute(user);
 
         mockMvc.perform(get("/forms/result/first")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNotFound())
@@ -1040,12 +1072,15 @@ class UserFormControllerTest extends RestDocsTestSupport {
         given(queryFinalFormResultUseCase.execute(user)).willReturn(new FormResultResponse(form, false));
 
         mockMvc.perform(get("/forms/result/final")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
+                        )
                 ));
 
         verify(queryFinalFormResultUseCase, times(1)).execute(user);
@@ -1060,7 +1095,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         willThrow(new FormNotFoundException()).given(queryFinalFormResultUseCase).execute(user);
 
         mockMvc.perform(get("/forms/result/final")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNotFound())
@@ -1082,12 +1117,15 @@ class UserFormControllerTest extends RestDocsTestSupport {
         given(generateAdmissionTicketUseCase.execute(user)).willReturn(new ByteArrayResource(file.getBytes()));
 
         mockMvc.perform(get("/forms/admission-ticket")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_PDF)
                 )
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
+                        )
                 ));
 
         verify(generateAdmissionTicketUseCase, times(1)).execute(user);
@@ -1102,7 +1140,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         willThrow(new InvalidFormStatusException()).given(generateAdmissionTicketUseCase).execute(user);
 
         mockMvc.perform(get("/forms/admission-ticket")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isConflict())
@@ -1120,12 +1158,15 @@ class UserFormControllerTest extends RestDocsTestSupport {
         willThrow(new FormNotFoundException()).given(generateAdmissionTicketUseCase).execute(user);
 
         mockMvc.perform(get("/forms/admission-ticket")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNotFound())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
+                        )
                 ));
 
         verify(generateAdmissionTicketUseCase, times(1)).execute(user);
@@ -1144,12 +1185,15 @@ class UserFormControllerTest extends RestDocsTestSupport {
         given(generateAdmissionTicketUseCase.execute(user)).willReturn(new ByteArrayResource(file.getBytes()));
 
         mockMvc.perform(get("/forms/proof-of-application")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_PDF)
                 )
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token"))
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
+                        )
                 ));
 
         verify(generateProofOfApplicationUseCase, times(1)).execute(user);
@@ -1164,7 +1208,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         willThrow(new InvalidFormStatusException()).given(generateProofOfApplicationUseCase).execute(user);
 
         mockMvc.perform(get("/forms/proof-of-application")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isConflict())
@@ -1182,7 +1226,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
         willThrow(new FormNotFoundException()).given(generateProofOfApplicationUseCase).execute(user);
 
         mockMvc.perform(get("/forms/proof-of-application")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNotFound())
