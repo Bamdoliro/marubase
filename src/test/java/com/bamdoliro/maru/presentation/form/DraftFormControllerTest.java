@@ -9,7 +9,6 @@ import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
@@ -19,8 +18,8 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -38,20 +37,16 @@ class DraftFormControllerTest extends RestDocsTestSupport {
         willDoNothing().given(draftFormUseCase).execute(any(User.class), any(SubmitFormRequest.class));
 
         mockMvc.perform(post("/form/draft")
-                .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                .cookie(AuthFixture.createAuthCookie())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(DraftFormFixture.createDraftFormRequest())))
 
                 .andExpect(status().isCreated())
 
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION)
-                                        .description("Bearer token")
-                        ),
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION)
-                                        .description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
                         ),
                         requestFields(
                                 fieldWithPath("type")
@@ -239,15 +234,15 @@ class DraftFormControllerTest extends RestDocsTestSupport {
         given(queryDraftFormUseCase.execute(user)).willReturn(DraftFormFixture.createDraftFormRequest());
 
         mockMvc.perform(get("/form/draft")
-                .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk())
 
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION)
-                                        .description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
                         )
                 ));
 
@@ -263,7 +258,7 @@ class DraftFormControllerTest extends RestDocsTestSupport {
         doThrow(new DraftFormNotFoundException()).when(queryDraftFormUseCase).execute(user);
 
         mockMvc.perform(get("/form/draft")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isNotFound())

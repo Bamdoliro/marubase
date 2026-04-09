@@ -11,15 +11,14 @@ import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -178,15 +177,15 @@ class UserControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
         mockMvc.perform(get("/users")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk())
 
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION)
-                                        .description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
                         )
                 ));
     }
@@ -401,16 +400,16 @@ class UserControllerTest extends RestDocsTestSupport {
         willDoNothing().given(deleteUserUseCase).execute(any(User.class), any(DeleteUserRequest.class));
 
         mockMvc.perform(delete("/users")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request))
                 )
                 .andExpect(status().isNoContent())
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION)
-                                        .description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
                         ),
                         requestFields(
                                 fieldWithPath("password")
@@ -431,7 +430,7 @@ class UserControllerTest extends RestDocsTestSupport {
         doThrow(new PasswordMismatchException()).when(deleteUserUseCase).execute(any(User.class), any(DeleteUserRequest.class));
 
         mockMvc.perform(delete("/users")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request))

@@ -9,12 +9,11 @@ import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import static org.mockito.BDDMockito.*;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -32,13 +31,14 @@ class FormControllerTest extends RestDocsTestSupport {
         given(queryFormUseCase.execute(user, formId)).willReturn(FormFixture.createFormResponse());
 
         mockMvc.perform(get("/forms/{form-id}", formId)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
                         ),
                         pathParameters(
                                 parameterWithName("form-id").description("조회할 원서의 id")
@@ -58,7 +58,7 @@ class FormControllerTest extends RestDocsTestSupport {
         given(queryFormUseCase.execute(user, formId)).willThrow(new FormNotFoundException());
 
         mockMvc.perform(get("/forms/{form-id}", formId)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNotFound())
@@ -75,7 +75,7 @@ class FormControllerTest extends RestDocsTestSupport {
         given(queryFormUseCase.execute(user, formId)).willThrow(new AuthorityMismatchException());
 
         mockMvc.perform(get("/forms/{form-id}", formId)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isForbidden())

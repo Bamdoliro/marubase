@@ -12,7 +12,6 @@ import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -22,8 +21,8 @@ import java.util.Objects;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -40,13 +39,14 @@ class AnalysisControllerTest extends RestDocsTestSupport {
 
         mockMvc.perform(get("/admin/analysis/number-of-applicants")
                         .param("type", "CURRENT")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
                         ),
                         queryParameters(
                                 parameterWithName("type")
@@ -64,15 +64,16 @@ class AnalysisControllerTest extends RestDocsTestSupport {
 
         mockMvc.perform(get("/admin/analysis/grade-distribution")
                         .param("statusList", "FIRST_PASSED", "FAILED", "PASSED")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk())
 
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
                         ),
                         queryParameters(
                                 parameterWithName("statusList")
@@ -90,15 +91,16 @@ class AnalysisControllerTest extends RestDocsTestSupport {
 
         mockMvc.perform(get("/admin/analysis/grade-distribution")
                         .param("statusList", "FAILED", "PASSED")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk())
 
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
                         ),
                         queryParameters(
                                 parameterWithName("statusList")
@@ -116,15 +118,16 @@ class AnalysisControllerTest extends RestDocsTestSupport {
 
         mockMvc.perform(get("/admin/analysis/grade-distribution")
                         .param("statusList", "PASSED")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk())
 
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
                         ),
                         queryParameters(
                                 parameterWithName("statusList")
@@ -148,15 +151,16 @@ class AnalysisControllerTest extends RestDocsTestSupport {
 
         mockMvc.perform(get("/admin/analysis/gender-ratio")
                         .params(multiValueMap)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk())
 
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
                         ),
                         queryParameters(
                                 parameterWithName("statusList")
@@ -182,15 +186,16 @@ class AnalysisControllerTest extends RestDocsTestSupport {
 
         mockMvc.perform(get("/admin/analysis/school-status")
                         .params(multiValueMap)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk())
 
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
                         ),
                         queryParameters(
                                 parameterWithName("statusList")
@@ -216,15 +221,16 @@ class AnalysisControllerTest extends RestDocsTestSupport {
 
         mockMvc.perform(get("/admin/analysis/school-status")
                         .params(multiValueMap)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk())
 
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
                         ),
                         queryParameters(
                                 parameterWithName("statusList")
@@ -250,15 +256,16 @@ class AnalysisControllerTest extends RestDocsTestSupport {
 
         mockMvc.perform(get("/admin/analysis/school-status")
                         .params(multiValueMap)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk())
 
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
                         ),
                         queryParameters(
                                 parameterWithName("statusList")
@@ -285,13 +292,14 @@ class AnalysisControllerTest extends RestDocsTestSupport {
 
         mockMvc.perform(get("/admin/analysis/school-status")
                         .params(multiValueMap)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
                         ),
                         queryParameters(
                                 parameterWithName("statusList")

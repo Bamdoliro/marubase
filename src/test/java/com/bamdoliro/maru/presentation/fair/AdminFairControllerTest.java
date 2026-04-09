@@ -10,7 +10,6 @@ import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -20,8 +19,8 @@ import static org.mockito.BDDMockito.*;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -42,7 +41,7 @@ public class AdminFairControllerTest extends RestDocsTestSupport {
         willDoNothing().given(createAdmissionFairUseCase).execute(request);
 
         mockMvc.perform(post("/admin/fairs")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request))
@@ -51,9 +50,9 @@ public class AdminFairControllerTest extends RestDocsTestSupport {
                 .andExpect(status().isCreated())
 
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION)
-                                        .description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
                         ),
                         requestFields(
                                 fieldWithPath("start")
@@ -92,16 +91,16 @@ public class AdminFairControllerTest extends RestDocsTestSupport {
         given(queryFairDetailUseCase.execute(fairId)).willReturn(FairFixture.createFairDetailResponse());
 
         mockMvc.perform(get("/admin/fairs/{fair-id}", fairId)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
 
                 .andExpect(status().isOk())
 
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION)
-                                        .description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
                         ),
                         pathParameters(
                                 parameterWithName("fair-id")
@@ -122,7 +121,7 @@ public class AdminFairControllerTest extends RestDocsTestSupport {
         willThrow(new FairNotFoundException()).given(queryFairDetailUseCase).execute(fairId);
 
         mockMvc.perform(get("/admin/fairs/{fair-id}", fairId)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept(MediaType.APPLICATION_JSON)
                 )
 
@@ -149,15 +148,15 @@ public class AdminFairControllerTest extends RestDocsTestSupport {
         given(exportAttendeeListUseCase.execute(fairId)).willReturn(new ByteArrayResource(file.getBytes()));
 
         mockMvc.perform(get("/admin/fairs/{fair-id}/export", fairId)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
+                        .cookie(AuthFixture.createAuthCookie())
                         .accept("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
 
                 .andExpect(status().isOk())
 
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION)
-                                        .description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.엑세스.토큰")
                         ),
                         pathParameters(
                                 parameterWithName("fair-id")
@@ -178,7 +177,7 @@ public class AdminFairControllerTest extends RestDocsTestSupport {
         willThrow(new FairNotFoundException()).given(exportAttendeeListUseCase).execute(fairId);
 
         mockMvc.perform(get("/admin/fairs/{fair-id}/export", fairId)
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader()))
+                .cookie(AuthFixture.createAuthCookie()))
 
                 .andExpect(status().isNotFound())
 

@@ -13,7 +13,6 @@ import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
@@ -27,8 +26,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
 import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -211,20 +208,21 @@ class AuthControllerTest extends RestDocsTestSupport {
         willDoNothing().given(logOutUseCase).execute(user);
 
         mockMvc.perform(delete("/auth")
-                        .header(HttpHeaders.AUTHORIZATION, AuthFixture.createAuthHeader())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("accessToken", AuthFixture.createAccessTokenString()))
                 )
 
                 .andExpect(status().isNoContent())
 
                 .andDo(restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION)
-                                        .description("Bearer token")
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("액세스 토큰")
                         )
                 ));
 
         verify(logOutUseCase, times(1)).execute(user);
     }
+
 }
