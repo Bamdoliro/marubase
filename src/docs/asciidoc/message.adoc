@@ -5,8 +5,8 @@
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/message-controller-test/조회할_상태의_원서를_가진_학생들에게_메시지를_보낸다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/message-controller-test/조회할_상태의_원서를_가진_학생들에게_메시지를_보낸다/request-cookies.adoc[]
 
 ===== Request Body
 include::{snippets}/message-controller-test/조회할_상태의_원서를_가진_학생들에게_메시지를_보낸다/request-fields.adoc[]
@@ -28,8 +28,8 @@ include::{snippets}/message-controller-test/해당제출상태인_원서가_없�
 
 === 요청 형식
 
-==== Request Header
-include::{snippets}/message-controller-test/마이스터전형과_마이스터에서_일반전형으로_바뀐_합격자를_제외한_1차_합격자들에게_메시지를_보낸다/request-headers.adoc[]
+==== Request Cookie
+include::{snippets}/message-controller-test/마이스터전형과_마이스터에서_일반전형으로_바뀐_합격자를_제외한_1차_합격자들에게_메시지를_보낸다/request-cookies.adoc[]
 
 ==== Request Body
 include::{snippets}/message-controller-test/마이스터전형과_마이스터에서_일반전형으로_바뀐_합격자를_제외한_1차_합격자들에게_메시지를_보낸다/request-fields.adoc[]
@@ -49,8 +49,8 @@ include::{snippets}/message-controller-test/마이스터_전형_1차_합격자�
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/message-controller-test/어드민을_제외한_전체_유저에게_메시지를_발송한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/message-controller-test/어드민을_제외한_전체_유저에게_메시지를_발송한다/request-cookies.adoc[]
 
 ===== Request Body
 include::{snippets}/message-controller-test/어드민을_제외한_전체_유저에게_메시지를_발송한다/request-fields.adoc[]

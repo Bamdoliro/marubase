@@ -5,8 +5,8 @@
 
 ==== 요청 형식
 
-==== Request Header
-include::{snippets}/analysis-controller-test/전형별_지원자수를_조회한다/request-headers.adoc[]
+==== Request Cookie
+include::{snippets}/analysis-controller-test/전형별_지원자수를_조회한다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/analysis-controller-test/전형별_지원자수를_조회한다/http-request.adoc[]
@@ -19,8 +19,8 @@ include::{snippets}/analysis-controller-test/전형별_지원자수를_조회한
 
 ==== 요청 형식
 
-==== Request Header
-include::{snippets}/analysis-controller-test/_1차_합격자들의_성적_분포를_조회한다/request-headers.adoc[]
+==== Request Cookie
+include::{snippets}/analysis-controller-test/_1차_합격자들의_성적_분포를_조회한다/request-cookies.adoc[]
 
 ==== Query Parameter
 include::{snippets}/analysis-controller-test/_1차_합격자들의_성적_분포를_조회한다/query-parameters.adoc[]
@@ -46,8 +46,8 @@ include::{snippets}/analysis-controller-test/최종_합격자들의_성적_분�
 
 ==== 요청 형식
 
-==== Request Header
-include::{snippets}/analysis-controller-test/전형별_성비를_조회한다/request-headers.adoc[]
+==== Request Cookie
+include::{snippets}/analysis-controller-test/전형별_성비를_조회한다/request-cookies.adoc[]
 
 ==== Query Parameter
 include::{snippets}/analysis-controller-test/전형별_성비를_조회한다/query-parameters.adoc[]
@@ -65,8 +65,8 @@ include::{snippets}/analysis-controller-test/전형별_성비를_조회한다/ht
 
 ==== 요청 형식
 
-==== Request Header
-include::{snippets}/analysis-controller-test/부산_특정구_출신_지원자들의_출신학교_통계를_조회한다/request-headers.adoc[]
+==== Request Cookie
+include::{snippets}/analysis-controller-test/부산_특정구_출신_지원자들의_출신학교_통계를_조회한다/request-cookies.adoc[]
 
 ==== Query Parameter
 include::{snippets}/analysis-controller-test/부산_특정구_출신_지원자들의_출신학교_통계를_조회한다/query-parameters.adoc[]

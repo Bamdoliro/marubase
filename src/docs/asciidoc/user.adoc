@@ -89,8 +89,8 @@ include::{snippets}/user-controller-test/회원가입_전화번호를_인증할_
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/user-controller-test/로그인한_유저를_불러온다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/user-controller-test/로그인한_유저를_불러온다/request-cookies.adoc[]
 
 ==== 요청
 include::{snippets}/user-controller-test/로그인한_유저를_불러온다/http-request.adoc[]
@@ -129,8 +129,8 @@ include::{snippets}/user-controller-test/해당_전화번호를_가진_유저가
 
 ==== 요청 형식
 
-===== Request Header
-include::{snippets}/user-controller-test/유저를_삭제한다/request-headers.adoc[]
+===== Request Cookie
+include::{snippets}/user-controller-test/유저를_삭제한다/request-cookies.adoc[]
 
 ===== Request Body
 include::{snippets}/user-controller-test/유저를_삭제한다/request-fields.adoc[]
