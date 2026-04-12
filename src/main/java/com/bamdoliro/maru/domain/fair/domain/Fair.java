@@ -58,6 +58,15 @@ public class Fair extends BaseTimeEntity {
         this.applicationEndDate = applicationEndDate;
     }
 
+    public void update(LocalDateTime start, Integer capacity, String place, FairType type, LocalDate applicationStartDate, LocalDate applicationEndDate) {
+        this.start = start;
+        this.capacity = capacity;
+        this.place = place;
+        this.type = type;
+        this.applicationStartDate = applicationStartDate;
+        this.applicationEndDate = applicationEndDate;
+    }
+
     public FairStatus getStatus(Integer headcount) {
         LocalDateTime now = LocalDateTime.now();
         if (now.isAfter(start)) {
