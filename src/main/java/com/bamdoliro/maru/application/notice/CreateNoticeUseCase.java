@@ -21,6 +21,6 @@ public class CreateNoticeUseCase {
                 new Notice(request.getTitle(), request.getContent(), fileNameList)
         );
 
-        return new IdResponse(notice);
+        return new IdResponse(notice.getId());
     }
 }
