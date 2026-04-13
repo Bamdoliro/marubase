@@ -19,7 +19,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
-public class UpdateAdmissionFairUseCaseTest {
+class UpdateAdmissionFairUseCaseTest {
 
     @InjectMocks
     private UpdateAdmissionFairUseCase updateAdmissionFairUseCase;
@@ -28,7 +28,7 @@ public class UpdateAdmissionFairUseCaseTest {
     private FairFacade fairFacade;
 
     @Test
-    public void 입학설명회_수정() {
+    void 입학설명회_수정() {
         // given
         Fair fair = FairFixture.createFair();
         LocalDateTime time = LocalDateTime.of(2026, 4, 13, 8, 19, 41);

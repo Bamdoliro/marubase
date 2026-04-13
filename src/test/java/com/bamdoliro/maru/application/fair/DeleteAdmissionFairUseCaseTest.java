@@ -11,7 +11,7 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class DeleteAdmissionFairUseCaseTest {
+class DeleteAdmissionFairUseCaseTest {
 
     @InjectMocks
     private DeleteAdmissionFairUseCase deleteAdmissionFairUseCase;
