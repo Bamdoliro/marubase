@@ -10,5 +10,7 @@ public class DeleteAdmissionFairUseCase {
 
     private final FairRepository fairRepository;
 
-    public void execute(Long fairId) { fairRepository.deleteById(fairId); }
+    public void execute(Long fairId) {
+        fairRepository.deleteById(fairId);
+    }
 }
