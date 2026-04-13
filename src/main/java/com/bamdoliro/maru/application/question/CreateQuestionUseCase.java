@@ -17,6 +17,6 @@ public class CreateQuestionUseCase {
         Question question = questionRepository.save(
                 new Question(request.getTitle(), request.getContent(), request.getCategory()));
 
-        return new IdResponse(question);
+        return new IdResponse(question.getId());
     }
 }
