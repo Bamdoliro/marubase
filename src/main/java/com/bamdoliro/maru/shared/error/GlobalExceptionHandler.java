@@ -96,7 +96,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(FileSizeLimitExceededException.class)
-    public ResponseEntity<ErrorResponse> handleFileSizeLimitExceededException(Exception e) {
+    public ResponseEntity<ErrorResponse> handleFileSizeLimitExceededException(FileSizeLimitExceededException e) {
         logHandledException(e);
 
         return ResponseEntity
