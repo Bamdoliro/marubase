@@ -109,3 +109,49 @@ include::{snippets}/admin-fair-controller-test/입학설명회_신청자_명단�
 
 ===== 입학설명회가 없는 경우
 include::{snippets}/admin-fair-controller-test/입학설명회_신청자_명단을_엑셀로_다운받을_때_입학설명회가_없으면_에러가_발생한다/http-response.adoc[]
+
+
+=== 입학설명회 일정 수정
+어드민은 입학설명회 일정을 수정할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Cookie
+include::{snippets}/admin-fair-controller-test/입학설명회를_수정한다/request-cookies.adoc[]
+
+===== Path Parameter
+include::{snippets}/admin-fair-controller-test/입학설명회를_수정한다/path-parameters.adoc[]
+
+===== Request Body
+include::{snippets}/admin-fair-controller-test/입학설명회를_수정한다/request-fields.adoc[]
+
+===== 요청
+include::{snippets}/admin-fair-controller-test/입학설명회를_수정한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/admin-fair-controller-test/입학설명회를_수정한다/http-response.adoc[]
+
+===== 입학설명회가 없는 경우
+include::{snippets}/admin-fair-controller-test/입학설명회를_수정할_때_입학설명회가_없으면_에러가_발생한다/http-response.adoc[]
+
+
+=== 입학설명회 일정 삭제
+어드민은 입학설명회 일정을 삭제할 수 있습니다.
+
+==== 요청 형식
+
+===== Request Cookie
+include::{snippets}/admin-fair-controller-test/입학설명회를_삭제한다/request-cookies.adoc[]
+
+===== Path Parameter
+include::{snippets}/admin-fair-controller-test/입학설명회를_삭제한다/path-parameters.adoc[]
+
+==== 요청
+include::{snippets}/admin-fair-controller-test/입학설명회를_삭제한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/admin-fair-controller-test/입학설명회를_삭제한다/http-response.adoc[]

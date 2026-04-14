@@ -276,4 +276,28 @@ public class AdminFairControllerTest extends RestDocsTestSupport {
         verify(deleteAdmissionFairUseCase, times(1)).execute(fairId);
     }
 
+    @Test
+    void 입학설명회를_수정할_때_입학설명회가_없으면_에러가_발생한다() throws Exception {
+        Long fairId = 1L;
+        LocalDateTime time = LocalDateTime.of(2026, 4, 13, 8, 19, 41);
+        LocalDate date = LocalDate.of(3939, 3, 9);
+
+        UpdateFairRequest request = new UpdateFairRequest(time, 100, "부산소프트웨어마이스터고등학교 어딘가", FairType.TEACHER, date, date);
+        willThrow(new FairNotFoundException()).given(updateAdmissionFairUseCase).execute(eq(1L), any(UpdateFairRequest.class));
+
+        User user = UserFixture.createAdminUser();
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+
+        mockMvc.perform(put("/admin/fairs/{fair-id}", fairId)
+                        .cookie(AuthFixture.createAuthCookie())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request)))
+
+                .andExpect(status().isNotFound())
+
+                .andDo(restDocs.document());
+    }
+
 }
