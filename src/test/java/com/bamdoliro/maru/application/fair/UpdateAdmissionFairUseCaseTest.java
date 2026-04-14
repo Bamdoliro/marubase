@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class UpdateAdmissionFairUseCaseTest {
 
     @InjectMocks
@@ -28,7 +28,7 @@ class UpdateAdmissionFairUseCaseTest {
     private FairFacade fairFacade;
 
     @Test
-    void 입학설명회_수정() {
+    void 입학설명회를_수정한다() {
         // given
         Fair fair = FairFixture.createFair();
         LocalDateTime time = LocalDateTime.of(2026, 4, 13, 8, 19, 41);

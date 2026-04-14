@@ -20,7 +20,7 @@ class DeleteAdmissionFairUseCaseTest {
     private FairRepository fairRepository;
 
     @Test
-    void 입학설명회_삭제() {
+    void 입학설명회를_삭제한다() {
         // given
         Long id = 1L;
         willDoNothing().given(fairRepository).deleteById(id);
