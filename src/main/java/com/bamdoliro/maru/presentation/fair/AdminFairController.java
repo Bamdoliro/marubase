@@ -2,8 +2,7 @@ package com.bamdoliro.maru.presentation.fair;
 
 import com.bamdoliro.maru.application.fair.*;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.presentation.fair.dto.request.CreateFairRequest;
-import com.bamdoliro.maru.presentation.fair.dto.request.UpdateFairRequest;
+import com.bamdoliro.maru.presentation.fair.dto.request.FairRequest;
 import com.bamdoliro.maru.presentation.fair.dto.response.FairDetailResponse;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.auth.Authority;
@@ -34,7 +33,7 @@ public class AdminFairController {
     @PostMapping
     public void createAdmissionFair(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
-            @RequestBody @Valid CreateFairRequest request
+            @RequestBody @Valid FairRequest request
     ) {
         createAdmissionFairUseCase.execute(request);
     }
@@ -64,7 +63,7 @@ public class AdminFairController {
     public void updateQuestion(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @PathVariable(name = "fair-id") Long fairId,
-            @RequestBody @Valid UpdateFairRequest request
+            @RequestBody @Valid FairRequest request
     ) {
         updateAdmissionFairUseCase.execute(fairId, request);
     }

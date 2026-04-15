@@ -2,7 +2,7 @@ package com.bamdoliro.maru.application.fair;
 
 import com.bamdoliro.maru.domain.fair.domain.Fair;
 import com.bamdoliro.maru.infrastructure.persistence.fair.FairRepository;
-import com.bamdoliro.maru.presentation.fair.dto.request.CreateFairRequest;
+import com.bamdoliro.maru.presentation.fair.dto.request.FairRequest;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +14,7 @@ public class CreateAdmissionFairUseCase {
     private final FairRepository fairRepository;
 
     @Transactional
-    public void execute(CreateFairRequest request) {
+    public void execute(FairRequest request) {
         fairRepository.save(
                 Fair.builder()
                         .start(request.getStart())

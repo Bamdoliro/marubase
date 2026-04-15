@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateFairRequest {
+public class FairRequest {
 
     @NotNull(message = "필수값입니다.")
     private LocalDateTime start;

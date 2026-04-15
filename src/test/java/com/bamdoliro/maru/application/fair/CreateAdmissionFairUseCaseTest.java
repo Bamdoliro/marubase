@@ -2,7 +2,7 @@ package com.bamdoliro.maru.application.fair;
 
 import com.bamdoliro.maru.domain.fair.domain.Fair;
 import com.bamdoliro.maru.infrastructure.persistence.fair.FairRepository;
-import com.bamdoliro.maru.presentation.fair.dto.request.CreateFairRequest;
+import com.bamdoliro.maru.presentation.fair.dto.request.FairRequest;
 import com.bamdoliro.maru.shared.fixture.FairFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +30,7 @@ class CreateAdmissionFairUseCaseTest {
     @Test
     void 입학설명회_일정을_만든다() {
         // given
-        CreateFairRequest request = FairFixture.createFairRequest();
+        FairRequest request = FairFixture.createFairRequest();
         Fair fair = FairFixture.createFair();
         given(fairRepository.save(any(Fair.class))).willReturn(fair);
         ArgumentCaptor<Fair> captor = ArgumentCaptor.forClass(Fair.class);

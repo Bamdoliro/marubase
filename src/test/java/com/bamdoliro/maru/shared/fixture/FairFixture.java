@@ -4,7 +4,7 @@ import com.bamdoliro.maru.domain.fair.domain.Attendee;
 import com.bamdoliro.maru.domain.fair.domain.Fair;
 import com.bamdoliro.maru.domain.fair.domain.type.FairType;
 import com.bamdoliro.maru.presentation.fair.dto.request.AttendAdmissionFairRequest;
-import com.bamdoliro.maru.presentation.fair.dto.request.CreateFairRequest;
+import com.bamdoliro.maru.presentation.fair.dto.request.FairRequest;
 import com.bamdoliro.maru.presentation.fair.dto.response.FairDetailResponse;
 import com.bamdoliro.maru.presentation.fair.dto.response.FairResponse;
 import com.bamdoliro.maru.shared.util.RandomCodeUtil;
@@ -25,8 +25,8 @@ public class FairFixture {
                 LocalDate.now().plusWeeks(2)
         );
     }
-    public static CreateFairRequest createFairRequest() {
-        return new CreateFairRequest(
+    public static FairRequest createFairRequest() {
+        return new FairRequest(
                 LocalDateTime.now().plusDays(1),
                 120,
                 "부산소프트웨어마이스터고등학교 1층 SRC관",

@@ -2,7 +2,7 @@ package com.bamdoliro.maru.application.fair;
 
 import com.bamdoliro.maru.domain.fair.domain.Fair;
 import com.bamdoliro.maru.domain.fair.domain.type.FairType;
-import com.bamdoliro.maru.presentation.fair.dto.request.UpdateFairRequest;
+import com.bamdoliro.maru.presentation.fair.dto.request.FairRequest;
 import com.bamdoliro.maru.shared.fixture.FairFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +33,7 @@ class UpdateAdmissionFairUseCaseTest {
         Fair fair = FairFixture.createFair();
         LocalDateTime time = LocalDateTime.of(2026, 4, 13, 8, 19, 41);
         LocalDate date = LocalDate.of(3939, 3, 9);
-        UpdateFairRequest request = new UpdateFairRequest(time, 100, "부산소프트웨어마이스터고등학교 어딘가", FairType.TEACHER, date, date);
+        FairRequest request = new FairRequest(time, 100, "부산소프트웨어마이스터고등학교 어딘가", FairType.TEACHER, date, date);
 
         given(fairFacade.getFair(fair.getId())).willReturn(fair);
 

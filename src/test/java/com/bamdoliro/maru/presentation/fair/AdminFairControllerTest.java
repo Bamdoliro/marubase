@@ -3,8 +3,7 @@ package com.bamdoliro.maru.presentation.fair;
 import com.bamdoliro.maru.domain.fair.domain.type.FairType;
 import com.bamdoliro.maru.domain.fair.exception.FairNotFoundException;
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.presentation.fair.dto.request.CreateFairRequest;
-import com.bamdoliro.maru.presentation.fair.dto.request.UpdateFairRequest;
+import com.bamdoliro.maru.presentation.fair.dto.request.FairRequest;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.FairFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
@@ -37,7 +36,7 @@ public class AdminFairControllerTest extends RestDocsTestSupport {
 
     @Test
     void 입학설명회_일정을_만든다() throws Exception {
-        CreateFairRequest request = FairFixture.createFairRequest();
+        FairRequest request = FairFixture.createFairRequest();
         User user = UserFixture.createAdminUser();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
@@ -82,7 +81,7 @@ public class AdminFairControllerTest extends RestDocsTestSupport {
                         )
                 ));
 
-        verify(createAdmissionFairUseCase, times(1)).execute(any(CreateFairRequest.class));
+        verify(createAdmissionFairUseCase, times(1)).execute(any(FairRequest.class));
     }
 
     @Test
@@ -196,7 +195,7 @@ public class AdminFairControllerTest extends RestDocsTestSupport {
         LocalDateTime time = LocalDateTime.of(2026, 4, 13, 8, 19, 41);
         LocalDate date = LocalDate.of(3939, 3, 9);
 
-        UpdateFairRequest request = new UpdateFairRequest(time, 100, "부산소프트웨어마이스터고등학교 어딘가", FairType.TEACHER, date, date);
+        FairRequest request = new FairRequest(time, 100, "부산소프트웨어마이스터고등학교 어딘가", FairType.TEACHER, date, date);
         willDoNothing().given(updateAdmissionFairUseCase).execute(fairId, request);
 
         User user = UserFixture.createAdminUser();
@@ -244,7 +243,7 @@ public class AdminFairControllerTest extends RestDocsTestSupport {
                         )
                 ));
 
-        verify(updateAdmissionFairUseCase, times(1)).execute(eq(fairId), any(UpdateFairRequest.class));
+        verify(updateAdmissionFairUseCase, times(1)).execute(eq(fairId), any(FairRequest.class));
     }
 
     @Test
@@ -282,8 +281,8 @@ public class AdminFairControllerTest extends RestDocsTestSupport {
         LocalDateTime time = LocalDateTime.of(2026, 4, 13, 8, 19, 41);
         LocalDate date = LocalDate.of(3939, 3, 9);
 
-        UpdateFairRequest request = new UpdateFairRequest(time, 100, "부산소프트웨어마이스터고등학교 어딘가", FairType.TEACHER, date, date);
-        willThrow(new FairNotFoundException()).given(updateAdmissionFairUseCase).execute(eq(1L), any(UpdateFairRequest.class));
+        FairRequest request = new FairRequest(time, 100, "부산소프트웨어마이스터고등학교 어딘가", FairType.TEACHER, date, date);
+        willThrow(new FairNotFoundException()).given(updateAdmissionFairUseCase).execute(eq(1L), any(FairRequest.class));
 
         User user = UserFixture.createAdminUser();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
