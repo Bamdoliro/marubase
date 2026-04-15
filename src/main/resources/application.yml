@@ -72,6 +72,9 @@ message:
   api-domain: ${MESSAGE_API_DOMAIN}
   from: ${MESSAGE_FROM}
 
+domain:
+  name : ${MARU_DOMAIN}
+
 ---
 spring:
   config:
@@ -88,3 +91,5 @@ spring:
       on-profile: dev
 
 debug: false
+
+
