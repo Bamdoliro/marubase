@@ -73,4 +73,7 @@ message:
   api-domain: https://bamdoliro-test-message-domain
   from: 00000000000
 
+domain:
+  name: this.is.maru.domain.com
+
 debug: false
