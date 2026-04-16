@@ -74,7 +74,7 @@ public class FileService {
         }
 
         return GetObjectPresignRequest.builder()
-                .signatureDuration(Duration.ofMinutes(60 * 10))
+                .signatureDuration(Duration.ofMinutes(60L * 10))
                 .getObjectRequest(GetObjectRequest.builder()
                         .bucket(bucket)
                         .key(fileName)
