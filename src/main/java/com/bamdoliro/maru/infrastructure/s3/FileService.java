@@ -1,24 +1,28 @@
 package com.bamdoliro.maru.infrastructure.s3;
 
-import com.amazonaws.HttpMethod;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.Headers;
-import com.amazonaws.services.s3.model.*;
 import com.bamdoliro.maru.infrastructure.s3.dto.response.UrlResponse;
 import com.bamdoliro.maru.infrastructure.s3.validator.FileValidator;
 import com.bamdoliro.maru.infrastructure.s3.dto.request.FileMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
+import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
-import java.util.Date;
+import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
 public class FileService {
 
-    private final AmazonS3 amazonS3;
+    private final S3Client s3Client;
+    private final S3Presigner s3Presigner;
 
     @Value("${spring.cloud.aws.s3.bucket}")
     private String bucket;
@@ -26,16 +30,16 @@ public class FileService {
     public String getUploadPresignedUrl(String folder, String fileName, FileMetadata fileMetadata, FileValidator validator) {
         validator.validate(fileMetadata);
         String fullFileName = createFileName(folder, fileName);
-        GeneratePresignedUrlRequest request = getGenerateUploadPresignedUrlRequest(bucket, fullFileName, fileMetadata);
+        PutObjectPresignRequest request = getGenerateUploadPresignedUrlRequest(bucket, fullFileName, fileMetadata);
 
-        return amazonS3.generatePresignedUrl(request).toString();
+        return s3Presigner.presignPutObject(request).url().toString();
     }
 
     public String getDownloadPresignedUrl(String folder, String fileName) {
         String fullFileName = createFileName(folder, fileName);
-        GeneratePresignedUrlRequest request = getGenerateDownloadPresignedUrlRequest(bucket, fullFileName);
+        GetObjectPresignRequest request = getGenerateDownloadPresignedUrlRequest(bucket, fullFileName);
 
-        return request != null ? amazonS3.generatePresignedUrl(request).toString() : null;
+        return request != null ? s3Presigner.presignGetObject(request).url().toString() : null;
     }
 
     public UrlResponse getPresignedUrl(String folder, String fileName, FileMetadata metadata, FileValidator validator) {
@@ -45,39 +49,37 @@ public class FileService {
         );
     }
 
-    private GeneratePresignedUrlRequest getGenerateUploadPresignedUrlRequest(String bucket, String fileName, FileMetadata fileMetadata) {
-        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, fileName)
-                .withMethod(HttpMethod.PUT)
-                .withExpiration(getPresignedUrlExpiration(3));
+    private PutObjectPresignRequest getGenerateUploadPresignedUrlRequest(String bucket, String fileName, FileMetadata fileMetadata) {
+        PutObjectRequest objectRequest = PutObjectRequest.builder()
+                .bucket(bucket)
+                .key(fileName)
+                .contentType(fileMetadata.getMediaType())
+                .contentLength(fileMetadata.getFileSize())
+                .build();
 
-        request.putCustomRequestHeader(Headers.CONTENT_TYPE, fileMetadata.getMediaType());
-        request.putCustomRequestHeader(Headers.CONTENT_LENGTH, fileMetadata.getFileSize().toString());
-
-        return request;
+        return PutObjectPresignRequest.builder()
+                .signatureDuration(Duration.ofMinutes(3))
+                .putObjectRequest(objectRequest)
+                .build();
     }
 
-    private GeneratePresignedUrlRequest getGenerateDownloadPresignedUrlRequest(String bucket, String fileName) {
+    private GetObjectPresignRequest getGenerateDownloadPresignedUrlRequest(String bucket, String fileName) {
         try {
-            amazonS3.getObjectMetadata(bucket, fileName);
-
-            return new GeneratePresignedUrlRequest(bucket, fileName)
-                    .withMethod(HttpMethod.GET)
-                    .withExpiration(getPresignedUrlExpiration(60 * 10));
-        } catch (AmazonS3Exception e) {
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
-                return null;
-            }
-            throw e;
+            s3Client.headObject(HeadObjectRequest.builder()
+                    .bucket(bucket)
+                    .key(fileName)
+                    .build());
+        } catch (NoSuchKeyException e) {
+            return null;
         }
-    }
 
-    private Date getPresignedUrlExpiration(int duration) {
-        Date expiration = new Date();
-        long expTimeMillis = expiration.getTime();
-        expTimeMillis += 1000L * 60 * duration;
-        expiration.setTime(expTimeMillis);
-
-        return expiration;
+        return GetObjectPresignRequest.builder()
+                .signatureDuration(Duration.ofMinutes(60L * 10))
+                .getObjectRequest(GetObjectRequest.builder()
+                        .bucket(bucket)
+                        .key(fileName)
+                        .build())
+                .build();
     }
 
     private String createFileName(String folder, String fileName) {

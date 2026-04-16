@@ -6,22 +6,16 @@ import com.bamdoliro.maru.domain.auth.exception.ExpiredTokenException;
 import com.bamdoliro.maru.domain.auth.exception.InvalidTokenException;
 import com.bamdoliro.maru.infrastructure.persistence.auth.TokenRepository;
 import com.bamdoliro.maru.shared.config.properties.JwtProperties;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -46,16 +40,14 @@ public class TokenService {
     }
 
     private String generateToken(String uuid, TokenType type, Long time) {
-        Claims claims = Jwts.claims();
-        claims.put("uuid", uuid);
-        claims.put("type", type.name());
         Date now = new Date();
 
         return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + time))
-                .signWith(getSigningKey(jwtProperties.getSecretKey()), SignatureAlgorithm.HS256)
+                .claim("uuid", uuid)
+                .claim("type", type.name())
+                .issuedAt(now)
+                .expiration(new Date(now.getTime() + time))
+                .signWith(getSigningKey())
                 .compact();
     }
 
@@ -71,13 +63,11 @@ public class TokenService {
 
     private Claims extractAllClaims(String token) {
         try {
-            validateSignatureAlgorithm(token);
-
-            return Jwts.parserBuilder()
-                    .setSigningKey(getSigningKey(jwtProperties.getSecretKey()))
+            return Jwts.parser()
+                    .verifyWith(getSigningKey())
                     .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+                    .parseSignedClaims(token)
+                    .getPayload();
         } catch (ExpiredJwtException e) {
             throw new ExpiredTokenException();
         } catch (Exception e) {
@@ -85,21 +75,8 @@ public class TokenService {
         }
     }
 
-    private void validateSignatureAlgorithm(String token) throws JsonProcessingException {
-        String[] tokenParts = token.split("\\.");
-        String headerJson = new String(Base64.getDecoder().decode(tokenParts[0]));
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> headerMap = objectMapper.readValue(headerJson, new TypeReference<>() {});
-        String algorithm = (String) headerMap.get("alg");
-
-        if (!algorithm.equals(SignatureAlgorithm.HS256.getValue())) {
-            throw new InvalidTokenException();
-        }
-    }
-
-    private Key getSigningKey(String secretKey) {
-        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
+    private SecretKey getSigningKey() {
+        byte[] keyBytes = jwtProperties.getSecretKey().getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
