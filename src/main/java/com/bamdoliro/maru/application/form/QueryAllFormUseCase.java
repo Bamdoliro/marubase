@@ -31,6 +31,7 @@ public class QueryAllFormUseCase {
                 case "total-score-desc" ->
                         formList.sort(Comparator.comparing(form -> form.getScore().getTotalScore(), Comparator.nullsLast(Comparator.reverseOrder())));
                 case "form-id" -> formList.sort(Comparator.comparing(Form::getId));
+                default -> formList.sort(Comparator.comparing(Form::getExaminationNumber));
             }
         } else {
             formList.sort(Comparator.comparing(Form::getExaminationNumber));
