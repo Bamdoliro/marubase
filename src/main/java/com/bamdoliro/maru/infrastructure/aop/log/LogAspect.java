@@ -3,17 +3,11 @@ package com.bamdoliro.maru.infrastructure.aop.log;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
-import com.bamdoliro.maru.domain.log.AdminLoginLog;
-import com.bamdoliro.maru.domain.log.FormSubmitLog;
-import com.bamdoliro.maru.domain.log.FormUpdateLog;
-import com.bamdoliro.maru.domain.log.UpdatedField;
+import com.bamdoliro.maru.domain.log.*;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.domain.type.Authority;
 import com.bamdoliro.maru.domain.user.service.UserFacade;
-import com.bamdoliro.maru.infrastructure.persistence.log.AdminLoginLogRepository;
-import com.bamdoliro.maru.infrastructure.persistence.log.FormSubmitLogRepository;
-import com.bamdoliro.maru.infrastructure.persistence.log.FormUpdateLogRepository;
-import com.bamdoliro.maru.infrastructure.persistence.log.UpdatedFieldRepository;
+import com.bamdoliro.maru.infrastructure.persistence.log.*;
 import com.bamdoliro.maru.presentation.auth.dto.request.LogInRequest;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,6 +40,7 @@ public class LogAspect {
     private final FormSubmitLogRepository formSubmitLogRepository;
     private final FormUpdateLogRepository formUpdateLogRepository;
     private final UpdatedFieldRepository updatedFieldRepository;
+    private final AdminLookupFormLogRepository  adminLookupFormLogRepository;
 
 
     @AfterReturning(value = "execution(* com.bamdoliro.maru.application.auth.LogInUseCase.execute(..))")
@@ -74,6 +69,28 @@ public class LogAspect {
     @AfterReturning(value = "execution(* com.bamdoliro.maru.application.form.SubmitFinalFormUseCase.execute(..))")
     public void logSubmitFinalFormSuccess(JoinPoint joinPoint) {
         generateFormSubmitLog(joinPoint, FormStatus.FINAL_SUBMITTED);
+    }
+
+    @AfterReturning(value = "execution(* com.bamdoliro.maru.application.form.QueryFormUseCase.execute(..))")
+    public void logAdminLookupFormSuccess(JoinPoint joinPoint) {
+        Object[] args = joinPoint.getArgs();
+
+        User user = (User) args[0];
+
+        if(user.getAuthority() == Authority.ADMIN) {
+            HttpServletRequest request = getCurrentHttpRequest();
+
+            String clientIp = getClientIp(request);
+            String userAgent = getUserAgent(request);
+
+            Long formId = (Long) args[1];
+
+            Form form = formFacade.getForm(formId);
+
+            AdminLookupFormLog log = new AdminLookupFormLog(clientIp, userAgent, user, form);
+
+            adminLookupFormLogRepository.save(log);
+        }
     }
 
     @Around(value = "execution(* com.bamdoliro.maru.application.form.UpdateFormUseCase.execute(..))")
