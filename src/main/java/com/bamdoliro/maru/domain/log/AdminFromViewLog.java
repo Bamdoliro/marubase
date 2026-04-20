@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tbl_admin_lookup_form_log")
 @Entity
-public class AdminLookupFormLog extends BaseTimeEntity {
+public class AdminFromViewLog extends BaseTimeEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -32,7 +32,7 @@ public class AdminLookupFormLog extends BaseTimeEntity {
     @JoinColumn(nullable = false, name = "form_id")
     private Form form;
 
-    public AdminLookupFormLog(String clientIp, String userAgent, User user, Form form) {
+    public AdminFromViewLog(String clientIp, String userAgent, User user, Form form) {
         this.clientIp = clientIp;
         this.userAgent = userAgent;
         this.user = user;

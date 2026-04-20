@@ -40,7 +40,7 @@ public class LogAspect {
     private final FormSubmitLogRepository formSubmitLogRepository;
     private final FormUpdateLogRepository formUpdateLogRepository;
     private final UpdatedFieldRepository updatedFieldRepository;
-    private final AdminLookupFormLogRepository  adminLookupFormLogRepository;
+    private final AdminFormViewLogRepository adminLookupFormLogRepository;
 
 
     @AfterReturning(value = "execution(* com.bamdoliro.maru.application.auth.LogInUseCase.execute(..))")
@@ -87,7 +87,7 @@ public class LogAspect {
 
             Form form = formFacade.getForm(formId);
 
-            AdminLookupFormLog log = new AdminLookupFormLog(clientIp, userAgent, user, form);
+            AdminFromViewLog log = new AdminFromViewLog(clientIp, userAgent, user, form);
 
             adminLookupFormLogRepository.save(log);
         }
