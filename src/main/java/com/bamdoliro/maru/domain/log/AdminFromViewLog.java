@@ -5,6 +5,7 @@ import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.shared.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,6 +33,7 @@ public class AdminFromViewLog extends BaseTimeEntity {
     @JoinColumn(nullable = false, name = "form_id")
     private Form form;
 
+    @Builder
     public AdminFromViewLog(String clientIp, String userAgent, User user, Form form) {
         this.clientIp = clientIp;
         this.userAgent = userAgent;
