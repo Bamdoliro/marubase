@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.application.form;
 
+import com.bamdoliro.maru.domain.auth.exception.AuthorityMismatchException;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
@@ -55,5 +56,16 @@ class ReceiveFormUseCaseTest {
         // when and then
         assertThrows(FormNotFoundException.class, () -> receiveFormUseCase.execute(form.getId(), user));
         assertEquals(form.getStatus(), FormStatus.APPROVED);
+    }
+
+    @Test
+    void 원서를_접수할_때_어드민이_아니면_에러가_발생한다(){
+        //given
+        Form form = FormFixture.createForm(FormType.REGULAR);
+        User user = UserFixture.createUser();
+        given(formFacade.getForm(form.getId())).willReturn(form);
+
+        // when and then
+        assertThrows(AuthorityMismatchException.class, () -> receiveFormUseCase.execute(form.getId(), user));
     }
 }
