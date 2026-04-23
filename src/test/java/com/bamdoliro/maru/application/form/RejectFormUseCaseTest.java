@@ -5,7 +5,9 @@ import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.FormNotFoundException;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
+import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
+import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,10 +33,11 @@ class RejectFormUseCaseTest {
     void 원서를_반려한다() {
         // given
         Form form = FormFixture.createForm(FormType.REGULAR);
+        User user = UserFixture.createAdminUser();
         given(formFacade.getForm(form.getId())).willReturn(form);
 
         // when
-        rejectFormUseCase.execute(form.getId());
+        rejectFormUseCase.execute(form.getId(), user);
 
         // then
         verify(formFacade).getForm(form.getId());
@@ -45,11 +48,12 @@ class RejectFormUseCaseTest {
     void 원서를_반려할_때_원서가_없으면_에러가_발생한다() {
         // given
         Form form = FormFixture.createForm(FormType.REGULAR);
-        form.submit();
+        User user = UserFixture.createAdminUser();
+        form.reject();
         willThrow(new FormNotFoundException()).given(formFacade).getForm(form.getId());
 
         // when and then
-        assertThrows(FormNotFoundException.class, () -> rejectFormUseCase.execute(form.getId()));
+        assertThrows(FormNotFoundException.class, () -> rejectFormUseCase.execute(form.getId(), user));
         assertEquals(form.getStatus(), FormStatus.FINAL_SUBMITTED);
     }
 }
