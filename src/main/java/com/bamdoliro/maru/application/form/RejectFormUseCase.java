@@ -2,6 +2,7 @@ package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
+import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,8 +14,9 @@ public class RejectFormUseCase {
     private final FormFacade formFacade;
 
     @Transactional
-    public void execute(Long id) {
+    public void execute(Long id, User user) {
         Form form = formFacade.getForm(id);
+        form.isAdmin(user);
         form.reject();
     }
 }

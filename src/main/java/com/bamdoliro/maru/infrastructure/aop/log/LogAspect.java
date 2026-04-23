@@ -41,6 +41,7 @@ public class LogAspect {
     private final FormUpdateLogRepository formUpdateLogRepository;
     private final UpdatedFieldRepository updatedFieldRepository;
     private final AdminFormViewLogRepository adminLookupFormLogRepository;
+    private final AdminFormStatusChangeLogRepository adminFormStatusChangeLogRepository;
 
 
     @AfterReturning(value = "execution(* com.bamdoliro.maru.application.auth.LogInUseCase.execute(..))")
@@ -91,6 +92,42 @@ public class LogAspect {
 
             adminLookupFormLogRepository.save(log);
         }
+    }
+
+    @Around(
+            value = "execution(* com.bamdoliro.maru.application.form.ApproveFormUseCase.execute(..)) || " +
+                    "execution(* com.bamdoliro.maru.application.form.RejectFormUseCase.execute(..)) || " +
+                    "execution(* com.bamdoliro.maru.application.form.ReceiveFormUseCase.execute(..))"
+    )
+    public void logChangeFormStatus(ProceedingJoinPoint joinPoint) throws Throwable {
+        Object[] args = joinPoint.getArgs();
+
+        User user = (User) args[1];
+
+        Long formId = (Long) args[0];
+
+        Form form = formFacade.getForm(formId);
+
+        HttpServletRequest request = getCurrentHttpRequest();
+        String clientIp = getClientIp(request);
+        String userAgent = getUserAgent(request);
+
+        FormStatus beforeStatus = form.getStatus();
+
+        joinPoint.proceed();
+
+        FormStatus afterStatus = form.getStatus();
+
+        AdminFormStatusChangeLog log = AdminFormStatusChangeLog.builder()
+                .clientIp(clientIp)
+                .userAgent(userAgent)
+                .user(user)
+                .form(form)
+                .beforeStatus(beforeStatus)
+                .afterStatus(afterStatus)
+                .build();
+
+        adminFormStatusChangeLogRepository.save(log);
     }
 
     @Around(value = "execution(* com.bamdoliro.maru.application.form.UpdateFormUseCase.execute(..))")

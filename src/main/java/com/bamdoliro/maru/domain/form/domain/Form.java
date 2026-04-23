@@ -131,6 +131,12 @@ public class Form extends BaseTimeEntity {
         }
     }
 
+    public void isAdmin(User user){
+        if(!user.isAdmin()) {
+            throw new AuthorityMismatchException();
+        }
+    }
+
     public void isApplicantOrAdmin(User user) {
         if (!user.isAdmin() && !this.user.equals(user)) {
             throw new AuthorityMismatchException();

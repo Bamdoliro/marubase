@@ -45,7 +45,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        willDoNothing().given(approveFormUseCase).execute(formId);
+        willDoNothing().given(approveFormUseCase).execute(formId, user);
 
         mockMvc.perform(patch("/admin/forms/{form-id}/approve", formId)
                         .cookie(AuthFixture.createAuthCookie())
@@ -60,7 +60,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
                         pathParameters(parameterWithName("form-id").description("승인할 원서의 id"))
                 ));
 
-        verify(approveFormUseCase, times(1)).execute(formId);
+        verify(approveFormUseCase, times(1)).execute(formId, user);
     }
 
     @Test
@@ -70,7 +70,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FormNotFoundException()).when(approveFormUseCase).execute(formId);
+        doThrow(new FormNotFoundException()).when(approveFormUseCase).execute(formId, user);
 
         mockMvc.perform(patch("/admin/forms/{form-id}/approve", formId)
                         .cookie(AuthFixture.createAuthCookie())
@@ -79,7 +79,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
                 .andExpect(status().isNotFound())
                 .andDo(restDocs.document());
 
-        verify(approveFormUseCase, times(1)).execute(formId);
+        verify(approveFormUseCase, times(1)).execute(formId, user);
     }
 
     @Test
@@ -89,7 +89,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        willDoNothing().given(rejectFormUseCase).execute(formId);
+        willDoNothing().given(rejectFormUseCase).execute(formId, user);
 
         mockMvc.perform(patch("/admin/forms/{form-id}/reject", formId)
                         .cookie(AuthFixture.createAuthCookie())
@@ -104,7 +104,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
                         pathParameters(parameterWithName("form-id").description("반려할 원서의 id"))
                 ));
 
-        verify(rejectFormUseCase, times(1)).execute(formId);
+        verify(rejectFormUseCase, times(1)).execute(formId, user);
     }
 
     @Test
@@ -114,7 +114,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FormNotFoundException()).when(rejectFormUseCase).execute(formId);
+        doThrow(new FormNotFoundException()).when(rejectFormUseCase).execute(formId, user);
 
         mockMvc.perform(patch("/admin/forms/{form-id}/reject", formId)
                         .cookie(AuthFixture.createAuthCookie())
@@ -123,7 +123,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
                 .andExpect(status().isNotFound())
                 .andDo(restDocs.document());
 
-        verify(rejectFormUseCase, times(1)).execute(formId);
+        verify(rejectFormUseCase, times(1)).execute(formId, user);
     }
 
     @Test
@@ -133,7 +133,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        willDoNothing().given(receiveFormUseCase).execute(formId);
+        willDoNothing().given(receiveFormUseCase).execute(formId, user);
 
         mockMvc.perform(patch("/admin/forms/{form-id}/receive", formId)
                         .cookie(AuthFixture.createAuthCookie())
@@ -148,7 +148,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
                         pathParameters(parameterWithName("form-id").description("접수할 원서의 id"))
                 ));
 
-        verify(receiveFormUseCase, times(1)).execute(formId);
+        verify(receiveFormUseCase, times(1)).execute(formId, user);
     }
 
     @Test
@@ -158,7 +158,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FormNotFoundException()).when(receiveFormUseCase).execute(formId);
+        doThrow(new FormNotFoundException()).when(receiveFormUseCase).execute(formId, user);
 
         mockMvc.perform(patch("/admin/forms/{form-id}/receive", formId)
                         .cookie(AuthFixture.createAuthCookie())
@@ -167,7 +167,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
                 .andExpect(status().isNotFound())
                 .andDo(restDocs.document());
 
-        verify(receiveFormUseCase, times(1)).execute(formId);
+        verify(receiveFormUseCase, times(1)).execute(formId, user);
     }
 
     @Test

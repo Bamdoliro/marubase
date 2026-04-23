@@ -56,7 +56,7 @@ public class AdminFormController {
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @PathVariable(name = "form-id") Long formId
     ) {
-        approveFormUseCase.execute(formId);
+        approveFormUseCase.execute(formId, user);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -65,7 +65,7 @@ public class AdminFormController {
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @PathVariable(name = "form-id") Long formId
     ) {
-        rejectFormUseCase.execute(formId);
+        rejectFormUseCase.execute(formId, user);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -74,7 +74,7 @@ public class AdminFormController {
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @PathVariable(name = "form-id") Long formId
     ) {
-        receiveFormUseCase.execute(formId);
+        receiveFormUseCase.execute(formId, user);
     }
 
     @GetMapping("/review")
