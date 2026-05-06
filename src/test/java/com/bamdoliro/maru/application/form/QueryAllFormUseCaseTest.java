@@ -4,6 +4,7 @@ import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.PageResult;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.util.RandomUtil;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,31 @@ class QueryAllFormUseCaseTest {
 
         // then
         assertEquals(formList.size(), returnedFormList.size());
+
+        verify(formRepository, times(1)).findByStatus(null);
+    }
+
+    @Test
+    void 일부_원서만_조회한다() {
+        // given
+        List<Form> formList = List.of(
+                FormFixture.createForm(FormType.REGULAR),
+                FormFixture.createForm(FormType.SPECIAL_ADMISSION),
+                FormFixture.createForm(FormType.MEISTER_TALENT),
+                FormFixture.createForm(FormType.MULTI_CHILDREN)
+        );
+
+        formList.forEach(form -> form.assignExaminationNumber(1001L));
+
+        given(formRepository.findByStatus(null)).willReturn(formList);
+
+        // when
+        PageResult<FormSimpleResponse> returnedFormList = queryAllFormUseCase.execute(null, null,null, 1, 2);
+
+        // then
+        assertEquals(2, returnedFormList.getTotalPages());
+        assertEquals(2, returnedFormList.getData().size());
+        assertEquals(FormType.REGULAR, returnedFormList.getData().get(0).getType());
 
         verify(formRepository, times(1)).findByStatus(null);
     }
