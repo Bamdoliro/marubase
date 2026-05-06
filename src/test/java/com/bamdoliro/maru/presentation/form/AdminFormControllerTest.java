@@ -9,6 +9,8 @@ import com.bamdoliro.maru.domain.form.exception.MissingTotalScoreException;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormRequest;
+import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.PageResult;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
@@ -27,10 +29,13 @@ import java.util.List;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
 import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class AdminFormControllerTest extends RestDocsTestSupport {
@@ -254,10 +259,15 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
-        given(queryAllFormUseCase.execute(FormStatus.SUBMITTED, FormType.REGULAR, null, 1, 2)).willReturn(List.of(
-                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
-                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED)
-        ));
+        given(queryAllFormUseCase.execute(FormStatus.SUBMITTED, FormType.REGULAR, null, 1, 2))
+            .willReturn(new PageResult<>(
+                    List.of(
+                            FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
+                            FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED)
+                    ),
+                    5L,
+                    3L
+            ));
 
         mockMvc.perform(get("/admin/forms")
                         .param("status", FormStatus.SUBMITTED.name())
@@ -268,7 +278,13 @@ class AdminFormControllerTest extends RestDocsTestSupport {
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
+                .andExpect(header().exists("X-Total-Count"))
+                .andExpect(header().exists("X-Total-Pages"))
                 .andDo(restDocs.document(
+                        responseHeaders(
+                                headerWithName("X-Total-Count").description("필터링된 전체 원서의 개수"),
+                                headerWithName("X-Total-Pages").description("전체 페이지 수")
+                        ),
                         requestCookies(
                                 cookieWithName("accessToken")
                                         .description("이것은.액세스.토큰")
