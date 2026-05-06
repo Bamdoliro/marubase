@@ -5,6 +5,7 @@ import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.PageResult;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
 
@@ -44,14 +45,18 @@ public class QueryAllFormUseCase {
     }
 
     // 하위 호환성을 유지해야하므로 execute 함수를 오버로드
-    public List<FormSimpleResponse> execute(FormStatus status, FormType type, String sort, int page, int size) {
+    public PageResult<FormSimpleResponse> execute(FormStatus status, FormType type, String sort, int page, int size) {
         List<FormSimpleResponse> allForms = this.execute(status, type, sort);
 
-        int skip = (page - 1) * size;
+        long totalCount = allForms.size();
+        long totalPages = (long) Math.ceil((double) totalCount / size);
 
-        return allForms.stream()
+        int skip = (page - 1) * size;
+        List<FormSimpleResponse> pagedData = allForms.stream()
                 .skip(skip)
                 .limit(size)
-                .collect(Collectors.toList());
+                .toList();
+
+        return new PageResult<>(pagedData, totalCount, totalPages);
     }
 }
