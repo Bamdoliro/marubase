@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @UseCase
@@ -40,5 +41,17 @@ public class QueryAllFormUseCase {
         return formList.stream()
                 .map(FormSimpleResponse::new)
                 .toList();
+    }
+
+    // 하위 호환성을 유지해야하므로 execute 함수를 오버로드
+    public List<FormSimpleResponse> execute(FormStatus status, FormType type, String sort, int page, int size) {
+        List<FormSimpleResponse> allForms = this.execute(status, type, sort);
+
+        int skip = (page - 1) * size;
+
+        return allForms.stream()
+                .skip(skip)
+                .limit(size)
+                .collect(Collectors.toList());
     }
 }
