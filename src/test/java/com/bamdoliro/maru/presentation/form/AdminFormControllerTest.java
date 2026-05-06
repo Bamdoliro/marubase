@@ -248,6 +248,45 @@ class AdminFormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
+    void 원서를_일부만_조회한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+
+        given(queryAllFormUseCase.execute(FormStatus.SUBMITTED, FormType.REGULAR, null, 1, 2)).willReturn(List.of(
+                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
+                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED)
+        ));
+
+        mockMvc.perform(get("/admin/forms")
+                        .param("status", FormStatus.SUBMITTED.name())
+                        .param("type", FormType.REGULAR.name())
+                        .param("page", "1")
+                        .param("size", "2")
+                        .cookie(AuthFixture.createAuthCookie())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        ),
+                        queryParameters(
+                                parameterWithName("status").description("<<form-status,원서 상태 (null인 경우 전체 조회)>>").optional(),
+                                parameterWithName("type").description("<<form-category,원서 카테고리 (null인 경우 전체 조회)>>").optional(),
+                                parameterWithName("sort").description("정렬 기준").optional(),
+                                parameterWithName("page").description("조회할 페이지 번호 (size, page둘다 null인 경우 전체 조회, size가 null 아니라면 1)").optional(),
+                                parameterWithName("size").description("페이지당 데이터 개수 (size, page둘다 null인 경우 전체 조회, page가 null 아니라면 10)").optional()
+                        )
+                ));
+
+        // 오버로딩된 페이징 메서드가 정확히 호출되었는지 검증합니다.
+        verify(queryAllFormUseCase, times(1)).execute(FormStatus.SUBMITTED, FormType.REGULAR, null, 1, 2);
+    }
+
+    @Test
     void 수험표_전체를_발급받는다() throws Exception {
         User user = UserFixture.createAdminUser();
         MockMultipartFile file = new MockMultipartFile(
