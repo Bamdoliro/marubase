@@ -8,6 +8,7 @@ import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListReques
 import com.bamdoliro.maru.presentation.form.dto.response.AdmissionAndPledgeUrlResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormUrlResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.PageResult;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.auth.Authority;
 import com.bamdoliro.maru.shared.response.CommonResponse;
@@ -87,29 +88,29 @@ public class AdminFormController {
     }
 
     @GetMapping
-    public ListCommonResponse<FormSimpleResponse> getFormList(
+    public ResponseEntity<ListCommonResponse<FormSimpleResponse>> getFormList(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestParam(name = "status", required = false) FormStatus status,
             @RequestParam(name = "type", required = false) FormType type,
             @RequestParam(name = "sort", required = false) String sort,
-
-            // page와 size는 하위 호환성을 위해 required = false로 설정
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "size", required = false) Integer size
     ) {
-        // 하위 호환성 유지를 위해 page와 size가 없는 경우 전체 조회를 수행
         if (page == null && size == null) {
-            return ListCommonResponse.ok(
-                    queryAllFormUseCase.execute(status, type, sort)
+            return ResponseEntity.ok(
+                    ListCommonResponse.ok(queryAllFormUseCase.execute(status, type, sort))
             );
         }
-        // page와 size가 둘중하나라 있는 경우 페이징 조회를 수행
+
         int pageNumber = (page != null) ? page : 1;
         int pageSize = (size != null) ? size : 10;
 
-        return ListCommonResponse.ok(
-                queryAllFormUseCase.execute(status, type, sort, pageNumber, pageSize)
-        );
+        PageResult<FormSimpleResponse> result = queryAllFormUseCase.execute(status, type, sort, pageNumber, pageSize);
+
+        return ResponseEntity.ok()
+                .header("X-Total-Count", String.valueOf(result.getTotalCount()))
+                .header("X-Total-Pages", String.valueOf(result.getTotalPages()))
+                .body(ListCommonResponse.ok(result.getData()));
     }
 
     @GetMapping("/admission-tickets")
