@@ -90,7 +90,7 @@ public class ExportSubjectGradeDetailUseCase {
         columnList.add(FormColumn.text(form -> form.getEducation().getSchool().getName()));
 
         for (String subjectKey : allSubjects) {
-            columnList.add(FormColumn.text(form -> getSubjectScore(form, subjectKey)));
+            columnList.add(FormColumn.score(form -> getSubjectScore(form, subjectKey)));
         }
 
         return columnList;
