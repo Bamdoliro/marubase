@@ -60,7 +60,7 @@ public class AdminFairController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{fair-id}")
-    public void updateQuestion(
+    public void updateFair(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @PathVariable(name = "fair-id") Long fairId,
             @RequestBody @Valid FairRequest request
@@ -70,7 +70,7 @@ public class AdminFairController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{fair-id}")
-    public void deleteQuestion(
+    public void deleteFair(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @PathVariable(name = "fair-id") Long fairId
     ) {
