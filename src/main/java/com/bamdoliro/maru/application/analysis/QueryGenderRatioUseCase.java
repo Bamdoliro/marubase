@@ -53,11 +53,19 @@ public class QueryGenderRatioUseCase {
         for(Map.Entry<FormType.Category, List<Form>> entry : formLists.entrySet()) {
             FormType.Category category = entry.getKey();
             List<Form> formList = entry.getValue();
+            Map<Boolean, Map<Gender, Long>> grouped = formList.stream()
+                    .collect(Collectors.groupingBy(
+                            this::isBusan,
+                            Collectors.groupingBy(
+                                    form -> form.getApplicant().getGender(),
+                                    Collectors.counting()
+                            )
+                    ));
 
-            long busanMale = formList.stream().filter(this::isBusan).filter(this::isMale).count();
-            long busanFemale = formList.stream().filter(this::isBusan).filter(this::isFemale).count();
-            long otherLocationMale = formList.stream().filter(this::isNotBusan).filter(this::isMale).count();
-            long otherLocationFemale = formList.stream().filter(this::isNotBusan).filter(this::isFemale).count();
+            long busanMale = grouped.getOrDefault(true, Map.of()).getOrDefault(Gender.MALE, 0L);
+            long busanFemale = grouped.getOrDefault(true, Map.of()).getOrDefault(Gender.FEMALE, 0L);
+            long otherLocationMale = grouped.getOrDefault(false, Map.of()).getOrDefault(Gender.MALE, 0L);
+            long otherLocationFemale = grouped.getOrDefault(false, Map.of()).getOrDefault(Gender.FEMALE, 0L);
 
             result.add(new GenderRatioResponse(category, busanMale, busanFemale, otherLocationMale, otherLocationFemale));
         }
