@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Component
@@ -43,7 +42,7 @@ public class XlsxGenerator {
         return xlsxService.convertToByteArrayResource(workbook);
     }
 
-    public Resource executeWithDynamicHeaders(List<String> headers, List<Form> formList, List<Function<Form, Object>> columnList, List<String> styleList) throws IOException {
+    public Resource executeWithDynamicHeaders(List<String> headers, List<Form> formList, List<FormColumn> columns) throws IOException {
         Workbook workbook = new org.apache.poi.xssf.usermodel.XSSFWorkbook();
         Sheet sheet = workbook.createSheet();
 
@@ -64,8 +63,8 @@ public class XlsxGenerator {
             Row row = sheet.createRow(index + 1);
             int columnIndex = 0;
 
-            for (Function<Form, Object> column : columnList) {
-                createCell(row, columnIndex, column.apply(form), styleMap.get(styleList.get(columnIndex++)));
+            for(FormColumn column : columns) {
+                createCell(row, columnIndex++, column.getExtractor().apply(form), styleMap.get(column.getStyle()));
             }
         }
 

@@ -4,6 +4,7 @@ import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.value.Subject;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
+import com.bamdoliro.maru.infrastructure.xlsx.FormColumn;
 import com.bamdoliro.maru.infrastructure.xlsx.XlsxGenerator;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 
 @RequiredArgsConstructor
 @UseCase
@@ -32,10 +32,9 @@ public class ExportSubjectGradeDetailUseCase {
         Set<String> allSubjects = extractAllSubjects(formList);
 
         List<String> headers = buildHeaders(allSubjects);
-        List<Function<Form, Object>> columnList = buildColumnList(allSubjects);
-        List<String> styleList = buildStyleList(allSubjects);
+        List<FormColumn> columnList = buildColumnList(allSubjects);
 
-        return xlsxGenerator.executeWithDynamicHeaders(headers, formList, columnList, styleList);
+        return xlsxGenerator.executeWithDynamicHeaders(headers, formList, columnList);
     }
 
     private Set<String> extractAllSubjects(List<Form> formList) {
@@ -80,38 +79,21 @@ public class ExportSubjectGradeDetailUseCase {
         return headers;
     }
 
-    private List<Function<Form, Object>> buildColumnList(Set<String> allSubjects) {
-        List<Function<Form, Object>> columnList = new ArrayList<>();
+    private List<FormColumn> buildColumnList(Set<String> allSubjects) {
+        List<FormColumn> columnList = new ArrayList<>();
 
-        columnList.add(Form::getId);
-        columnList.add(Form::getExaminationNumber);
-        columnList.add(form -> form.getApplicant().getName());
-        columnList.add(form -> form.getApplicant().getPhoneNumber().toString());
-        columnList.add(form -> form.getApplicant().getBirthday().format(DateTimeFormatter.BASIC_ISO_DATE));
-        columnList.add(form -> form.getEducation().getSchool().getName());
+        columnList.add(FormColumn.text(Form::getId));
+        columnList.add(FormColumn.text(Form::getExaminationNumber));
+        columnList.add(FormColumn.text(form -> form.getApplicant().getName()));
+        columnList.add(FormColumn.text(form -> form.getApplicant().getPhoneNumber().toString()));
+        columnList.add(FormColumn.text(form -> form.getApplicant().getBirthday().format(DateTimeFormatter.BASIC_ISO_DATE)));
+        columnList.add(FormColumn.text(form -> form.getEducation().getSchool().getName()));
 
         for (String subjectKey : allSubjects) {
-            columnList.add(form -> getSubjectScore(form, subjectKey));
+            columnList.add(FormColumn.text(form -> getSubjectScore(form, subjectKey)));
         }
 
         return columnList;
-    }
-
-    private List<String> buildStyleList(Set<String> allSubjects) {
-        List<String> styleList = new ArrayList<>();
-
-        styleList.add("default");
-        styleList.add("default");
-        styleList.add("default");
-        styleList.add("default");
-        styleList.add("default");
-        styleList.add("default");
-
-        for (String ignored : allSubjects) {
-            styleList.add("right");
-        }
-
-        return styleList;
     }
 
     private Object getSubjectScore(Form form, String subjectKey) {
