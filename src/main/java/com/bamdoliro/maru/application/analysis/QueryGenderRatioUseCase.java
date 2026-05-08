@@ -77,15 +77,4 @@ public class QueryGenderRatioUseCase {
         return form.getEducation().getSchool().isBusan();
     }
 
-    private boolean isNotBusan(Form form) {
-        return !isBusan(form);
-    }
-
-    private boolean isMale(Form form) {
-        return form.getApplicant().getGender() == (Gender.MALE);
-    }
-
-    private boolean isFemale(Form form) {
-        return form.getApplicant().getGender() == (Gender.FEMALE);
-    }
 }
