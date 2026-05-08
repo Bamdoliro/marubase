@@ -19,7 +19,7 @@ public class XlsxGenerator {
 
     private final XlsxService xlsxService;
 
-    public Resource execute(String templateName, List<Form> formList, List<Function<Form, Object>> columnList, List<String> styleList) throws IOException {
+    public Resource execute(String templateName, List<Form> formList, List<FormColumn> columns) throws IOException {
         Workbook workbook = xlsxService.openTemplate(templateName);
         Sheet sheet = workbook.getSheetAt(0);
 
@@ -35,8 +35,8 @@ public class XlsxGenerator {
             Row row = sheet.createRow(index + XlsxConstant.FIRST_ROW_INDEX_WITH_TITLE);
             int columnIndex = 0;
 
-            for (Function<Form, Object> column : columnList) {
-                createCell(row, columnIndex, column.apply(form), styleMap.get(styleList.get(columnIndex++)));
+            for(FormColumn column : columns) {
+                createCell(row, columnIndex++, column.getExtractor().apply(form), styleMap.get(column.getStyle()));
             }
         }
 
