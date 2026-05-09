@@ -88,7 +88,7 @@ public class AdminFormController {
     }
 
     @GetMapping
-    public ResponseEntity<ListCommonResponse<FormSimpleResponse>> getFormList(
+    public ResponseEntity<PageResult> getFormList(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestParam(name = "status", required = false) FormStatus status,
             @RequestParam(name = "type", required = false) FormType type,
@@ -96,21 +96,10 @@ public class AdminFormController {
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "size", required = false) Integer size
     ) {
-        if (page == null && size == null) {
-            return ResponseEntity.ok(
-                    ListCommonResponse.ok(queryAllFormUseCase.execute(status, type, sort))
-            );
-        }
-
-        int pageNumber = (page != null) ? page : 1;
-        int pageSize = (size != null) ? size : 10;
-
-        PageResult<FormSimpleResponse> result = queryAllFormUseCase.execute(status, type, sort, pageNumber, pageSize);
+        PageResult<FormSimpleResponse> result = queryAllFormUseCase.execute(status, type, sort, page, size);
 
         return ResponseEntity.ok()
-                .header("X-Total-Count", String.valueOf(result.getTotalCount()))
-                .header("X-Total-Pages", String.valueOf(result.getTotalPages()))
-                .body(ListCommonResponse.ok(result.getData()));
+                .body(result);
     }
 
     @GetMapping("/admission-tickets")
