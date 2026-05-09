@@ -32,11 +32,9 @@ import static org.springframework.restdocs.cookies.CookieDocumentation.requestCo
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class AdminFormControllerTest extends RestDocsTestSupport {
 
@@ -222,13 +220,16 @@ class AdminFormControllerTest extends RestDocsTestSupport {
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(queryAllFormUseCase.execute(FormStatus.SUBMITTED, FormType.REGULAR, null)).willReturn(List.of(
-                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
-                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
-                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
-                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
-                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED)
-        ));
+
+        given(queryAllFormUseCase.execute(FormStatus.SUBMITTED, FormType.REGULAR, null, 1, 2))
+                .willReturn(new PageResult<>(
+                        List.of(
+                                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
+                                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED)
+                        ),
+                        5L,
+                        3L
+                ));
 
         mockMvc.perform(get("/admin/forms")
                         .param("status", FormStatus.SUBMITTED.name())
@@ -237,21 +238,23 @@ class AdminFormControllerTest extends RestDocsTestSupport {
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").isArray())
+                .andExpect(jsonPath("$.data.length()").value(2))
                 .andDo(restDocs.document(
                         requestCookies(
-                                cookieWithName("accessToken")
-                                        .description("이것은.액세스.토큰")
+                                cookieWithName("accessToken").description("이것은.액세스.토큰")
                         ),
                         queryParameters(
-                                parameterWithName("status").description("<<form-status,원서 상태 (null인 경우 전체 조회)>>").optional(),
-                                parameterWithName("type").description("<<form-category,원서 카테고리 (null인 경우 전체 조회)>>").optional(),
-                                parameterWithName("sort").description("정렬 기준").optional()
+                                parameterWithName("status").description("<<원서 상태 (null인 경우 전체 조회)>>").optional(),
+                                parameterWithName("type").description("<<원서 카테고리 (null인 경우 전체 조회)>>").optional(),
+                                parameterWithName("sort").description("정렬 기준").optional(),
+                                parameterWithName("page").description("조회할 페이지 번호 (size, page둘다 null인 경우 전체 조회, size가 null 아니라면 1)").optional(),
+                                parameterWithName("size").description("페이지당 데이터 개수 (size, page둘다 null인 경우 전체 조회, page가 null 아니라면 10)").optional()
                         )
                 ));
 
-        verify(queryAllFormUseCase, times(1)).execute(FormStatus.SUBMITTED, FormType.REGULAR, null);
+        verify(queryAllFormUseCase, times(1)).execute(FormStatus.SUBMITTED, FormType.REGULAR, null, 1, 2);
     }
-
     @Test
     void 원서를_일부만_조회한다() throws Exception {
         User user = UserFixture.createAdminUser();
@@ -260,14 +263,14 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
 
         given(queryAllFormUseCase.execute(FormStatus.SUBMITTED, FormType.REGULAR, null, 1, 2))
-            .willReturn(new PageResult<>(
-                    List.of(
-                            FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
-                            FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED)
-                    ),
-                    5L,
-                    3L
-            ));
+                .willReturn(new PageResult<>(
+                        List.of(
+                                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
+                                FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED)
+                        ),
+                        5L,
+                        3L
+                ));
 
         mockMvc.perform(get("/admin/forms")
                         .param("status", FormStatus.SUBMITTED.name())
@@ -278,27 +281,21 @@ class AdminFormControllerTest extends RestDocsTestSupport {
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(header().exists("X-Total-Count"))
-                .andExpect(header().exists("X-Total-Pages"))
+                .andExpect(jsonPath("$.data").isArray())
+                .andExpect(jsonPath("$.data.length()").value(2))
                 .andDo(restDocs.document(
-                        responseHeaders(
-                                headerWithName("X-Total-Count").description("필터링된 전체 원서의 개수"),
-                                headerWithName("X-Total-Pages").description("전체 페이지 수")
-                        ),
                         requestCookies(
-                                cookieWithName("accessToken")
-                                        .description("이것은.액세스.토큰")
+                                cookieWithName("accessToken").description("이것은.액세스.토큰")
                         ),
                         queryParameters(
-                                parameterWithName("status").description("<<form-status,원서 상태 (null인 경우 전체 조회)>>").optional(),
-                                parameterWithName("type").description("<<form-category,원서 카테고리 (null인 경우 전체 조회)>>").optional(),
+                                parameterWithName("status").description("<<원서 상태 (null인 경우 전체 조회)>>").optional(),
+                                parameterWithName("type").description("<<원서 카테고리 (null인 경우 전체 조회)>>").optional(),
                                 parameterWithName("sort").description("정렬 기준").optional(),
                                 parameterWithName("page").description("조회할 페이지 번호 (size, page둘다 null인 경우 전체 조회, size가 null 아니라면 1)").optional(),
                                 parameterWithName("size").description("페이지당 데이터 개수 (size, page둘다 null인 경우 전체 조회, page가 null 아니라면 10)").optional()
                         )
                 ));
 
-        // 오버로딩된 페이징 메서드가 정확히 호출되었는지 검증합니다.
         verify(queryAllFormUseCase, times(1)).execute(FormStatus.SUBMITTED, FormType.REGULAR, null, 1, 2);
     }
 
