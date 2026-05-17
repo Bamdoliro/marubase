@@ -102,6 +102,7 @@ dependencyManagement {
 test {
     outputs.dir snippetsDir
     useJUnitPlatform()
+    maxParallelForks = Runtime.runtime.availableProcessors()
 }
 
 asciidoctor {
