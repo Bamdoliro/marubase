@@ -21,11 +21,12 @@ public class SelectSecondPassUseCase {
 
     private final FormRepository formRepository;
     private final CalculateFormScoreService calculateFormScoreService;
-    private final AtomicInteger otherRegionCount = new AtomicInteger((int) Math.ceil(FixedNumber.TOTAL * FixedNumber.OTHER_REGION_RATE));
 
     @Transactional
     public void execute() {
         validate();
+
+        AtomicInteger otherRegionCount = new AtomicInteger((int) Math.ceil(FixedNumber.TOTAL * FixedNumber.OTHER_REGION_RATE));
 
         int regularCount = FixedNumber.REGULAR;
         int meisterTalentCount = FixedNumber.MEISTER_TALENT;
@@ -54,25 +55,25 @@ public class SelectSecondPassUseCase {
         int equalOpportunityCount = (int) Math.round(socialIntegrationCount * 0.5);
         int societyDiversityCount = equalOpportunityCount;
 
-        processForms(equalOpportunityFormList, equalOpportunityCount, this::changeToRegularAndCalculateScoreAgain);
-        processForms(societyDiversityFormList, societyDiversityCount, this::changeToRegularAndCalculateScoreAgain);
-        processForms(meisterTalentFormList, meisterTalentCount, this::changeToRegularAndCalculateScoreAgain);
+        processForms(equalOpportunityFormList, equalOpportunityCount, this::changeToRegularAndCalculateScoreAgain, otherRegionCount);
+        processForms(societyDiversityFormList, societyDiversityCount, this::changeToRegularAndCalculateScoreAgain, otherRegionCount);
+        processForms(meisterTalentFormList, meisterTalentCount, this::changeToRegularAndCalculateScoreAgain,otherRegionCount);
 
         formRepository.flush();
         List<Form> regularFormList = formRepository.findFirstPassedRegularForm();
 
-        processForms(regularFormList, regularCount, Form::fail);
+        processForms(regularFormList, regularCount, Form::fail, otherRegionCount);
 
         formRepository.flush();
         List<Form> supernumeraryFormList = formRepository.findFirstPassedSupernumeraryForm();
         List<Form> nationalVeteransEducationFormList = classifyFormsByType(supernumeraryFormList, FormType::isNationalVeteransEducation);
         List<Form> specialAdmissionFormList = classifyFormsByType(supernumeraryFormList, FormType::isSpecialAdmission);
 
-        processForms(nationalVeteransEducationFormList, nationalVeteransEducationCount, Form::fail);
-        processForms(specialAdmissionFormList, specialAdmissionCount, Form::fail);
+        processForms(nationalVeteransEducationFormList, nationalVeteransEducationCount, Form::fail, otherRegionCount);
+        processForms(specialAdmissionFormList, specialAdmissionCount, Form::fail, otherRegionCount);
     }
 
-    private void processForms(List<Form> formList, int count, Consumer<Form> action) {
+    private void processForms(List<Form> formList, int count, Consumer<Form> action, AtomicInteger otherRegionCount) {
         for (Form form : formList) {
             if (count > 0) {
                 if (form.getEducation().getSchool().isBusan()) {
