@@ -103,6 +103,7 @@ test {
     outputs.dir snippetsDir
     useJUnitPlatform()
     maxParallelForks = Runtime.runtime.availableProcessors()
+    inputs.dir('src/test')
 }
 
 asciidoctor {

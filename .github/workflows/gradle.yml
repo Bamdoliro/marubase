@@ -39,6 +39,15 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
+    - name: Cache Gradle dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
     - name: Start Redis
       uses: supercharge/redis-github-action@1.1.0
       with:
@@ -59,5 +68,6 @@ jobs:
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: build
+        arguments: build --build-cache
+        cache-disabled: true
 #test
