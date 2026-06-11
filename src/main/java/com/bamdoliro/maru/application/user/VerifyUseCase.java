@@ -21,7 +21,7 @@ public class VerifyUseCase {
     public void execute(VerifyRequest request) {
 
         if (request.getType() == VerificationType.SIGNUP) {
-            SignUpVerification signUpVerification = getSingUpVerification(request.getPhoneNumber());
+            SignUpVerification signUpVerification = getSignUpVerification(request.getPhoneNumber());
 
             if (!signUpVerification.getCode().equals(request.getCode())) {
                 throw new VerificationCodeMismatchException();
@@ -45,7 +45,7 @@ public class VerifyUseCase {
         }
     }
 
-    private SignUpVerification getSingUpVerification(String phoneNumber) {
+    private SignUpVerification getSignUpVerification(String phoneNumber) {
         return signUpVerificationRepository.findById(phoneNumber)
                 .orElseThrow(VerifyingHasFailedException::new);
     }
