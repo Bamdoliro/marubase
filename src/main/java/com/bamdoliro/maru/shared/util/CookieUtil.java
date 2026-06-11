@@ -11,16 +11,18 @@ public class CookieUtil {
 
     private final String ACCESS_TOKEN  = "accessToken";
     private final String REFRESH_TOKEN = "refreshToken";
+    private static final int ACCESS_MAX_AGE = 3600;
+    private static final int REFRESH_MAX_AGE = 1296000;
 
     @Value("${domain.name}")
     private String DOMAIN;
 
     public void addAccessTokenCookie(HttpServletResponse response, String accessToken) {
-        addCookie(response, buildCookie(ACCESS_TOKEN, accessToken, 3600));
+        addCookie(response, buildCookie(ACCESS_TOKEN, accessToken, ACCESS_MAX_AGE));
     }
 
     public void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
-        addCookie(response, buildCookie(REFRESH_TOKEN, refreshToken, 1296000));
+        addCookie(response, buildCookie(REFRESH_TOKEN, refreshToken, REFRESH_MAX_AGE));
     }
 
     public void deleteAccessTokenCookie(HttpServletResponse response) {
