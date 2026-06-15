@@ -30,20 +30,18 @@ public class UpdateSecondRoundScoreUseCase {
     private final FormRepository formRepository;
     private final XlsxService xlsxService;
 
-    private CellStyle errorCellStyle;
-
     @Transactional
     public Resource execute(MultipartFile xlsx) throws IOException {
         Workbook workbook = new XSSFWorkbook(xlsx.getInputStream());
         Sheet sheet = workbook.getSheetAt(0);
 
-        errorCellStyle = xlsxService.createDefaultCellStyle(workbook);
+        CellStyle errorCellStyle = xlsxService.createDefaultCellStyle(workbook);
         errorCellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
         errorCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
         List<Form> formList = formRepository.findByStatus(FormStatus.FIRST_PASSED);
         formList.sort(Comparator.comparing(Form::getExaminationNumber));
-        List<SecondScoreVo> secondScoreVoList = getSecondScoreVoList(sheet);
+        List<SecondScoreVo> secondScoreVoList = getSecondScoreVoList(sheet, errorCellStyle);
         if (secondScoreVoList == null) {
             return xlsxService.convertToByteArrayResource(workbook);
         }
@@ -61,10 +59,10 @@ public class UpdateSecondRoundScoreUseCase {
         return null;
     }
 
-    private List<SecondScoreVo> getSecondScoreVoList(Sheet sheet) {
+    private List<SecondScoreVo> getSecondScoreVoList(Sheet sheet, CellStyle errorCellStyle) {
         List<SecondScoreVo> voList = IntStream.range(1, sheet.getPhysicalNumberOfRows())
                 .mapToObj(sheet::getRow)
-                .map(this::getSecondScoreFrom)
+                .map(r -> getSecondScoreFrom(r, errorCellStyle))
                 .collect(Collectors.toList());
 
         if (voList.contains(null)) {
@@ -76,9 +74,9 @@ public class UpdateSecondRoundScoreUseCase {
         return voList;
     }
 
-    private SecondScoreVo getSecondScoreFrom(Row row) {
-        List<Cell> invalidCellTypeList = validateCellType(row);
-        boolean isValidScore = validateScore(row, invalidCellTypeList);
+    private SecondScoreVo getSecondScoreFrom(Row row, CellStyle errorCellStyle) {
+        List<Cell> invalidCellTypeList = validateCellType(row, errorCellStyle);
+        boolean isValidScore = validateScore(row, invalidCellTypeList, errorCellStyle);
 
         if (invalidCellTypeList.isEmpty() && isValidScore) {
             boolean isShow = row.getCell(6).getBooleanCellValue();
@@ -97,7 +95,7 @@ public class UpdateSecondRoundScoreUseCase {
         }
     }
 
-    private List<Cell> validateCellType(Row row) {
+    private List<Cell> validateCellType(Row row, CellStyle errorCellStyle) {
         // 수험번호 | 이름 | 전형 구분 | 심층면접 | NCS | 코딩테스트 | 응시 여부
         List<Cell> cellList = new ArrayList<>();
 
@@ -111,19 +109,19 @@ public class UpdateSecondRoundScoreUseCase {
         boolean isShow = false;
 
         if (examinationNumberCell.getCellType() != CellType.NUMERIC) {
-            setErrorCell(examinationNumberCell, "타입 불일치");
+            setErrorCell(errorCellStyle, examinationNumberCell, "타입 불일치");
             cellList.add(examinationNumberCell);
         }
         if (nameCell.getCellType() != CellType.STRING) {
-            setErrorCell(nameCell, "타입 불일치");
+            setErrorCell(errorCellStyle, nameCell, "타입 불일치");
             cellList.add(nameCell);
         }
         if (typeCell.getCellType() != CellType.STRING) {
-            setErrorCell(typeCell, "타입 불일치");
+            setErrorCell(errorCellStyle, typeCell, "타입 불일치");
             cellList.add(typeCell);
         }
         if (isShowCell.getCellType() != CellType.FORMULA) {
-            setErrorCell(isShowCell, "타입 불일치");
+            setErrorCell(errorCellStyle, isShowCell, "타입 불일치");
             cellList.add(isShowCell);
         } else {
             isShow = isShowCell.getBooleanCellValue();
@@ -131,11 +129,11 @@ public class UpdateSecondRoundScoreUseCase {
 
         if (isShow) {
             if (depthInterviewScoreCell != null && depthInterviewScoreCell.getCellType() != CellType.NUMERIC) {
-                setErrorCell(depthInterviewScoreCell, "타입 불일치");
+                setErrorCell(errorCellStyle, depthInterviewScoreCell, "타입 불일치");
                 cellList.add(depthInterviewScoreCell);
             }
             if (ncsScoreCell != null && ncsScoreCell.getCellType() != CellType.NUMERIC) {
-                setErrorCell(ncsScoreCell, "타입 불일치");
+                setErrorCell(errorCellStyle, ncsScoreCell, "타입 불일치");
                 cellList.add(ncsScoreCell);
             }
             if (
@@ -144,7 +142,7 @@ public class UpdateSecondRoundScoreUseCase {
                     (!"마이스터인재전형".equals(typeCell.getStringCellValue()) &&
                             codingTestScoreCell != null && codingTestScoreCell.getCellType() != CellType.BLANK))
             {
-                setErrorCell(codingTestScoreCell, "타입 불일치");
+                setErrorCell(errorCellStyle, codingTestScoreCell, "타입 불일치");
                 cellList.add(codingTestScoreCell);
             }
         }
@@ -152,7 +150,7 @@ public class UpdateSecondRoundScoreUseCase {
         return cellList;
     }
 
-    private boolean validateScore(Row row, List<Cell> invalidCellTypeList) {
+    private boolean validateScore(Row row, List<Cell> invalidCellTypeList, CellStyle errorCellStyle) {
         // 수험번호 | 이름 | 전형 구분 | 심층면접 | NCS | 코딩테스트 | 응시 여부
         boolean isValid = true;
 
@@ -173,36 +171,36 @@ public class UpdateSecondRoundScoreUseCase {
             switch (type) {
                 case "마이스터인재전형" -> {
                     if (!invalidCellTypeList.contains(depthInterviewScoreCell) && !(0 <= depthInterviewScore && depthInterviewScore <= 120)) {
-                        setErrorCell(depthInterviewScoreCell, "범위 초과");
+                        setErrorCell(errorCellStyle, depthInterviewScoreCell, "범위 초과");
                         isValid = false;
                     }
                     if (!invalidCellTypeList.contains(ncsScoreCell) && !(0 <= ncsScore && ncsScore <= 40)) {
-                        setErrorCell(ncsScoreCell, "범위 초과");
+                        setErrorCell(errorCellStyle, ncsScoreCell, "범위 초과");
                         isValid = false;
                     }
                     if (codingTestScoreCell != null && !invalidCellTypeList.contains(codingTestScoreCell)
                             && !(0 <= codingTestScore && codingTestScore <= 80)) {
-                        setErrorCell(codingTestScoreCell, "범위 초과");
+                        setErrorCell(errorCellStyle, codingTestScoreCell, "범위 초과");
                         isValid = false;
                     }
                 }
                 case "사회통합전형" -> {
                     if (!invalidCellTypeList.contains(depthInterviewScoreCell) && !(0 <= depthInterviewScore && depthInterviewScore <= 200)) {
-                        setErrorCell(depthInterviewScoreCell, "범위 초과");
+                        setErrorCell(errorCellStyle, depthInterviewScoreCell, "범위 초과");
                         isValid = false;
                     }
                     if (!invalidCellTypeList.contains(ncsScoreCell) && !(0 <= ncsScore && ncsScore <= 40)) {
-                        setErrorCell(ncsScoreCell, "범위 초과");
+                        setErrorCell(errorCellStyle, ncsScoreCell, "범위 초과");
                         isValid = false;
                     }
                 }
                 default -> {
                     if (!invalidCellTypeList.contains(depthInterviewScoreCell) && !(0 <= depthInterviewScore && depthInterviewScore <= 120)) {
-                        setErrorCell(depthInterviewScoreCell, "범위 초과");
+                        setErrorCell(errorCellStyle, depthInterviewScoreCell, "범위 초과");
                         isValid = false;
                     }
                     if (!invalidCellTypeList.contains(ncsScoreCell) && !(0 <= ncsScore && ncsScore <= 40)) {
-                        setErrorCell(ncsScoreCell, "범위 초과");
+                        setErrorCell(errorCellStyle, ncsScoreCell, "범위 초과");
                         isValid = false;
                     }
                 }
@@ -255,7 +253,7 @@ public class UpdateSecondRoundScoreUseCase {
         }
     }
 
-    private void setErrorCell(Cell errorCell, String message) {
+    private void setErrorCell(CellStyle errorCellStyle, Cell errorCell, String message) {
         errorCell.setCellStyle(errorCellStyle);
         errorCell.setCellValue(message);
     }
