@@ -100,7 +100,8 @@ public class SelectSecondPassUseCase {
         List<Form> firstPassedFormList = formRepository.findByStatus(FormStatus.FIRST_PASSED);
         firstPassedFormList.stream()
                 .filter(form -> form.getScore().getTotalScore() == null)
-                .forEach(form -> {
+                .findFirst()
+                .ifPresent(form -> {
                     throw new MissingTotalScoreException();
                 });
     }
