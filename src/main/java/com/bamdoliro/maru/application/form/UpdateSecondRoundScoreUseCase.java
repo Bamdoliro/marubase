@@ -32,31 +32,30 @@ public class UpdateSecondRoundScoreUseCase {
 
     @Transactional
     public Resource execute(MultipartFile xlsx) throws IOException {
-        Workbook workbook = new XSSFWorkbook(xlsx.getInputStream());
-        Sheet sheet = workbook.getSheetAt(0);
+        try(Workbook workbook = new XSSFWorkbook(xlsx.getInputStream())) {
+            Sheet sheet = workbook.getSheetAt(0);
 
-        CellStyle errorCellStyle = xlsxService.createDefaultCellStyle(workbook);
-        errorCellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
-        errorCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            CellStyle errorCellStyle = xlsxService.createDefaultCellStyle(workbook);
+            errorCellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+            errorCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
-        List<Form> formList = formRepository.findByStatus(FormStatus.FIRST_PASSED);
-        formList.sort(Comparator.comparing(Form::getExaminationNumber));
-        List<SecondScoreVo> secondScoreVoList = getSecondScoreVoList(sheet, errorCellStyle);
-        if (secondScoreVoList == null) {
-            return xlsxService.convertToByteArrayResource(workbook);
+            List<Form> formList = formRepository.findByStatus(FormStatus.FIRST_PASSED);
+            formList.sort(Comparator.comparing(Form::getExaminationNumber));
+            List<SecondScoreVo> secondScoreVoList = getSecondScoreVoList(sheet, errorCellStyle);
+            if (secondScoreVoList == null) {
+                return xlsxService.convertToByteArrayResource(workbook);
+            }
+            validateList(formList, secondScoreVoList);
+
+            for (int index = 0; index < formList.size(); index++) {
+                Form form = formList.get(index);
+                SecondScoreVo secondScoreVo = secondScoreVoList.get(index);
+                validate(form, secondScoreVo);
+
+                updateFormOrNoShow(form, secondScoreVo);
+            }
+            return null;
         }
-        validateList(formList, secondScoreVoList);
-
-        for (int index = 0; index < formList.size(); index++) {
-            Form form = formList.get(index);
-            SecondScoreVo secondScoreVo = secondScoreVoList.get(index);
-            validate(form, secondScoreVo);
-
-            updateFormOrNoShow(form, secondScoreVo);
-        }
-        workbook.close();
-
-        return null;
     }
 
     private List<SecondScoreVo> getSecondScoreVoList(Sheet sheet, CellStyle errorCellStyle) {
