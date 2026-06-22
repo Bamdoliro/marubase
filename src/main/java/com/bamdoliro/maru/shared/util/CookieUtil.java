@@ -44,6 +44,7 @@ public class CookieUtil {
                 .sameSite("Strict")
                 .domain(DOMAIN)
                 .maxAge(maxAge)
+                .path("/")
                 .build();
     }
 
