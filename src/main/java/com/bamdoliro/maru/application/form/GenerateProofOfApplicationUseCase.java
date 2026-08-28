@@ -1,5 +1,7 @@
 package com.bamdoliro.maru.application.form;
 
+import com.bamdoliro.maru.application.schedule.AdmissionScheduleFacade;
+import com.bamdoliro.maru.domain.schedule.domain.AdmissionSchedule;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.exception.InvalidFormStatusException;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
@@ -10,7 +12,7 @@ import com.bamdoliro.maru.infrastructure.s3.constants.FolderConstant;
 import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.Templates;
 import com.bamdoliro.maru.shared.annotation.UseCase;
-import com.bamdoliro.maru.shared.constants.Schedule;
+import com.bamdoliro.maru.shared.util.ScheduleFormatter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 
@@ -25,16 +27,23 @@ public class GenerateProofOfApplicationUseCase {
     private final ProcessTemplateService processTemplateService;
     private final GeneratePdfService generatePdfService;
     private final FileService fileService;
+    private final AdmissionScheduleFacade admissionScheduleFacade;
 
     public ByteArrayResource execute(User user) {
         Form form = formFacade.getForm(user);
         validateFormStatus(form);
+        AdmissionSchedule schedule = admissionScheduleFacade.getCurrentSchedule();
 
         Map<String, Object> formMap = Map.of(
                 "form", form,
-                "year", Schedule.getAdmissionYear(),
-                "announcement_of_first_pass", Schedule.toLocaleString(Schedule.ANNOUNCEMENT_OF_FIRST_PASS),
-                "identificationPictureUri", fileService.getDownloadPresignedUrl(FolderConstant.IDENTIFICATION_PICTURE, user.getUuid().toString())
+                "year", schedule.getAdmissionYear(),
+                "announcement_of_first_pass",
+                        ScheduleFormatter.toLocaleString(schedule.getAnnouncementOfFirstPass()),
+                "identificationPictureUri",
+                        fileService.getDownloadPresignedUrl(
+                                FolderConstant.IDENTIFICATION_PICTURE,
+                                user.getUuid().toString()
+                        )
         );
         String html = processTemplateService.execute(Templates.PROOF_OF_APPLICATION, formMap);
         ByteArrayOutputStream outputStream = generatePdfService.execute(html);

@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.application.form;
 
+import com.bamdoliro.maru.application.schedule.AdmissionScheduleFacade;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.InvalidFormStatusException;
@@ -9,31 +10,29 @@ import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.s3.FileService;
 import com.bamdoliro.maru.infrastructure.s3.dto.request.FileMetadata;
 import com.bamdoliro.maru.infrastructure.s3.validator.FileValidator;
-import com.bamdoliro.maru.shared.constants.Schedule;
+import com.bamdoliro.maru.domain.schedule.domain.AdmissionSchedule;
+import com.bamdoliro.maru.shared.config.TimeConfig;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.SharedFixture;
+import com.bamdoliro.maru.shared.fixture.ScheduleFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import static com.bamdoliro.maru.shared.constants.FileConstant.MB;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UploadAdmissionAndPledgeUseCaseTest {
-
-    @InjectMocks
-    private UploadAdmissionAndPledgeUseCase uploadAdmissionAndPledgeUseCase;
 
     @Mock
     private FileService fileService;
@@ -41,13 +40,13 @@ public class UploadAdmissionAndPledgeUseCaseTest {
     @Mock
     private FormFacade formFacade;
 
+    @Mock
+    private AdmissionScheduleFacade admissionScheduleFacade;
+
     @Test
     void 입학등록원_및_금연서약서를_업로드한다() {
-        // 스케줄 강제 초기화
-        assertNotNull(Schedule.ADMISSION_AND_PLEDGE_START);
-        assertNotNull(Schedule.ADMISSION_AND_PLEDGE_END);
-
         //given
+        AdmissionSchedule schedule = ScheduleFixture.createSchedule();
         User user = UserFixture.createUser();
         Form form = FormFixture.createForm(FormType.REGULAR);
         FileMetadata metadata = new FileMetadata(
@@ -57,15 +56,16 @@ public class UploadAdmissionAndPledgeUseCaseTest {
         );
         form.pass();
 
+        given(admissionScheduleFacade.getCurrentSchedule()).willReturn(schedule);
         given(formFacade.getForm(user)).willReturn(form);
         given(fileService.getPresignedUrl(any(String.class), any(String.class), any(FileMetadata.class), any(FileValidator.class))).willReturn(SharedFixture.createAdmissionAndPledgeUrlResponse());
 
-        //when
-        try (MockedStatic<LocalDateTime> mockedLocalDateTime = mockStatic(LocalDateTime.class)) {
-            mockedLocalDateTime.when(LocalDateTime::now).thenReturn(Schedule.ADMISSION_AND_PLEDGE_START.plusSeconds(1));
+        UploadAdmissionAndPledgeUseCase uploadAdmissionAndPledgeUseCase = createUseCase(
+                schedule.getAdmissionAndPledgeStart().plusSeconds(1)
+        );
 
-            uploadAdmissionAndPledgeUseCase.execute(user, metadata);
-        }
+        //when
+        uploadAdmissionAndPledgeUseCase.execute(user, metadata);
 
         //then
         verify(formFacade, times(1)).getForm(user);
@@ -74,11 +74,8 @@ public class UploadAdmissionAndPledgeUseCaseTest {
 
     @Test
     void 입학등록원_및_금연서약서를_업로드할_때_제출_기간이_아니면_에러가_발생한다() {
-        // 스케줄 강제 초기화
-        assertNotNull(Schedule.ADMISSION_AND_PLEDGE_START);
-        assertNotNull(Schedule.ADMISSION_AND_PLEDGE_END);
-
         // given
+        AdmissionSchedule schedule = ScheduleFixture.createSchedule();
         User user = UserFixture.createUser();
         FileMetadata metadata = new FileMetadata(
                 "admission-and-pledge.pdf",
@@ -86,12 +83,16 @@ public class UploadAdmissionAndPledgeUseCaseTest {
                 10 * MB
         );
 
-        // when and then
-        try (MockedStatic<LocalDateTime> mockedLocalDateTime = Mockito.mockStatic(LocalDateTime.class)) {
-            mockedLocalDateTime.when(LocalDateTime::now).thenReturn(Schedule.ADMISSION_AND_PLEDGE_START.minusSeconds(1));
+        given(admissionScheduleFacade.getCurrentSchedule()).willReturn(schedule);
+        UploadAdmissionAndPledgeUseCase uploadAdmissionAndPledgeUseCase = createUseCase(
+                schedule.getAdmissionAndPledgeStart().minusSeconds(1)
+        );
 
-            assertThrows(OutOfAdmissionAndPledgePeriodException.class, () -> uploadAdmissionAndPledgeUseCase.execute(user, metadata));
-        }
+        // when and then
+        assertThrows(
+                OutOfAdmissionAndPledgePeriodException.class,
+                () -> uploadAdmissionAndPledgeUseCase.execute(user, metadata)
+        );
 
         verify(formFacade, never()).getForm(user);
         verify(fileService, never()).getPresignedUrl(any(String.class), any(String.class), any(FileMetadata.class), any(FileValidator.class));
@@ -99,11 +100,8 @@ public class UploadAdmissionAndPledgeUseCaseTest {
 
     @Test
     void 최종합격자가_아닌_지원자가_입학등록원_및_금연서약서를_업로드하면_에러가_발생한다() {
-        // 스케줄 강제 초기화
-        assertNotNull(Schedule.ADMISSION_AND_PLEDGE_START);
-        assertNotNull(Schedule.ADMISSION_AND_PLEDGE_END);
-
         //given
+        AdmissionSchedule schedule = ScheduleFixture.createSchedule();
         User user = UserFixture.createUser();
         Form form = FormFixture.createForm(FormType.REGULAR);
         FileMetadata metadata = new FileMetadata(
@@ -113,16 +111,31 @@ public class UploadAdmissionAndPledgeUseCaseTest {
         );
 
         given(formFacade.getForm(user)).willReturn(form);
+        given(admissionScheduleFacade.getCurrentSchedule()).willReturn(schedule);
+        UploadAdmissionAndPledgeUseCase uploadAdmissionAndPledgeUseCase = createUseCase(
+                schedule.getAdmissionAndPledgeStart().plusSeconds(1)
+        );
 
         //when
-        try (MockedStatic<LocalDateTime> mockedLocalDateTime = Mockito.mockStatic(LocalDateTime.class)) {
-            mockedLocalDateTime.when(LocalDateTime::now).thenReturn(Schedule.ADMISSION_AND_PLEDGE_START.plusSeconds(1));
-
-            assertThrows(InvalidFormStatusException.class, () -> uploadAdmissionAndPledgeUseCase.execute(user, metadata));
-        }
+        assertThrows(
+                InvalidFormStatusException.class,
+                () -> uploadAdmissionAndPledgeUseCase.execute(user, metadata)
+        );
 
         //then
         verify(formFacade, times(1)).getForm(user);
         verify(fileService, never()).getPresignedUrl(any(String.class), any(String.class), any(FileMetadata.class), any(FileValidator.class));
+    }
+
+    private UploadAdmissionAndPledgeUseCase createUseCase(LocalDateTime dateTime) {
+        ZoneId zoneId = TimeConfig.SERVICE_ZONE_ID;
+        Instant instant = dateTime.atZone(zoneId).toInstant();
+        Clock clock = Clock.fixed(instant, zoneId);
+        return new UploadAdmissionAndPledgeUseCase(
+                fileService,
+                formFacade,
+                admissionScheduleFacade,
+                clock
+        );
     }
 }

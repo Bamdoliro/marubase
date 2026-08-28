@@ -13,6 +13,10 @@ import com.bamdoliro.maru.application.message.SendMessageUseCase;
 import com.bamdoliro.maru.application.notice.*;
 import com.bamdoliro.maru.application.question.*;
 import com.bamdoliro.maru.application.school.SearchSchoolUseCase;
+import com.bamdoliro.maru.application.schedule.CreateScheduleUseCase;
+import com.bamdoliro.maru.application.schedule.QueryCurrentScheduleUseCase;
+import com.bamdoliro.maru.application.schedule.QueryScheduleUseCase;
+import com.bamdoliro.maru.application.schedule.UpdateScheduleUseCase;
 import com.bamdoliro.maru.application.user.*;
 import com.bamdoliro.maru.domain.auth.service.TokenService;
 import com.bamdoliro.maru.infrastructure.message.SendMessageService;
@@ -31,6 +35,7 @@ import com.bamdoliro.maru.presentation.notice.NoticeController;
 import com.bamdoliro.maru.presentation.question.AdminQuestionController;
 import com.bamdoliro.maru.presentation.question.QuestionController;
 import com.bamdoliro.maru.presentation.school.SchoolController;
+import com.bamdoliro.maru.presentation.schedule.AdminScheduleController;
 import com.bamdoliro.maru.presentation.user.UserController;
 import com.bamdoliro.maru.shared.auth.AuthenticationArgumentResolver;
 import com.bamdoliro.maru.shared.auth.AuthenticationExtractor;
@@ -61,7 +66,8 @@ import org.springframework.test.web.servlet.MockMvc;
             FairController.class,
             AdminFairController.class,
             MessageController.class,
-            AnalysisController.class})
+            AnalysisController.class,
+            AdminScheduleController.class})
 public abstract class ControllerTest {
 
     @Autowired
@@ -259,6 +265,18 @@ public abstract class ControllerTest {
 
     @MockitoBean
     protected QuerySchoolStatusUseCase querySchoolStatusUseCase;
+
+    @MockitoBean
+    protected QueryCurrentScheduleUseCase queryCurrentScheduleUseCase;
+
+    @MockitoBean
+    protected QueryScheduleUseCase queryScheduleUseCase;
+
+    @MockitoBean
+    protected CreateScheduleUseCase createScheduleUseCase;
+
+    @MockitoBean
+    protected UpdateScheduleUseCase updateScheduleUseCase;
 
 
     @MockitoBean

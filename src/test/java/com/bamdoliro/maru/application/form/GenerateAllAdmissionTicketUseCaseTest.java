@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.application.form;
 
+import com.bamdoliro.maru.application.schedule.AdmissionScheduleFacade;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
@@ -10,6 +11,7 @@ import com.bamdoliro.maru.infrastructure.s3.FileService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.SharedFixture;
+import com.bamdoliro.maru.shared.fixture.ScheduleFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -47,6 +49,9 @@ public class GenerateAllAdmissionTicketUseCaseTest {
     @Mock
     private FormRepository formRepository;
 
+    @Mock
+    private AdmissionScheduleFacade admissionScheduleFacade;
+
     @Test
     void 모든_1차_합격자의_수험표를_생성한다() {
         // given
@@ -55,6 +60,7 @@ public class GenerateAllAdmissionTicketUseCaseTest {
         formList.add(FormFixture.createForm(FormType.MEISTER_TALENT));
         formList.forEach(Form::firstPass);
         given(formRepository.findByStatus(FormStatus.FIRST_PASSED)).willReturn(formList);
+        given(admissionScheduleFacade.getCurrentSchedule()).willReturn(ScheduleFixture.createSchedule());
         given(processTemplateService.execute(any(String.class), anyMap())).willReturn("html");
         given(fileService.getDownloadPresignedUrl(any(String.class), any(String.class))).willReturn(SharedFixture.createIdentificationPictureUrlResponse().getDownloadUrl());
         given(generatePdfService.execute(any(String.class))).willReturn(new ByteArrayOutputStream());
