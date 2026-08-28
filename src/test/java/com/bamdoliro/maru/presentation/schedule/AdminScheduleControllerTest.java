@@ -4,6 +4,7 @@ import com.bamdoliro.maru.domain.schedule.domain.AdmissionSchedule;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.schedule.dto.request.ScheduleRequest;
 import com.bamdoliro.maru.presentation.schedule.dto.response.ScheduleResponse;
+import com.bamdoliro.maru.shared.auth.AuthenticatedUser;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.ScheduleFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
@@ -31,7 +32,7 @@ class AdminScheduleControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class)))
                 .willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any()))
-                .willReturn(user);
+                .willReturn(AuthenticatedUser.from(user));
         given(queryCurrentScheduleUseCase.execute()).willReturn(new ScheduleResponse(schedule));
 
         mockMvc.perform(get("/admin/schedules/current")
@@ -54,7 +55,7 @@ class AdminScheduleControllerTest extends RestDocsTestSupport {
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class)))
                 .willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any()))
-                .willReturn(user);
+                .willReturn(AuthenticatedUser.from(user));
         willDoNothing().given(updateScheduleUseCase).execute(any(), any());
 
         mockMvc.perform(put("/admin/schedules/current")

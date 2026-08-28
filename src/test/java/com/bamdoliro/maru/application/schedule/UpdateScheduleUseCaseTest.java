@@ -8,6 +8,7 @@ import com.bamdoliro.maru.infrastructure.aop.log.AdmissionScheduleAuditService;
 import com.bamdoliro.maru.infrastructure.persistence.schedule.AdmissionScheduleRepository;
 import com.bamdoliro.maru.infrastructure.persistence.schedule.FirstPassSelectionExecutionRepository;
 import com.bamdoliro.maru.presentation.schedule.dto.request.ScheduleRequest;
+import com.bamdoliro.maru.shared.auth.AuthenticatedUser;
 import com.bamdoliro.maru.shared.fixture.ScheduleFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
@@ -52,7 +53,7 @@ class UpdateScheduleUseCaseTest {
         given(admissionScheduleFacade.getCurrentSchedule()).willReturn(schedule);
         given(auditService.snapshot(schedule)).willReturn("schedule");
 
-        updateScheduleUseCase.execute(user, request);
+        updateScheduleUseCase.execute(AuthenticatedUser.from(user), request);
 
         verify(auditService).log(any(), any(), any(), any(), any());
         verify(eventPublisher).publishEvent(any(AdmissionScheduleChangedEvent.class));
@@ -68,7 +69,7 @@ class UpdateScheduleUseCaseTest {
 
         assertThrows(
                 ScheduleVersionConflictException.class,
-                () -> updateScheduleUseCase.execute(user, request)
+                () -> updateScheduleUseCase.execute(AuthenticatedUser.from(user), request)
         );
 
         verify(eventPublisher, never()).publishEvent(any());

@@ -4,11 +4,11 @@ import com.bamdoliro.maru.application.schedule.event.AdmissionScheduleChangedEve
 import com.bamdoliro.maru.domain.schedule.domain.AdmissionSchedule;
 import com.bamdoliro.maru.domain.schedule.domain.type.ScheduleChangeType;
 import com.bamdoliro.maru.domain.schedule.exception.ScheduleAlreadyExistsException;
-import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.aop.log.AdmissionScheduleAuditService;
 import com.bamdoliro.maru.infrastructure.persistence.schedule.AdmissionScheduleRepository;
 import com.bamdoliro.maru.presentation.schedule.dto.request.ScheduleRequest;
 import com.bamdoliro.maru.shared.annotation.UseCase;
+import com.bamdoliro.maru.shared.auth.AuthenticatedUser;
 import com.bamdoliro.maru.shared.response.IdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -23,7 +23,7 @@ public class CreateScheduleUseCase {
     private final AdmissionScheduleAuditService auditService;
 
     @Transactional
-    public IdResponse execute(User user, ScheduleRequest request) {
+    public IdResponse execute(AuthenticatedUser user, ScheduleRequest request) {
         if (admissionScheduleRepository.existsByAdmissionYear(request.getAdmissionYear())) {
             throw new ScheduleAlreadyExistsException();
         }
@@ -35,7 +35,7 @@ public class CreateScheduleUseCase {
         AdmissionSchedule schedule = admissionScheduleRepository.save(createSchedule(request));
         auditService.log(
                 schedule,
-                user,
+                user.id(),
                 ScheduleChangeType.CREATED,
                 null,
                 auditService.snapshot(schedule)

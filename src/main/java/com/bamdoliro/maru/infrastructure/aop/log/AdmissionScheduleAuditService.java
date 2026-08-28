@@ -3,7 +3,6 @@ package com.bamdoliro.maru.infrastructure.aop.log;
 import com.bamdoliro.maru.domain.schedule.domain.AdmissionSchedule;
 import com.bamdoliro.maru.domain.schedule.domain.AdmissionScheduleChangeLog;
 import com.bamdoliro.maru.domain.schedule.domain.type.ScheduleChangeType;
-import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.persistence.schedule.AdmissionScheduleChangeLogRepository;
 import com.bamdoliro.maru.presentation.schedule.dto.response.ScheduleResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -31,7 +30,7 @@ public class AdmissionScheduleAuditService {
 
     public void log(
             AdmissionSchedule schedule,
-            User user,
+            Long userId,
             ScheduleChangeType changeType,
             String beforeSchedule,
             String afterSchedule
@@ -40,7 +39,7 @@ public class AdmissionScheduleAuditService {
         changeLogRepository.save(
                 AdmissionScheduleChangeLog.builder()
                         .schedule(schedule)
-                        .user(user)
+                        .userId(userId)
                         .clientIp(getClientIp(request))
                         .userAgent(getUserAgent(request))
                         .changeType(changeType)

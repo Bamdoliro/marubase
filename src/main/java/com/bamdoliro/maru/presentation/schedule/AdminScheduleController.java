@@ -4,9 +4,9 @@ import com.bamdoliro.maru.application.schedule.CreateScheduleUseCase;
 import com.bamdoliro.maru.application.schedule.QueryCurrentScheduleUseCase;
 import com.bamdoliro.maru.application.schedule.QueryScheduleUseCase;
 import com.bamdoliro.maru.application.schedule.UpdateScheduleUseCase;
-import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.schedule.dto.request.ScheduleRequest;
 import com.bamdoliro.maru.presentation.schedule.dto.response.ScheduleResponse;
+import com.bamdoliro.maru.shared.auth.AuthenticatedUser;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.auth.Authority;
 import com.bamdoliro.maru.shared.response.CommonResponse;
@@ -36,14 +36,14 @@ public class AdminScheduleController {
 
     @GetMapping("/current")
     public SingleCommonResponse<ScheduleResponse> getCurrentSchedule(
-            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+            @AuthenticationPrincipal(authority = Authority.ADMIN) AuthenticatedUser user
     ) {
         return CommonResponse.ok(queryCurrentScheduleUseCase.execute());
     }
 
     @GetMapping
     public SingleCommonResponse<ScheduleResponse> getSchedule(
-            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
+            @AuthenticationPrincipal(authority = Authority.ADMIN) AuthenticatedUser user,
             @RequestParam(name = "admission-year") Integer admissionYear
     ) {
         return CommonResponse.ok(queryScheduleUseCase.execute(admissionYear));
@@ -52,7 +52,7 @@ public class AdminScheduleController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public SingleCommonResponse<IdResponse> createSchedule(
-            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
+            @AuthenticationPrincipal(authority = Authority.ADMIN) AuthenticatedUser user,
             @RequestBody @Valid ScheduleRequest request
     ) {
         return CommonResponse.ok(createScheduleUseCase.execute(user, request));
@@ -61,7 +61,7 @@ public class AdminScheduleController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/current")
     public void updateCurrentSchedule(
-            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
+            @AuthenticationPrincipal(authority = Authority.ADMIN) AuthenticatedUser user,
             @RequestBody @Valid ScheduleRequest request
     ) {
         updateScheduleUseCase.execute(user, request);

@@ -6,12 +6,12 @@ import com.bamdoliro.maru.domain.schedule.domain.type.ScheduleChangeType;
 import com.bamdoliro.maru.domain.schedule.exception.FirstPassAlreadyExecutedException;
 import com.bamdoliro.maru.domain.schedule.exception.ScheduleAlreadyExistsException;
 import com.bamdoliro.maru.domain.schedule.exception.ScheduleVersionConflictException;
-import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.infrastructure.aop.log.AdmissionScheduleAuditService;
 import com.bamdoliro.maru.infrastructure.persistence.schedule.AdmissionScheduleRepository;
 import com.bamdoliro.maru.infrastructure.persistence.schedule.FirstPassSelectionExecutionRepository;
 import com.bamdoliro.maru.presentation.schedule.dto.request.ScheduleRequest;
 import com.bamdoliro.maru.shared.annotation.UseCase;
+import com.bamdoliro.maru.shared.auth.AuthenticatedUser;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class UpdateScheduleUseCase {
     private final AdmissionScheduleAuditService auditService;
 
     @Transactional
-    public void execute(User user, ScheduleRequest request) {
+    public void execute(AuthenticatedUser user, ScheduleRequest request) {
         AdmissionSchedule schedule = admissionScheduleFacade.getCurrentSchedule();
         String beforeSchedule = auditService.snapshot(schedule);
         validateVersion(schedule, request.getVersion());
@@ -56,7 +56,7 @@ public class UpdateScheduleUseCase {
         );
         auditService.log(
                 schedule,
-                user,
+                user.id(),
                 ScheduleChangeType.UPDATED,
                 beforeSchedule,
                 auditService.snapshot(schedule)

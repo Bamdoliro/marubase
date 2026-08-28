@@ -1,7 +1,6 @@
 package com.bamdoliro.maru.domain.schedule.domain;
 
 import com.bamdoliro.maru.domain.schedule.domain.type.ScheduleChangeType;
-import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.shared.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,9 +32,8 @@ public class AdmissionScheduleChangeLog extends BaseTimeEntity {
     @JoinColumn(name = "schedule_id", nullable = false)
     private AdmissionSchedule schedule;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
     @Column(nullable = false)
     private String clientIp;
@@ -56,7 +54,7 @@ public class AdmissionScheduleChangeLog extends BaseTimeEntity {
     @Builder
     public AdmissionScheduleChangeLog(
             AdmissionSchedule schedule,
-            User user,
+            Long userId,
             String clientIp,
             String userAgent,
             ScheduleChangeType changeType,
@@ -64,7 +62,7 @@ public class AdmissionScheduleChangeLog extends BaseTimeEntity {
             String afterSchedule
     ) {
         this.schedule = schedule;
-        this.user = user;
+        this.userId = userId;
         this.clientIp = clientIp;
         this.userAgent = userAgent;
         this.changeType = changeType;
