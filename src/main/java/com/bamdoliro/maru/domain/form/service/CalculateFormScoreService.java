@@ -62,6 +62,10 @@ public class CalculateFormScoreService {
         return null;
     }
 
+    private Double calculateMajorWeight(Form form) {
+        return form.getGrade().getSubjectList().getAverageInformationScore() / 2;
+    }
+
     private Double calculateRegularScore(Form form) {
         double score;
 
@@ -73,7 +77,7 @@ public class CalculateFormScoreService {
                     7.2 * 2 * subjectMap.getScoreOf(3, 1);
         }
 
-        return REGULAR_TYPE_DEFAULT_SCORE + score;
+        return REGULAR_TYPE_DEFAULT_SCORE + score + calculateMajorWeight(form);
     }
 
     public Double calculateDepthInterviewScoreToRegular(Form form) {
@@ -91,7 +95,7 @@ public class CalculateFormScoreService {
                     4.32 * 2 * subjectMap.getScoreOf(3, 1);
         }
 
-        return SPECIAL_TYPE_DEFAULT_SCORE + score;
+        return SPECIAL_TYPE_DEFAULT_SCORE + score + calculateMajorWeight(form);
     }
 
     private Integer calculateAttendanceScore(Form form) {

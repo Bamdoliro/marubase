@@ -19,6 +19,6 @@ public class FormConstant {
     public static final int MIN_VOLUNTEER_TIME = 15;
     public static final int MAX_VOLUNTEER_TIME = 30;
 
-    public static final int REGULAR_TYPE_DEFAULT_SCORE = 80;
-    public static final int SPECIAL_TYPE_DEFAULT_SCORE = 48;
+    public static final double REGULAR_TYPE_DEFAULT_SCORE = 77.5;
+    public static final double SPECIAL_TYPE_DEFAULT_SCORE = 45.5;
 }
