@@ -7,6 +7,7 @@ public class FormConstant {
 
     public static final int MIN_BONUS_SCORE = 0;
     public static final int MAX_BONUS_SCORE = 4;
+    public static final int MENTORING_PROGRAM_BONUS_SCORE = 1;
 
     public static final int DEFAULT_ATTENDANCE_SCORE = 14;
     public static final int MIN_ATTENDANCE_SCORE = 0;

@@ -19,6 +19,7 @@ public class GradeResponse {
     private Integer volunteerTime2;
     private Integer volunteerTime3;
     private List<Certificate> certificateList;
+    private boolean mentoringProgram;
 
     public GradeResponse(Grade grade) {
         this.subjectList = grade.getSubjectList().getValue()
@@ -32,5 +33,6 @@ public class GradeResponse {
         this.volunteerTime2 = grade.getVolunteerTime2();
         this.volunteerTime3 = grade.getVolunteerTime3();
         this.certificateList = grade.getCertificateListValue();
+        this.mentoringProgram = grade.isMentoringProgram();
     }
 }

@@ -71,7 +71,8 @@ public class FormFixture {
                         8,
                         2,
                         1,
-                        new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2))
+                        new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2)),
+                        false
                 ),
                 new Document(
                         "하이난김밤돌",
@@ -136,7 +137,8 @@ public class FormFixture {
                         8,
                         2,
                         1,
-                        new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2))
+                        new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2)),
+                        false
                 ),
                 new Document(
                         "하이난김밤돌",
@@ -215,7 +217,8 @@ public class FormFixture {
                         randomNumber(0, 100),
                         randomNumber(0, 100),
                         randomNumber(0, 100),
-                        new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2, Certificate.CRAFTSMAN_COMPUTER))
+                        new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2, Certificate.CRAFTSMAN_EMBEDDED)),
+                        false
                 ),
                 new Document(
                         "하이난김밤돌",
@@ -292,7 +295,8 @@ public class FormFixture {
                 randomNumber(0, 100),
                 randomNumber(0, 100),
                 randomNumber(0, 100),
-                new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2, Certificate.CRAFTSMAN_COMPUTER))
+                new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2, Certificate.CRAFTSMAN_EMBEDDED)),
+                false
         ),
                 new Document(
                         "하이난김밤돌",
@@ -343,7 +347,8 @@ public class FormFixture {
                         randomNumber(0, 100),
                         randomNumber(0, 100),
                         randomNumber(0, 100),
-                        new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2, Certificate.CRAFTSMAN_COMPUTER))
+                        new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2, Certificate.CRAFTSMAN_EMBEDDED)),
+                        false
                 ),
                 new Document(
                         "하이난김밤돌",
@@ -408,7 +413,8 @@ public class FormFixture {
                         null,
                         null,
                         null,
-                        new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2))
+                        new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2)),
+                        false
                 ),
                 new Document(
                         "하이난김밤돌",
@@ -455,7 +461,8 @@ public class FormFixture {
                         8,
                         2,
                         1,
-                        List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2)
+                        List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2),
+                        false
                 ),
                 createDocumentRequest(),
                 type
@@ -491,7 +498,8 @@ public class FormFixture {
                         null,
                         null,
                         null,
-                        List.of(Certificate.CRAFTSMAN_INFORMATION_PROCESSING, Certificate.COMPUTER_SPECIALIST_LEVEL_1)
+                        List.of(Certificate.CRAFTSMAN_PROGRAMMING, Certificate.COMPUTER_SPECIALIST_LEVEL_1),
+                        false
                 ),
                 createDocumentRequest(),
                 type
@@ -528,7 +536,8 @@ public class FormFixture {
                         8,
                         2,
                         1,
-                        List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2)
+                        List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2),
+                        false
                 ),
                 createDocumentRequest(),
                 type
@@ -597,7 +606,8 @@ public class FormFixture {
                         8,
                         2,
                         1,
-                        List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2)
+                        List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2),
+                        false
                 ),
                 new DocumentResponse(
                         "하이난김밤돌",

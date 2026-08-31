@@ -50,6 +50,8 @@ public class GradeRequest {
     @Nullable
     private List<Certificate> certificateList;
 
+    private boolean mentoringProgram;
+
     public Grade toValue() {
         List<Subject> subjectList = new ArrayList<>();
         this.subjectList.stream()
@@ -64,7 +66,8 @@ public class GradeRequest {
                 volunteerTime1,
                 volunteerTime2,
                 volunteerTime3,
-                new CertificateList(certificateList)
+                new CertificateList(certificateList),
+                mentoringProgram
         );
     }
 }

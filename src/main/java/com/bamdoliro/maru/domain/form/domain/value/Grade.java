@@ -59,7 +59,10 @@ public class Grade {
     @Embedded
     private CertificateList certificateList;
 
-    public Grade(SubjectList subjectList, Attendance attendance1, Attendance attendance2, Attendance attendance3, Integer volunteerTime1, Integer volunteerTime2, Integer volunteerTime3, CertificateList certificateList) {
+    @Column(nullable = false)
+    private boolean mentoringProgram;
+
+    public Grade(SubjectList subjectList, Attendance attendance1, Attendance attendance2, Attendance attendance3, Integer volunteerTime1, Integer volunteerTime2, Integer volunteerTime3, CertificateList certificateList, boolean mentoringProgram) {
         this.subjectList = subjectList;
         this.attendance1 = attendance1;
         this.attendance2 = attendance2;
@@ -68,6 +71,7 @@ public class Grade {
         this.volunteerTime2 = volunteerTime2;
         this.volunteerTime3 = volunteerTime3;
         this.certificateList = certificateList;
+        this.mentoringProgram = mentoringProgram;
     }
 
     public Attendance getTotalAttendance() {
