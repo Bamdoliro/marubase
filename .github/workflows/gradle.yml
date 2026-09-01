@@ -60,7 +60,9 @@ jobs:
       env:
         LOCALSTACK_AUTH_TOKEN: ${{secrets.LOCAL_STACK_SECRET_KEY}}
     - name: Create s3 Bucket
-      run: awslocal s3 mb s3://maru-s3-test-bucket
+      run: |
+        aws --endpoint-url=http://localhost:4566 s3api create-bucket \
+          --bucket maru-s3-test-bucket
       env:
         AWS_ACCESS_KEY_ID: test
         AWS_SECRET_ACCESS_KEY: test
