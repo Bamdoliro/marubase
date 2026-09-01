@@ -46,6 +46,7 @@ public class FormFixture {
                 new Grade(
                         new SubjectList(
                                 List.of(
+                                        new Subject(1, 1, "정보", AchievementLevel.A),
                                         new Subject(2, 1, "국어", AchievementLevel.A),
                                         new Subject(2, 1, "수학", AchievementLevel.A),
                                         new Subject(2, 1, "사회", AchievementLevel.A),

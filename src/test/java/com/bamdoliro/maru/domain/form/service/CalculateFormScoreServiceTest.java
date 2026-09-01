@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -67,7 +68,7 @@ class CalculateFormScoreServiceTest {
         calculateFormScoreService.execute(form);
 
         // then
-        assertEquals(156.000, form.getScore().getSubjectGradeScore());
+        assertEquals(155.000, form.getScore().getSubjectGradeScore());
         assertNull(form.getScore().getThirdGradeFirstSemesterSubjectGradeScore());
         assertEquals(14, form.getScore().getAttendanceScore());
         assertEquals(14, form.getScore().getVolunteerScore());
@@ -83,7 +84,7 @@ class CalculateFormScoreServiceTest {
         calculateFormScoreService.execute(form);
 
         // then
-        assertEquals(93.6, form.getScore().getSubjectGradeScore());
+        assertEquals(92.6, form.getScore().getSubjectGradeScore());
         assertEquals(14, form.getScore().getAttendanceScore());
         assertEquals(14, form.getScore().getVolunteerScore());
         assertEquals(2, form.getScore().getBonusScore());
@@ -116,18 +117,20 @@ class CalculateFormScoreServiceTest {
     }
 
     @Test
-    void 정보_교과_가중치가_일반전형_산출식에_반영된다() {
+    void 정보_교과_등급에_따라_일반전형_산출식의_가중치가_달라진다() {
         // given
         Form form = FormFixture.createForm(FormType.REGULAR);
-        List<Subject> subjectList = new ArrayList<>(form.getGrade().getSubjectList().getValue());
-        subjectList.add(new Subject(1, 1, "정보", AchievementLevel.A));
+        List<Subject> subjectList = form.getGrade().getSubjectList().getValue().stream()
+                .filter(subject -> !subject.getSubjectName().equals("정보"))
+                .collect(Collectors.toCollection(ArrayList::new));
+        subjectList.add(new Subject(1, 1, "정보", AchievementLevel.E));
         replaceSubjectList(form, subjectList);
 
         // when
         calculateFormScoreService.execute(form);
 
         // then
-        assertEquals(195.886, form.getScore().getSubjectGradeScore());
+        assertEquals(193.886, form.getScore().getSubjectGradeScore());
     }
 
     private void replaceGrade(Form form, CertificateList certificateList, boolean mentoringProgram) {
