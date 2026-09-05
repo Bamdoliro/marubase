@@ -15,6 +15,7 @@ import static com.bamdoliro.maru.domain.form.constant.FormConstant.DEFAULT_VOLUN
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.MAX_ABSENCE_COUNT;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.MAX_ATTENDANCE_SCORE;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.MAX_BONUS_SCORE;
+import static com.bamdoliro.maru.domain.form.constant.FormConstant.MENTORING_PROGRAM_BONUS_SCORE;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.MAX_VOLUNTEER_SCORE;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.MAX_VOLUNTEER_TIME;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.MIN_ATTENDANCE_SCORE;
@@ -62,6 +63,10 @@ public class CalculateFormScoreService {
         return null;
     }
 
+    private Double calculateMajorWeight(Form form) {
+        return form.getGrade().getSubjectList().getAverageInformationScore() / 2;
+    }
+
     private Double calculateRegularScore(Form form) {
         double score;
 
@@ -73,7 +78,7 @@ public class CalculateFormScoreService {
                     7.2 * 2 * subjectMap.getScoreOf(3, 1);
         }
 
-        return REGULAR_TYPE_DEFAULT_SCORE + score;
+        return REGULAR_TYPE_DEFAULT_SCORE + score + calculateMajorWeight(form);
     }
 
     public Double calculateDepthInterviewScoreToRegular(Form form) {
@@ -91,7 +96,7 @@ public class CalculateFormScoreService {
                     4.32 * 2 * subjectMap.getScoreOf(3, 1);
         }
 
-        return SPECIAL_TYPE_DEFAULT_SCORE + score;
+        return SPECIAL_TYPE_DEFAULT_SCORE + score + calculateMajorWeight(form);
     }
 
     private Integer calculateAttendanceScore(Form form) {
@@ -132,14 +137,14 @@ public class CalculateFormScoreService {
     }
 
     private Integer calculateBonusScore(Form form) {
-        if (Objects.isNull(form.getGrade().getCertificateListValue())) {
-            return 0;
-        }
+        int certificateBonusScore = Objects.isNull(form.getGrade().getCertificateListValue())
+                ? 0
+                : form.getGrade().getCertificateListValue().stream()
+                        .mapToInt(Certificate::getScore)
+                        .sum();
 
-        int bonusScore = form.getGrade().getCertificateListValue().stream()
-                .mapToInt(Certificate::getScore)
-                .sum();
+        int mentoringProgramBonusScore = form.getGrade().isMentoringProgram() ? MENTORING_PROGRAM_BONUS_SCORE : 0;
 
-        return Math.min(bonusScore, MAX_BONUS_SCORE);
+        return Math.min(certificateBonusScore + mentoringProgramBonusScore, MAX_BONUS_SCORE);
     }
 }

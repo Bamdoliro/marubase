@@ -25,6 +25,12 @@ public class SubjectRequest {
     private String subjectName;
 
     @Nullable
+    private AchievementLevel achievementLevel11;
+
+    @Nullable
+    private AchievementLevel achievementLevel12;
+
+    @Nullable
     private AchievementLevel achievementLevel21;
 
     @Nullable
@@ -44,6 +50,14 @@ public class SubjectRequest {
         if (Objects.nonNull(score)) {
             subjectList.add(new Subject(subjectName, score));
         } else {
+            if (Objects.nonNull(achievementLevel11)) {
+                subjectList.add(new Subject(1, 1, subjectName, achievementLevel11));
+            }
+
+            if (Objects.nonNull(achievementLevel12)) {
+                subjectList.add(new Subject(1, 2, subjectName, achievementLevel12));
+            }
+
             if (Objects.nonNull(achievementLevel21)) {
                 subjectList.add(new Subject(2, 1, subjectName, achievementLevel21));
             }

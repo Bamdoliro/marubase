@@ -48,13 +48,13 @@ public class Subject {
     }
 
     private AchievementLevel calculateQualificationExaminationAchievementLevel(int score) {
-        if (score >= 90) {
+        if (score >= 99) {
             return AchievementLevel.A;
-        } else if (score >= 80) {
+        } else if (score >= 97) {
             return AchievementLevel.B;
-        } else if (score >= 70) {
+        } else if (score >= 93) {
             return AchievementLevel.C;
-        } else if (score >= 60) {
+        } else if (score >= 89) {
             return AchievementLevel.D;
         }
 

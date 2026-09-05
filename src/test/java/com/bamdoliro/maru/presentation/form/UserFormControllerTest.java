@@ -80,6 +80,8 @@ class UserFormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("education.schoolPhoneNumber").type(JsonFieldType.STRING).description("작성 교사 전화번호 (없는 경우 null)"),
                                 fieldWithPath("education.teacherMobilePhoneNumber").type(JsonFieldType.STRING).description("작성 교사 휴대전화번호 (없는 경우 null)"),
                                 fieldWithPath("grade.subjectList[].subjectName").type(JsonFieldType.STRING).description("과목명"),
+                                fieldWithPath("grade.subjectList[].achievementLevel11").type(JsonFieldType.STRING).description("<<achievement-level,1학년 1학기 성취도>> (정보 과목에만 존재)").optional(),
+                                fieldWithPath("grade.subjectList[].achievementLevel12").type(JsonFieldType.STRING).description("<<achievement-level,1학년 2학기 성취도>> (정보 과목에만 존재)").optional(),
                                 fieldWithPath("grade.subjectList[].achievementLevel21").type(JsonFieldType.STRING).description("<<achievement-level,2학년 1학기 성취도>>").optional(),
                                 fieldWithPath("grade.subjectList[].achievementLevel22").type(JsonFieldType.STRING).description("<<achievement-level,2학년 2학기 성취도>>").optional(),
                                 fieldWithPath("grade.subjectList[].achievementLevel31").type(JsonFieldType.STRING).description("<<achievement-level,3학년 1학기 성취도>>").optional(),
@@ -100,6 +102,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("grade.volunteerTime1").type(JsonFieldType.NUMBER).description("1학년 봉사시간"),
                                 fieldWithPath("grade.volunteerTime2").type(JsonFieldType.NUMBER).description("2학년 봉사시간"),
                                 fieldWithPath("grade.volunteerTime3").type(JsonFieldType.NUMBER).description("3학년 봉사시간"),
+                                fieldWithPath("grade.mentoringProgram").type(JsonFieldType.BOOLEAN).description("멘토링 프로그램 참여 여부"),
                                 fieldWithPath("document.coverLetter").type(JsonFieldType.STRING).description("1600자 이내의 자기소개서"),
                                 fieldWithPath("document.statementOfPurpose").type(JsonFieldType.STRING).description("1600자 이내의 학업계획서")
                         )
@@ -329,6 +332,8 @@ class UserFormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("education.schoolPhoneNumber").type(JsonFieldType.STRING).description("작성 교사 전화번호 (없는 경우 null)"),
                                 fieldWithPath("education.teacherMobilePhoneNumber").type(JsonFieldType.STRING).description("작성 교사 휴대전화번호 (없는 경우 null)"),
                                 fieldWithPath("grade.subjectList[].subjectName").type(JsonFieldType.STRING).description("과목명"),
+                                fieldWithPath("grade.subjectList[].achievementLevel11").type(JsonFieldType.STRING).description("<<achievement-level,1학년 1학기 성취도>> (정보 과목에만 존재)").optional(),
+                                fieldWithPath("grade.subjectList[].achievementLevel12").type(JsonFieldType.STRING).description("<<achievement-level,1학년 2학기 성취도>> (정보 과목에만 존재)").optional(),
                                 fieldWithPath("grade.subjectList[].achievementLevel21").type(JsonFieldType.STRING).description("<<achievement-level,2학년 1학기 성취도>>").optional(),
                                 fieldWithPath("grade.subjectList[].achievementLevel22").type(JsonFieldType.STRING).description("<<achievement-level,2학년 2학기 성취도>>").optional(),
                                 fieldWithPath("grade.subjectList[].achievementLevel31").type(JsonFieldType.STRING).description("<<achievement-level,3학년 1학기 성취도>>").optional(),
@@ -349,6 +354,7 @@ class UserFormControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("grade.volunteerTime1").type(JsonFieldType.NUMBER).description("1학년 봉사시간"),
                                 fieldWithPath("grade.volunteerTime2").type(JsonFieldType.NUMBER).description("2학년 봉사시간"),
                                 fieldWithPath("grade.volunteerTime3").type(JsonFieldType.NUMBER).description("3학년 봉사시간"),
+                                fieldWithPath("grade.mentoringProgram").type(JsonFieldType.BOOLEAN).description("멘토링 프로그램 참여 여부"),
                                 fieldWithPath("document.coverLetter").type(JsonFieldType.STRING).description("1600자 이내의 자기소개서"),
                                 fieldWithPath("document.statementOfPurpose").type(JsonFieldType.STRING).description("1600자 이내의 학업계획서")
                         )

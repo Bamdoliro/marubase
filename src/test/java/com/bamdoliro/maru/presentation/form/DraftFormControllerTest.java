@@ -129,6 +129,14 @@ class DraftFormControllerTest extends RestDocsTestSupport {
                                         .type(JsonFieldType.STRING)
                                         .optional()
                                         .description("과목명"),
+                                fieldWithPath("grade.subjectList[].achievementLevel11")
+                                        .type(JsonFieldType.STRING)
+                                        .description("<<achievement-level,1학년 1학기 성취도 (정보 과목에만 존재, 성적이 없는 경우 null)>>")
+                                        .optional(),
+                                fieldWithPath("grade.subjectList[].achievementLevel12")
+                                        .type(JsonFieldType.STRING)
+                                        .description("<<achievement-level,1학년 2학기 성취도 (정보 과목에만 존재, 성적이 없는 경우 null)>>")
+                                        .optional(),
                                 fieldWithPath("grade.subjectList[].achievementLevel21")
                                         .type(JsonFieldType.STRING)
                                         .description("<<achievement-level,2학년 1학기 성취도 (성적이 없는 경우 null)>>")
@@ -205,6 +213,10 @@ class DraftFormControllerTest extends RestDocsTestSupport {
                                         .type(JsonFieldType.NUMBER)
                                         .optional()
                                         .description("3학년 봉사시간 (봉사 성적이 없는 경우 null)"),
+                                fieldWithPath("grade.mentoringProgram")
+                                        .type(JsonFieldType.BOOLEAN)
+                                        .optional()
+                                        .description("멘토링 프로그램 참여 여부"),
                                 fieldWithPath("document.coverLetter")
                                         .type(JsonFieldType.STRING)
                                         .optional()

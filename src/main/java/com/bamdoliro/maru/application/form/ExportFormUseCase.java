@@ -159,6 +159,10 @@ class SubjectVO {
 
     private String subjectName;
 
+    public AchievementLevel achievementLevel11;
+
+    public AchievementLevel achievementLevel12;
+
     public AchievementLevel achievementLevel21;
 
     public AchievementLevel achievementLevel22;

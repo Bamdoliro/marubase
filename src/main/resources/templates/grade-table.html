@@ -96,6 +96,27 @@
             th:text="${subject.achievementLevel31.toString(subject.subjectName)}"></td>
     </tr>
 </table>
+<table>
+    <caption style="font-size: 14px;">1학년 정보 교과 성적</caption>
+    <tr>
+        <th rowspan="2" class="ba">과목</th>
+        <th class="ba">1학년 1학기</th>
+        <th class="ba">1학년 2학기</th>
+    </tr>
+    <tr>
+        <th class="ba">성취수준</th>
+        <th class="ba">성취수준</th>
+    </tr>
+    <tr th:each="subject : ${subjectList}" th:if="${subject.subjectName == '정보'}">
+        <td class="ba" th:text="${subject.subjectName}"></td>
+        <td class="ba disabled" th:if="${subject.achievementLevel11 == null}"></td>
+        <td class="ba" th:unless="${subject.achievementLevel11 == null}"
+            th:text="${subject.achievementLevel11.toString(subject.subjectName)}"></td>
+        <td class="ba disabled" th:if="${subject.achievementLevel12 == null}"></td>
+        <td class="ba" th:unless="${subject.achievementLevel12 == null}"
+            th:text="${subject.achievementLevel12.toString(subject.subjectName)}"></td>
+    </tr>
+</table>
 <table th:if="${form.education.isQualificationExamination()}">
     <caption th:text='${"2. 출결 상황 - " + form.score.attendanceScore + "점"}'></caption>
     <tr>
@@ -179,9 +200,16 @@
         <th class="ba">자격증명</th>
     </tr>
     <tr>
-        <td class="ba disabled" th:if="${form.score.bonusScore == 0}">-</td>
-        <td class="ba" th:unless="${form.score.bonusScore == 0}"
+        <td class="ba disabled" th:if="${form.grade.certificateList.value.isEmpty()}">-</td>
+        <td class="ba" th:unless="${form.grade.certificateList.value.isEmpty()}"
             th:text="${form.grade.certificateList.toString()}"></td>
+    </tr>
+    <tr>
+        <th class="ba">가산점 프로그램</th>
+    </tr>
+    <tr>
+        <td class="ba disabled" th:unless="${form.grade.mentoringProgram}">-</td>
+        <td class="ba" th:if="${form.grade.mentoringProgram}">멘토 멘티 프로그램(1점)</td>
     </tr>
 </table>
 <table>
