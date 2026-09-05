@@ -31,6 +31,9 @@ public class AuthenticationArgumentResolver implements HandlerMethodArgumentReso
 
         validateAuthority(user, Objects.requireNonNull(parameter.getParameterAnnotation(AuthenticationPrincipal.class)));
 
+        if (parameter.getParameterType().equals(AuthenticatedUser.class)) {
+            return AuthenticatedUser.from(user);
+        }
         return user;
     }
 

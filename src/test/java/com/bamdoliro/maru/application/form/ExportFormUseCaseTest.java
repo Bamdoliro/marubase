@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.application.form;
 
+import com.bamdoliro.maru.application.schedule.AdmissionScheduleFacade;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
@@ -11,6 +12,7 @@ import com.bamdoliro.maru.infrastructure.s3.FileService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.SharedFixture;
+import com.bamdoliro.maru.shared.fixture.ScheduleFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.itextpdf.kernel.utils.PdfMerger;
 import org.junit.jupiter.api.Test;
@@ -48,12 +50,16 @@ class ExportFormUseCaseTest {
     @Mock
     private FileService fileService;
 
+    @Mock
+    private AdmissionScheduleFacade admissionScheduleFacade;
+
     @Test
     void 일반전형_원서를_pdf로_다운받는다() {
         // given
         User user = UserFixture.createUser();
         Form form = FormFixture.createForm(FormType.REGULAR);
         given(formFacade.getForm(user)).willReturn(form);
+        given(admissionScheduleFacade.getCurrentSchedule()).willReturn(ScheduleFixture.createSchedule());
         given(processTemplateService.execute(any(String.class), any())).willReturn("html");
         given(generatePdfService.execute(any(String.class))).willReturn(new ByteArrayOutputStream());
         given(fileService.getDownloadPresignedUrl(any(String.class), any(String.class))).willReturn(SharedFixture.createIdentificationPictureUrlResponse().getDownloadUrl());
@@ -76,6 +82,7 @@ class ExportFormUseCaseTest {
         User user = UserFixture.createUser();
         Form form = FormFixture.createForm(FormType.FROM_NORTH_KOREA);
         given(formFacade.getForm(user)).willReturn(form);
+        given(admissionScheduleFacade.getCurrentSchedule()).willReturn(ScheduleFixture.createSchedule());
         given(processTemplateService.execute(any(String.class), any())).willReturn("html");
         given(generatePdfService.execute(any(String.class))).willReturn(new ByteArrayOutputStream());
         given(fileService.getDownloadPresignedUrl(any(String.class), any(String.class))).willReturn(SharedFixture.createIdentificationPictureUrlResponse().getDownloadUrl());
@@ -98,6 +105,7 @@ class ExportFormUseCaseTest {
         User user = UserFixture.createUser();
         Form form = FormFixture.createForm(FormType.REGULAR);
         given(formFacade.getForm(user)).willReturn(form);
+        given(admissionScheduleFacade.getCurrentSchedule()).willReturn(ScheduleFixture.createSchedule());
         given(processTemplateService.execute(any(String.class), any())).willReturn("html");
         given(fileService.getDownloadPresignedUrl(any(String.class), any(String.class))).willReturn(SharedFixture.createIdentificationPictureUrlResponse().getDownloadUrl());
         doThrow(FailedToExportPdfException.class).when(generatePdfService).execute(any(String.class));

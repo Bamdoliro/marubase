@@ -29,4 +29,6 @@ include::message.adoc[]
 
 include::analysis.adoc[]
 
+include::schedule.adoc[]
+
 include::enum.adoc[]

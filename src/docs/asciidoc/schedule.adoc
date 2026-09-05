@@ -1,0 +1,77 @@
+== 입학 일정 Schedule
+
+=== 현재 입학 일정 조회
+
+어드민은 현재 활성화된 입학 일정을 조회할 수 있습니다.
+
+==== 요청
+
+include::{snippets}/admin-schedule-controller-test/현재_입학_일정을_조회한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/admin-schedule-controller-test/현재_입학_일정을_조회한다/http-response.adoc[]
+
+=== 학년도별 입학 일정 조회
+
+`GET /admin/schedules?admission-year={year}`로 보관된 학년도별 일정을 조회합니다.
+
+=== 새로운 학년도 일정 생성
+
+`POST /admin/schedules`로 새로운 학년도 일정을 생성하고 활성 일정으로 전환합니다.
+기존 활성 일정은 이력으로 보관됩니다.
+
+=== 요청 필드
+
+`POST /admin/schedules`와 `PUT /admin/schedules/current`는 다음 JSON 형식을
+사용합니다. 생성 요청에서는 `version`을 생략하고, 수정 요청에서는 현재 일정 조회
+응답의 `version`을 그대로 전달합니다.
+
+[source,json]
+----
+{
+  "admissionYear": 2027,
+  "version": 0,
+  "applicationFormStart": "2026-10-19T09:00:00",
+  "applicationFormEnd": "2026-10-22T17:00:00",
+  "selectFirstPassAt": "2026-10-22T18:00:00",
+  "announcementOfFirstPass": "2026-10-26T15:00:00",
+  "announcementOfSecondPass": "2026-11-04T15:00:00",
+  "codingTest": "2026-10-30T09:30:00",
+  "ncs": "2026-10-30T11:00:00",
+  "depthInterview": "2026-10-30T13:00:00",
+  "physicalExamination": "2026-10-30T15:00:00",
+  "entranceRegistrationPeriodStart": "2026-11-15T00:00:00",
+  "entranceRegistrationPeriodEnd": "2026-12-18T00:00:00",
+  "meisterTalentEntranceTime": "2026-10-30T09:00:00",
+  "meisterTalentExclusionEntranceTime": "2026-10-30T10:30:00",
+  "admissionAndPledgeStart": "2026-12-15T00:00:00",
+  "admissionAndPledgeEnd": "2026-12-17T23:59:59"
+}
+----
+
+=== 현재 입학 일정 수정
+
+어드민은 `PUT /admin/schedules/current`로 현재 일정을 수정할 수 있습니다.
+조회 응답의 `version`을 요청에 포함해야 하며, 다른 관리자가 먼저 수정한 경우
+`409 Conflict`가 반환됩니다.
+
+==== 요청
+
+include::{snippets}/admin-schedule-controller-test/현재_입학_일정을_수정한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/admin-schedule-controller-test/현재_입학_일정을_수정한다/http-response.adoc[]
+
+일정은 원서 접수, 1차 선발과 발표, 전형, 최종 발표, 등록 및 서약서 제출
+순서로 입력해야 합니다. 잘못된 순서는 `400 Bad Request`로 거부됩니다.
+
+=== 운영 동작
+
+일정의 시간대는 `Asia/Seoul`입니다. 현재 일정을 저장하면 1차 합격자 선발 예약이
+새로운 `selectFirstPassAt`으로 즉시 교체됩니다. 이미 선발이 실행된 일정의 선발
+시각은 변경할 수 없으며, 학년도별로 선발은 한 번만 실행됩니다.
+
+일정 생성 및 수정 시 관리자, IP, User-Agent, 변경 전후 값이 변경 이력에
+기록됩니다.
