@@ -2,12 +2,14 @@ package com.bamdoliro.maru.application.user;
 
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.domain.SignUpVerification;
+import com.bamdoliro.maru.domain.user.exception.SignUpTemporarilyDisabledException;
 import com.bamdoliro.maru.domain.user.exception.UserAlreadyExistsException;
 import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
 import com.bamdoliro.maru.infrastructure.persistence.user.UserRepository;
 import com.bamdoliro.maru.infrastructure.persistence.user.SignUpVerificationRepository;
 import com.bamdoliro.maru.presentation.user.dto.request.SignUpUserRequest;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -38,6 +40,21 @@ class SignUpUserUseCaseTest {
     private UserRepository userRepository;
 
     @Test
+    void 회원가입이_임시로_차단되어_있다() {
+        // given
+        SignUpUserRequest request = new SignUpUserRequest("전화번호", "김밤돌", "비밀번호");
+
+        // when and then
+        assertThrows(SignUpTemporarilyDisabledException.class,
+                () -> signUpUserUseCase.execute(request));
+
+        verify(userRepository, never()).existsByPhoneNumber(any());
+        verify(userRepository, never()).save(any());
+    }
+
+    // TODO: 회원가입 임시 차단이 해제되면 @Disabled를 제거하고 원래대로 검증
+    @Disabled("회원가입 임시 차단으로 인해 원래 로직에 도달하지 않음")
+    @Test
     void 유저를_생성한다() {
         // given
         User user = UserFixture.createUser();
@@ -59,6 +76,7 @@ class SignUpUserUseCaseTest {
         assertEquals(user.getPhoneNumber(), savedUser.getPhoneNumber());
     }
 
+    @Disabled("회원가입 임시 차단으로 인해 원래 로직에 도달하지 않음")
     @Test
     void 전화번호_인증을_요청하지_않았거나_만료되었다면_에러가_발생한다() {
         // given
@@ -74,6 +92,7 @@ class SignUpUserUseCaseTest {
         verify(userRepository, never()).save(any());
     }
 
+    @Disabled("회원가입 임시 차단으로 인해 원래 로직에 도달하지 않음")
     @Test
     void 전화번호_인증을_하지_않았다면_에러가_발생한다() {
         // given
@@ -91,6 +110,7 @@ class SignUpUserUseCaseTest {
         verify(userRepository, never()).save(any());
     }
 
+    @Disabled("회원가입 임시 차단으로 인해 원래 로직에 도달하지 않음")
     @Test
     void 이미_유저가_있다면_에러가_발생한다() {
         // given

@@ -3,6 +3,7 @@ package com.bamdoliro.maru.application.user;
 import com.bamdoliro.maru.domain.user.domain.SignUpVerification;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.domain.type.Authority;
+import com.bamdoliro.maru.domain.user.exception.SignUpTemporarilyDisabledException;
 import com.bamdoliro.maru.domain.user.exception.UserAlreadyExistsException;
 import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
 import com.bamdoliro.maru.infrastructure.persistence.user.SignUpVerificationRepository;
@@ -21,6 +22,11 @@ public class SignUpUserUseCase {
 
     @Transactional
     public void execute(SignUpUserRequest request) {
+        // TODO: 임시 회원가입 차단. 재개 시 이 블록을 원래 코드로 되돌리기
+        if (true) {
+            throw new SignUpTemporarilyDisabledException();
+        }
+
         validate(request);
 
         userRepository.save(
