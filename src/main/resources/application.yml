@@ -79,6 +79,16 @@ domain:
 spring:
   config:
     activate:
+      on-profile: local
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+---
+spring:
+  config:
+    activate:
       on-profile: prod
 
   web:
@@ -91,5 +101,4 @@ spring:
       on-profile: dev
 
 debug: false
-
 
