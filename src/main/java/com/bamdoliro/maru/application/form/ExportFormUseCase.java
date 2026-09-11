@@ -44,6 +44,8 @@ public class ExportFormUseCase {
         SubjectMap subjectMap = form.getGrade().getSubjectList().getSubjectMap();
         Map<String, Object> formMap = Map.of(
                 "form", form,
+                "grade11", subjectMap.getSubjectListOf(1, 1),
+                "grade12", subjectMap.getSubjectListOf(1, 2),
                 "grade21", subjectMap.getSubjectListOf(2, 1),
                 "grade22", subjectMap.getSubjectListOf(2, 2),
                 "grade31", subjectMap.getSubjectListOf(3, 1),
