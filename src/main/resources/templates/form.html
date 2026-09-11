@@ -167,9 +167,13 @@
     </tr>
     <tr th:unless="${form.education.isQualificationExamination()}">
         <th scope="row" class="ba" rowspan="2">1</th>
-        <td class="ba disabled" colspan="2">-</td>
-        <td class="ba disabled" colspan="3"></td>
-        <td class="ba disabled" colspan="1"></td>
+        <td class="ba" colspan="2">1</td>
+        <td class="ba" colspan="3"
+            th:unless="${form.education.isQualificationExamination()}"
+            th:text="${grade11.size()}"></td>
+        <td class="ba" colspan="1"
+            th:unless="${form.education.isQualificationExamination()}"
+            th:text="${grade11.totalScore()}"></td>
         <td class="ba" rowspan="7" colspan="2"
             th:unless="${form.education.isQualificationExamination()}"
             th:text="${form.score.subjectGradeScore}"></td>
@@ -201,10 +205,19 @@
             th:unless="${form.education.isQualificationExamination()}"
             th:text="${form.score.getFirstRoundScore()}"></td>
     </tr>
-    <tr>
+    <tr th:if="${form.education.isQualificationExamination()}">
         <td class="ba disabled" colspan="2">-</td>
         <td class="ba disabled" colspan="3"></td>
         <td class="ba disabled" colspan="1"></td>
+    </tr>
+    <tr th:unless="${form.education.isQualificationExamination()}">
+        <td class="ba" colspan="2">2</td>
+        <td class="ba" colspan="3"
+            th:unless="${form.education.isQualificationExamination()}"
+            th:text="${grade12.size()}"></td>
+        <td class="ba" colspan="1"
+            th:unless="${form.education.isQualificationExamination()}"
+            th:text="${grade12.totalScore()}"></td>
     </tr>
     <tr th:if="${form.education.isQualificationExamination()}">
         <th scope="row" class="ba" rowspan="2">2</th>
@@ -303,9 +316,9 @@
         <th scope="row" class="ba">계</th>
         <td class="ba disabled" colspan="2"></td>
         <td class="ba" colspan="3"
-            th:text="${grade21.size() + grade22.size() + grade31.size()}"></td>
+            th:text="${grade11.size() + grade12.size() + grade21.size() + grade22.size() + grade31.size()}"></td>
         <td class="ba" colspan="1"
-            th:text="${grade21.totalScore() + grade22.totalScore() + grade31.totalScore()}"></td>
+            th:text="${grade11.totalScore() + grade12.totalScore() + grade21.totalScore() + grade22.totalScore() + grade31.totalScore()}"></td>
         <td class="ba" colspan="1"
             th:text="${form.grade.getTotalAbsenceCount()}"></td>
         <td class="ba" colspan="2"
