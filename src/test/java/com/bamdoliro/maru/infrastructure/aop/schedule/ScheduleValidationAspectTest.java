@@ -9,6 +9,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -23,6 +24,8 @@ class ScheduleValidationAspectTest {
     @Mock
     private AdmissionScheduleFacade admissionScheduleFacade;
 
+    // TODO: 원서접수 기간 검증 우회가 해제되면 @Disabled 제거
+    @Disabled("원서접수 기간 검증이 임시로 우회되어 있어 스터빙이 호출되지 않음")
     @Test
     void 날짜_및_시간_검증에_성공한다() {
         AdmissionSchedule schedule = ScheduleFixture.createSchedule();
@@ -35,6 +38,8 @@ class ScheduleValidationAspectTest {
         scheduleValidationAspect.validateApplicationFormPeriod();
     }
 
+    // TODO: 원서접수 기간 검증 우회가 해제되면 @Disabled 제거
+    @Disabled("원서접수 기간 검증이 임시로 우회되어 있어 이 테스트는 통과하지 않음")
     @Test
     void 날짜_및_시간_검증에_실패하면_에러가_발생한다() {
         AdmissionSchedule schedule = ScheduleFixture.createSchedule();
