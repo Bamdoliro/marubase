@@ -21,6 +21,11 @@ public class ScheduleValidationAspect {
 
     @Before("@annotation(com.bamdoliro.maru.shared.annotation.ValidateApplicationFormPeriod)")
     public void validateApplicationFormPeriod() {
+        // TODO: 원서접수 기간 검증 임시 우회. 재적용 시 아래 if 블록 제거
+        if (true) {
+            return;
+        }
+
         AdmissionSchedule schedule = admissionScheduleFacade.getCurrentSchedule();
         LocalDateTime now = LocalDateTime.now(serviceClock);
         if (now.isBefore(schedule.getApplicationFormStart())
