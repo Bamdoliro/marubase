@@ -2,6 +2,7 @@ package com.bamdoliro.maru.shared.config;
 
 import com.bamdoliro.maru.shared.auth.AuthenticationArgumentResolver;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -16,6 +17,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final AuthenticationArgumentResolver authenticationArgumentResolver;
 
+    @Value("${cors.allowed-origins}")
+    private String[] allowedOrigins;
+
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(authenticationArgumentResolver);
@@ -24,10 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(
-                        "https://maru.bamdoliro.com",
-                        "https://madmin.bamdoliro.com"
-                )
+                .allowedOrigins(allowedOrigins)
                 .allowedMethods(
                         HttpMethod.GET.name(),
                         HttpMethod.HEAD.name(),

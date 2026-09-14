@@ -34,6 +34,7 @@ spring:
     aws:
       s3:
         bucket: ${BUCKET_NAME}
+        prefix: "${S3_PREFIX:}"
       stack:
         auto: false
       region:
@@ -75,6 +76,9 @@ message:
 domain:
   name : ${MARU_DOMAIN}
 
+
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:https://maru.bamdoliro.com,https://madmin.bamdoliro.com}
 ---
 spring:
   config:

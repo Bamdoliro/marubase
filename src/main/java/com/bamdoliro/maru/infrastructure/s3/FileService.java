@@ -27,6 +27,9 @@ public class FileService {
     @Value("${spring.cloud.aws.s3.bucket}")
     private String bucket;
 
+    @Value("${spring.cloud.aws.s3.prefix:}")
+    private String prefix;
+
     public String getUploadPresignedUrl(String folder, String fileName, FileMetadata fileMetadata, FileValidator validator) {
         validator.validate(fileMetadata);
         String fullFileName = createFileName(folder, fileName);
@@ -83,6 +86,7 @@ public class FileService {
     }
 
     private String createFileName(String folder, String fileName) {
-        return folder + "/" + fileName;
+        String base = folder + "/" + fileName;
+        return (prefix == null || prefix.isBlank()) ? base : prefix + "/" + base;
     }
 }
