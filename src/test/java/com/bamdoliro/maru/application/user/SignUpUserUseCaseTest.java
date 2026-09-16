@@ -39,6 +39,8 @@ class SignUpUserUseCaseTest {
     @Mock
     private UserRepository userRepository;
 
+    // TODO: 회원가입 임시 차단을 재개하면 @Disabled 제거
+    @Disabled("회원가입 임시 차단이 해제되어 있어 이 테스트는 통과하지 않음")
     @Test
     void 회원가입이_임시로_차단되어_있다() {
         // given
@@ -52,8 +54,6 @@ class SignUpUserUseCaseTest {
         verify(userRepository, never()).save(any());
     }
 
-    // TODO: 회원가입 임시 차단이 해제되면 @Disabled를 제거하고 원래대로 검증
-    @Disabled("회원가입 임시 차단으로 인해 원래 로직에 도달하지 않음")
     @Test
     void 유저를_생성한다() {
         // given
@@ -76,7 +76,6 @@ class SignUpUserUseCaseTest {
         assertEquals(user.getPhoneNumber(), savedUser.getPhoneNumber());
     }
 
-    @Disabled("회원가입 임시 차단으로 인해 원래 로직에 도달하지 않음")
     @Test
     void 전화번호_인증을_요청하지_않았거나_만료되었다면_에러가_발생한다() {
         // given
@@ -92,7 +91,6 @@ class SignUpUserUseCaseTest {
         verify(userRepository, never()).save(any());
     }
 
-    @Disabled("회원가입 임시 차단으로 인해 원래 로직에 도달하지 않음")
     @Test
     void 전화번호_인증을_하지_않았다면_에러가_발생한다() {
         // given
@@ -110,7 +108,6 @@ class SignUpUserUseCaseTest {
         verify(userRepository, never()).save(any());
     }
 
-    @Disabled("회원가입 임시 차단으로 인해 원래 로직에 도달하지 않음")
     @Test
     void 이미_유저가_있다면_에러가_발생한다() {
         // given
