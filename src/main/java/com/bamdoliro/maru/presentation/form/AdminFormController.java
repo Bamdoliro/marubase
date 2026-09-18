@@ -8,6 +8,7 @@ import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListReques
 import com.bamdoliro.maru.presentation.form.dto.response.AdmissionAndPledgeUrlResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormUrlResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.PageResult;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.auth.Authority;
 import com.bamdoliro.maru.shared.response.CommonResponse;
@@ -87,15 +88,18 @@ public class AdminFormController {
     }
 
     @GetMapping
-    public ListCommonResponse<FormSimpleResponse> getFormList(
+    public ResponseEntity<PageResult> getFormList(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
             @RequestParam(name = "status", required = false) FormStatus status,
             @RequestParam(name = "type", required = false) FormType type,
-            @RequestParam(name = "sort", required = false) String sort
+            @RequestParam(name = "sort", required = false) String sort,
+            @RequestParam(name = "page", required = false) Integer page,
+            @RequestParam(name = "size", required = false) Integer size
     ) {
-        return ListCommonResponse.ok(
-                queryAllFormUseCase.execute(status, type, sort)
-        );
+        PageResult<FormSimpleResponse> result = queryAllFormUseCase.execute(status, type, sort, page, size);
+
+        return ResponseEntity.ok()
+                .body(result);
     }
 
     @GetMapping("/admission-tickets")
