@@ -39,6 +39,18 @@ class SubjectListTest {
     }
 
     @Test
+    void 과목이_없으면_평균_점수는_0이다() {
+        // given
+        SubjectList subjectList = SubjectList.of(null);
+
+        // when
+        Double averageScore = subjectList.getAverageScore();
+
+        // then
+        assertEquals(0.0, averageScore);
+    }
+
+    @Test
     void 정보가_아닌_과목은_평균에서_제외된다() {
         // given
         SubjectList subjectList = new SubjectList(List.of(

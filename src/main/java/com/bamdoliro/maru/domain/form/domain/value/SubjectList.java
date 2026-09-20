@@ -33,6 +33,10 @@ public class SubjectList {
     }
 
     public Double getAverageScore() {
+        if (size() == 0) {
+            return 0.0;
+        }
+
         return (double) totalScore() / (double) size();
     }
 

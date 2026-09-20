@@ -12,6 +12,9 @@ public class MathUtil {
         if(value == null){
             return null;
         }
+        if(value.isNaN() || value.isInfinite()){
+            throw new IllegalArgumentException("점수 계산 결과가 NaN 또는 Infinite입니다: " + value);
+        }
         return BigDecimal.valueOf(value)
                 .setScale(place, RoundingMode.HALF_UP)
                 .doubleValue();
