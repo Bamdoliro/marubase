@@ -5,9 +5,12 @@ import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.CannotUpdateNotRejectedFormException;
 import com.bamdoliro.maru.domain.form.exception.FormNotFoundException;
+import com.bamdoliro.maru.domain.form.exception.InvalidGradeException;
 import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.presentation.form.dto.request.SubmitFormRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.UpdateFormRequest;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
@@ -18,8 +21,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -98,5 +103,26 @@ class UpdateFormUseCaseTest {
         );
 
         verify(formFacade, times(1)).getForm(user);
+    }
+
+    @Test
+    void 학기별_성적이_비어있는_원서로_수정하면_에러가_발생한다() {
+        // given
+        User user = UserFixture.createUser();
+        SubmitFormRequest submitFormRequest = FormFixture.createFormRequestWithEmptyGrade(FormType.REGULAR);
+        UpdateFormRequest request = new UpdateFormRequest(
+                submitFormRequest.getApplicant(),
+                submitFormRequest.getParent(),
+                submitFormRequest.getEducation(),
+                submitFormRequest.getGrade(),
+                submitFormRequest.getDocument(),
+                submitFormRequest.getType()
+        );
+
+        // when and then
+        assertThrows(InvalidGradeException.class, () -> updateFormUseCase.execute(user, request));
+
+        verify(formFacade, never()).getForm(any(User.class));
+        verify(calculateFormScoreService, never()).execute(any(Form.class));
     }
 }

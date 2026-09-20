@@ -25,6 +25,7 @@ public class SubmitFormUseCase {
     @ValidateApplicationFormPeriod
     @Transactional
     public void execute(User user, SubmitFormRequest request) {
+        GradeRequestValidator.validate(request.getEducation(), request.getGrade());
         validateOnlyOneFormPerUser(user);
 
         Form form = Form.builder()

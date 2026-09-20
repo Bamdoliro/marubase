@@ -4,6 +4,8 @@ import com.bamdoliro.maru.shared.response.ErrorResponse;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
+import org.springframework.core.NestedExceptionUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -131,9 +133,19 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(e.getErrorProperty(), e.getMessage()));
     }
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+        Throwable rootCause = NestedExceptionUtils.getMostSpecificCause(e);
+        log.error(rootCause.getMessage(), e);
+
+        return ResponseEntity
+                .status(GlobalErrorProperty.CONFLICT.getStatus())
+                .body(new ErrorResponse(GlobalErrorProperty.CONFLICT));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
-        log.error(e.getMessage(), e);
+        log.error("{}: {}", e.getClass().getName(), e.getMessage(), e);
 
         return ResponseEntity
                 .status(GlobalErrorProperty.INTERNAL_SERVER_ERROR.getStatus())
