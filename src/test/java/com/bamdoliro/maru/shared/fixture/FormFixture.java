@@ -507,6 +507,68 @@ public class FormFixture {
         );
     }
 
+    public static SubmitFormRequest createFormRequestWithEmptyGrade(FormType type) {
+        return new SubmitFormRequest(
+                createApplicantRequest(),
+                createParentRequest(),
+                new EducationRequest(
+                        GraduationType.EXPECTED,
+                        "2021",
+                        "비전중학교",
+                        "경기도",
+                        "경기도 비전시 비전구 비전로 1",
+                        "7631003",
+                        "나교사",
+                        "0519701234",
+                        "01012344321"
+                ),
+                new GradeRequest(
+                        List.of(),
+                        new AttendanceRequest(0, 0, 0, 2),
+                        new AttendanceRequest(2, 1, 0, 0),
+                        new AttendanceRequest(0, 0, 1, 0),
+                        8,
+                        2,
+                        1,
+                        null,
+                        false
+                ),
+                createDocumentRequest(),
+                type
+        );
+    }
+
+    public static SubmitFormRequest createQualificationExaminationFormRequestWithEmptyGrade(FormType type) {
+        return new SubmitFormRequest(
+                createApplicantRequest(),
+                createParentRequest(),
+                new EducationRequest(
+                        GraduationType.QUALIFICATION_EXAMINATION,
+                        "2021",
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                ),
+                new GradeRequest(
+                        List.of(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        false
+                ),
+                createDocumentRequest(),
+                type
+        );
+    }
+
     public static UpdateFormRequest createUpdateFormRequest(FormType type) {
         return new UpdateFormRequest(
                 createApplicantRequest(),

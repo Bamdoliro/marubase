@@ -3,6 +3,7 @@ package com.bamdoliro.maru.application.form;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.FormAlreadySubmittedException;
+import com.bamdoliro.maru.domain.form.exception.InvalidGradeException;
 import com.bamdoliro.maru.domain.form.service.AssignExaminationNumberService;
 import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.domain.user.domain.User;
@@ -76,6 +77,36 @@ class SubmitFormUseCaseTest {
         verify(calculateFormScoreService, never()).execute(any(Form.class));
         verify(assignExaminationNumberService, never()).execute(any(Form.class));
         verify(formRepository, never()).delete(any(Form.class));
+        verify(formRepository, never()).save(any(Form.class));
+    }
+
+    @Test
+    void 학기별_성적이_비어있는_원서를_제출하면_에러가_발생한다() {
+        // given
+        SubmitFormRequest request = FormFixture.createFormRequestWithEmptyGrade(FormType.REGULAR);
+        User user = UserFixture.createUser();
+
+        // when and then
+        assertThrows(InvalidGradeException.class, () -> submitFormUseCase.execute(user, request));
+
+        verify(formRepository, never()).findByUser(any(User.class));
+        verify(calculateFormScoreService, never()).execute(any(Form.class));
+        verify(assignExaminationNumberService, never()).execute(any(Form.class));
+        verify(formRepository, never()).save(any(Form.class));
+    }
+
+    @Test
+    void 검정고시_과목이_비어있는_원서를_제출하면_에러가_발생한다() {
+        // given
+        SubmitFormRequest request = FormFixture.createQualificationExaminationFormRequestWithEmptyGrade(FormType.REGULAR);
+        User user = UserFixture.createUser();
+
+        // when and then
+        assertThrows(InvalidGradeException.class, () -> submitFormUseCase.execute(user, request));
+
+        verify(formRepository, never()).findByUser(any(User.class));
+        verify(calculateFormScoreService, never()).execute(any(Form.class));
+        verify(assignExaminationNumberService, never()).execute(any(Form.class));
         verify(formRepository, never()).save(any(Form.class));
     }
 }

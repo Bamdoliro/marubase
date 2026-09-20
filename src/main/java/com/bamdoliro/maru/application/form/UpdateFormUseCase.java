@@ -21,6 +21,8 @@ public class UpdateFormUseCase {
     @ValidateApplicationFormPeriod
     @Transactional
     public void execute(User user, UpdateFormRequest request) {
+        GradeRequestValidator.validate(request.getEducation(), request.getGrade());
+
         Form form = formFacade.getForm(user);
         form.isApplicant(user);
         validateFormStatus(form);
