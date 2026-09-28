@@ -22,10 +22,10 @@ public class SignUpUserUseCase {
 
     @Transactional
     public void execute(SignUpUserRequest request) {
-        // TODO: 임시 회원가입 차단. 재개 시 이 블록을 원래 코드로 되돌리기
-        if (true) {
-            throw new SignUpTemporarilyDisabledException();
-        }
+        // TODO: 임시 회원가입 차단. 재개 시 아래 주석을 해제
+        // if (true) {
+        //     throw new SignUpTemporarilyDisabledException();
+        // }
 
         validate(request);
 
