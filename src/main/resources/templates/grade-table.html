@@ -87,13 +87,13 @@
         <td class="ba" th:text="${subject.subjectName}"></td>
         <td class="ba disabled" th:if="${subject.achievementLevel21 == null}"></td>
         <td class="ba" th:unless="${subject.achievementLevel21 == null}"
-            th:text="${subject.achievementLevel21.toString(subject.subjectName)}"></td>
+            th:text="${subject.achievementLevel21.toGradeTableString()}"></td>
         <td class="ba disabled" th:if="${subject.achievementLevel22 == null}"></td>
         <td class="ba" th:unless="${subject.achievementLevel22 == null}"
-            th:text="${subject.achievementLevel22.toString(subject.subjectName)}"></td>
+            th:text="${subject.achievementLevel22.toGradeTableString()}"></td>
         <td class="ba disabled" th:if="${subject.achievementLevel31 == null}"></td>
         <td class="ba" th:unless="${subject.achievementLevel31 == null}"
-            th:text="${subject.achievementLevel31.toString(subject.subjectName)}"></td>
+            th:text="${subject.achievementLevel31.toGradeTableString()}"></td>
     </tr>
 </table>
 <table>
@@ -111,10 +111,10 @@
         <td class="ba" th:text="${subject.subjectName}"></td>
         <td class="ba disabled" th:if="${subject.achievementLevel11 == null}"></td>
         <td class="ba" th:unless="${subject.achievementLevel11 == null}"
-            th:text="${subject.achievementLevel11.toString(subject.subjectName)}"></td>
+            th:text="${subject.achievementLevel11.toGradeTableString()}"></td>
         <td class="ba disabled" th:if="${subject.achievementLevel12 == null}"></td>
         <td class="ba" th:unless="${subject.achievementLevel12 == null}"
-            th:text="${subject.achievementLevel12.toString(subject.subjectName)}"></td>
+            th:text="${subject.achievementLevel12.toGradeTableString()}"></td>
     </tr>
 </table>
 <table th:if="${form.education.isQualificationExamination()}">
