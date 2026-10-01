@@ -19,14 +19,7 @@ public enum AchievementLevel implements EnumProperty {
     private final String korean;
     private final String korean3step;
 
-    public String toString(String subjectName) {
-        if (subjectName.equals("음악") ||
-                subjectName.equals("미술") ||
-                subjectName.equals("체육")
-        ) {
-            return String.format("%s/%s", this.name(), this.getKorean3step());
-        }
-
-        return String.format("%s/%s", this.name(), this.getKorean());
+    public String toGradeTableString() {
+        return description;
     }
 }
