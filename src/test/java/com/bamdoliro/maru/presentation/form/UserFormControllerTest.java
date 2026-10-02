@@ -33,6 +33,7 @@ import static org.springframework.restdocs.cookies.CookieDocumentation.requestCo
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class UserFormControllerTest extends RestDocsTestSupport {
@@ -183,6 +184,47 @@ class UserFormControllerTest extends RestDocsTestSupport {
                         .content(toJson(request))
                 )
                 .andExpect(status().isBadRequest())
+                .andDo(restDocs.document());
+
+        verify(submitFormUseCase, never()).execute(any(User.class), any(SubmitFormRequest.class));
+    }
+
+    @Test
+    void 원서를_제출할_때_학교명이_30자이면_성공한다() throws Exception {
+        SubmitFormRequest request = FormFixture.createFormRequestWithSchoolName(FormType.REGULAR, "가".repeat(30));
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+
+        mockMvc.perform(post("/forms")
+                        .cookie(AuthFixture.createAuthCookie())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+                )
+                .andExpect(status().isCreated())
+                .andDo(restDocs.document());
+
+        verify(submitFormUseCase, times(1)).execute(any(User.class), any(SubmitFormRequest.class));
+    }
+
+    @Test
+    void 원서를_제출할_때_학교명이_30자를_넘으면_에러가_발생한다() throws Exception {
+        SubmitFormRequest request = FormFixture.createFormRequestWithSchoolName(FormType.REGULAR, "가".repeat(31));
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+
+        mockMvc.perform(post("/forms")
+                        .cookie(AuthFixture.createAuthCookie())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error['education.schoolName']").value("30자 이하여야 합니다."))
                 .andDo(restDocs.document());
 
         verify(submitFormUseCase, never()).execute(any(User.class), any(SubmitFormRequest.class));
@@ -361,6 +403,47 @@ class UserFormControllerTest extends RestDocsTestSupport {
                 ));
 
         verify(updateFormUseCase, times(1)).execute(any(User.class), any(UpdateFormRequest.class));
+    }
+
+    @Test
+    void 원서를_수정할_때_학교명이_30자이면_성공한다() throws Exception {
+        UpdateFormRequest request = FormFixture.createUpdateFormRequestWithSchoolName(FormType.REGULAR, "가".repeat(30));
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+
+        mockMvc.perform(put("/forms")
+                        .cookie(AuthFixture.createAuthCookie())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+                )
+                .andExpect(status().isNoContent())
+                .andDo(restDocs.document());
+
+        verify(updateFormUseCase, times(1)).execute(any(User.class), any(UpdateFormRequest.class));
+    }
+
+    @Test
+    void 원서를_수정할_때_학교명이_30자를_넘으면_에러가_발생한다() throws Exception {
+        UpdateFormRequest request = FormFixture.createUpdateFormRequestWithSchoolName(FormType.REGULAR, "가".repeat(31));
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+
+        mockMvc.perform(put("/forms")
+                        .cookie(AuthFixture.createAuthCookie())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error['education.schoolName']").value("30자 이하여야 합니다."))
+                .andDo(restDocs.document());
+
+        verify(updateFormUseCase, never()).execute(any(User.class), any(UpdateFormRequest.class));
     }
 
     @Test
