@@ -607,6 +607,44 @@ public class FormFixture {
         );
     }
 
+    public static SubmitFormRequest createFormRequestWithSchoolName(FormType type, String schoolName) {
+        SubmitFormRequest request = createFormRequest(type);
+        return new SubmitFormRequest(
+                request.getApplicant(),
+                request.getParent(),
+                withSchoolName(request.getEducation(), schoolName),
+                request.getGrade(),
+                request.getDocument(),
+                request.getType()
+        );
+    }
+
+    public static UpdateFormRequest createUpdateFormRequestWithSchoolName(FormType type, String schoolName) {
+        UpdateFormRequest request = createUpdateFormRequest(type);
+        return new UpdateFormRequest(
+                request.getApplicant(),
+                request.getParent(),
+                withSchoolName(request.getEducation(), schoolName),
+                request.getGrade(),
+                request.getDocument(),
+                request.getType()
+        );
+    }
+
+    private static EducationRequest withSchoolName(EducationRequest education, String schoolName) {
+        return new EducationRequest(
+                education.getGraduationType(),
+                education.getGraduationYear(),
+                schoolName,
+                education.getSchoolLocation(),
+                education.getSchoolAddress(),
+                education.getSchoolCode(),
+                education.getTeacherName(),
+                education.getSchoolPhoneNumber(),
+                education.getTeacherMobilePhoneNumber()
+        );
+    }
+
     public static FormSimpleResponse createFormSimpleResponse(FormStatus status) {
         Form form = FormFixture.createForm(FormType.REGULAR);
         return new FormSimpleResponse(form);
