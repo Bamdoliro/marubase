@@ -170,7 +170,7 @@
         <td class="ba" colspan="2">1</td>
         <td class="ba" colspan="3"
             th:unless="${form.education.isQualificationExamination()}"
-            th:text="${grade11.size()}"></td>
+            th:text="${grade11.getSubjectCount()}"></td>
         <td class="ba" colspan="1"
             th:unless="${form.education.isQualificationExamination()}"
             th:text="${grade11.totalScore()}"></td>
@@ -214,7 +214,7 @@
         <td class="ba" colspan="2">2</td>
         <td class="ba" colspan="3"
             th:unless="${form.education.isQualificationExamination()}"
-            th:text="${grade12.size()}"></td>
+            th:text="${grade12.getSubjectCount()}"></td>
         <td class="ba" colspan="1"
             th:unless="${form.education.isQualificationExamination()}"
             th:text="${grade12.totalScore()}"></td>
@@ -235,7 +235,7 @@
         <td class="ba" colspan="2">1</td>
         <td class="ba" colspan="3"
             th:unless="${form.education.isQualificationExamination()}"
-            th:text="${grade21.size()}"></td>
+            th:text="${grade21.getSubjectCount()}"></td>
         <td class="ba" colspan="1"
             th:unless="${form.education.isQualificationExamination()}"
             th:text="${grade21.totalScore()}"></td>
@@ -263,7 +263,7 @@
     <tr th:unless="${form.education.isQualificationExamination()}">
         <td class="ba" colspan="2">2</td>
         <td class="ba" colspan="3"
-            th:text="${grade22.size()}"></td>
+            th:text="${grade22.getSubjectCount()}"></td>
         <td class="ba" colspan="1"
             th:text="${grade22.totalScore()}"></td>
     </tr>
@@ -282,7 +282,7 @@
         <th scope="row" class="ba" rowspan="2">3</th>
         <td class="ba" colspan="2">1</td>
         <td class="ba" colspan="3"
-            th:text="${grade31.size()}"></td>
+            th:text="${grade31.getSubjectCount()}"></td>
         <td class="ba" colspan="1"
             th:text="${grade31.totalScore()}"></td>
         <td class="ba" colspan="1" rowspan="2"
@@ -316,7 +316,7 @@
         <th scope="row" class="ba">계</th>
         <td class="ba disabled" colspan="2"></td>
         <td class="ba" colspan="3"
-            th:text="${grade11.size() + grade12.size() + grade21.size() + grade22.size() + grade31.size()}"></td>
+            th:text="${grade11.getSubjectCount() + grade12.getSubjectCount() + grade21.getSubjectCount() + grade22.getSubjectCount() + grade31.getSubjectCount()}"></td>
         <td class="ba" colspan="1"
             th:text="${grade11.totalScore() + grade12.totalScore() + grade21.totalScore() + grade22.totalScore() + grade31.totalScore()}"></td>
         <td class="ba" colspan="1"

@@ -52,6 +52,12 @@ public class SubjectList {
                 .sum();
     }
 
+    public Integer getSubjectCount() {
+        return (int) value.stream()
+                .filter(subject -> subject.getAchievementLevel() != AchievementLevel.F)
+                .count();
+    }
+
     public Double getAverageInformationScore() {
         double score = 0;
         int count = 0;
