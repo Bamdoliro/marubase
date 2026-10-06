@@ -62,7 +62,7 @@ public class SubjectList {
                 subject.getSubjectName().equals("정보")
             ) {
                 score += subject.getScore();
-                count++;
+                count += subject.getCount();
             }
         }
 
