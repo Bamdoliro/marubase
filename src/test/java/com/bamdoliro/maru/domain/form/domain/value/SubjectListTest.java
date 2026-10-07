@@ -64,4 +64,37 @@ class SubjectListTest {
         // then
         assertEquals((double) AchievementLevel.A.getScore(), averageInformationScore);
     }
+
+    @Test
+    void 국어_영어_수학이_미이수면_과목_수는_0이다() {
+        // given
+        SubjectList subjectList = new SubjectList(List.of(
+                new Subject(2, 1, "국어", AchievementLevel.F),
+                new Subject(2, 1, "영어", AchievementLevel.F),
+                new Subject(2, 1, "수학", AchievementLevel.F)
+        ));
+
+        // when
+        Integer subjectCount = subjectList.getSubjectCount();
+
+        // then
+        assertEquals(4, subjectList.size());
+        assertEquals(0, subjectCount);
+    }
+
+    @Test
+    void 수학_과목_수를_1로_센다() {
+        // given
+        SubjectList subjectList = new SubjectList(List.of(
+                new Subject(2, 1, "국어", AchievementLevel.A),
+                new Subject(2, 1, "수학", AchievementLevel.A)
+        ));
+
+        // when
+        Integer subjectCount = subjectList.getSubjectCount();
+
+        // then
+        assertEquals(3, subjectList.size());
+        assertEquals(2, subjectCount);
+    }
 }
