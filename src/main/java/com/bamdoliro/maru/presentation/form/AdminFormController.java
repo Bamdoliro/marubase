@@ -8,6 +8,7 @@ import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListReques
 import com.bamdoliro.maru.presentation.form.dto.response.AdmissionAndPledgeUrlResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormUrlResponse;
+import com.bamdoliro.maru.shared.auth.AuthenticatedUser;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.auth.Authority;
 import com.bamdoliro.maru.shared.response.CommonResponse;
@@ -213,7 +214,7 @@ public class AdminFormController {
 
     @GetMapping("/pdf")
     public ResponseEntity<Resource> mergeFormPdf(
-            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
+            @AuthenticationPrincipal(authority = Authority.ADMIN) AuthenticatedUser user,
             @RequestParam(name = "id-list") List<Long> formIdList
     ) {
         String filename = "원서모음.pdf";

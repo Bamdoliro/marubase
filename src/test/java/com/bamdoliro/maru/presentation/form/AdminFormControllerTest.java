@@ -9,6 +9,7 @@ import com.bamdoliro.maru.domain.form.exception.MissingTotalScoreException;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormRequest;
+import com.bamdoliro.maru.shared.auth.AuthenticatedUser;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
@@ -637,7 +638,8 @@ class AdminFormControllerTest extends RestDocsTestSupport {
         );
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
-        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any()))
+                .willReturn(AuthenticatedUser.from(user));
         given(mergeFormPdfUseCase.execute(idList)).willReturn(new ByteArrayResource(file.getBytes()));
 
         mockMvc.perform(get("/admin/forms/pdf")
