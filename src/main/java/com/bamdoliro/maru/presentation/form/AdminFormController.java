@@ -47,6 +47,7 @@ public class AdminFormController {
     private final ExportSubjectGradeDetailUseCase exportSubjectGradeDetailUseCase;
     private final PassOrFailFormUseCase passOrFailFormUseCase;
     private final QueryFormUrlUseCase queryFormUrlUseCase;
+    private final MergeFormPdfUseCase mergeFormPdfUseCase;
     private final SelectSecondPassUseCase selectSecondPassUseCase;
     private final QueryAdmissionAndPledgeUseCase queryAdmissionAndPledgeUseCase;
 
@@ -208,6 +209,24 @@ public class AdminFormController {
         return CommonResponse.ok(
                 queryFormUrlUseCase.execute(formIdList)
         );
+    }
+
+    @GetMapping("/pdf")
+    public ResponseEntity<Resource> mergeFormPdf(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
+            @RequestParam(name = "id-list") List<Long> formIdList
+    ) {
+        String filename = "원서모음.pdf";
+        String encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8)
+                .replace("+", "%20");
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(
+                        "Content-Disposition",
+                        "attachment; filename=\"forms.pdf\"; filename*=UTF-8''" + encodedFilename
+                )
+                .body(mergeFormPdfUseCase.execute(formIdList));
     }
 
     @GetMapping("/admission-and-pledges")
