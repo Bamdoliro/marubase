@@ -106,7 +106,7 @@ public class CalculateFormScoreService {
 
         Attendance totalAttendance = form.getGrade().getTotalAttendance();
         int convertedAbsenceCount = getConvertedAbsenceCount(totalAttendance);
-        return convertedAbsenceCount > MAX_ABSENCE_COUNT ? MIN_ATTENDANCE_SCORE : MAX_ATTENDANCE_SCORE - convertedAbsenceCount;
+        return convertedAbsenceCount >= MAX_ABSENCE_COUNT ? MIN_ATTENDANCE_SCORE : MAX_ATTENDANCE_SCORE - convertedAbsenceCount;
     }
 
     private Integer getConvertedAbsenceCount(Attendance attendance) {

@@ -12,7 +12,7 @@ public class FormConstant {
     public static final int DEFAULT_ATTENDANCE_SCORE = 14;
     public static final int MIN_ATTENDANCE_SCORE = 0;
     public static final int MAX_ATTENDANCE_SCORE = 18;
-    public static final int MAX_ABSENCE_COUNT = 16;
+    public static final int MAX_ABSENCE_COUNT = 16; // 환산 결석일수가 이 값 이상이면 출석성적 0점
 
     public static final int DEFAULT_VOLUNTEER_SCORE = 14;
     public static final int MIN_VOLUNTEER_SCORE = 0;
