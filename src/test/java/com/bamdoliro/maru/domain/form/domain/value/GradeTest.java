@@ -31,4 +31,16 @@ class GradeTest {
         assertEquals(3, grade.getCertificateList().size());
         assertEquals(Certificate.COMPUTER_SPECIALIST_LEVEL_2, computerSpecialistCertificate);
     }
+
+    @Test
+    void 봉사시간_합계가_int_범위를_넘으면_최댓값으로_제한한다() {
+        // given
+        Grade grade = new Grade(null, null, null, null, 1431655791, 1431655791, 1431655791, new CertificateList(List.of()), false);
+
+        // when
+        Integer totalVolunteerTime = grade.getTotalVolunteerTime();
+
+        // then
+        assertEquals(Integer.MAX_VALUE, totalVolunteerTime);
+    }
 }

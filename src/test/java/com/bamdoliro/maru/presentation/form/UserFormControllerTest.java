@@ -231,6 +231,47 @@ class UserFormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
+    void 원서를_제출할_때_봉사시간이_999시간이면_성공한다() throws Exception {
+        SubmitFormRequest request = FormFixture.createFormRequestWithVolunteerTime(FormType.REGULAR, 999);
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+
+        mockMvc.perform(post("/forms")
+                        .cookie(AuthFixture.createAuthCookie())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+                )
+                .andExpect(status().isCreated())
+                .andDo(restDocs.document());
+
+        verify(submitFormUseCase, times(1)).execute(any(User.class), any(SubmitFormRequest.class));
+    }
+
+    @Test
+    void 원서를_제출할_때_봉사시간이_999시간을_넘으면_에러가_발생한다() throws Exception {
+        SubmitFormRequest request = FormFixture.createFormRequestWithVolunteerTime(FormType.REGULAR, 1431655791);
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+
+        mockMvc.perform(post("/forms")
+                        .cookie(AuthFixture.createAuthCookie())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error['grade.volunteerTime1']").value("999 이하여야 합니다."))
+                .andDo(restDocs.document());
+
+        verify(submitFormUseCase, never()).execute(any(User.class), any(SubmitFormRequest.class));
+    }
+
+    @Test
     void 원서를_최종_제출한다() throws Exception {
         User user = UserFixture.createUser();
 
@@ -441,6 +482,47 @@ class UserFormControllerTest extends RestDocsTestSupport {
                 )
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error['education.schoolName']").value("30자 이하여야 합니다."))
+                .andDo(restDocs.document());
+
+        verify(updateFormUseCase, never()).execute(any(User.class), any(UpdateFormRequest.class));
+    }
+
+    @Test
+    void 원서를_수정할_때_봉사시간이_999시간이면_성공한다() throws Exception {
+        UpdateFormRequest request = FormFixture.createUpdateFormRequestWithVolunteerTime(FormType.REGULAR, 999);
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+
+        mockMvc.perform(put("/forms")
+                        .cookie(AuthFixture.createAuthCookie())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+                )
+                .andExpect(status().isNoContent())
+                .andDo(restDocs.document());
+
+        verify(updateFormUseCase, times(1)).execute(any(User.class), any(UpdateFormRequest.class));
+    }
+
+    @Test
+    void 원서를_수정할_때_봉사시간이_999시간을_넘으면_에러가_발생한다() throws Exception {
+        UpdateFormRequest request = FormFixture.createUpdateFormRequestWithVolunteerTime(FormType.REGULAR, 1431655791);
+        User user = UserFixture.createUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+
+        mockMvc.perform(put("/forms")
+                        .cookie(AuthFixture.createAuthCookie())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error['grade.volunteerTime1']").value("999 이하여야 합니다."))
                 .andDo(restDocs.document());
 
         verify(updateFormUseCase, never()).execute(any(User.class), any(UpdateFormRequest.class));

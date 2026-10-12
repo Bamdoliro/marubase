@@ -238,6 +238,19 @@ class CalculateFormScoreServiceTest {
         assertEquals(18, form.getScore().getVolunteerScore());
     }
 
+    @Test
+    void 저장된_봉사시간_합계가_int_범위를_넘어도_봉사점수는_18점이다() {
+        // given
+        Form form = FormFixture.createForm(FormType.REGULAR);
+        replaceVolunteerTime(form, 1431655791, 1431655791, 1431655791);
+
+        // when
+        calculateFormScoreService.execute(form);
+
+        // then
+        assertEquals(18, form.getScore().getVolunteerScore());
+    }
+
     private void replaceVolunteerTime(Form form, Integer volunteerTime1, Integer volunteerTime2, Integer volunteerTime3) {
         Grade grade = form.getGrade();
         Grade newGrade = new Grade(

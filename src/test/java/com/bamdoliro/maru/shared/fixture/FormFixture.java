@@ -631,6 +631,44 @@ public class FormFixture {
         );
     }
 
+    public static SubmitFormRequest createFormRequestWithVolunteerTime(FormType type, Integer volunteerTime) {
+        SubmitFormRequest request = createFormRequest(type);
+        return new SubmitFormRequest(
+                request.getApplicant(),
+                request.getParent(),
+                request.getEducation(),
+                withVolunteerTime(request.getGrade(), volunteerTime),
+                request.getDocument(),
+                request.getType()
+        );
+    }
+
+    public static UpdateFormRequest createUpdateFormRequestWithVolunteerTime(FormType type, Integer volunteerTime) {
+        UpdateFormRequest request = createUpdateFormRequest(type);
+        return new UpdateFormRequest(
+                request.getApplicant(),
+                request.getParent(),
+                request.getEducation(),
+                withVolunteerTime(request.getGrade(), volunteerTime),
+                request.getDocument(),
+                request.getType()
+        );
+    }
+
+    private static GradeRequest withVolunteerTime(GradeRequest grade, Integer volunteerTime) {
+        return new GradeRequest(
+                grade.getSubjectList(),
+                grade.getAttendance1(),
+                grade.getAttendance2(),
+                grade.getAttendance3(),
+                volunteerTime,
+                volunteerTime,
+                volunteerTime,
+                grade.getCertificateList(),
+                grade.isMentoringProgram()
+        );
+    }
+
     private static EducationRequest withSchoolName(EducationRequest education, String schoolName) {
         return new EducationRequest(
                 education.getGraduationType(),
