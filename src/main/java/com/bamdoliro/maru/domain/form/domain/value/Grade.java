@@ -100,7 +100,11 @@ public class Grade {
     }
 
     public Integer getTotalVolunteerTime() {
-        return volunteerTime1 + volunteerTime2 + volunteerTime3;
+        return nullToZero(volunteerTime1) + nullToZero(volunteerTime2) + nullToZero(volunteerTime3);
+    }
+
+    private int nullToZero(Integer value) {
+        return value == null ? 0 : value;
     }
 
     public List<Subject> getSubjectListValue() {
