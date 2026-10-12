@@ -36,6 +36,7 @@ import com.bamdoliro.maru.presentation.question.AdminQuestionController;
 import com.bamdoliro.maru.presentation.question.QuestionController;
 import com.bamdoliro.maru.presentation.school.SchoolController;
 import com.bamdoliro.maru.presentation.schedule.AdminScheduleController;
+import com.bamdoliro.maru.presentation.schedule.ScheduleController;
 import com.bamdoliro.maru.presentation.user.UserController;
 import com.bamdoliro.maru.shared.auth.AuthenticationArgumentResolver;
 import com.bamdoliro.maru.shared.auth.AuthenticationExtractor;
@@ -67,6 +68,7 @@ import org.springframework.test.web.servlet.MockMvc;
             AdminFairController.class,
             MessageController.class,
             AnalysisController.class,
+            ScheduleController.class,
             AdminScheduleController.class})
 public abstract class ControllerTest {
 
