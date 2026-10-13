@@ -15,10 +15,7 @@ import java.io.InputStream;
 public class MergePdfService {
 
     public void execute(PdfMerger merger, ByteArrayOutputStream outputStream) {
-        PdfDocument document = createPdfDocumentFrom(outputStream);
-
-        merger.merge(document, 1, document.getNumberOfPages());
-        document.close();
+        execute(merger, outputStream.toByteArray());
 
         try {
             outputStream.close();
@@ -27,9 +24,16 @@ public class MergePdfService {
         }
     }
 
-    private PdfDocument createPdfDocumentFrom(ByteArrayOutputStream outputStream) {
+    public void execute(PdfMerger merger, byte[] pdf) {
+        PdfDocument document = createPdfDocumentFrom(pdf);
+
+        merger.merge(document, 1, document.getNumberOfPages());
+        document.close();
+    }
+
+    private PdfDocument createPdfDocumentFrom(byte[] pdf) {
         try {
-            InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+            InputStream inputStream = new ByteArrayInputStream(pdf);
             return new PdfDocument(new PdfReader(inputStream));
         } catch (IOException e) {
             throw new FailedToExportPdfException();

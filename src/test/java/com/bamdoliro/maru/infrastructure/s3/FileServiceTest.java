@@ -10,6 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.core.ResponseBytes;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
 import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
@@ -25,6 +28,7 @@ import static com.bamdoliro.maru.shared.constants.FileConstant.MB;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 @ExtendWith(MockitoExtension.class)
 class FileServiceTest {
@@ -66,6 +70,22 @@ class FileServiceTest {
         // then
         verify(s3Presigner, times(1)).presignPutObject(any(PutObjectPresignRequest.class));
         verify(s3Presigner, times(1)).presignGetObject(any(GetObjectPresignRequest.class));
+    }
+
+    @Test
+    void 파일을_다운로드한다() {
+        // given
+        byte[] file = "pdf".getBytes();
+        given(s3Client.getObjectAsBytes(any(GetObjectRequest.class))).willReturn(
+                ResponseBytes.fromByteArray(GetObjectResponse.builder().build(), file)
+        );
+
+        // when
+        byte[] result = fileService.download("form", "uuid");
+
+        // then
+        assertArrayEquals(file, result);
+        verify(s3Client, times(1)).getObjectAsBytes(any(GetObjectRequest.class));
     }
 
 }

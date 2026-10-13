@@ -9,6 +9,7 @@ import com.bamdoliro.maru.domain.form.exception.MissingTotalScoreException;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormRequest;
+import com.bamdoliro.maru.shared.auth.AuthenticatedUser;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
@@ -31,6 +32,8 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class AdminFormControllerTest extends RestDocsTestSupport {
@@ -624,6 +627,40 @@ class AdminFormControllerTest extends RestDocsTestSupport {
                 ));
 
         verify(queryFormUrlUseCase, times(1)).execute(idList);
+    }
+
+    @Test
+    void 선택한_원서의_pdf를_병합해서_다운로드한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+        List<Long> idList = List.of(1L, 2L, 3L);
+        MockMultipartFile file = new MockMultipartFile(
+                "forms", "forms.pdf", MediaType.APPLICATION_PDF_VALUE, "<<file>>".getBytes()
+        );
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any()))
+                .willReturn(AuthenticatedUser.from(user));
+        given(mergeFormPdfUseCase.execute(idList)).willReturn(new ByteArrayResource(file.getBytes()));
+
+        mockMvc.perform(get("/admin/forms/pdf")
+                        .cookie(AuthFixture.createAuthCookie())
+                        .param("id-list", "1,2,3")
+                .accept(MediaType.APPLICATION_PDF))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_PDF))
+                .andExpect(header().string(
+                        "Content-Disposition",
+                        "attachment; filename=\"forms.pdf\"; filename*=UTF-8''%EC%9B%90%EC%84%9C%EB%AA%A8%EC%9D%8C.pdf"
+                ))
+                .andDo(restDocs.document(
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        ),
+                        queryParameters(parameterWithName("id-list").description("병합할 원서 id 목록"))
+                ));
+
+        verify(mergeFormPdfUseCase, times(1)).execute(idList);
     }
 
     @Test

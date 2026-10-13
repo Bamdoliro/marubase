@@ -8,6 +8,7 @@ import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListReques
 import com.bamdoliro.maru.presentation.form.dto.response.AdmissionAndPledgeUrlResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormUrlResponse;
+import com.bamdoliro.maru.shared.auth.AuthenticatedUser;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.auth.Authority;
 import com.bamdoliro.maru.shared.response.CommonResponse;
@@ -47,6 +48,7 @@ public class AdminFormController {
     private final ExportSubjectGradeDetailUseCase exportSubjectGradeDetailUseCase;
     private final PassOrFailFormUseCase passOrFailFormUseCase;
     private final QueryFormUrlUseCase queryFormUrlUseCase;
+    private final MergeFormPdfUseCase mergeFormPdfUseCase;
     private final SelectSecondPassUseCase selectSecondPassUseCase;
     private final QueryAdmissionAndPledgeUseCase queryAdmissionAndPledgeUseCase;
 
@@ -208,6 +210,24 @@ public class AdminFormController {
         return CommonResponse.ok(
                 queryFormUrlUseCase.execute(formIdList)
         );
+    }
+
+    @GetMapping("/pdf")
+    public ResponseEntity<Resource> mergeFormPdf(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) AuthenticatedUser user,
+            @RequestParam(name = "id-list") List<Long> formIdList
+    ) {
+        String filename = "원서모음.pdf";
+        String encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8)
+                .replace("+", "%20");
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(
+                        "Content-Disposition",
+                        "attachment; filename=\"forms.pdf\"; filename*=UTF-8''" + encodedFilename
+                )
+                .body(mergeFormPdfUseCase.execute(formIdList));
     }
 
     @GetMapping("/admission-and-pledges")

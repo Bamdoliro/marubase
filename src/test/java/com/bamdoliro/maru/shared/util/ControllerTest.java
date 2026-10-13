@@ -251,6 +251,9 @@ public abstract class ControllerTest {
     protected QueryFormUrlUseCase queryFormUrlUseCase;
 
     @MockitoBean
+    protected MergeFormPdfUseCase mergeFormPdfUseCase;
+
+    @MockitoBean
     protected SelectSecondPassUseCase selectSecondPassUseCase;
 
     @MockitoBean

@@ -6,8 +6,10 @@ import com.bamdoliro.maru.infrastructure.s3.dto.request.FileMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -43,6 +45,18 @@ public class FileService {
         GetObjectPresignRequest request = getGenerateDownloadPresignedUrlRequest(bucket, fullFileName);
 
         return request != null ? s3Presigner.presignGetObject(request).url().toString() : null;
+    }
+
+    public byte[] download(String folder, String fileName) {
+        String fullFileName = createFileName(folder, fileName);
+        ResponseBytes<GetObjectResponse> response = s3Client.getObjectAsBytes(
+                GetObjectRequest.builder()
+                        .bucket(bucket)
+                        .key(fullFileName)
+                        .build()
+        );
+
+        return response.asByteArray();
     }
 
     public UrlResponse getPresignedUrl(String folder, String fileName, FileMetadata metadata, FileValidator validator) {
