@@ -52,7 +52,9 @@ public class UpdateScheduleUseCase {
                 request.getMeisterTalentEntranceTime(),
                 request.getMeisterTalentExclusionEntranceTime(),
                 request.getAdmissionAndPledgeStart(),
-                request.getAdmissionAndPledgeEnd()
+                request.getAdmissionAndPledgeEnd(),
+                request.getMaintenanceStart(),
+                request.getMaintenanceEnd()
         );
         auditService.log(
                 schedule,

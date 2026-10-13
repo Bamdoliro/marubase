@@ -78,6 +78,12 @@ public class AdmissionSchedule extends BaseTimeEntity {
     @Column(nullable = false)
     private LocalDateTime admissionAndPledgeEnd;
 
+    @Column(nullable = true)
+    private LocalDateTime maintenanceStart;
+
+    @Column(nullable = true)
+    private LocalDateTime maintenanceEnd;
+
     @Version
     private Long version;
 
@@ -99,7 +105,9 @@ public class AdmissionSchedule extends BaseTimeEntity {
             LocalDateTime meisterTalentEntranceTime,
             LocalDateTime meisterTalentExclusionEntranceTime,
             LocalDateTime admissionAndPledgeStart,
-            LocalDateTime admissionAndPledgeEnd
+            LocalDateTime admissionAndPledgeEnd,
+            LocalDateTime maintenanceStart,
+            LocalDateTime maintenanceEnd
     ) {
         validate(
                 admissionYear,
@@ -117,7 +125,9 @@ public class AdmissionSchedule extends BaseTimeEntity {
                 meisterTalentEntranceTime,
                 meisterTalentExclusionEntranceTime,
                 admissionAndPledgeStart,
-                admissionAndPledgeEnd
+                admissionAndPledgeEnd,
+                maintenanceStart,
+                maintenanceEnd
         );
         this.admissionYear = admissionYear;
         this.active = active;
@@ -136,6 +146,8 @@ public class AdmissionSchedule extends BaseTimeEntity {
         this.meisterTalentExclusionEntranceTime = meisterTalentExclusionEntranceTime;
         this.admissionAndPledgeStart = admissionAndPledgeStart;
         this.admissionAndPledgeEnd = admissionAndPledgeEnd;
+        this.maintenanceStart = maintenanceStart;
+        this.maintenanceEnd = maintenanceEnd;
     }
 
     public void update(
@@ -154,7 +166,9 @@ public class AdmissionSchedule extends BaseTimeEntity {
             LocalDateTime meisterTalentEntranceTime,
             LocalDateTime meisterTalentExclusionEntranceTime,
             LocalDateTime admissionAndPledgeStart,
-            LocalDateTime admissionAndPledgeEnd
+            LocalDateTime admissionAndPledgeEnd,
+            LocalDateTime maintenanceStart,
+            LocalDateTime maintenanceEnd
     ) {
         validate(
                 admissionYear,
@@ -172,7 +186,9 @@ public class AdmissionSchedule extends BaseTimeEntity {
                 meisterTalentEntranceTime,
                 meisterTalentExclusionEntranceTime,
                 admissionAndPledgeStart,
-                admissionAndPledgeEnd
+                admissionAndPledgeEnd,
+                maintenanceStart,
+                maintenanceEnd
         );
         this.admissionYear = admissionYear;
         this.applicationFormStart = applicationFormStart;
@@ -190,6 +206,8 @@ public class AdmissionSchedule extends BaseTimeEntity {
         this.meisterTalentExclusionEntranceTime = meisterTalentExclusionEntranceTime;
         this.admissionAndPledgeStart = admissionAndPledgeStart;
         this.admissionAndPledgeEnd = admissionAndPledgeEnd;
+        this.maintenanceStart = maintenanceStart;
+        this.maintenanceEnd = maintenanceEnd;
     }
 
     public void activate() {
@@ -216,7 +234,9 @@ public class AdmissionSchedule extends BaseTimeEntity {
             LocalDateTime meisterTalentEntranceTime,
             LocalDateTime meisterTalentExclusionEntranceTime,
             LocalDateTime admissionAndPledgeStart,
-            LocalDateTime admissionAndPledgeEnd
+            LocalDateTime admissionAndPledgeEnd,
+            LocalDateTime maintenanceStart,
+            LocalDateTime maintenanceEnd
     ) {
         boolean invalid = !allNotNull(
                 admissionYear,
@@ -236,6 +256,13 @@ public class AdmissionSchedule extends BaseTimeEntity {
                 admissionAndPledgeStart,
                 admissionAndPledgeEnd
         );
+        if (invalid) {
+            throw new InvalidSchedulePeriodException();
+        }
+
+        invalid = Objects.isNull(maintenanceStart) != Objects.isNull(maintenanceEnd)
+                || (Objects.nonNull(maintenanceStart)
+                && !isBefore(maintenanceStart, maintenanceEnd));
         if (invalid) {
             throw new InvalidSchedulePeriodException();
         }

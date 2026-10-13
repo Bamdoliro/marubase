@@ -62,4 +62,8 @@ public class ScheduleRequest {
 
     @NotNull(message = "필수값입니다.")
     private LocalDateTime admissionAndPledgeEnd;
+
+    private LocalDateTime maintenanceStart;
+
+    private LocalDateTime maintenanceEnd;
 }

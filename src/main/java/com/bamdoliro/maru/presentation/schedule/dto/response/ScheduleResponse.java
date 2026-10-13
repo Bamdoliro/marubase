@@ -26,6 +26,8 @@ public class ScheduleResponse {
     private final LocalDateTime meisterTalentExclusionEntranceTime;
     private final LocalDateTime admissionAndPledgeStart;
     private final LocalDateTime admissionAndPledgeEnd;
+    private final LocalDateTime maintenanceStart;
+    private final LocalDateTime maintenanceEnd;
     private final LocalDateTime updatedAt;
 
     public ScheduleResponse(AdmissionSchedule schedule) {
@@ -48,6 +50,8 @@ public class ScheduleResponse {
         this.meisterTalentExclusionEntranceTime = schedule.getMeisterTalentExclusionEntranceTime();
         this.admissionAndPledgeStart = schedule.getAdmissionAndPledgeStart();
         this.admissionAndPledgeEnd = schedule.getAdmissionAndPledgeEnd();
+        this.maintenanceStart = schedule.getMaintenanceStart();
+        this.maintenanceEnd = schedule.getMaintenanceEnd();
         this.updatedAt = schedule.getUpdatedAt();
     }
 }
