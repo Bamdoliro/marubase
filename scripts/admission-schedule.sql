@@ -17,10 +17,18 @@ CREATE TABLE IF NOT EXISTS tbl_admission_schedule (
     meister_talent_exclusion_entrance_time TIMESTAMP NOT NULL,
     admission_and_pledge_start TIMESTAMP NOT NULL,
     admission_and_pledge_end TIMESTAMP NOT NULL,
+    maintenance_start TIMESTAMP,
+    maintenance_end TIMESTAMP,
     version BIGINT NOT NULL DEFAULT 0,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL
 );
+
+ALTER TABLE tbl_admission_schedule
+    ADD COLUMN IF NOT EXISTS maintenance_start TIMESTAMP;
+
+ALTER TABLE tbl_admission_schedule
+    ADD COLUMN IF NOT EXISTS maintenance_end TIMESTAMP;
 
 CREATE UNIQUE INDEX IF NOT EXISTS uk_admission_schedule_active
     ON tbl_admission_schedule (active)

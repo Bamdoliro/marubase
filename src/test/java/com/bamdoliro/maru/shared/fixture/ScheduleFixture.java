@@ -7,6 +7,13 @@ import java.time.LocalDateTime;
 public class ScheduleFixture {
 
     public static AdmissionSchedule createSchedule() {
+        return createSchedule(null, null);
+    }
+
+    public static AdmissionSchedule createSchedule(
+            LocalDateTime maintenanceStart,
+            LocalDateTime maintenanceEnd
+    ) {
         return AdmissionSchedule.builder()
                 .admissionYear(2026)
                 .active(true)
@@ -25,6 +32,8 @@ public class ScheduleFixture {
                 .admissionAndPledgeStart(LocalDateTime.of(2025, 12, 15, 0, 0))
                 .admissionAndPledgeEnd(LocalDateTime.of(2025, 12, 17, 23, 59, 59))
                 .entranceRegistrationPeriodEnd(LocalDateTime.of(2025, 12, 18, 0, 0))
+                .maintenanceStart(maintenanceStart)
+                .maintenanceEnd(maintenanceEnd)
                 .build();
     }
 
@@ -47,7 +56,9 @@ public class ScheduleFixture {
                 schedule.getMeisterTalentEntranceTime(),
                 schedule.getMeisterTalentExclusionEntranceTime(),
                 schedule.getAdmissionAndPledgeStart(),
-                schedule.getAdmissionAndPledgeEnd()
+                schedule.getAdmissionAndPledgeEnd(),
+                schedule.getMaintenanceStart(),
+                schedule.getMaintenanceEnd()
         );
     }
 }

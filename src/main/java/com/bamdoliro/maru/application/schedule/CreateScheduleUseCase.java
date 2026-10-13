@@ -63,6 +63,8 @@ public class CreateScheduleUseCase {
                 .meisterTalentExclusionEntranceTime(request.getMeisterTalentExclusionEntranceTime())
                 .admissionAndPledgeStart(request.getAdmissionAndPledgeStart())
                 .admissionAndPledgeEnd(request.getAdmissionAndPledgeEnd())
+                .maintenanceStart(request.getMaintenanceStart())
+                .maintenanceEnd(request.getMaintenanceEnd())
                 .build();
     }
 }
