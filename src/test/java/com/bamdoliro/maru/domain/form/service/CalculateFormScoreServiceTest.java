@@ -4,6 +4,7 @@ import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.AchievementLevel;
 import com.bamdoliro.maru.domain.form.domain.type.Certificate;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
+import com.bamdoliro.maru.domain.form.domain.value.Attendance;
 import com.bamdoliro.maru.domain.form.domain.value.CertificateList;
 import com.bamdoliro.maru.domain.form.domain.value.Grade;
 import com.bamdoliro.maru.domain.form.domain.value.Subject;
@@ -88,6 +89,71 @@ class CalculateFormScoreServiceTest {
         assertEquals(14, form.getScore().getAttendanceScore());
         assertEquals(0, form.getScore().getVolunteerScore());
         assertEquals(2, form.getScore().getBonusScore());
+    }
+
+    @Test
+    void 환산_결석일수가_15일이면_출석성적은_3점이다() {
+        // given
+        Form form = FormFixture.createForm(FormType.REGULAR);
+        replaceAttendance(form, new Attendance(15, 0, 0, 0));
+
+        // when
+        calculateFormScoreService.execute(form);
+
+        // then
+        assertEquals(3, form.getScore().getAttendanceScore());
+    }
+
+    @Test
+    void 환산_결석일수가_16일이면_출석성적은_0점이다() {
+        // given
+        Form form = FormFixture.createForm(FormType.REGULAR);
+        replaceAttendance(form, new Attendance(16, 0, 0, 0));
+
+        // when
+        calculateFormScoreService.execute(form);
+
+        // then
+        assertEquals(0, form.getScore().getAttendanceScore());
+    }
+
+    @Test
+    void 환산_결석일수가_16일을_넘으면_출석성적은_0점이다() {
+        // given
+        Form form = FormFixture.createForm(FormType.REGULAR);
+        replaceAttendance(form, new Attendance(17, 0, 0, 0));
+
+        // when
+        calculateFormScoreService.execute(form);
+
+        // then
+        assertEquals(0, form.getScore().getAttendanceScore());
+    }
+
+    @Test
+    void 미인정_지각_조퇴_결과_3회는_결석_1회로_환산하고_소수점은_버린다() {
+        // given
+        Form form = FormFixture.createForm(FormType.REGULAR);
+        replaceAttendance(form, new Attendance(1, 2, 2, 1));
+
+        // when
+        calculateFormScoreService.execute(form);
+
+        // then
+        assertEquals(16, form.getScore().getAttendanceScore());
+    }
+
+    @Test
+    void 지각_조퇴_결과를_환산해_16일이_되면_출석성적은_0점이다() {
+        // given
+        Form form = FormFixture.createForm(FormType.REGULAR);
+        replaceAttendance(form, new Attendance(15, 3, 0, 0));
+
+        // when
+        calculateFormScoreService.execute(form);
+
+        // then
+        assertEquals(0, form.getScore().getAttendanceScore());
     }
 
     @Test
@@ -251,6 +317,23 @@ class CalculateFormScoreServiceTest {
                 grade.getAttendance1(),
                 grade.getAttendance2(),
                 grade.getAttendance3(),
+                grade.getVolunteerTime1(),
+                grade.getVolunteerTime2(),
+                grade.getVolunteerTime3(),
+                grade.getCertificateList(),
+                grade.isMentoringProgram()
+        );
+        form.update(form.getApplicant(), form.getParent(), form.getEducation(), newGrade, form.getDocument(), form.getType());
+    }
+
+    private void replaceAttendance(Form form, Attendance attendance1) {
+        Grade grade = form.getGrade();
+        Attendance zero = new Attendance(0, 0, 0, 0);
+        Grade newGrade = new Grade(
+                grade.getSubjectList(),
+                attendance1,
+                zero,
+                zero,
                 grade.getVolunteerTime1(),
                 grade.getVolunteerTime2(),
                 grade.getVolunteerTime3(),
