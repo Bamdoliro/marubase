@@ -6,7 +6,6 @@ import java.util.function.IntUnaryOperator;
 
 /**
  * 1차·2차 선발에서 공용으로 쓰는 전형별 선발 인원.
- * <p>
  * 마이스터인재·사회통합전형의 미달분은 배수를 적용하기 전 원 정원 단위로 일반전형에 이월하고,
  * 사회통합전형의 하위 분류(기회균등·사회다양성) 분할은 배수를 적용한 실제 선발 인원으로 한다.
  */
@@ -35,7 +34,6 @@ record SelectionQuota(
             meisterTalent -= gap;
         }
 
-        // 하위 분류끼리 미달분을 서로 이월하고 나면 사회통합 전체 미달분은 (원 정원 - 지원자 합계)와 같다.
         int socialIntegrationApplicantCount = equalOpportunityApplicantCount + societyDiversityApplicantCount;
         if (socialIntegrationApplicantCount < FixedNumber.SOCIAL_INTEGRATION) {
             int gap = FixedNumber.SOCIAL_INTEGRATION - socialIntegrationApplicantCount;
