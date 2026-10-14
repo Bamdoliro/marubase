@@ -24,53 +24,34 @@ public class SelectFirstPassUseCase {
         AtomicInteger otherRegionCount = new AtomicInteger(
                 (int) (calculateMultiple(FixedNumber.TOTAL) * FixedNumber.OTHER_REGION_RATE)
         );
-        int regularCount = FixedNumber.REGULAR;
-        int meisterTalentCount = FixedNumber.MEISTER_TALENT;
-        int socialIntegrationCount = FixedNumber.SOCIAL_INTEGRATION;
-        int nationalVeteransEducationCount = FixedNumber.NATIONAL_VETERANS_EDUCATION;
-        int specialAdmissionCount = FixedNumber.SPECIAL_ADMISSION;
 
         List<Form> specialFormList = formRepository.findApprovedSpecialForm();
         List<Form> meisterTalentFormList = classifyFormsByType(specialFormList, FormType::isMeister);
-        List<Form> socialIntegrationFormList = classifyFormsByType(specialFormList, FormType::isSocial);
         List<Form> equalOpportunityFormList = classifyFormsByType(specialFormList, FormType::isEqualOpportunity);
         List<Form> societyDiversityFormList = classifyFormsByType(specialFormList, FormType::isSocietyDiversity);
 
-        if (meisterTalentFormList.size() < FixedNumber.MEISTER_TALENT) {
-            int gap = FixedNumber.MEISTER_TALENT - meisterTalentFormList.size();
-            regularCount += gap;
-            meisterTalentCount -= gap;
-        }
-
-        if (socialIntegrationFormList.size() < FixedNumber.SOCIAL_INTEGRATION) {
-            int gap = FixedNumber.SOCIAL_INTEGRATION - socialIntegrationFormList.size();
-            regularCount += gap;
-            socialIntegrationCount -= gap;
-        }
-
-        regularCount = calculateMultiple(regularCount);
-        meisterTalentCount = calculateMultiple(meisterTalentCount);
-        socialIntegrationCount = calculateMultiple(socialIntegrationCount);
-        nationalVeteransEducationCount = calculateMultiple(nationalVeteransEducationCount);
-        specialAdmissionCount = calculateMultiple(specialAdmissionCount);
-        int equalOpportunityCount = (int) Math.round(socialIntegrationCount * 0.5);
-        int societyDiversityCount = equalOpportunityCount;
+        SelectionQuota quota = SelectionQuota.of(
+                meisterTalentFormList.size(),
+                equalOpportunityFormList.size(),
+                societyDiversityFormList.size(),
+                this::calculateMultiple
+        );
 
         processForms(
                 equalOpportunityFormList,
-                equalOpportunityCount,
+                quota.equalOpportunity(),
                 otherRegionCount,
                 this::changeToRegularAndCalculateGradeAgain
         );
         processForms(
                 societyDiversityFormList,
-                societyDiversityCount,
+                quota.societyDiversity(),
                 otherRegionCount,
                 this::changeToRegularAndCalculateGradeAgain
         );
         processForms(
                 meisterTalentFormList,
-                meisterTalentCount,
+                quota.meisterTalent(),
                 otherRegionCount,
                 this::changeToRegularAndCalculateGradeAgain
         );
@@ -78,7 +59,7 @@ public class SelectFirstPassUseCase {
         formRepository.flush();
         List<Form> regularFormList = formRepository.findApprovedRegularForm();
 
-        processForms(regularFormList, regularCount, otherRegionCount, Form::firstFail);
+        processForms(regularFormList, quota.regular(), otherRegionCount, Form::firstFail);
 
         formRepository.flush();
         List<Form> supernumeraryFormList = formRepository.findApprovedSupernumeraryForm();
@@ -93,11 +74,11 @@ public class SelectFirstPassUseCase {
 
         processForms(
                 nationalVeteransFormList,
-                nationalVeteransEducationCount,
+                quota.nationalVeteransEducation(),
                 otherRegionCount,
                 Form::firstFail
         );
-        processForms(specialAdmissionFormList, specialAdmissionCount, otherRegionCount, Form::firstFail);
+        processForms(specialAdmissionFormList, quota.specialAdmission(), otherRegionCount, Form::firstFail);
     }
 
     private void processForms(
@@ -108,6 +89,11 @@ public class SelectFirstPassUseCase {
     ) {
         if (formList.isEmpty())
             return;
+
+        if (count <= 0) {
+            formList.forEach(action);
+            return;
+        }
 
         Double lastScore = formList.get(Math.min(count, formList.size()) - 1).getScore().getFirstRoundScore();
 

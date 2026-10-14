@@ -45,8 +45,14 @@ class SelectFirstPassUseCaseTest {
     @Autowired
     private AssignExaminationNumberService assignExaminationNumberService;
 
+    private SelectionScenarioSupport scenario;
+
     @BeforeEach
     void setUp() {
+        scenario = new SelectionScenarioSupport(userRepository, formRepository, assignExaminationNumberService, calculateFormScoreService);
+    }
+
+    private void setUpRandomForms() {
         List<User> userList = userRepository.saveAll(
                 UserFixture.generateUserList(FixedNumber.TOTAL * 2)
         );
@@ -62,6 +68,7 @@ class SelectFirstPassUseCaseTest {
 
     @Test
     void 정상적으로_1차전형_합격자를_선발한다() {
+        setUpRandomForms();
         selectFirstPassUseCase.execute();
 
         Comparator<Form> compare = Comparator
@@ -86,5 +93,83 @@ class SelectFirstPassUseCaseTest {
         int totalCount = (int) Math.ceil(FixedNumber.TOTAL * FixedNumber.MULTIPLE);
         assertEquals(totalCount, passedFormCount);
         assertTrue(Math.ceil((double) totalCount / 2) >= passedOtherRegionFormCount);
+    }
+
+    @Test
+    void 기회균등이_미달이면_남는_자리를_사회다양성으로_넘긴다() {
+        // given
+        scenario.saveApprovedForms(13, 1, 6);
+
+        // when
+        selectFirstPassUseCase.execute();
+
+        // then
+        // 사회통합 8석: 기회균등 미달 3석을 사회다양성으로 넘기지만 사회다양성 지원자가 6명이라 6명 선발
+        assertEquals("regular=63, meisterTalent=13, equalOpportunity=1, societyDiversity=6", scenario.countPassedForms(Form::isFirstPassedNow));
+    }
+
+    @Test
+    void 기회균등_지원자가_없으면_사회다양성이_사회통합_정원을_모두_가져간다() {
+        // given
+        scenario.saveApprovedForms(13, 0, 20);
+
+        // when
+        selectFirstPassUseCase.execute();
+
+        // then
+        // 사회통합 8석 전부 사회다양성
+        assertEquals("regular=63, meisterTalent=13, equalOpportunity=0, societyDiversity=8", scenario.countPassedForms(Form::isFirstPassedNow));
+    }
+
+    @Test
+    void 사회다양성이_미달이면_남는_자리를_기회균등으로_넘긴다() {
+        // given
+        scenario.saveApprovedForms(13, 20, 1);
+
+        // when
+        selectFirstPassUseCase.execute();
+
+        // then
+        // 사회통합 8석: 사회다양성 미달 3석을 기회균등으로
+        assertEquals("regular=63, meisterTalent=13, equalOpportunity=7, societyDiversity=1", scenario.countPassedForms(Form::isFirstPassedNow));
+    }
+
+    @Test
+    void 사회통합_전체가_미달이면_남는_자리만큼_일반전형_정원을_늘린다() {
+        // given
+        scenario.saveApprovedForms(13, 1, 2);
+
+        // when
+        selectFirstPassUseCase.execute();
+
+        // then
+        // 사회통합 미달 3석 → 일반 ceil((48 + 3) * 1.3) = 67
+        assertEquals("regular=67, meisterTalent=13, equalOpportunity=1, societyDiversity=2", scenario.countPassedForms(Form::isFirstPassedNow));
+    }
+
+    @Test
+    void 사회통합_양쪽_모두_정원_이상이면_반반_선발한다() {
+        // given
+        scenario.saveApprovedForms(13, 10, 10);
+
+        // when
+        selectFirstPassUseCase.execute();
+
+        // then
+        // 사회통합 8석 → 4 / 4
+        assertEquals("regular=63, meisterTalent=13, equalOpportunity=4, societyDiversity=4", scenario.countPassedForms(Form::isFirstPassedNow));
+    }
+
+    @Test
+    void 마이스터인재전형이_미달이면_일반전형_정원을_늘린다() {
+        // given
+        scenario.saveApprovedForms(5, 10, 10);
+
+        // when
+        selectFirstPassUseCase.execute();
+
+        // then
+        // 마이스터 미달 5석 → 일반 ceil((48 + 5) * 1.3) = 69
+        assertEquals("regular=69, meisterTalent=5, equalOpportunity=4, societyDiversity=4", scenario.countPassedForms(Form::isFirstPassedNow));
     }
 }

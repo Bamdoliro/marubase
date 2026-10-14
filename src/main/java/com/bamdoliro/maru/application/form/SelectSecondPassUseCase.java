@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.IntUnaryOperator;
 
 @RequiredArgsConstructor
 @UseCase
@@ -28,49 +29,35 @@ public class SelectSecondPassUseCase {
 
         AtomicInteger otherRegionCount = new AtomicInteger((int) Math.ceil(FixedNumber.TOTAL * FixedNumber.OTHER_REGION_RATE));
 
-        int regularCount = FixedNumber.REGULAR;
-        int meisterTalentCount = FixedNumber.MEISTER_TALENT;
-        int socialIntegrationCount = FixedNumber.SOCIAL_INTEGRATION;
-        int nationalVeteransEducationCount = FixedNumber.NATIONAL_VETERANS_EDUCATION;
-        int specialAdmissionCount = FixedNumber.SPECIAL_ADMISSION;
-
+        // 1차 합격자 수를 원 정원과 비교해 미달분을 이월한다. 2차는 배수 없이 원 정원으로 선발한다.
         List<Form> specialFormList = formRepository.findFirstPassedSpecialForm();
         List<Form> meisterTalentFormList = classifyFormsByType(specialFormList, FormType::isMeister);
-        List<Form> socialIntegrationFormList = classifyFormsByType(specialFormList, FormType::isSocial);
         List<Form> equalOpportunityFormList = classifyFormsByType(specialFormList, FormType::isEqualOpportunity);
         List<Form> societyDiversityFormList = classifyFormsByType(specialFormList, FormType::isSocietyDiversity);
 
-        if (meisterTalentFormList.size() < FixedNumber.MEISTER_TALENT) {
-            int gap = FixedNumber.MEISTER_TALENT - meisterTalentFormList.size();
-            regularCount += gap;
-            meisterTalentCount -= gap;
-        }
+        SelectionQuota quota = SelectionQuota.of(
+                meisterTalentFormList.size(),
+                equalOpportunityFormList.size(),
+                societyDiversityFormList.size(),
+                IntUnaryOperator.identity()
+        );
 
-        if (socialIntegrationFormList.size() < FixedNumber.SOCIAL_INTEGRATION) {
-            int gap = FixedNumber.SOCIAL_INTEGRATION - socialIntegrationFormList.size();
-            regularCount += gap;
-            socialIntegrationCount -= gap;
-        }
-
-        int equalOpportunityCount = (int) Math.round(socialIntegrationCount * 0.5);
-        int societyDiversityCount = equalOpportunityCount;
-
-        processForms(equalOpportunityFormList, equalOpportunityCount, this::changeToRegularAndCalculateScoreAgain, otherRegionCount);
-        processForms(societyDiversityFormList, societyDiversityCount, this::changeToRegularAndCalculateScoreAgain, otherRegionCount);
-        processForms(meisterTalentFormList, meisterTalentCount, this::changeToRegularAndCalculateScoreAgain,otherRegionCount);
+        processForms(equalOpportunityFormList, quota.equalOpportunity(), this::changeToRegularAndCalculateScoreAgain, otherRegionCount);
+        processForms(societyDiversityFormList, quota.societyDiversity(), this::changeToRegularAndCalculateScoreAgain, otherRegionCount);
+        processForms(meisterTalentFormList, quota.meisterTalent(), this::changeToRegularAndCalculateScoreAgain,otherRegionCount);
 
         formRepository.flush();
         List<Form> regularFormList = formRepository.findFirstPassedRegularForm();
 
-        processForms(regularFormList, regularCount, Form::fail, otherRegionCount);
+        processForms(regularFormList, quota.regular(), Form::fail, otherRegionCount);
 
         formRepository.flush();
         List<Form> supernumeraryFormList = formRepository.findFirstPassedSupernumeraryForm();
         List<Form> nationalVeteransEducationFormList = classifyFormsByType(supernumeraryFormList, FormType::isNationalVeteransEducation);
         List<Form> specialAdmissionFormList = classifyFormsByType(supernumeraryFormList, FormType::isSpecialAdmission);
 
-        processForms(nationalVeteransEducationFormList, nationalVeteransEducationCount, Form::fail, otherRegionCount);
-        processForms(specialAdmissionFormList, specialAdmissionCount, Form::fail, otherRegionCount);
+        processForms(nationalVeteransEducationFormList, quota.nationalVeteransEducation(), Form::fail, otherRegionCount);
+        processForms(specialAdmissionFormList, quota.specialAdmission(), Form::fail, otherRegionCount);
     }
 
     private void processForms(List<Form> formList, int count, Consumer<Form> action, AtomicInteger otherRegionCount) {
