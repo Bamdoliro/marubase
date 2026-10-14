@@ -36,17 +36,14 @@ public class GradeRequest {
     @Valid
     private AttendanceRequest attendance3;
 
-    @Nullable
     @Min(value = 0, message = "0 이상이여야 합니다.")
     @Max(value = 999, message = "999 이하여야 합니다.")
     private Integer volunteerTime1;
 
-    @Nullable
     @Min(value = 0, message = "0 이상이여야 합니다.")
     @Max(value = 999, message = "999 이하여야 합니다.")
     private Integer volunteerTime2;
 
-    @Nullable
     @Min(value = 0, message = "0 이상이여야 합니다.")
     @Max(value = 999, message = "999 이하여야 합니다.")
     private Integer volunteerTime3;
