@@ -113,7 +113,6 @@ public class CalculateFormScoreService {
     }
 
     private Integer calculateVolunteerScore(Form form) {
-        // 검정고시 지원자도 고정 점수 없이 입력한 봉사시간으로 산출한다. 미입력(null)은 0시간으로 본다.
         int totalVolunteerTime = form.getGrade().getTotalVolunteerTime();
 
         if (totalVolunteerTime < MIN_VOLUNTEER_TIME) {

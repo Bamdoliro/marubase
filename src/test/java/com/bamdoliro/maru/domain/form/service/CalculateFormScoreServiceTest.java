@@ -147,32 +147,6 @@ class CalculateFormScoreServiceTest {
     }
 
     @Test
-    void 검정고시_봉사시간이_모두_null이면_봉사점수는_0점이다() {
-        // given
-        Form form = FormFixture.createQualificationExaminationForm(FormType.REGULAR);
-        replaceVolunteerTime(form, null, null, null);
-
-        // when
-        calculateFormScoreService.execute(form);
-
-        // then
-        assertEquals(0, form.getScore().getVolunteerScore());
-    }
-
-    @Test
-    void 봉사시간_일부가_null이면_0시간으로_보고_합산한다() {
-        // given
-        Form form = FormFixture.createQualificationExaminationForm(FormType.REGULAR);
-        replaceVolunteerTime(form, null, 10, 5);
-
-        // when
-        calculateFormScoreService.execute(form);
-
-        // then
-        assertEquals(11, form.getScore().getVolunteerScore());
-    }
-
-    @Test
     void 봉사시간_합계가_14시간이면_봉사점수는_0점이다() {
         // given
         Form form = FormFixture.createForm(FormType.REGULAR);
@@ -235,19 +209,6 @@ class CalculateFormScoreServiceTest {
 
         // then
         assertEquals(14, form.getScore().getAttendanceScore());
-        assertEquals(18, form.getScore().getVolunteerScore());
-    }
-
-    @Test
-    void 저장된_봉사시간_합계가_int_범위를_넘어도_봉사점수는_18점이다() {
-        // given
-        Form form = FormFixture.createForm(FormType.REGULAR);
-        replaceVolunteerTime(form, 1431655791, 1431655791, 1431655791);
-
-        // when
-        calculateFormScoreService.execute(form);
-
-        // then
         assertEquals(18, form.getScore().getVolunteerScore());
     }
 

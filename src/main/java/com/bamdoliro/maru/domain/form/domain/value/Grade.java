@@ -100,13 +100,7 @@ public class Grade {
     }
 
     public Integer getTotalVolunteerTime() {
-        // 이미 저장된 비정상적으로 큰 값끼리 더해도 int 오버플로로 음수·작은 값이 되지 않도록 long으로 합산한다.
-        long total = nullToZero(volunteerTime1) + nullToZero(volunteerTime2) + nullToZero(volunteerTime3);
-        return (int) Math.min(total, Integer.MAX_VALUE);
-    }
-
-    private long nullToZero(Integer value) {
-        return value == null ? 0 : value;
+        return volunteerTime1 + volunteerTime2 + volunteerTime3;
     }
 
     public List<Subject> getSubjectListValue() {
