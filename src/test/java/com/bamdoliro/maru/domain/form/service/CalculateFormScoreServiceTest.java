@@ -134,7 +134,6 @@ class CalculateFormScoreServiceTest {
     void 미인정_지각_조퇴_결과_3회는_결석_1회로_환산하고_소수점은_버린다() {
         // given
         Form form = FormFixture.createForm(FormType.REGULAR);
-        // 결석 1 + (지각 2 + 조퇴 2 + 결과 1) / 3 = 1 + 1 = 2일 → 16점
         replaceAttendance(form, new Attendance(1, 2, 2, 1));
 
         // when
@@ -148,7 +147,6 @@ class CalculateFormScoreServiceTest {
     void 지각_조퇴_결과를_환산해_16일이_되면_출석성적은_0점이다() {
         // given
         Form form = FormFixture.createForm(FormType.REGULAR);
-        // 결석 15 + 지각 3 / 3 = 16일
         replaceAttendance(form, new Attendance(15, 3, 0, 0));
 
         // when
