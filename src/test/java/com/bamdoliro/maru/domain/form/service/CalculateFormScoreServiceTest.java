@@ -71,7 +71,7 @@ class CalculateFormScoreServiceTest {
         assertEquals(155.000, form.getScore().getSubjectGradeScore());
         assertNull(form.getScore().getThirdGradeFirstSemesterSubjectGradeScore());
         assertEquals(14, form.getScore().getAttendanceScore());
-        assertEquals(14, form.getScore().getVolunteerScore());
+        assertEquals(0, form.getScore().getVolunteerScore());
         assertEquals(2, form.getScore().getBonusScore());
     }
 
@@ -86,7 +86,7 @@ class CalculateFormScoreServiceTest {
         // then
         assertEquals(92.6, form.getScore().getSubjectGradeScore());
         assertEquals(14, form.getScore().getAttendanceScore());
-        assertEquals(14, form.getScore().getVolunteerScore());
+        assertEquals(0, form.getScore().getVolunteerScore());
         assertEquals(2, form.getScore().getBonusScore());
     }
 
@@ -131,6 +131,101 @@ class CalculateFormScoreServiceTest {
 
         // then
         assertEquals(193.886, form.getScore().getSubjectGradeScore());
+    }
+
+    @Test
+    void 검정고시_봉사시간이_모두_0이면_봉사점수는_0점이다() {
+        // given
+        Form form = FormFixture.createQualificationExaminationForm(FormType.REGULAR);
+        replaceVolunteerTime(form, 0, 0, 0);
+
+        // when
+        calculateFormScoreService.execute(form);
+
+        // then
+        assertEquals(0, form.getScore().getVolunteerScore());
+    }
+
+    @Test
+    void 봉사시간_합계가_14시간이면_봉사점수는_0점이다() {
+        // given
+        Form form = FormFixture.createForm(FormType.REGULAR);
+        replaceVolunteerTime(form, 5, 5, 4);
+
+        // when
+        calculateFormScoreService.execute(form);
+
+        // then
+        assertEquals(0, form.getScore().getVolunteerScore());
+    }
+
+    @Test
+    void 봉사시간_합계가_15시간이면_감점_후_반올림해_11점이다() {
+        // given
+        Form form = FormFixture.createForm(FormType.REGULAR);
+        replaceVolunteerTime(form, 5, 5, 5);
+
+        // when
+        calculateFormScoreService.execute(form);
+
+        // then
+        assertEquals(11, form.getScore().getVolunteerScore());
+    }
+
+    @Test
+    void 봉사시간_합계가_30시간이면_봉사점수는_18점이다() {
+        // given
+        Form form = FormFixture.createForm(FormType.REGULAR);
+        replaceVolunteerTime(form, 10, 10, 10);
+
+        // when
+        calculateFormScoreService.execute(form);
+
+        // then
+        assertEquals(18, form.getScore().getVolunteerScore());
+    }
+
+    @Test
+    void 봉사시간_합계가_30시간을_넘어도_봉사점수는_18점이다() {
+        // given
+        Form form = FormFixture.createForm(FormType.REGULAR);
+        replaceVolunteerTime(form, 10, 10, 11);
+
+        // when
+        calculateFormScoreService.execute(form);
+
+        // then
+        assertEquals(18, form.getScore().getVolunteerScore());
+    }
+
+    @Test
+    void 검정고시_지원자는_봉사시간과_관계없이_출석성적이_14점이다() {
+        // given
+        Form form = FormFixture.createQualificationExaminationForm(FormType.REGULAR);
+        replaceVolunteerTime(form, 10, 10, 10);
+
+        // when
+        calculateFormScoreService.execute(form);
+
+        // then
+        assertEquals(14, form.getScore().getAttendanceScore());
+        assertEquals(18, form.getScore().getVolunteerScore());
+    }
+
+    private void replaceVolunteerTime(Form form, Integer volunteerTime1, Integer volunteerTime2, Integer volunteerTime3) {
+        Grade grade = form.getGrade();
+        Grade newGrade = new Grade(
+                grade.getSubjectList(),
+                grade.getAttendance1(),
+                grade.getAttendance2(),
+                grade.getAttendance3(),
+                volunteerTime1,
+                volunteerTime2,
+                volunteerTime3,
+                grade.getCertificateList(),
+                grade.isMentoringProgram()
+        );
+        form.update(form.getApplicant(), form.getParent(), form.getEducation(), newGrade, form.getDocument(), form.getType());
     }
 
     private void replaceGrade(Form form, CertificateList certificateList, boolean mentoringProgram) {

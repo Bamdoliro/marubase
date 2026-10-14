@@ -411,9 +411,9 @@ public class FormFixture {
                         null,
                         null,
                         null,
-                        null,
-                        null,
-                        null,
+                        0,
+                        0,
+                        0,
                         new CertificateList(List.of(Certificate.COMPUTER_SPECIALIST_LEVEL_2)),
                         false
                 ),
@@ -496,9 +496,9 @@ public class FormFixture {
                         null,
                         null,
                         null,
-                        null,
-                        null,
-                        null,
+                        0,
+                        0,
+                        0,
                         List.of(Certificate.CRAFTSMAN_PROGRAMMING, Certificate.COMPUTER_SPECIALIST_LEVEL_1),
                         false
                 ),
@@ -628,6 +628,44 @@ public class FormFixture {
                 request.getGrade(),
                 request.getDocument(),
                 request.getType()
+        );
+    }
+
+    public static SubmitFormRequest createFormRequestWithVolunteerTime(FormType type, Integer volunteerTime) {
+        SubmitFormRequest request = createFormRequest(type);
+        return new SubmitFormRequest(
+                request.getApplicant(),
+                request.getParent(),
+                request.getEducation(),
+                withVolunteerTime(request.getGrade(), volunteerTime),
+                request.getDocument(),
+                request.getType()
+        );
+    }
+
+    public static UpdateFormRequest createUpdateFormRequestWithVolunteerTime(FormType type, Integer volunteerTime) {
+        UpdateFormRequest request = createUpdateFormRequest(type);
+        return new UpdateFormRequest(
+                request.getApplicant(),
+                request.getParent(),
+                request.getEducation(),
+                withVolunteerTime(request.getGrade(), volunteerTime),
+                request.getDocument(),
+                request.getType()
+        );
+    }
+
+    private static GradeRequest withVolunteerTime(GradeRequest grade, Integer volunteerTime) {
+        return new GradeRequest(
+                grade.getSubjectList(),
+                grade.getAttendance1(),
+                grade.getAttendance2(),
+                grade.getAttendance3(),
+                volunteerTime,
+                volunteerTime,
+                volunteerTime,
+                grade.getCertificateList(),
+                grade.isMentoringProgram()
         );
     }
 

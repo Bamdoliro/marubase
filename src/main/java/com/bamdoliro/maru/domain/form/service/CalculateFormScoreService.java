@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.Objects;
 
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.DEFAULT_ATTENDANCE_SCORE;
-import static com.bamdoliro.maru.domain.form.constant.FormConstant.DEFAULT_VOLUNTEER_SCORE;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.MAX_ABSENCE_COUNT;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.MAX_ATTENDANCE_SCORE;
 import static com.bamdoliro.maru.domain.form.constant.FormConstant.MAX_BONUS_SCORE;
@@ -114,15 +113,6 @@ public class CalculateFormScoreService {
     }
 
     private Integer calculateVolunteerScore(Form form) {
-        if (
-                form.getEducation().isQualificationExamination() ||
-                        form.getGrade().getVolunteerTime1() == null ||
-                        form.getGrade().getVolunteerTime2() == null ||
-                        form.getGrade().getVolunteerTime3() == null
-        ) {
-            return DEFAULT_VOLUNTEER_SCORE;
-        }
-
         int totalVolunteerTime = form.getGrade().getTotalVolunteerTime();
 
         if (totalVolunteerTime < MIN_VOLUNTEER_TIME) {
