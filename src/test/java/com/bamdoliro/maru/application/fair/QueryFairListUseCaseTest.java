@@ -38,7 +38,7 @@ class QueryFairListUseCaseTest {
         // given
         List<Fair> fairList = FairFixture.createFairList();
         given(fairRepository.findByType(FairType.STUDENT_AND_PARENT)).willReturn(fairList);
-        given(attendeeRepository.countByFair(any(Fair.class))).willReturn(20);
+        given(attendeeRepository.sumHeadcountByFair(any(Fair.class))).willReturn(20L);
 
         // when
         List<FairResponse> response = queryFairListUseCase.execute(FairType.STUDENT_AND_PARENT);
@@ -47,7 +47,7 @@ class QueryFairListUseCaseTest {
         assertEquals(fairList.size(), response.size());
 
         verify(fairRepository, times(1)).findByType(FairType.STUDENT_AND_PARENT);
-        verify(attendeeRepository, times(response.size())).countByFair(any(Fair.class));
+        verify(attendeeRepository, times(response.size())).sumHeadcountByFair(any(Fair.class));
     }
 
 }

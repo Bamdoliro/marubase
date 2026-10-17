@@ -21,7 +21,7 @@ public class FairDetailResponse {
     private FairStatus status;
     private List<AttendeeResponse> attendeeList;
 
-    public FairDetailResponse(Fair fair, Integer headCount) {
+    public FairDetailResponse(Fair fair, long headCount) {
         this.start = fair.getStart();
         this.place = fair.getPlace();
         this.applicationStartDate = fair.getApplicationStartDate();
