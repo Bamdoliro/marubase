@@ -9,6 +9,9 @@ import com.bamdoliro.maru.infrastructure.persistence.user.SignUpVerificationRepo
 import com.bamdoliro.maru.infrastructure.persistence.user.UpdatePasswordVerificationRepository;
 import com.bamdoliro.maru.presentation.user.dto.request.VerifyRequest;
 import com.bamdoliro.maru.shared.annotation.UseCase;
+import com.bamdoliro.maru.shared.ratelimit.RateLimitExceededException;
+import com.bamdoliro.maru.shared.ratelimit.RateLimitPolicy;
+import com.bamdoliro.maru.shared.ratelimit.RateLimitService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -17,6 +20,7 @@ public class VerifyUseCase {
 
     private final SignUpVerificationRepository signUpVerificationRepository;
     private final UpdatePasswordVerificationRepository updatePasswordVerificationRepository;
+    private final RateLimitService rateLimitService;
 
     public void execute(VerifyRequest request) {
 
@@ -24,25 +28,51 @@ public class VerifyUseCase {
             SignUpVerification signUpVerification = getSignUpVerification(request.getPhoneNumber());
 
             if (!signUpVerification.getCode().equals(request.getCode())) {
-                throw new VerificationCodeMismatchException();
+                handleVerificationFailure(request, () -> signUpVerificationRepository.delete(signUpVerification));
             }
 
             signUpVerificationRepository.updateSignUpVerification(
                     signUpVerification.getPhoneNumber(),
                     true
             );
+            resetVerificationFailure(request);
         } else {
             UpdatePasswordVerification updatePasswordVerification = getUpdatePasswordVerification(request.getPhoneNumber());
 
             if (!updatePasswordVerification.getCode().equals(request.getCode())) {
-                throw new VerificationCodeMismatchException();
+                handleVerificationFailure(request, () -> updatePasswordVerificationRepository.delete(updatePasswordVerification));
             }
 
             updatePasswordVerificationRepository.updatePasswordVerification(
                     updatePasswordVerification.getPhoneNumber(),
                     true
             );
+            resetVerificationFailure(request);
         }
+    }
+
+    private void handleVerificationFailure(VerifyRequest request, Runnable deleteVerification) {
+        long failureCount = rateLimitService.increment(
+                RateLimitPolicy.VERIFICATION_FAILURE,
+                createVerificationFailureKey(request)
+        );
+        if (failureCount >= RateLimitPolicy.VERIFICATION_FAILURE.getMaxRequests()) {
+            deleteVerification.run();
+            resetVerificationFailure(request);
+            throw new RateLimitExceededException();
+        }
+        throw new VerificationCodeMismatchException();
+    }
+
+    private void resetVerificationFailure(VerifyRequest request) {
+        rateLimitService.reset(
+                RateLimitPolicy.VERIFICATION_FAILURE,
+                createVerificationFailureKey(request)
+        );
+    }
+
+    private String createVerificationFailureKey(VerifyRequest request) {
+        return request.getType().name() + ":" + request.getPhoneNumber();
     }
 
     private SignUpVerification getSignUpVerification(String phoneNumber) {

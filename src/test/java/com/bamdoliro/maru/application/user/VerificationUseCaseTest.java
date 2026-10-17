@@ -9,6 +9,8 @@ import com.bamdoliro.maru.infrastructure.persistence.user.SignUpVerificationRepo
 import com.bamdoliro.maru.infrastructure.persistence.user.UpdatePasswordVerificationRepository;
 import com.bamdoliro.maru.presentation.user.dto.request.SendVerificationRequest;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
+import com.bamdoliro.maru.shared.ratelimit.RateLimitPolicy;
+import com.bamdoliro.maru.shared.ratelimit.RateLimitService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,6 +39,9 @@ class VerificationUseCaseTest {
     @Mock
     private UpdatePasswordVerificationRepository updatePasswordVerificationRepository;
 
+    @Mock
+    private RateLimitService rateLimitService;
+
     @Test
     void 유저가_회원가입_전화번호_인증을_요청한다() {
         // given
@@ -50,6 +55,10 @@ class VerificationUseCaseTest {
         // then
         verify(sendMessageService, times(1)).execute(anyString(), anyString());
         verify(signUpVerificationRepository, times(1)).save(any(SignUpVerification.class));
+        verify(rateLimitService).reset(
+                RateLimitPolicy.VERIFICATION_FAILURE,
+                VerificationType.SIGNUP.name() + ":" + signUpVerification.getPhoneNumber()
+        );
 
         assertNotNull(signUpVerification.getCode());
     }
@@ -81,6 +90,10 @@ class VerificationUseCaseTest {
         // then
         verify(sendMessageService, times(1)).execute(anyString(), anyString());
         verify(updatePasswordVerificationRepository, times(1)).save(any(UpdatePasswordVerification.class));
+        verify(rateLimitService).reset(
+                RateLimitPolicy.VERIFICATION_FAILURE,
+                VerificationType.UPDATE_PASSWORD.name() + ":" + verification.getPhoneNumber()
+        );
 
         assertNotNull(verification.getCode());
     }

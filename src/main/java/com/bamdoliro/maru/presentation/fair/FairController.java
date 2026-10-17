@@ -5,6 +5,8 @@ import com.bamdoliro.maru.application.fair.QueryFairListUseCase;
 import com.bamdoliro.maru.domain.fair.domain.type.FairType;
 import com.bamdoliro.maru.presentation.fair.dto.request.AttendAdmissionFairRequest;
 import com.bamdoliro.maru.presentation.fair.dto.response.FairResponse;
+import com.bamdoliro.maru.shared.ratelimit.RateLimitPolicy;
+import com.bamdoliro.maru.shared.ratelimit.RateLimited;
 import com.bamdoliro.maru.shared.response.CommonResponse;
 import com.bamdoliro.maru.shared.response.ListCommonResponse;
 import jakarta.validation.Valid;
@@ -29,6 +31,7 @@ public class FairController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{fair-id}")
+    @RateLimited(policy = RateLimitPolicy.FAIR_APPLICATION_PHONE, key = "#p0 + ':' + #p1.phoneNumber")
     public void attendAdmissionFair(
             @PathVariable(name = "fair-id") Long fairId,
             @RequestBody @Valid AttendAdmissionFairRequest request

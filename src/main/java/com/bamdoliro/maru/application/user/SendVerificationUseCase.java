@@ -8,6 +8,8 @@ import com.bamdoliro.maru.infrastructure.persistence.user.SignUpVerificationRepo
 import com.bamdoliro.maru.infrastructure.persistence.user.UpdatePasswordVerificationRepository;
 import com.bamdoliro.maru.presentation.user.dto.request.SendVerificationRequest;
 import com.bamdoliro.maru.shared.annotation.UseCase;
+import com.bamdoliro.maru.shared.ratelimit.RateLimitPolicy;
+import com.bamdoliro.maru.shared.ratelimit.RateLimitService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -17,6 +19,7 @@ public class SendVerificationUseCase {
     private final SendMessageService sendMessageService;
     private final SignUpVerificationRepository signUpVerificationRepository;
     private final UpdatePasswordVerificationRepository updatePasswordVerificationRepository;
+    private final RateLimitService rateLimitService;
 
     public void execute(SendVerificationRequest request) {
 
@@ -33,6 +36,7 @@ public class SendVerificationUseCase {
             );
 
             signUpVerificationRepository.save(signUpVerification);
+            resetVerificationFailure(request);
         } else {
             UpdatePasswordVerification updatePasswordVerification = new UpdatePasswordVerification(request.getPhoneNumber());
             String text = String.format(
@@ -46,6 +50,14 @@ public class SendVerificationUseCase {
             );
 
             updatePasswordVerificationRepository.save(updatePasswordVerification);
+            resetVerificationFailure(request);
         }
+    }
+
+    private void resetVerificationFailure(SendVerificationRequest request) {
+        rateLimitService.reset(
+                RateLimitPolicy.VERIFICATION_FAILURE,
+                request.getType().name() + ":" + request.getPhoneNumber()
+        );
     }
 }

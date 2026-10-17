@@ -5,6 +5,8 @@ import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.user.dto.request.*;
 import com.bamdoliro.maru.presentation.user.dto.response.UserResponse;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
+import com.bamdoliro.maru.shared.ratelimit.RateLimitPolicy;
+import com.bamdoliro.maru.shared.ratelimit.RateLimited;
 import com.bamdoliro.maru.shared.response.CommonResponse;
 import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import jakarta.validation.Valid;
@@ -33,6 +35,7 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/verification")
+    @RateLimited(policy = RateLimitPolicy.VERIFICATION_SEND_PHONE, key = "#p0.phoneNumber")
     public void sendMessageVerification(
             @RequestBody @Valid SendVerificationRequest request
     ) {
@@ -50,6 +53,7 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/verification")
+    @RateLimited(policy = RateLimitPolicy.VERIFICATION_CHECK_PHONE, key = "#p0.phoneNumber")
     public void verify(
             @RequestBody @Valid VerifyRequest request
     ) {
@@ -58,6 +62,7 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/password")
+    @RateLimited(policy = RateLimitPolicy.PASSWORD_UPDATE_PHONE, key = "#p0.phoneNumber")
     public void updatePassword(
             @RequestBody @Valid UpdatePasswordRequest request
     ){
