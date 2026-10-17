@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.RedisHash;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@RedisHash(value = "password-verification")
+@RedisHash(value = "password-verification", timeToLive = 60 * 5)
 public class UpdatePasswordVerification {
 
     @Id
