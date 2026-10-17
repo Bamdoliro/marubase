@@ -7,6 +7,8 @@ import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.auth.dto.request.LogInRequest;
 import com.bamdoliro.maru.presentation.auth.dto.response.TokenResponse;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
+import com.bamdoliro.maru.shared.ratelimit.RateLimitPolicy;
+import com.bamdoliro.maru.shared.ratelimit.RateLimited;
 import com.bamdoliro.maru.shared.util.CookieUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -25,6 +27,7 @@ public class AuthController {
     private final CookieUtil cookieUtil;
 
     @PostMapping
+    @RateLimited(policy = RateLimitPolicy.LOGIN_ACCOUNT, key = "#p0.phoneNumber")
     public void logIn(
             @RequestBody @Valid LogInRequest request,
             HttpServletResponse response

@@ -7,6 +7,9 @@ import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
 import com.bamdoliro.maru.infrastructure.persistence.user.SignUpVerificationRepository;
 import com.bamdoliro.maru.presentation.user.dto.request.VerifyRequest;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
+import com.bamdoliro.maru.shared.ratelimit.RateLimitExceededException;
+import com.bamdoliro.maru.shared.ratelimit.RateLimitPolicy;
+import com.bamdoliro.maru.shared.ratelimit.RateLimitService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,6 +33,9 @@ class VerifyUseCaseTest {
 
     @Mock
     private SignUpVerificationRepository signUpVerificationRepository;
+
+    @Mock
+    private RateLimitService rateLimitService;
 
     @Test
     void 회원가입_인증을_완료한다() {
@@ -68,5 +74,28 @@ class VerifyUseCaseTest {
         assertThrows(VerificationCodeMismatchException.class, () -> verifyUseCase.execute(request));
         verify(signUpVerificationRepository, times(1)).findById(request.getPhoneNumber());
         verify(signUpVerificationRepository, never()).updateSignUpVerification(request.getPhoneNumber(), true);
+    }
+
+    @Test
+    void 인증번호를_다섯_번_틀리면_인증_요청을_폐기한다() {
+        // given
+        SignUpVerification signUpVerification = UserFixture.createSignUpVerification(false);
+        VerifyRequest request = new VerifyRequest(
+                signUpVerification.getPhoneNumber(),
+                "000000",
+                VerificationType.SIGNUP
+        );
+        given(signUpVerificationRepository.findById(request.getPhoneNumber()))
+                .willReturn(Optional.of(signUpVerification));
+        given(rateLimitService.increment(
+                RateLimitPolicy.VERIFICATION_FAILURE,
+                VerificationType.SIGNUP.name() + ":" + request.getPhoneNumber()
+        )).willReturn(5L);
+
+        // when and then
+        assertThrows(RateLimitExceededException.class, () -> verifyUseCase.execute(request));
+        verify(signUpVerificationRepository, times(1)).delete(signUpVerification);
+        verify(signUpVerificationRepository, never())
+                .updateSignUpVerification(request.getPhoneNumber(), true);
     }
 }
