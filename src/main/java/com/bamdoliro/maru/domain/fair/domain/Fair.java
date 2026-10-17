@@ -67,7 +67,7 @@ public class Fair extends BaseTimeEntity {
         this.applicationEndDate = applicationEndDate;
     }
 
-    public FairStatus getStatus(Integer headcount) {
+    public FairStatus getStatus(long headcount) {
         LocalDateTime now = LocalDateTime.now();
         if (now.isAfter(start)) {
             return FairStatus.CLOSED;

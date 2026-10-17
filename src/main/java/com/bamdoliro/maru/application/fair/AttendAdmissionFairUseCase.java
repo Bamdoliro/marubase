@@ -3,6 +3,7 @@ package com.bamdoliro.maru.application.fair;
 import com.bamdoliro.maru.domain.fair.domain.Attendee;
 import com.bamdoliro.maru.domain.fair.domain.Fair;
 import com.bamdoliro.maru.domain.fair.domain.type.FairStatus;
+import com.bamdoliro.maru.domain.fair.exception.AttendeeAlreadyExistsException;
 import com.bamdoliro.maru.domain.fair.exception.HeadcountExceededException;
 import com.bamdoliro.maru.domain.fair.exception.NotApplicationPeriodException;
 import com.bamdoliro.maru.infrastructure.message.SendMessageService;
@@ -12,6 +13,7 @@ import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.Normalizer;
 import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
@@ -24,14 +26,15 @@ public class AttendAdmissionFairUseCase {
 
     @Transactional
     public void execute(Long fairId, AttendAdmissionFairRequest request) {
-        Fair fair = fairFacade.getFair(fairId);
+        Fair fair = fairFacade.getFairForUpdate(fairId);
         validateFairApplicationPeriod(fair);
+        validateDuplicateAttendee(fair, request.getPhoneNumber());
         validateFairCapacity(fair, request.getHeadcount());
 
         Attendee attendee = attendeeRepository.save(
                 Attendee.builder()
                         .schoolName(request.getSchoolName())
-                        .name(request.getName())
+                        .name(normalizeName(request.getName()))
                         .type(request.getType())
                         .phoneNumber(request.getPhoneNumber())
                         .headcount(request.getHeadcount())
@@ -44,8 +47,16 @@ public class AttendAdmissionFairUseCase {
     }
 
     private void validateFairCapacity(Fair fair, Integer headcount) {
-        if (attendeeRepository.countByFair(fair) + headcount > fair.getCapacity()) {
+        long currentHeadcount = attendeeRepository.sumHeadcountByFair(fair);
+        long remainingCapacity = (long) fair.getCapacity() - currentHeadcount;
+        if (headcount > remainingCapacity) {
             throw new HeadcountExceededException();
+        }
+    }
+
+    private void validateDuplicateAttendee(Fair fair, String phoneNumber) {
+        if (attendeeRepository.existsByFairAndPhoneNumber(fair, phoneNumber)) {
+            throw new AttendeeAlreadyExistsException();
         }
     }
 
@@ -53,6 +64,10 @@ public class AttendAdmissionFairUseCase {
         if (!fair.getStatus().equals(FairStatus.APPLICATION_IN_PROGRESS)) {
             throw new NotApplicationPeriodException();
         }
+    }
+
+    private String normalizeName(String name) {
+        return Normalizer.normalize(name, Normalizer.Form.NFC);
     }
 
     private void sendMessage(Fair fair, Attendee attendee) {

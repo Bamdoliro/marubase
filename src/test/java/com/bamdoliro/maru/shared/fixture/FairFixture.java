@@ -80,9 +80,9 @@ public class FairFixture {
 
     public static List<FairResponse> createFairResponseList() {
         return List.of(
-                new FairResponse(createClosedFair(), null),
-                new FairResponse(createClosedFair(), null),
-                new FairResponse(createClosedFair(), null)
+                new FairResponse(createClosedFair(), 0L),
+                new FairResponse(createClosedFair(), 0L),
+                new FairResponse(createClosedFair(), 0L)
         );
     }
 
@@ -103,6 +103,6 @@ public class FairFixture {
     }
 
     public static FairDetailResponse createFairDetailResponse() {
-        return new FairDetailResponse(createFairDetail(), null);
+        return new FairDetailResponse(createFairDetail(), 0L);
     }
 }
