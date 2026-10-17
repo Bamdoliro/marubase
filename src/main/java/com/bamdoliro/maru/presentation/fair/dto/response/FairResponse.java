@@ -19,7 +19,7 @@ public class FairResponse {
     private LocalDate applicationEndDate;
     private FairStatus status;
 
-    public FairResponse(Fair fair, Integer headCount) {
+    public FairResponse(Fair fair, long headCount) {
         this.id = fair.getId();
         this.start = fair.getStart();
         this.place = fair.getPlace();

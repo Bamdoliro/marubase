@@ -47,4 +47,14 @@ class FairFacadeTest {
         // when and then
         assertThrows(FairNotFoundException.class, () -> fairFacade.getFair(-1L));
     }
+
+    @Test
+    void 신청을_처리할_때_설명회_행을_잠가서_가져온다() {
+        Fair fair = FairFixture.createFair();
+        given(fairRepository.findByIdForUpdate(fair.getId())).willReturn(Optional.of(fair));
+
+        Fair foundFair = fairFacade.getFairForUpdate(fair.getId());
+
+        assertEquals(fair, foundFair);
+    }
 }
