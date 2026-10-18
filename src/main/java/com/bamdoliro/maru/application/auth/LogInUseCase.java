@@ -29,8 +29,8 @@ public class LogInUseCase {
         }
 
         return TokenResponse.builder()
-                .accessToken(tokenService.generateAccessToken(user.getPhoneNumber()))
-                .refreshToken(tokenService.generateRefreshToken(user.getPhoneNumber()))
+                .accessToken(tokenService.generateAccessToken(user.getUuid().toString()))
+                .refreshToken(tokenService.generateRefreshToken(user.getUuid().toString()))
                 .build();
     }
 

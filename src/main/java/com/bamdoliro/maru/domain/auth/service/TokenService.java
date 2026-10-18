@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -63,11 +64,19 @@ public class TokenService {
 
     private Claims extractAllClaims(String token) {
         try {
-            return Jwts.parser()
+            Claims claims = Jwts.parser()
                     .verifyWith(getSigningKey())
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
+            String uuid = claims.get("uuid", String.class);
+            if (uuid == null || !UUID.fromString(uuid).toString().equals(uuid)
+                    || claims.getIssuedAt() == null || claims.getExpiration() == null
+                    || !claims.getExpiration().after(claims.getIssuedAt())) {
+                throw new InvalidTokenException();
+            }
+            TokenType.valueOf(claims.get("type", String.class));
+            return claims;
         } catch (ExpiredJwtException e) {
             throw new ExpiredTokenException();
         } catch (Exception e) {
