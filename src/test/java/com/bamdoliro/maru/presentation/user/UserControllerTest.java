@@ -6,6 +6,7 @@ import com.bamdoliro.maru.domain.user.exception.*;
 import com.bamdoliro.maru.domain.user.exception.error.UserErrorProperty;
 import com.bamdoliro.maru.infrastructure.message.exception.FailedToSendException;
 import com.bamdoliro.maru.presentation.user.dto.request.*;
+import com.bamdoliro.maru.presentation.user.dto.response.VerificationResponse;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
@@ -26,13 +27,42 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class UserControllerTest extends RestDocsTestSupport {
 
+    private static final String PROOF = "a".repeat(43);
+
+    @Test
+    void 다섯번_오입력_폐기를_별도_에러로_반환한다() throws Exception {
+        doThrow(new VerificationAttemptsExceededException()).when(verifyUseCase).execute(any(VerifyRequest.class));
+        mockMvc.perform(patch("/users/verification").contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(new VerifyRequest("01000000000", "123456", VerificationType.SIGNUP))))
+                .andExpect(status().isTooManyRequests())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath("$.code")
+                        .value("VERIFICATION_ATTEMPTS_EXCEEDED"));
+    }
+
+    @Test
+    void 증명_없는_비밀번호_변경은_입력단에서_거부한다() throws Exception {
+        mockMvc.perform(patch("/users/password").contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(new UpdatePasswordRequest("01000000000", "password123!", null))))
+                .andExpect(status().isBadRequest());
+        verifyNoInteractions(updatePasswordUseCase);
+    }
+
+    @Test
+    void 증명_없는_회원가입은_입력단에서_거부한다() throws Exception {
+        mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(new SignUpUserRequest("01000000000", "테스트", "password123!", null))))
+                .andExpect(status().isBadRequest());
+        verifyNoInteractions(signUpUserUseCase);
+    }
+
     @Test
     void 유저를_생성한다() throws Exception {
         willDoNothing().given(signUpUserUseCase).execute(any(SignUpUserRequest.class));
         SignUpUserRequest request = new SignUpUserRequest(
                 "01085852525",
                 "김밤돌",
-                "password123$"
+                "password123$",
+                PROOF
         );
 
         mockMvc.perform(post("/users")
@@ -53,7 +83,8 @@ class UserControllerTest extends RestDocsTestSupport {
                                         .description("이름"),
                                 fieldWithPath("password")
                                         .type(JsonFieldType.STRING)
-                                        .description("최소 8 자, 최소 하나의 문자, 하나의 숫자 및 하나의 특수 문자를 포함하는 비밀번호")
+                                        .description("최소 8 자, 최소 하나의 문자, 하나의 숫자 및 하나의 특수 문자를 포함하는 비밀번호"),
+                                fieldWithPath("verificationToken").type(JsonFieldType.STRING).description("회원가입용 일회용 인증 증명")
                         )
                 ));
     }
@@ -61,7 +92,7 @@ class UserControllerTest extends RestDocsTestSupport {
     @Test
     void 유저를_생성할_때_전화번호_인증이_실패한_경우_에러가_발생한다() throws Exception {
         doThrow(new VerifyingHasFailedException()).when(signUpUserUseCase).execute(any(SignUpUserRequest.class));
-        SignUpUserRequest request = new SignUpUserRequest("01085852525", "김밤돌", "password123$");
+        SignUpUserRequest request = new SignUpUserRequest("01085852525", "김밤돌", "password123$", PROOF);
 
         mockMvc.perform(post("/users")
                         .accept(MediaType.APPLICATION_JSON)
@@ -76,7 +107,7 @@ class UserControllerTest extends RestDocsTestSupport {
     void 유저를_생성할_때_이미_유저가_있다면_에러가_발생한다() throws Exception {
         doThrow(new UserAlreadyExistsException())
                 .when(signUpUserUseCase).execute(any(SignUpUserRequest.class));
-        SignUpUserRequest request = new SignUpUserRequest("01085852525", "김밤돌", "password123$");
+        SignUpUserRequest request = new SignUpUserRequest("01085852525", "김밤돌", "password123$", PROOF);
 
         mockMvc.perform(post("/users")
                         .accept(MediaType.APPLICATION_JSON)
@@ -92,7 +123,7 @@ class UserControllerTest extends RestDocsTestSupport {
     @Test
     void 유저를_생성할_때_잘못된_형식의_요청을_보내면_에러가_발생한다() throws Exception {
         willDoNothing().given(signUpUserUseCase).execute(any(SignUpUserRequest.class));
-        SignUpUserRequest request = new SignUpUserRequest("bamdoliro", "", "p$");
+        SignUpUserRequest request = new SignUpUserRequest("bamdoliro", "", "p$", PROOF);
 
         mockMvc.perform(post("/users")
                         .accept(MediaType.APPLICATION_JSON)
@@ -192,7 +223,7 @@ class UserControllerTest extends RestDocsTestSupport {
 
     @Test
     void 회원가입_전화번호_인증을_완료한다() throws Exception {
-        willDoNothing().given(verifyUseCase).execute(any(VerifyRequest.class));
+        given(verifyUseCase.execute(any(VerifyRequest.class))).willReturn(new VerificationResponse(PROOF, 300));
         VerifyRequest request = new VerifyRequest("01085852525", "123456", VerificationType.SIGNUP);
 
         mockMvc.perform(patch("/users/verification")
@@ -201,7 +232,10 @@ class UserControllerTest extends RestDocsTestSupport {
                         .content(toJson(request))
                 )
 
-                .andExpect(status().isNoContent())
+                .andExpect(status().isOk())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath("$.data.verificationToken").value(PROOF))
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath("$.data.expiresIn").value(300))
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.header().string("Cache-Control", "no-store"))
 
                 .andDo(restDocs.document(
                         requestFields(
@@ -258,7 +292,7 @@ class UserControllerTest extends RestDocsTestSupport {
 
     @Test
     void 비밀번호_변경_전화번호_인증을_완료한다() throws Exception {
-        willDoNothing().given(verifyUseCase).execute(any(VerifyRequest.class));
+        given(verifyUseCase.execute(any(VerifyRequest.class))).willReturn(new VerificationResponse(PROOF, 300));
         VerifyRequest request = new VerifyRequest("01085852525", "123456", VerificationType.UPDATE_PASSWORD);
 
         mockMvc.perform(patch("/users/verification")
@@ -267,7 +301,10 @@ class UserControllerTest extends RestDocsTestSupport {
                         .content(toJson(request))
                 )
 
-                .andExpect(status().isNoContent())
+                .andExpect(status().isOk())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath("$.data.verificationToken").value(PROOF))
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath("$.data.expiresIn").value(300))
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.header().string("Cache-Control", "no-store"))
 
                 .andDo(restDocs.document(
                         requestFields(
@@ -325,7 +362,7 @@ class UserControllerTest extends RestDocsTestSupport {
     @Test
     void 비밀번호를_변경한다() throws Exception {
         willDoNothing().given(updatePasswordUseCase).execute(any(UpdatePasswordRequest.class));
-        UpdatePasswordRequest request = new UpdatePasswordRequest("01085852525", "hihi1234!");
+        UpdatePasswordRequest request = new UpdatePasswordRequest("01085852525", "hihi1234!", PROOF);
 
         mockMvc.perform(patch("/users/password")
                         .accept(MediaType.APPLICATION_JSON)
@@ -340,7 +377,8 @@ class UserControllerTest extends RestDocsTestSupport {
                                         .description("전화번호"),
                                 fieldWithPath("password")
                                         .type(JsonFieldType.STRING)
-                                        .description("변경할 비밀번호")
+                                        .description("변경할 비밀번호"),
+                                fieldWithPath("verificationToken").type(JsonFieldType.STRING).description("비밀번호 변경용 일회용 인증 증명")
                         )
                 ));
     }
@@ -348,7 +386,7 @@ class UserControllerTest extends RestDocsTestSupport {
     @Test
     void 비밀번호를_변경할_때_전화번호_인증이_실패한_경우_에러가_발생한다() throws Exception {
         doThrow(new VerifyingHasFailedException()).when(updatePasswordUseCase).execute(any(UpdatePasswordRequest.class));
-        SignUpUserRequest request = new SignUpUserRequest("01085852525", "김밤돌", "password123$");
+        SignUpUserRequest request = new SignUpUserRequest("01085852525", "김밤돌", "password123$", PROOF);
 
         mockMvc.perform(patch("/users/password")
                         .accept(MediaType.APPLICATION_JSON)
@@ -362,7 +400,7 @@ class UserControllerTest extends RestDocsTestSupport {
     @Test
     void 해당_전화번호를_가진_유저가_없으면_오류가_발생한다() throws Exception {
         doThrow(new UserNotFoundException()).when(updatePasswordUseCase).execute(any(UpdatePasswordRequest.class));
-        UpdatePasswordRequest request = new UpdatePasswordRequest("01085852525", "hihi1234!");
+        UpdatePasswordRequest request = new UpdatePasswordRequest("01085852525", "hihi1234!", PROOF);
 
         mockMvc.perform(patch("/users/password")
                         .accept(MediaType.APPLICATION_JSON)
@@ -377,7 +415,7 @@ class UserControllerTest extends RestDocsTestSupport {
 
     @Test
     void 비밀번호_형식이_다르면_오류가_발생한다() throws Exception {
-        UpdatePasswordRequest request = new UpdatePasswordRequest("01085852525", "123456");
+        UpdatePasswordRequest request = new UpdatePasswordRequest("01085852525", "123456", PROOF);
 
         mockMvc.perform(patch("/users/password")
                         .accept(MediaType.APPLICATION_JSON)

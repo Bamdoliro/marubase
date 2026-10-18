@@ -1,11 +1,10 @@
 package com.bamdoliro.maru.application.user;
 
-import com.bamdoliro.maru.domain.user.domain.UpdatePasswordVerification;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.auth.service.AuthSessionService;
-import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
 import com.bamdoliro.maru.domain.user.service.UserFacade;
-import com.bamdoliro.maru.infrastructure.persistence.user.UpdatePasswordVerificationRepository;
+import com.bamdoliro.maru.domain.user.domain.type.VerificationType;
+import com.bamdoliro.maru.domain.user.service.VerificationProofService;
 import com.bamdoliro.maru.presentation.user.dto.request.UpdatePasswordRequest;
 import com.bamdoliro.maru.shared.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
@@ -15,27 +14,18 @@ import org.springframework.transaction.annotation.Transactional;
 @UseCase
 public class UpdatePasswordUseCase {
 
-    private final UpdatePasswordVerificationRepository updatePasswordVerificationRepository;
+    private final VerificationProofService verificationProofService;
     private final UserFacade userFacade;
     private final AuthSessionService authSessionService;
 
     @Transactional
     public void execute(UpdatePasswordRequest request) {
-        validate(request);
+        verificationProofService.consume(request.getPhoneNumber(),
+                VerificationType.UPDATE_PASSWORD, request.getVerificationToken());
 
         User user = userFacade.getUserForUpdate(request.getPhoneNumber());
         authSessionService.revoke(user.getUuid());
         user.updatePassword(request.getPassword());
     }
 
-    private void validate(UpdatePasswordRequest request) {
-        UpdatePasswordVerification updatePasswordVerification = updatePasswordVerificationRepository.findById(request.getPhoneNumber())
-                .orElseThrow(VerifyingHasFailedException::new);
-
-        if (!updatePasswordVerification.getIsVerified()) {
-            throw new VerifyingHasFailedException();
-        }
-
-        updatePasswordVerificationRepository.delete(updatePasswordVerification);
-    }
 }

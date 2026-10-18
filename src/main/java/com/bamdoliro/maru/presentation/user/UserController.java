@@ -4,6 +4,7 @@ import com.bamdoliro.maru.application.user.*;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.user.dto.request.*;
 import com.bamdoliro.maru.presentation.user.dto.response.UserResponse;
+import com.bamdoliro.maru.presentation.user.dto.response.VerificationResponse;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.ratelimit.RateLimitPolicy;
 import com.bamdoliro.maru.shared.ratelimit.RateLimited;
@@ -12,6 +13,8 @@ import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.CacheControl;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,13 +54,13 @@ public class UserController {
         );
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/verification")
     @RateLimited(policy = RateLimitPolicy.VERIFICATION_CHECK_PHONE, key = "#p0.phoneNumber")
-    public void verify(
+    public ResponseEntity<SingleCommonResponse<VerificationResponse>> verify(
             @RequestBody @Valid VerifyRequest request
     ) {
-        verifyUseCase.execute(request);
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore())
+                .body(CommonResponse.ok(verifyUseCase.execute(request)));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -25,4 +25,8 @@ public class SignUpUserRequest {
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$",
             message = "비밀번호는 최소 하나의 문자, 숫자, 특수문자를 포함하며 8 글자 이상이어야 합니다.")
     private String password;
+
+    @NotBlank(message = "전화번호 인증 증명이 필요합니다.")
+    @Pattern(regexp = "[A-Za-z0-9_-]{43}", message = "올바른 인증 증명이 아닙니다.")
+    private String verificationToken;
 }

@@ -61,6 +61,15 @@ include::{snippets}/user-controller-test/전화번호_인증을_요청할_때_�
 === 전화번호 인증
 전화번호 인증 요청을 보낸 뒤, 인증 코드를 입력해 인증을 완료할 수 있습니다.
 
+성공 응답은 200이며 data.verificationToken과 data.expiresIn(300초)을 반환합니다.
+verificationToken은 회원가입 또는 비밀번호 변경 요청에 필수로 전달해야 합니다.
+증명은 전화번호와 인증 용도에 묶여 있으며 한 번만 사용할 수 있습니다.
+재발급, 만료, 소비 이후에는 다시 전화번호 인증을 진행해야 합니다.
+응답의 인증 증명을 URL이나 로그에 남기지 마세요.
+
+인증번호를 5회 잘못 입력하면 429 VERIFICATION_ATTEMPTS_EXCEEDED로 폐기됩니다.
+일반 요청 제한인 429 TOO_MANY_REQUESTS와 구분하여 재발급을 안내해야 합니다.
+
 ==== 요청 형식
 
 ===== Request Body
