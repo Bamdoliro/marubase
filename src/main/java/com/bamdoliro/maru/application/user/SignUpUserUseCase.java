@@ -1,12 +1,10 @@
 package com.bamdoliro.maru.application.user;
 
-import com.bamdoliro.maru.domain.user.domain.SignUpVerification;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.domain.type.Authority;
-import com.bamdoliro.maru.domain.user.exception.SignUpTemporarilyDisabledException;
 import com.bamdoliro.maru.domain.user.exception.UserAlreadyExistsException;
-import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
-import com.bamdoliro.maru.infrastructure.persistence.user.SignUpVerificationRepository;
+import com.bamdoliro.maru.domain.user.domain.type.VerificationType;
+import com.bamdoliro.maru.domain.user.service.VerificationProofService;
 import com.bamdoliro.maru.infrastructure.persistence.user.UserRepository;
 import com.bamdoliro.maru.presentation.user.dto.request.SignUpUserRequest;
 import com.bamdoliro.maru.shared.annotation.UseCase;
@@ -17,16 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 @UseCase
 public class SignUpUserUseCase {
 
-    private final SignUpVerificationRepository signUpVerificationRepository;
+    private final VerificationProofService verificationProofService;
     private final UserRepository userRepository;
 
     @Transactional
     public void execute(SignUpUserRequest request) {
-        // TODO: 임시 회원가입 차단. 재개 시 아래 주석을 해제
-        // if (true) {
-        //     throw new SignUpTemporarilyDisabledException();
-        // }
-
         validate(request);
 
         userRepository.save(
@@ -40,17 +33,11 @@ public class SignUpUserUseCase {
     }
 
     private void validate(SignUpUserRequest request) {
-        SignUpVerification signUpVerification = signUpVerificationRepository.findById(request.getPhoneNumber())
-                .orElseThrow(VerifyingHasFailedException::new);
-
-        if (!signUpVerification.getIsVerified()) {
-            throw new VerifyingHasFailedException();
-        }
+        verificationProofService.consume(request.getPhoneNumber(),
+                VerificationType.SIGNUP, request.getVerificationToken());
 
         if (userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new UserAlreadyExistsException();
         }
-
-        signUpVerificationRepository.delete(signUpVerification);
     }
 }
