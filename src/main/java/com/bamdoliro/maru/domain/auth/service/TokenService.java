@@ -1,10 +1,8 @@
 package com.bamdoliro.maru.domain.auth.service;
 
-import com.bamdoliro.maru.domain.auth.domain.Token;
 import com.bamdoliro.maru.domain.auth.domain.type.TokenType;
 import com.bamdoliro.maru.domain.auth.exception.ExpiredTokenException;
 import com.bamdoliro.maru.domain.auth.exception.InvalidTokenException;
-import com.bamdoliro.maru.infrastructure.persistence.auth.TokenRepository;
 import com.bamdoliro.maru.shared.config.properties.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -23,28 +21,21 @@ import java.util.UUID;
 public class TokenService {
 
     private final JwtProperties jwtProperties;
-    private final TokenRepository tokenRepository;
 
-    public String generateAccessToken(String uuid) {
-        return generateToken(uuid, TokenType.ACCESS_TOKEN, jwtProperties.getAccessExpirationTime());
+    public String generateAccessToken(String uuid, String sessionId) {
+        return generateToken(uuid, sessionId, TokenType.ACCESS_TOKEN, jwtProperties.getAccessExpirationTime());
     }
 
-    public String generateRefreshToken(String uuid) {
-        String token = generateToken(uuid, TokenType.REFRESH_TOKEN, jwtProperties.getRefreshExpirationTime());
-        tokenRepository.save(
-                Token.builder()
-                        .uuid(uuid)
-                        .token(token)
-                        .build());
-
-        return token;
+    public String generateRefreshToken(String uuid, String sessionId) {
+        return generateToken(uuid, sessionId, TokenType.REFRESH_TOKEN, jwtProperties.getRefreshExpirationTime());
     }
 
-    private String generateToken(String uuid, TokenType type, Long time) {
+    private String generateToken(String uuid, String sessionId, TokenType type, Long time) {
         Date now = new Date();
 
         return Jwts.builder()
                 .claim("uuid", uuid)
+                .claim("sid", sessionId)
                 .claim("type", type.name())
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + time))
@@ -54,6 +45,10 @@ public class TokenService {
 
     public String getUuid(String token) {
         return extractAllClaims(token).get("uuid", String.class);
+    }
+
+    public String getSessionId(String token) {
+        return extractAllClaims(token).get("sid", String.class);
     }
 
     public TokenType getType(String token) {
@@ -76,6 +71,10 @@ public class TokenService {
                 throw new InvalidTokenException();
             }
             TokenType.valueOf(claims.get("type", String.class));
+            String sessionId = claims.get("sid", String.class);
+            if (sessionId == null || !UUID.fromString(sessionId).toString().equals(sessionId)) {
+                throw new InvalidTokenException();
+            }
             return claims;
         } catch (ExpiredJwtException e) {
             throw new ExpiredTokenException();

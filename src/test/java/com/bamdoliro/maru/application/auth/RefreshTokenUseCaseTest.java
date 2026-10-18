@@ -1,98 +1,60 @@
 package com.bamdoliro.maru.application.auth;
 
-import com.bamdoliro.maru.domain.auth.domain.Token;
 import com.bamdoliro.maru.domain.auth.domain.type.TokenType;
 import com.bamdoliro.maru.domain.auth.exception.ExpiredTokenException;
 import com.bamdoliro.maru.domain.auth.exception.InvalidTokenException;
+import com.bamdoliro.maru.domain.auth.service.AuthSessionService;
 import com.bamdoliro.maru.domain.auth.service.TokenService;
-import com.bamdoliro.maru.infrastructure.persistence.auth.TokenRepository;
-import com.bamdoliro.maru.presentation.auth.dto.response.TokenResponse;
-import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
+import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 class RefreshTokenUseCaseTest {
 
-    @InjectMocks
-    private RefreshTokenUseCase refreshTokenUseCase;
-
-    @Mock
-    private TokenService tokenService;
-
-    @Mock
-    private TokenRepository tokenRepository;
+    private final TokenService tokenService = mock(TokenService.class);
+    private final AuthSessionService sessions = mock(AuthSessionService.class);
+    private final RefreshTokenUseCase useCase = new RefreshTokenUseCase(tokenService, sessions);
 
     @Test
-    void 리프레시_토큰으로_액세스_토큰을_재발급한다() {
-        // given
-        Token refreshToken = AuthFixture.createRefreshToken();
-        String accessToken = AuthFixture.createAccessTokenString();
-        given(tokenService.getType(refreshToken.getToken())).willReturn(TokenType.REFRESH_TOKEN);
-        given(tokenService.getUuid(refreshToken.getToken())).willReturn(refreshToken.getUuid());
-        given(tokenRepository.findById(refreshToken.getUuid())).willReturn(Optional.of(refreshToken));
-        given(tokenService.generateAccessToken(refreshToken.getUuid())).willReturn(accessToken);
-
-        // when
-        TokenResponse response = refreshTokenUseCase.execute(refreshToken.getToken());
-
-        // then
-        verify(tokenService, times(1)).getType(refreshToken.getToken());
-        verify(tokenService, times(1)).getUuid(refreshToken.getToken());
-        verify(tokenRepository, times(1)).findById(refreshToken.getUuid());
-        verify(tokenService, times(1)).generateAccessToken(refreshToken.getUuid());
-        assertEquals(accessToken, response.getAccessToken());
+    void 살아있는_세션에서만_동일한_세션의_액세스_토큰을_재발급한다() {
+        UUID uuid = stubRefresh();
+        when(tokenService.generateAccessToken(uuid.toString(), "session")).thenReturn("access");
+        assertEquals("access", useCase.execute("refresh").getAccessToken());
+        verify(sessions).validate(uuid, "session");
+        verify(sessions, never()).create(any());
     }
 
     @Test
-    void 리프레시_토큰이_만료되었으면_에러가_발생한다() {
-        // given
-        String expiredRefreshToken = "만료.리프레시.토큰";
-        doThrow(new ExpiredTokenException()).when(tokenService).getType(expiredRefreshToken);
-
-        // when and then
-        assertThrows(ExpiredTokenException.class, () -> refreshTokenUseCase.execute(expiredRefreshToken));
-        verify(tokenService, times(1)).getType(expiredRefreshToken);
-        verify(tokenService, never()).generateAccessToken(anyString());
+    void 폐기된_세션으로_재발급하지_않는다() {
+        UUID uuid = stubRefresh();
+        doThrow(new ExpiredTokenException()).when(sessions).validate(uuid, "session");
+        assertThrows(ExpiredTokenException.class, () -> useCase.execute("refresh"));
+        verify(tokenService, never()).generateAccessToken(any(), any());
     }
 
     @Test
-    void 로그아웃_했으면_에러가_발생한다() {
-        // given
-        String loggedOutRefreshToken = "로그아웃.리프레시.토큰";
-        Token refreshToken = AuthFixture.createRefreshToken();
-        given(tokenService.getType(loggedOutRefreshToken)).willReturn(TokenType.REFRESH_TOKEN);
-        given(tokenService.getUuid(loggedOutRefreshToken)).willReturn(refreshToken.getUuid());
-        given(tokenRepository.findById(refreshToken.getUuid())).willReturn(Optional.of(refreshToken));
-
-        // when and then
-        assertThrows(ExpiredTokenException.class, () -> refreshTokenUseCase.execute(loggedOutRefreshToken));
+    void Redis_장애시_재발급하지_않는다() {
+        UUID uuid = stubRefresh();
+        doThrow(new IllegalStateException("Redis unavailable")).when(sessions).validate(uuid, "session");
+        assertThrows(IllegalStateException.class, () -> useCase.execute("refresh"));
+        verify(tokenService, never()).generateAccessToken(any(), any());
     }
 
     @Test
-    void 액세스_토큰으로_재발급을_시도하면_에러가_발생한다() {
-        // given
-        String accessToken = "이것은.액세스.토큰";
-        given(tokenService.getType(accessToken)).willReturn(TokenType.ACCESS_TOKEN);
+    void 액세스_토큰으로_재발급하지_않는다() {
+        when(tokenService.getType("access")).thenReturn(TokenType.ACCESS_TOKEN);
+        assertThrows(InvalidTokenException.class, () -> useCase.execute("access"));
+        verifyNoInteractions(sessions);
+    }
 
-        // when and then
-        assertThrows(InvalidTokenException.class, () -> refreshTokenUseCase.execute(accessToken));
-        verify(tokenService, times(1)).getType(accessToken);
-        verify(tokenRepository, never()).findById(anyString());
-        verify(tokenService, never()).generateAccessToken(anyString());
+    private UUID stubRefresh() {
+        UUID uuid = UUID.randomUUID();
+        when(tokenService.getType("refresh")).thenReturn(TokenType.REFRESH_TOKEN);
+        when(tokenService.getUuid("refresh")).thenReturn(uuid.toString());
+        when(tokenService.getSessionId("refresh")).thenReturn("session");
+        return uuid;
     }
 }

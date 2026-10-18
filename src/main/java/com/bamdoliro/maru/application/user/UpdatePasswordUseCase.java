@@ -2,6 +2,7 @@ package com.bamdoliro.maru.application.user;
 
 import com.bamdoliro.maru.domain.user.domain.UpdatePasswordVerification;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.domain.auth.service.AuthSessionService;
 import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
 import com.bamdoliro.maru.domain.user.service.UserFacade;
 import com.bamdoliro.maru.infrastructure.persistence.user.UpdatePasswordVerificationRepository;
@@ -16,12 +17,14 @@ public class UpdatePasswordUseCase {
 
     private final UpdatePasswordVerificationRepository updatePasswordVerificationRepository;
     private final UserFacade userFacade;
+    private final AuthSessionService authSessionService;
 
     @Transactional
     public void execute(UpdatePasswordRequest request) {
         validate(request);
 
-        User user = userFacade.getUser(request.getPhoneNumber());
+        User user = userFacade.getUserForUpdate(request.getPhoneNumber());
+        authSessionService.revoke(user.getUuid());
         user.updatePassword(request.getPassword());
     }
 

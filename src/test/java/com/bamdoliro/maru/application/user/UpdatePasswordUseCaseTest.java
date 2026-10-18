@@ -2,6 +2,7 @@ package com.bamdoliro.maru.application.user;
 
 import com.bamdoliro.maru.domain.user.domain.UpdatePasswordVerification;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.domain.auth.service.AuthSessionService;
 import com.bamdoliro.maru.domain.user.exception.VerifyingHasFailedException;
 import com.bamdoliro.maru.domain.user.service.UserFacade;
 import com.bamdoliro.maru.infrastructure.persistence.user.UpdatePasswordVerificationRepository;
@@ -32,6 +33,9 @@ public class UpdatePasswordUseCaseTest {
     @Mock
     private UserFacade userFacade;
 
+    @Mock
+    private AuthSessionService authSessionService;
+
     @Test
     void 비밀번호를_변경한다() {
         //given
@@ -40,7 +44,7 @@ public class UpdatePasswordUseCaseTest {
         UpdatePasswordRequest request = new UpdatePasswordRequest(user.getPhoneNumber(), "비밀번호");
 
         given(verificationRepository.findById(request.getPhoneNumber())).willReturn(Optional.of(verification));
-        given(userFacade.getUser(request.getPhoneNumber())).willReturn(user);
+        given(userFacade.getUserForUpdate(request.getPhoneNumber())).willReturn(user);
 
         //when
         updatePasswordUseCase.execute(request);
@@ -48,6 +52,7 @@ public class UpdatePasswordUseCaseTest {
         //then
         verify(verificationRepository, times(1)).findById(request.getPhoneNumber());
 
+        verify(authSessionService).revoke(user.getUuid());
         assertTrue(user.getPassword().match(request.getPassword()));
     }
 
@@ -62,7 +67,20 @@ public class UpdatePasswordUseCaseTest {
         assertThrows(VerifyingHasFailedException.class,
                 () -> updatePasswordUseCase.execute(request));
 
-        verify(userFacade, never()).getUser(any());
+        verify(userFacade, never()).getUserForUpdate(any());
+    }
+
+    @Test
+    void 세션_폐기에_실패하면_비밀번호를_바꾸지_않는다() {
+        User user = UserFixture.createUser();
+        String previousPassword = user.getPassword().getValue();
+        UpdatePasswordRequest request = new UpdatePasswordRequest(user.getPhoneNumber(), "새비밀번호");
+        given(verificationRepository.findById(request.getPhoneNumber()))
+                .willReturn(Optional.of(UserFixture.createUpdatePasswordVerification(true)));
+        given(userFacade.getUserForUpdate(request.getPhoneNumber())).willReturn(user);
+        doThrow(new IllegalStateException("Redis unavailable")).when(authSessionService).revoke(user.getUuid());
+        assertThrows(IllegalStateException.class, () -> updatePasswordUseCase.execute(request));
+        org.junit.jupiter.api.Assertions.assertEquals(previousPassword, user.getPassword().getValue());
     }
 
     @Test
@@ -78,6 +96,6 @@ public class UpdatePasswordUseCaseTest {
         assertThrows(VerifyingHasFailedException.class,
                 () -> updatePasswordUseCase.execute(request));
 
-        verify(userFacade, never()).getUser(any());
+        verify(userFacade, never()).getUserForUpdate(any());
     }
 }
