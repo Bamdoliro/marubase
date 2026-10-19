@@ -6,6 +6,7 @@ import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.infrastructure.persistence.form.vo.*;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -19,6 +20,8 @@ import static com.bamdoliro.maru.domain.form.domain.QForm.form;
 @Repository
 @RequiredArgsConstructor
 public class FormRepositoryImpl implements FormRepositoryCustom {
+
+    private static final String BUSAN = "부산광역시";
 
     private final JPAQueryFactory queryFactory;
 
@@ -275,9 +278,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                         form.education.school.address
                 ))
                 .from(form)
-                .where(form.education.school.address.contains(keyword)
-                        .or(form.education.school.location.eq(keyword))
-                        .and(form.status.in(round)))
+                .where(schoolRegionMatches(keyword), form.status.in(round))
                 .fetch();
     }
 
@@ -290,9 +291,23 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                         form.education.school.address
                 ))
                 .from(form)
-                .where(form.education.school.location.eq("부산광역시").not()
-                        .and(form.status.in(round)))
+                .where(hasSchoolRegion(), schoolRegionMatches(BUSAN).not(), form.status.in(round))
                 .fetch();
+    }
+
+    private BooleanExpression schoolRegionMatches(String region) {
+        return regionMatches(form.education.school.address, region)
+                .or(regionMatches(form.education.school.location, region));
+    }
+
+    private BooleanExpression regionMatches(StringExpression value, String region) {
+        StringExpression normalized = value.coalesce("").trim();
+        return normalized.eq(region).or(normalized.startsWith(region + " "));
+    }
+
+    private BooleanExpression hasSchoolRegion() {
+        return form.education.school.address.coalesce("").trim().ne("")
+                .or(form.education.school.location.coalesce("").trim().ne(""));
     }
 
     @Override
