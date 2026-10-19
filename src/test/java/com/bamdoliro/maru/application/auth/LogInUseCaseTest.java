@@ -43,16 +43,16 @@ class LogInUseCaseTest {
         String refreshToken = AuthFixture.createRefreshTokenString();
 
         given(userFacade.getUser(request.getPhoneNumber())).willReturn(user);
-        given(tokenService.generateAccessToken(user.getPhoneNumber())).willReturn(accessToken);
-        given(tokenService.generateRefreshToken(user.getPhoneNumber())).willReturn(refreshToken);
+        given(tokenService.generateAccessToken(user.getUuid().toString())).willReturn(accessToken);
+        given(tokenService.generateRefreshToken(user.getUuid().toString())).willReturn(refreshToken);
 
         // when
         TokenResponse response = logInUseCase.execute(request);
 
         // then
         verify(userFacade, times(1)).getUser(request.getPhoneNumber());
-        verify(tokenService, times(1)).generateAccessToken(user.getPhoneNumber());
-        verify(tokenService, times(1)).generateRefreshToken(user.getPhoneNumber());
+        verify(tokenService, times(1)).generateAccessToken(user.getUuid().toString());
+        verify(tokenService, times(1)).generateRefreshToken(user.getUuid().toString());
         assertEquals(accessToken, response.getAccessToken());
         assertEquals(refreshToken, response.getRefreshToken());
     }
@@ -69,8 +69,8 @@ class LogInUseCaseTest {
         assertThrows(WrongLoginException.class, () -> logInUseCase.execute(request));
 
         verify(userFacade, times(1)).getUser(request.getPhoneNumber());
-        verify(tokenService, never()).generateAccessToken(user.getPhoneNumber());
-        verify(tokenService, never()).generateRefreshToken(user.getPhoneNumber());
+        verify(tokenService, never()).generateAccessToken(user.getUuid().toString());
+        verify(tokenService, never()).generateRefreshToken(user.getUuid().toString());
     }
 
     @Test
@@ -85,7 +85,7 @@ class LogInUseCaseTest {
         assertThrows(WrongLoginException.class, () -> logInUseCase.execute(request));
 
         verify(userFacade, times(1)).getUser(request.getPhoneNumber());
-        verify(tokenService, never()).generateAccessToken(user.getPhoneNumber());
-        verify(tokenService, never()).generateRefreshToken(user.getPhoneNumber());
+        verify(tokenService, never()).generateAccessToken(user.getUuid().toString());
+        verify(tokenService, never()).generateRefreshToken(user.getUuid().toString());
     }
 }

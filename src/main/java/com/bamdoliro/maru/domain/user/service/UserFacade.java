@@ -6,12 +6,19 @@ import com.bamdoliro.maru.infrastructure.persistence.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
 public class UserFacade {
 
     private final UserRepository userRepository;
+
+    @Transactional(readOnly = true)
+    public User getUserByUuid(UUID uuid) {
+        return userRepository.findByUuid(uuid)
+                .orElseThrow(UserNotFoundException::new);
+    }
 
     @Transactional(readOnly = true)
     public User getUser(String phoneNumber) {
