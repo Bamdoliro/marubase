@@ -29,7 +29,7 @@ public class UploadFormUseCase {
         validateFormStatus(form);
 
         return fileService.getPresignedUrl(FolderConstant.FORM, user.getUuid().toString(), fileMetadata, metadata ->
-                DefaultFileValidator.validate(metadata, Set.of(MediaType.APPLICATION_PDF), 20)
+                DefaultFileValidator.validate(metadata, Set.of(MediaType.APPLICATION_PDF), 30)
         );
     }
 

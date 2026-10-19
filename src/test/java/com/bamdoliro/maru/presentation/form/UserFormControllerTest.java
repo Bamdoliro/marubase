@@ -842,11 +842,11 @@ class UserFormControllerTest extends RestDocsTestSupport {
     @Test
     void 원서_서류를_업로드할_때_파일이_용량_제한을_넘으면_에러가_발생한다() throws Exception {
         User user = UserFixture.createUser();
-        FileMetadata metadata = new FileMetadata("form.pdf", MediaType.APPLICATION_PDF_VALUE, 21 * MB);
+        FileMetadata metadata = new FileMetadata("form.pdf", MediaType.APPLICATION_PDF_VALUE, 31 * MB);
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        doThrow(new FileSizeLimitExceededException(20)).when(uploadFormUseCase).execute(any(User.class), any(FileMetadata.class));
+        doThrow(new FileSizeLimitExceededException(30)).when(uploadFormUseCase).execute(any(User.class), any(FileMetadata.class));
 
         mockMvc.perform(post("/forms/form-document")
                         .cookie(AuthFixture.createAuthCookie())
