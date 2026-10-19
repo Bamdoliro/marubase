@@ -3,6 +3,7 @@ package com.bamdoliro.maru.application.user;
 import com.bamdoliro.maru.application.auth.LogOutUseCase;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.user.domain.User;
+import com.bamdoliro.maru.domain.user.service.UserFacade;
 import com.bamdoliro.maru.domain.user.domain.value.Password;
 import com.bamdoliro.maru.domain.user.exception.PasswordMismatchException;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
@@ -21,9 +22,11 @@ public class DeleteUserUseCase {
     private final FormRepository formRepository;
     private final LogOutUseCase logOutUseCase;
     private final UserRepository userRepository;
+    private final UserFacade userFacade;
 
     @Transactional
     public void execute(User user, DeleteUserRequest request) {
+        user = userFacade.getUserByUuidForUpdate(user.getUuid());
         validatePassword(request.getPassword(), user.getPassword());
         Optional<Form> form = formRepository.findByUser(user);
         form.ifPresent(formRepository::delete);

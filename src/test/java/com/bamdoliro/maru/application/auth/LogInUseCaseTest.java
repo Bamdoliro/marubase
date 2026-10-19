@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.application.auth;
 
 import com.bamdoliro.maru.domain.auth.service.TokenService;
+import com.bamdoliro.maru.domain.auth.service.AuthSessionService;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.domain.user.exception.UserNotFoundException;
 import com.bamdoliro.maru.domain.auth.exception.WrongLoginException;
@@ -34,6 +35,9 @@ class LogInUseCaseTest {
     @Mock
     private UserFacade userFacade;
 
+    @Mock
+    private AuthSessionService authSessionService;
+
     @Test
     void 유저가_로그인한다() {
         // given
@@ -41,18 +45,19 @@ class LogInUseCaseTest {
         LogInRequest request = new LogInRequest(user.getPhoneNumber(), "비밀번호");
         String accessToken = AuthFixture.createAccessTokenString();
         String refreshToken = AuthFixture.createRefreshTokenString();
+        given(authSessionService.create(user.getUuid())).willReturn("session");
 
-        given(userFacade.getUser(request.getPhoneNumber())).willReturn(user);
-        given(tokenService.generateAccessToken(user.getUuid().toString())).willReturn(accessToken);
-        given(tokenService.generateRefreshToken(user.getUuid().toString())).willReturn(refreshToken);
+        given(userFacade.getUserForUpdate(request.getPhoneNumber())).willReturn(user);
+        given(tokenService.generateAccessToken(user.getUuid().toString(), "session")).willReturn(accessToken);
+        given(tokenService.generateRefreshToken(user.getUuid().toString(), "session")).willReturn(refreshToken);
 
         // when
         TokenResponse response = logInUseCase.execute(request);
 
         // then
-        verify(userFacade, times(1)).getUser(request.getPhoneNumber());
-        verify(tokenService, times(1)).generateAccessToken(user.getUuid().toString());
-        verify(tokenService, times(1)).generateRefreshToken(user.getUuid().toString());
+        verify(userFacade, times(1)).getUserForUpdate(request.getPhoneNumber());
+        verify(tokenService, times(1)).generateAccessToken(user.getUuid().toString(), "session");
+        verify(tokenService, times(1)).generateRefreshToken(user.getUuid().toString(), "session");
         assertEquals(accessToken, response.getAccessToken());
         assertEquals(refreshToken, response.getRefreshToken());
     }
@@ -63,14 +68,14 @@ class LogInUseCaseTest {
         User user = UserFixture.createUser();
         LogInRequest request = new LogInRequest(user.getPhoneNumber(), "비밀번호");
 
-        given(userFacade.getUser(request.getPhoneNumber())).willThrow(UserNotFoundException.class);
+        given(userFacade.getUserForUpdate(request.getPhoneNumber())).willThrow(UserNotFoundException.class);
 
         // when and then
         assertThrows(WrongLoginException.class, () -> logInUseCase.execute(request));
 
-        verify(userFacade, times(1)).getUser(request.getPhoneNumber());
-        verify(tokenService, never()).generateAccessToken(user.getUuid().toString());
-        verify(tokenService, never()).generateRefreshToken(user.getUuid().toString());
+        verify(userFacade, times(1)).getUserForUpdate(request.getPhoneNumber());
+        verify(tokenService, never()).generateAccessToken(user.getUuid().toString(), "session");
+        verify(tokenService, never()).generateRefreshToken(user.getUuid().toString(), "session");
     }
 
     @Test
@@ -79,13 +84,13 @@ class LogInUseCaseTest {
         User user = UserFixture.createUser();
         LogInRequest request = new LogInRequest(user.getPhoneNumber(), "틀린비밀번호");
 
-        given(userFacade.getUser(request.getPhoneNumber())).willReturn(user);
+        given(userFacade.getUserForUpdate(request.getPhoneNumber())).willReturn(user);
 
         // when and then
         assertThrows(WrongLoginException.class, () -> logInUseCase.execute(request));
 
-        verify(userFacade, times(1)).getUser(request.getPhoneNumber());
-        verify(tokenService, never()).generateAccessToken(user.getUuid().toString());
-        verify(tokenService, never()).generateRefreshToken(user.getUuid().toString());
+        verify(userFacade, times(1)).getUserForUpdate(request.getPhoneNumber());
+        verify(tokenService, never()).generateAccessToken(user.getUuid().toString(), "session");
+        verify(tokenService, never()).generateRefreshToken(user.getUuid().toString(), "session");
     }
 }

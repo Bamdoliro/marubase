@@ -3,7 +3,6 @@ package com.bamdoliro.maru.domain.auth.service;
 import com.bamdoliro.maru.domain.auth.domain.type.TokenType;
 import com.bamdoliro.maru.domain.auth.exception.ExpiredTokenException;
 import com.bamdoliro.maru.domain.auth.exception.InvalidTokenException;
-import com.bamdoliro.maru.infrastructure.persistence.auth.TokenRepository;
 import com.bamdoliro.maru.shared.config.properties.JwtProperties;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -26,7 +25,7 @@ class TokenValidationTest {
     void setUp() {
         JwtProperties properties = mock(JwtProperties.class);
         when(properties.getSecretKey()).thenReturn(SECRET);
-        tokenService = new TokenService(properties, mock(TokenRepository.class));
+        tokenService = new TokenService(properties);
     }
 
     @Test
@@ -55,7 +54,7 @@ class TokenValidationTest {
     }
 
     private String token(String uuid, String type, Date expiration) {
-        return Jwts.builder().claim("uuid", uuid).claim("type", type)
+        return Jwts.builder().claim("uuid", uuid).claim("type", type).claim("sid", UUID.randomUUID().toString())
                 .issuedAt(new Date(System.currentTimeMillis() - 120000)).expiration(expiration)
                 .signWith(Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8))).compact();
     }

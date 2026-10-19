@@ -1,7 +1,8 @@
 package com.bamdoliro.maru.application.auth;
 
 import com.bamdoliro.maru.domain.user.domain.User;
-import com.bamdoliro.maru.infrastructure.persistence.auth.TokenRepository;
+import com.bamdoliro.maru.domain.auth.service.AuthSessionService;
+import com.bamdoliro.maru.domain.user.service.UserFacade;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,18 +21,22 @@ class LogOutUseCaseTest {
     private LogOutUseCase logOutUseCase;
 
     @Mock
-    private TokenRepository tokenRepository;
+    private AuthSessionService authSessionService;
+
+    @Mock
+    private UserFacade userFacade;
 
     @Test
     void 로그아웃_한다() {
         // given
         User user = UserFixture.createUser();
-        willDoNothing().given(tokenRepository).deleteById(user.getUuid().toString());
+        willDoNothing().given(authSessionService).revoke(user.getUuid());
 
         // when
         logOutUseCase.execute(user);
 
         // then
-        verify(tokenRepository, times(1)).deleteById(user.getUuid().toString());
+        verify(userFacade).getUserByUuidForUpdate(user.getUuid());
+        verify(authSessionService, times(1)).revoke(user.getUuid());
     }
 }
