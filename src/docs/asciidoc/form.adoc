@@ -443,6 +443,25 @@ include::{snippets}/admin-form-controller-test/원서를_전체_조회한다/req
 ===== Query Parameter
 include::{snippets}/admin-form-controller-test/원서를_전체_조회한다/query-parameters.adoc[]
 
+`GET /admin/forms`의 `sort` 옵션:
+
+* `first-round-score-desc`: 1차 점수(`firstRoundScore`) 높은 순
+* `first-round-score-asc`: 1차 점수(`firstRoundScore`) 낮은 순
+* `total-score-desc`: 최종 점수(`totalScore`) 높은 순 (기존 동작 유지)
+* `total-score-asc`: 최종 점수(`totalScore`) 낮은 순 (기존 동작 유지)
+* `form-id`: 원서 ID 오름차순
+
+1차 점수 정렬은 최종 점수가 아직 없어도 사용할 수 있으며, `status`, `type` 필터와 함께 사용할 수 있습니다.
+1차 점수가 `null`이면 높은 순/낮은 순 모두 마지막에 배치하고, 0점은 정상 점수로 정렬합니다.
+동점자는 기존 조회 순서를 유지합니다. 합격자 선발의 동점자 처리 규칙을 적용하는 기능은 아닙니다.
+응답 형식은 기존과 동일하며, 화면에서 1차 점수를 표시하려면 `firstRoundScore`를 사용합니다.
+
+[source,http]
+----
+GET /admin/forms?sort=first-round-score-desc
+GET /admin/forms?status=SUBMITTED&type=REGULAR&sort=first-round-score-asc
+----
+
 ==== 요청
 include::{snippets}/admin-form-controller-test/원서를_전체_조회한다/http-request.adoc[]
 
