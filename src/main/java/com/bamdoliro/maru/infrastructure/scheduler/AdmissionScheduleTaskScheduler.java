@@ -4,6 +4,7 @@ import com.bamdoliro.maru.application.schedule.AdmissionScheduleFacade;
 import com.bamdoliro.maru.application.schedule.ExecuteFirstPassSelectionUseCase;
 import com.bamdoliro.maru.application.schedule.event.AdmissionScheduleChangedEvent;
 import com.bamdoliro.maru.domain.schedule.domain.AdmissionSchedule;
+import com.bamdoliro.maru.domain.schedule.exception.ScheduleNotFoundException;
 import com.bamdoliro.maru.shared.config.TimeConfig;
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -31,7 +32,11 @@ public class AdmissionScheduleTaskScheduler {
 
     @EventListener(ApplicationReadyEvent.class)
     public synchronized void scheduleOnStartup() {
-        schedule(admissionScheduleFacade.getCurrentSchedule());
+        try {
+            schedule(admissionScheduleFacade.getCurrentSchedule());
+        } catch (ScheduleNotFoundException e) {
+            log.warn("First-pass selection is not scheduled until an admission schedule is configured.");
+        }
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)

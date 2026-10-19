@@ -1,5 +1,7 @@
 package com.bamdoliro.maru.application.form;
 
+import com.bamdoliro.maru.application.schedule.AdmissionScheduleFacade;
+import com.bamdoliro.maru.shared.fixture.ScheduleFixture;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.InvalidFormStatusException;
@@ -41,12 +43,16 @@ public class DownloadAdmissionAndPledgeFormatUseCaseTest {
     @Mock
     private MergePdfService mergePdfService;
 
+    @Mock
+    private AdmissionScheduleFacade admissionScheduleFacade;
+
     @Test
     void 최종합격한_지원자는_입학등록원_및_금연서약서_양식을_pdf로_다운받는다() {
         //given
         User user = UserFixture.createUser();
         Form form = FormFixture.createForm(FormType.REGULAR);
         form.pass();
+        given(admissionScheduleFacade.getCurrentSchedule()).willReturn(ScheduleFixture.createSchedule());
         given(formFacade.getForm(user)).willReturn(form);
         given(processTemplateService.execute(any(String.class), any())).willReturn("html");
         given(generatePdfService.execute(any(String.class))).willReturn(new ByteArrayOutputStream());
@@ -57,7 +63,8 @@ public class DownloadAdmissionAndPledgeFormatUseCaseTest {
 
         //then
         verify(formFacade, times(1)).getForm(user);
-        verify(processTemplateService, times(2)).execute(any(String.class), any());
+        verify(processTemplateService, times(2)).execute(any(String.class),
+                argThat(data -> data.get("year").equals(2026) && data.get("form") == form));
         verify(generatePdfService, times(2)).execute(any(String.class));
         verify(mergePdfService, times(2)).execute(any(PdfMerger.class), any(ByteArrayOutputStream.class));
     }
@@ -85,6 +92,7 @@ public class DownloadAdmissionAndPledgeFormatUseCaseTest {
         User user = UserFixture.createUser();
         Form form = FormFixture.createForm(FormType.REGULAR);
         form.pass();
+        given(admissionScheduleFacade.getCurrentSchedule()).willReturn(ScheduleFixture.createSchedule());
         given(formFacade.getForm(user)).willReturn(form);
         given(processTemplateService.execute(any(String.class), any())).willReturn("html");
         doThrow(FailedToExportPdfException.class).when(generatePdfService).execute(any(String.class));

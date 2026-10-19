@@ -1,5 +1,6 @@
 package com.bamdoliro.maru.application.form;
 
+import com.bamdoliro.maru.application.schedule.AdmissionScheduleFacade;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.exception.InvalidFormStatusException;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
@@ -27,13 +28,15 @@ public class DownloadAdmissionAndPledgeFormatUseCase {
     private final FormFacade formFacade;
     private final ProcessTemplateService processTemplateService;
     private final GeneratePdfService generatePdfService;
+    private final AdmissionScheduleFacade admissionScheduleFacade;
 
     public ByteArrayResource execute(User user) {
         Form form = formFacade.getForm(user);
         validate(form);
 
         Map<String, Object> formMap = Map.of(
-                "form", form
+                "form", form,
+                "year", admissionScheduleFacade.getCurrentSchedule().getAdmissionYear()
         );
 
         List<String> templates = List.of(

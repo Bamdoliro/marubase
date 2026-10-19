@@ -3,6 +3,7 @@ package com.bamdoliro.maru.infrastructure.scheduler;
 import com.bamdoliro.maru.application.schedule.AdmissionScheduleFacade;
 import com.bamdoliro.maru.application.schedule.ExecuteFirstPassSelectionUseCase;
 import com.bamdoliro.maru.domain.schedule.domain.AdmissionSchedule;
+import com.bamdoliro.maru.domain.schedule.exception.ScheduleNotFoundException;
 import com.bamdoliro.maru.shared.config.TimeConfig;
 import com.bamdoliro.maru.shared.fixture.ScheduleFixture;
 import java.time.Clock;
@@ -65,5 +66,18 @@ class AdmissionScheduleTaskSchedulerTest {
     private Clock fixedClock(java.time.LocalDateTime dateTime) {
         Instant instant = dateTime.atZone(TimeConfig.SERVICE_ZONE_ID).toInstant();
         return Clock.fixed(instant, TimeConfig.SERVICE_ZONE_ID);
+    }
+
+    @Test
+    void 일정이_없는_새_서버도_시작할_수_있다() {
+        given(admissionScheduleFacade.getCurrentSchedule()).willThrow(new ScheduleNotFoundException());
+        AdmissionScheduleTaskScheduler scheduler = new AdmissionScheduleTaskScheduler(
+                taskScheduler, admissionScheduleFacade, executeFirstPassSelectionUseCase,
+                Clock.system(TimeConfig.SERVICE_ZONE_ID)
+        );
+
+        scheduler.scheduleOnStartup();
+
+        verify(taskScheduler, never()).schedule(any(Runnable.class), any(Instant.class));
     }
 }
