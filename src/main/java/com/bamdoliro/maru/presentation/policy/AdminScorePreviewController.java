@@ -25,6 +25,6 @@ public class AdminScorePreviewController {
             @AuthenticationPrincipal(authority = Authority.ADMIN) AuthenticatedUser user,
             @RequestBody @Valid ScorePreviewRequest request
     ) {
-        return CommonResponse.ok(preview.execute(request.source(), request.inputs()));
+        return CommonResponse.ok(preview.execute(request.source(), request.inputs(), request.subjects()));
     }
 }
