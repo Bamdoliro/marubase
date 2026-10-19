@@ -15,6 +15,8 @@ import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.io.ByteArrayResource;
@@ -243,11 +245,30 @@ class AdminFormControllerTest extends RestDocsTestSupport {
                         queryParameters(
                                 parameterWithName("status").description("<<form-status,원서 상태 (null인 경우 전체 조회)>>").optional(),
                                 parameterWithName("type").description("<<form-category,원서 카테고리 (null인 경우 전체 조회)>>").optional(),
-                                parameterWithName("sort").description("정렬 기준").optional()
+                                parameterWithName("sort").description("정렬 기준: first-round-score-asc/desc (1차 점수), total-score-asc/desc (최종 점수), form-id (접수순)").optional()
                         )
                 ));
 
         verify(queryAllFormUseCase, times(1)).execute(FormStatus.SUBMITTED, FormType.REGULAR, null);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"first-round-score-asc", "first-round-score-desc"})
+    void 일차_점수_정렬_조건을_전달한다(String sort) throws Exception {
+        User user = UserFixture.createAdminUser();
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(queryAllFormUseCase.execute(FormStatus.SUBMITTED, FormType.REGULAR, sort)).willReturn(List.of());
+
+        mockMvc.perform(get("/admin/forms")
+                        .param("status", FormStatus.SUBMITTED.name())
+                        .param("type", FormType.REGULAR.name())
+                        .param("sort", sort)
+                        .cookie(AuthFixture.createAuthCookie())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(queryAllFormUseCase).execute(FormStatus.SUBMITTED, FormType.REGULAR, sort);
     }
 
     @Test

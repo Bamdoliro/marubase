@@ -26,6 +26,10 @@ public class QueryAllFormUseCase {
 
         if (sort != null) {
             switch (sort) {
+                case "first-round-score-asc" ->
+                        formList.sort(Comparator.comparing(form -> form.getScore().getFirstRoundScore(), Comparator.nullsLast(Comparator.naturalOrder())));
+                case "first-round-score-desc" ->
+                        formList.sort(Comparator.comparing(form -> form.getScore().getFirstRoundScore(), Comparator.nullsLast(Comparator.reverseOrder())));
                 case "total-score-asc" ->
                         formList.sort(Comparator.comparing(form -> form.getScore().getTotalScore(), Comparator.nullsLast(Comparator.naturalOrder())));
                 case "total-score-desc" ->
