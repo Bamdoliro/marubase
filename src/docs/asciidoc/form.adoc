@@ -318,7 +318,7 @@ include::{snippets}/user-form-controller-test/증명_사진을_업로드할_때_
 === 서류 업로드
 지원자는 서류를 업로드할 수 있습니다.
 
-20MB 이하의 pdf 파일만 업로드할 수 있습니다.
+30MB 이하의 pdf 파일만 업로드할 수 있습니다.
 
 파일 이름은 비어있으면 안 됩니다. 또한 20글자 이하여야 합니다.
 
@@ -347,7 +347,7 @@ include::{snippets}/user-form-controller-test/원서_서류를_업로드할_때_
 ===== 빈 파일인 경우
 include::{snippets}/user-form-controller-test/원서_서류를_업로드할_때_파일이_비었으면_에러가_발생한다/http-response.adoc[]
 
-===== 용량이 20MB를 초과한 경우
+===== 용량이 30MB를 초과한 경우
 include::{snippets}/user-form-controller-test/원서_서류를_업로드할_때_파일이_용량_제한을_넘으면_에러가_발생한다/http-response.adoc[]
 
 ===== pdf 파일이 아닌 경우
