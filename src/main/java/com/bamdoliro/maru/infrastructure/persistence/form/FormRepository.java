@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface FormRepository extends JpaRepository<Form, Long>, FormRepositoryCustom {
 
+    boolean existsByIdNotNull();
+
     Optional<Form> findByUser(User user);
 
     Optional<Form> findByExaminationNumber(Long examinationNumber);

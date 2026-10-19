@@ -1,6 +1,8 @@
 package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.application.schedule.AdmissionScheduleFacade;
+import com.bamdoliro.maru.application.policy.AdmissionPolicyService;
+import com.bamdoliro.maru.domain.policy.TicketNotice;
 import com.bamdoliro.maru.domain.schedule.domain.AdmissionSchedule;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
@@ -34,6 +36,7 @@ public class GenerateAllAdmissionTicketUseCase {
     private final MergePdfService mergePdfService;
     private final FileService fileService;
     private final AdmissionScheduleFacade admissionScheduleFacade;
+    private final AdmissionPolicyService admissionPolicyService;
 
     public ByteArrayResource execute() {
         List<Form> formList = formRepository.findByStatus(FormStatus.FIRST_PASSED)
@@ -41,11 +44,13 @@ public class GenerateAllAdmissionTicketUseCase {
                 .sorted(Comparator.comparing(Form::getExaminationNumber, Comparator.nullsLast(Long::compareTo)))
                 .toList();
 
+        AdmissionSchedule schedule = admissionScheduleFacade.getCurrentSchedule();
+        TicketNotice notice = admissionPolicyService.ticketFor(schedule.getId());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PdfDocument mergedDocument = new PdfDocument(new PdfWriter(outputStream));
         PdfMerger pdfMerger = new PdfMerger(mergedDocument);
 
-        formList.forEach(form -> mergePdfService.execute(pdfMerger, generateAdmissionTicket(form)));
+        formList.forEach(form -> mergePdfService.execute(pdfMerger, generateAdmissionTicket(form, schedule, notice)));
 
         mergedDocument.close();
         pdfMerger.close();
@@ -53,12 +58,12 @@ public class GenerateAllAdmissionTicketUseCase {
         return new ByteArrayResource(outputStream.toByteArray());
     }
 
-    private ByteArrayOutputStream generateAdmissionTicket(Form form) {
-        AdmissionSchedule schedule = admissionScheduleFacade.getCurrentSchedule();
+    private ByteArrayOutputStream generateAdmissionTicket(Form form, AdmissionSchedule schedule, TicketNotice notice) {
 
         Map<String, Object> formMap = Map.ofEntries(
                 Map.entry("form", form),
                 Map.entry("year", schedule.getAdmissionYear()),
+                Map.entry("notice", notice),
                 Map.entry("codingTest", ScheduleFormatter.toLocaleString(schedule.getCodingTest())),
                 Map.entry("ncs", ScheduleFormatter.toLocaleString(schedule.getNcs())),
                 Map.entry("depthInterview", ScheduleFormatter.toLocaleString(schedule.getDepthInterview())),

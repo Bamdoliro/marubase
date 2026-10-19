@@ -1,5 +1,9 @@
 package com.bamdoliro.maru.shared.util;
 
+import com.bamdoliro.maru.application.policy.AdmissionPolicyService;
+import com.bamdoliro.maru.domain.policy.formula.ScoreFormulaPreview;
+import com.bamdoliro.maru.presentation.policy.AdminAdmissionPolicyController;
+import com.bamdoliro.maru.presentation.policy.AdminScorePreviewController;
 import com.bamdoliro.maru.application.analysis.QueryGenderRatioUseCase;
 import com.bamdoliro.maru.application.analysis.QueryGradeDistributionUseCase;
 import com.bamdoliro.maru.application.analysis.QueryNumberOfApplicantsUseCase;
@@ -69,8 +73,16 @@ import org.springframework.test.web.servlet.MockMvc;
             MessageController.class,
             AnalysisController.class,
             ScheduleController.class,
-            AdminScheduleController.class})
+            AdminScheduleController.class,
+            AdminAdmissionPolicyController.class,
+            AdminScorePreviewController.class})
 public abstract class ControllerTest {
+
+    @MockitoBean
+    protected AdmissionPolicyService admissionPolicyService;
+
+    @MockitoBean
+    protected ScoreFormulaPreview scoreFormulaPreview;
 
     @Autowired
     protected MockMvc mockMvc;

@@ -1,6 +1,8 @@
 package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.application.schedule.AdmissionScheduleFacade;
+import com.bamdoliro.maru.application.policy.AdmissionPolicyService;
+import com.bamdoliro.maru.domain.policy.TicketNotice;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.exception.FormNotFoundException;
@@ -48,6 +50,9 @@ class GenerateAdmissionTicketUseCaseTest {
     private FileService fileService;
 
     @Mock
+    private AdmissionPolicyService admissionPolicyService;
+
+    @Mock
     private AdmissionScheduleFacade admissionScheduleFacade;
 
     @Test
@@ -59,6 +64,7 @@ class GenerateAdmissionTicketUseCaseTest {
 
         given(formFacade.getForm(user)).willReturn(form);
         given(admissionScheduleFacade.getCurrentSchedule()).willReturn(ScheduleFixture.createSchedule());
+        given(admissionPolicyService.ticketFor(null)).willReturn(TicketNotice.defaults());
         given(processTemplateService.execute(any(String.class), anyMap())).willReturn("html");
         given(fileService.getDownloadPresignedUrl(any(String.class), any(String.class))).willReturn(SharedFixture.createIdentificationPictureUrlResponse().getDownloadUrl());
         given(generatePdfService.execute(any(String.class))).willReturn(new ByteArrayOutputStream());
