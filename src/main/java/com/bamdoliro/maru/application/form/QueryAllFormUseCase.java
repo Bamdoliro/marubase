@@ -1,8 +1,7 @@
 package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
-import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
-import com.bamdoliro.maru.domain.form.domain.type.FormType;
+import com.bamdoliro.maru.presentation.form.dto.request.FormListRequest;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.shared.annotation.UseCase;
@@ -19,11 +18,19 @@ public class QueryAllFormUseCase {
 
     private final FormRepository formRepository;
 
-    public List<FormSimpleResponse> execute(FormStatus status, FormType type, String sort) {
-        List<Form> formList = new ArrayList<>(formRepository.findByStatus(status).stream()
-                .filter(form -> Objects.isNull(type) || form.getType().equals(type))
+    public List<FormSimpleResponse> execute(FormListRequest request) {
+        List<Form> formList = new ArrayList<>(formRepository.findByStatus(request.getStatus()).stream()
+                .filter(form -> Objects.isNull(request.getType()) || form.getType().equals(request.getType()))
+                .filter(form -> request.getMentoringProgram() == null
+                        || form.getGrade().isMentoringProgram() == request.getMentoringProgram())
+                .filter(form -> matchesSchool(form, request.getSchoolName()))
+                .filter(form -> matchesScore(form.getScore().getFirstRoundScore(),
+                        request.getFirstRoundScoreMin(), request.getFirstRoundScoreMax()))
+                .filter(form -> matchesScore(form.getScore().getTotalScore(),
+                        request.getTotalScoreMin(), request.getTotalScoreMax()))
                 .toList());
 
+        String sort = request.getSort();
         if (sort != null) {
             switch (sort) {
                 case "first-round-score-asc" ->
@@ -44,5 +51,23 @@ public class QueryAllFormUseCase {
         return formList.stream()
                 .map(FormSimpleResponse::new)
                 .toList();
+    }
+
+    private boolean matchesSchool(Form form, String schoolName) {
+        if (schoolName == null || schoolName.isBlank()) {
+            return true;
+        }
+        if (form.getEducation().getSchool() == null) {
+            return false;
+        }
+        String name = form.getEducation().getSchool().getName();
+        return name != null && name.contains(schoolName.trim());
+    }
+
+    private boolean matchesScore(Double score, Double min, Double max) {
+        if (min == null && max == null) {
+            return true;
+        }
+        return score != null && (min == null || score >= min) && (max == null || score <= max);
     }
 }

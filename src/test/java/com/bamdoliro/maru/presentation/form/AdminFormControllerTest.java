@@ -9,6 +9,7 @@ import com.bamdoliro.maru.domain.form.exception.MissingTotalScoreException;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.FormListRequest;
 import com.bamdoliro.maru.shared.auth.AuthenticatedUser;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
@@ -17,6 +18,7 @@ import com.bamdoliro.maru.shared.util.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.io.ByteArrayResource;
@@ -219,10 +221,12 @@ class AdminFormControllerTest extends RestDocsTestSupport {
     @Test
     void 원서를_전체_조회한다() throws Exception {
         User user = UserFixture.createAdminUser();
+        FormListRequest request = FormListRequest.builder()
+                .status(FormStatus.SUBMITTED).type(FormType.REGULAR).build();
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(queryAllFormUseCase.execute(FormStatus.SUBMITTED, FormType.REGULAR, null)).willReturn(List.of(
+        given(queryAllFormUseCase.execute(refEq(request))).willReturn(List.of(
                 FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
                 FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
                 FormFixture.createFormSimpleResponse(FormStatus.SUBMITTED),
@@ -249,16 +253,18 @@ class AdminFormControllerTest extends RestDocsTestSupport {
                         )
                 ));
 
-        verify(queryAllFormUseCase, times(1)).execute(FormStatus.SUBMITTED, FormType.REGULAR, null);
+        verify(queryAllFormUseCase, times(1)).execute(refEq(request));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"first-round-score-asc", "first-round-score-desc"})
     void 일차_점수_정렬_조건을_전달한다(String sort) throws Exception {
         User user = UserFixture.createAdminUser();
+        FormListRequest request = FormListRequest.builder()
+                .status(FormStatus.SUBMITTED).type(FormType.REGULAR).sort(sort).build();
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        given(queryAllFormUseCase.execute(FormStatus.SUBMITTED, FormType.REGULAR, sort)).willReturn(List.of());
+        given(queryAllFormUseCase.execute(refEq(request))).willReturn(List.of());
 
         mockMvc.perform(get("/admin/forms")
                         .param("status", FormStatus.SUBMITTED.name())
@@ -268,7 +274,79 @@ class AdminFormControllerTest extends RestDocsTestSupport {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        verify(queryAllFormUseCase).execute(FormStatus.SUBMITTED, FormType.REGULAR, sort);
+        verify(queryAllFormUseCase).execute(refEq(request));
+    }
+
+    @Test
+    void 원서_상세_검색조건을_전달한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        FormListRequest request = FormListRequest.builder().status(FormStatus.SUBMITTED)
+                .type(FormType.REGULAR).sort("first-round-score-desc").mentoringProgram(true)
+                .schoolName("부산").firstRoundScoreMin(180.0).firstRoundScoreMax(190.0)
+                .totalScoreMin(200.0).totalScoreMax(300.0).build();
+        given(queryAllFormUseCase.execute(refEq(request))).willReturn(List.of());
+
+        mockMvc.perform(get("/admin/forms")
+                        .cookie(AuthFixture.createAuthCookie())
+                        .param("status", "SUBMITTED").param("type", "REGULAR")
+                        .param("sort", "first-round-score-desc").param("mentoringProgram", "true")
+                        .param("schoolName", "부산").param("firstRoundScoreMin", "180")
+                        .param("firstRoundScoreMax", "190").param("totalScoreMin", "200")
+                        .param("totalScoreMax", "300"))
+                .andExpect(status().isOk())
+                .andDo(restDocs.document(queryParameters(
+                        parameterWithName("status").description("원서 상태").optional(),
+                        parameterWithName("type").description("전형").optional(),
+                        parameterWithName("sort").description("정렬 기준").optional(),
+                        parameterWithName("mentoringProgram").description("멘토멘티 체크 여부, 생략 시 전체").optional(),
+                        parameterWithName("schoolName").description("출신학교명 부분일치").optional(),
+                        parameterWithName("firstRoundScoreMin").description("1차 점수 하한, 포함").optional(),
+                        parameterWithName("firstRoundScoreMax").description("1차 점수 상한, 포함").optional(),
+                        parameterWithName("totalScoreMin").description("최종 점수 하한, 포함").optional(),
+                        parameterWithName("totalScoreMax").description("최종 점수 상한, 포함").optional()
+                )));
+        verify(queryAllFormUseCase).execute(refEq(request));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"firstRoundScoreMin,-1", "firstRoundScoreMax,-1", "totalScoreMin,-1",
+            "totalScoreMax,-1", "firstRoundScoreMin,NaN", "totalScoreMax,Infinity",
+            "mentoringProgram,invalid", "firstRoundScoreMin,invalid"})
+    void 잘못된_검색조건은_거부한다(String parameter, String value) throws Exception {
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any()))
+                .willReturn(UserFixture.createAdminUser());
+
+        mockMvc.perform(get("/admin/forms").cookie(AuthFixture.createAuthCookie()).param(parameter, value))
+                .andExpect(status().isBadRequest());
+        verifyNoInteractions(queryAllFormUseCase);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"firstRoundScore", "totalScore"})
+    void 점수_최솟값이_최댓값보다_크면_거부한다(String prefix) throws Exception {
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any()))
+                .willReturn(UserFixture.createAdminUser());
+
+        mockMvc.perform(get("/admin/forms").cookie(AuthFixture.createAuthCookie())
+                        .param(prefix + "Min", "190").param(prefix + "Max", "180"))
+                .andExpect(status().isBadRequest());
+        verifyNoInteractions(queryAllFormUseCase);
+    }
+
+    @Test
+    void 검색조건을_생략하면_기존_전체조회로_처리한다() throws Exception {
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any()))
+                .willReturn(UserFixture.createAdminUser());
+        given(queryAllFormUseCase.execute(any())).willReturn(List.of());
+
+        mockMvc.perform(get("/admin/forms").cookie(AuthFixture.createAuthCookie()))
+                .andExpect(status().isOk());
+        verify(queryAllFormUseCase).execute(refEq(new FormListRequest()));
     }
 
     @Test

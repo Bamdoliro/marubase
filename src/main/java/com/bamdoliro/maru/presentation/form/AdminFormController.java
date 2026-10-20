@@ -1,8 +1,7 @@
 package com.bamdoliro.maru.presentation.form;
 
 import com.bamdoliro.maru.application.form.*;
-import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
-import com.bamdoliro.maru.domain.form.domain.type.FormType;
+import com.bamdoliro.maru.presentation.form.dto.request.FormListRequest;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListRequest;
 import com.bamdoliro.maru.presentation.form.dto.response.AdmissionAndPledgeUrlResponse;
@@ -91,12 +90,10 @@ public class AdminFormController {
     @GetMapping
     public ListCommonResponse<FormSimpleResponse> getFormList(
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
-            @RequestParam(name = "status", required = false) FormStatus status,
-            @RequestParam(name = "type", required = false) FormType type,
-            @RequestParam(name = "sort", required = false) String sort
+            @ModelAttribute @Valid FormListRequest request
     ) {
         return ListCommonResponse.ok(
-                queryAllFormUseCase.execute(status, type, sort)
+                queryAllFormUseCase.execute(request)
         );
     }
 

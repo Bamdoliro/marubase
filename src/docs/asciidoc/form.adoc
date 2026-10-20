@@ -462,6 +462,30 @@ GET /admin/forms?sort=first-round-score-desc
 GET /admin/forms?status=SUBMITTED&type=REGULAR&sort=first-round-score-asc
 ----
 
+===== 상세 검색 조건
+include::{snippets}/admin-form-controller-test/원서_상세_검색조건을_전달한다/query-parameters.adoc[]
+
+모든 조건은 선택 사항이며 지정한 조건들을 AND로 결합한 뒤 정렬합니다.
+`mentoringProgram=true`는 체크한 학생, `false`는 체크하지 않은 학생, 생략하면 전체입니다.
+`schoolName`은 앞뒤 공백을 제거한 출신학교명 부분일치 검색이며, 빈 문자열은 필터를 적용하지 않습니다.
+점수 범위는 하한과 상한을 포함하고 한쪽만 지정할 수도 있습니다.
+해당 점수가 미정(`null`)이면 점수 범위를 지정한 조회에서 제외됩니다. 0점은 정상 점수입니다.
+음수, NaN/Infinity, 최솟값이 최댓값보다 큰 범위는 `400 Bad Request`를 반환합니다.
+1차 점수 범위와 최종 점수 범위는 서로 독립적이며 응답 형식은 기존과 동일합니다.
+
+[source,http]
+----
+GET /admin/forms?mentoringProgram=true
+GET /admin/forms?mentoringProgram=false&schoolName=부산&firstRoundScoreMin=180&firstRoundScoreMax=190&sort=first-round-score-desc
+----
+
+===== 멘토멘티 이수증 첨부 안내
+멘토멘티 프로그램을 체크한 학생의 원서 PDF를 새로 생성하면 마지막에
+`멘토멘티 프로그램 이수증을 첨부해주십시오` 문구와 첨부 여백만 있는 A4 페이지 1장을 추가합니다.
+체크하지 않은 학생의 PDF에는 추가하지 않습니다. 별도 이수증 업로드 기능을 추가하는 것은 아닙니다.
+이미 최종 제출되어 저장된 PDF 및 해당 파일의 관리자 다운로드/병합 결과는 자동 변경하지 않습니다.
+DB/Redis 스키마 변경은 필요하지 않습니다.
+
 ==== 요청
 include::{snippets}/admin-form-controller-test/원서를_전체_조회한다/http-request.adoc[]
 

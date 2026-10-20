@@ -10,6 +10,7 @@ import com.bamdoliro.maru.infrastructure.pdf.MergePdfService;
 import com.bamdoliro.maru.infrastructure.pdf.exception.FailedToExportPdfException;
 import com.bamdoliro.maru.infrastructure.s3.FileService;
 import com.bamdoliro.maru.infrastructure.thymeleaf.ProcessTemplateService;
+import com.bamdoliro.maru.infrastructure.thymeleaf.Templates;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.SharedFixture;
 import com.bamdoliro.maru.shared.fixture.ScheduleFixture;
@@ -17,13 +18,18 @@ import com.bamdoliro.maru.shared.fixture.UserFixture;
 import com.itextpdf.kernel.utils.PdfMerger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.mockito.InjectMocks;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayOutputStream;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -52,6 +58,31 @@ class ExportFormUseCaseTest {
 
     @Mock
     private AdmissionScheduleFacade admissionScheduleFacade;
+
+    @ParameterizedTest
+    @EnumSource(FormType.class)
+    void 멘토멘티_체크시에만_모든_전형의_마지막에_이수증_페이지를_추가한다(FormType type) {
+        User user = UserFixture.createUser();
+        Form form = FormFixture.createForm(type);
+        given(formFacade.getForm(user)).willReturn(form);
+        given(admissionScheduleFacade.getCurrentSchedule()).willReturn(ScheduleFixture.createSchedule());
+        given(processTemplateService.execute(anyString(), any())).willReturn("html");
+        given(generatePdfService.execute(anyString())).willReturn(new ByteArrayOutputStream());
+        given(fileService.getDownloadPresignedUrl(anyString(), anyString())).willReturn("https://example.com/photo.png");
+
+        exportFormUseCase.execute(user);
+        verify(processTemplateService, never()).execute(eq(Templates.MENTORING_CERTIFICATE), any());
+
+        clearInvocations(processTemplateService);
+        ReflectionTestUtils.setField(form.getGrade(), "mentoringProgram", true);
+        exportFormUseCase.execute(user);
+
+        ArgumentCaptor<String> templates = ArgumentCaptor.forClass(String.class);
+        verify(processTemplateService, atLeastOnce()).execute(templates.capture(), any());
+        assertThat(templates.getAllValues())
+                .endsWith(Templates.PRIVACY_POLICY, Templates.MENTORING_CERTIFICATE);
+        verify(processTemplateService).execute(eq(Templates.MENTORING_CERTIFICATE), any());
+    }
 
     @Test
     void 일반전형_원서를_pdf로_다운받는다() {
