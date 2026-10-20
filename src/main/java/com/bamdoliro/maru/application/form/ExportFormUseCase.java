@@ -116,6 +116,14 @@ public class ExportFormUseCase {
     }
 
     private List<String> getRequiredTemplates(Form form) {
+        List<String> templates = new ArrayList<>(getBaseTemplates(form));
+        if (form.getGrade().isMentoringProgram()) {
+            templates.add(Templates.MENTORING_CERTIFICATE);
+        }
+        return templates;
+    }
+
+    private List<String> getBaseTemplates(Form form) {
         if (form.getType().isRegular()) {
             if (form.getEducation().isQualificationExamination()) {
                 return List.of(

@@ -6,6 +6,7 @@ import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.domain.value.Score;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
+import com.bamdoliro.maru.presentation.form.dto.request.FormListRequest;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.util.RandomUtil;
 import org.junit.jupiter.api.Test;
@@ -50,7 +51,7 @@ class QueryAllFormUseCaseTest {
         given(formRepository.findByStatus(null)).willReturn(formList);
 
         // when
-        List<FormSimpleResponse> returnedFormList = queryAllFormUseCase.execute(null, null, null);
+        List<FormSimpleResponse> returnedFormList = query(null, null, null);
 
         // then
         assertEquals(formList.size(), returnedFormList.size());
@@ -73,7 +74,7 @@ class QueryAllFormUseCaseTest {
         given(formRepository.findByStatus(null)).willReturn(formList);
 
         // when
-        List<FormSimpleResponse> returnedFormList = queryAllFormUseCase.execute(null, FormType.MEISTER_TALENT, null);
+        List<FormSimpleResponse> returnedFormList = query(null, FormType.MEISTER_TALENT, null);
 
         // then
         assertEquals(1, returnedFormList.size());
@@ -96,7 +97,7 @@ class QueryAllFormUseCaseTest {
         given(formRepository.findByStatus(null)).willReturn(formList);
 
         // when
-        List<FormSimpleResponse> returnedFormList = queryAllFormUseCase.execute(null, FormType.MULTI_CHILDREN, null);
+        List<FormSimpleResponse> returnedFormList = query(null, FormType.MULTI_CHILDREN, null);
 
         // then
         assertEquals(1, returnedFormList.size());
@@ -130,7 +131,7 @@ class QueryAllFormUseCaseTest {
         given(formRepository.findByStatus(null)).willReturn(formList);
 
         // when
-        List<FormSimpleResponse> returnedFormList = queryAllFormUseCase.execute(null, null, "total-score-desc");
+        List<FormSimpleResponse> returnedFormList = query(null, null, "total-score-desc");
 
         // then
         assertEquals(
@@ -169,7 +170,7 @@ class QueryAllFormUseCaseTest {
         given(formRepository.findByStatus(null)).willReturn(formList);
 
         // when
-        List<FormSimpleResponse> returnedFormList = queryAllFormUseCase.execute(null, null, "total-score-asc");
+        List<FormSimpleResponse> returnedFormList = query(null, null, "total-score-asc");
 
         // then
         assertEquals(
@@ -195,7 +196,7 @@ class QueryAllFormUseCaseTest {
         given(formRepository.findByStatus(null)).willReturn(formList);
 
         // when
-        List<FormSimpleResponse> returnedFormList = queryAllFormUseCase.execute(null, FormType.REGULAR, "form-id");
+        List<FormSimpleResponse> returnedFormList = query(null, FormType.REGULAR, "form-id");
 
         // then
         assertEquals(1, returnedFormList.size());
@@ -211,7 +212,7 @@ class QueryAllFormUseCaseTest {
         Form middle = createScoredForm(186.033, null, FormType.REGULAR);
         given(formRepository.findByStatus(null)).willReturn(List.of(middle, high, low));
 
-        List<FormSimpleResponse> result = queryAllFormUseCase.execute(null, null, sort);
+        List<FormSimpleResponse> result = query(null, null, sort);
 
         assertThat(result).extracting(FormSimpleResponse::getFirstRoundScore)
                 .containsExactlyElementsOf(sort.endsWith("asc")
@@ -226,7 +227,7 @@ class QueryAllFormUseCaseTest {
         Form low = createScoredForm(186.033, 250.0, FormType.REGULAR);
         given(formRepository.findByStatus(null)).willReturn(List.of(low, high));
 
-        List<FormSimpleResponse> result = queryAllFormUseCase.execute(null, null, sort);
+        List<FormSimpleResponse> result = query(null, null, sort);
 
         assertThat(result).extracting(FormSimpleResponse::getFirstRoundScore)
                 .containsExactlyElementsOf(sort.endsWith("asc")
@@ -240,7 +241,7 @@ class QueryAllFormUseCaseTest {
         Form scored = createScoredForm(0.0, null, FormType.REGULAR);
         given(formRepository.findByStatus(null)).willReturn(List.of(missing, scored));
 
-        List<FormSimpleResponse> result = queryAllFormUseCase.execute(null, null, sort);
+        List<FormSimpleResponse> result = query(null, null, sort);
 
         assertThat(result).extracting(FormSimpleResponse::getFirstRoundScore)
                 .containsExactly(0.0, null);
@@ -254,7 +255,7 @@ class QueryAllFormUseCaseTest {
         Form meister = createScoredForm(200.0, null, FormType.MEISTER_TALENT);
         given(formRepository.findByStatus(FormStatus.SUBMITTED)).willReturn(List.of(high, meister, low));
 
-        List<FormSimpleResponse> result = queryAllFormUseCase.execute(FormStatus.SUBMITTED, FormType.REGULAR, sort);
+        List<FormSimpleResponse> result = query(FormStatus.SUBMITTED, FormType.REGULAR, sort);
 
         assertThat(result).extracting(FormSimpleResponse::getType).containsOnly(FormType.REGULAR);
         assertThat(result).extracting(FormSimpleResponse::getFirstRoundScore)
@@ -268,7 +269,7 @@ class QueryAllFormUseCaseTest {
     void 일차_점수_정렬_대상이_없으면_빈_목록을_반환한다(String sort) {
         given(formRepository.findByStatus(null)).willReturn(List.of());
 
-        assertThat(queryAllFormUseCase.execute(null, null, sort)).isEmpty();
+        assertThat(query(null, null, sort)).isEmpty();
     }
 
     @ParameterizedTest
@@ -280,7 +281,7 @@ class QueryAllFormUseCaseTest {
         second.assignExaminationNumber(1002L);
         given(formRepository.findByStatus(null)).willReturn(List.of(first, second));
 
-        assertThat(queryAllFormUseCase.execute(null, null, sort))
+        assertThat(query(null, null, sort))
                 .extracting(FormSimpleResponse::getExaminationNumber).containsExactly(1001L, 1002L);
     }
 
@@ -289,5 +290,10 @@ class QueryAllFormUseCaseTest {
         form.updateScore(new Score(0.0, null, 0, 0, 0,
                 null, null, null, firstRoundScore, totalScore));
         return form;
+    }
+
+    private List<FormSimpleResponse> query(FormStatus status, FormType type, String sort) {
+        return queryAllFormUseCase.execute(FormListRequest.builder()
+                .status(status).type(type).sort(sort).build());
     }
 }
