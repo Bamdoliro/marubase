@@ -164,18 +164,7 @@
         <td class="ba" th:text="${form.grade.attendance3.classAbsenceCount}"></td>
     </tr>
 </table>
-<table th:if="${form.education.isQualificationExamination()}">
-    <caption th:text='${"3. 봉사활동 - " + form.score.volunteerScore + "점"}'></caption>
-    <tr>
-        <th class="ba">봉사활동</th>
-        <th class="ba">부여점수</th>
-    </tr>
-    <tr>
-        <th class="ba">봉사내역</th>
-        <td class="ba">14점(기본점수)</td>
-    </tr>
-</table>
-<table th:unless="${form.education.isQualificationExamination()}">
+<table>
     <caption th:text='${"3. 봉사활동 - " + form.score.volunteerScore + "점"}'></caption>
     <tr>
         <th class="ba" style="width: 20%">학년</th>
