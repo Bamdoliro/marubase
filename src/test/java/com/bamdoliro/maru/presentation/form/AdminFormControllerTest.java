@@ -505,6 +505,33 @@ class AdminFormControllerTest extends RestDocsTestSupport {
     }
 
     @Test
+    void 정상적으로_지원자등록양식을_다운로드한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+        MockMultipartFile file = new MockMultipartFile(
+                "지원자등록양식", "지원자등록양식.xlsx",
+                String.valueOf(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")),
+                "<<file>>".getBytes()
+        );
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(exportApplicationFormUseCase.execute()).willReturn(new ByteArrayResource(file.getBytes()));
+
+        mockMvc.perform(get("/admin/forms/xlsx/application-form")
+                        .cookie(AuthFixture.createAuthCookie())
+                        .accept("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        )
+                ));
+
+        verify(exportApplicationFormUseCase, times(1)).execute();
+    }
+
+    @Test
     void 정상적으로_1차전형_결과를_다운로드한다() throws Exception {
         User user = UserFixture.createAdminUser();
         MockMultipartFile file = new MockMultipartFile(
