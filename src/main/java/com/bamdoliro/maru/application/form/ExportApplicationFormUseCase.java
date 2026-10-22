@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,7 +20,9 @@ public class ExportApplicationFormUseCase {
     private final ApplicationFormXlsxWriter applicationFormXlsxWriter;
 
     public Resource execute() throws IOException {
-        List<Form> formList = formRepository.findByStatus(FormStatus.APPROVED);
+        List<Form> formList = formRepository.findByStatus(FormStatus.APPROVED).stream()
+                .sorted(Comparator.comparing(Form::getId))
+                .toList();
 
         return applicationFormXlsxWriter.write(formList);
     }
