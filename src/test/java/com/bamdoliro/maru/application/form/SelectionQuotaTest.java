@@ -1,6 +1,8 @@
 package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.shared.constants.FixedNumber;
+import com.bamdoliro.maru.domain.policy.SelectionPolicy;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.IntUnaryOperator;
@@ -12,6 +14,20 @@ class SelectionQuotaTest {
 
     private static final IntUnaryOperator FIRST_ROUND = count -> (int) Math.ceil(count * FixedNumber.MULTIPLE);
     private static final IntUnaryOperator SECOND_ROUND = IntUnaryOperator.identity();
+
+    @Test
+    void 변경된_배수와_타지역_비율을_각_단계_반올림_규칙대로_계산한다() {
+        var policy = new SelectionPolicy(40, 8, 4, 2, 3, new BigDecimal("1.25"), new BigDecimal("0.35"));
+        assertEquals(65, policy.firstRoundCount(policy.total()));
+        assertEquals(22, policy.otherRegionCount(true));
+        assertEquals(19, policy.otherRegionCount(false));
+        SelectionQuota first = SelectionQuota.of(policy, 20, 20, 20, policy::firstRoundCount);
+        SelectionQuota second = SelectionQuota.of(policy, 20, 20, 20, SECOND_ROUND);
+        assertQuota(50, 10, 2, 3, first);
+        assertQuota(40, 8, 2, 2, second);
+        assertEquals(3, first.nationalVeteransEducation());
+        assertEquals(4, first.specialAdmission());
+    }
 
     @Test
     void 기회균등이_미달이면_남는_자리를_사회다양성으로_넘긴다() {

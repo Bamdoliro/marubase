@@ -1,6 +1,6 @@
 package com.bamdoliro.maru.application.form;
 
-import com.bamdoliro.maru.shared.constants.FixedNumber;
+import com.bamdoliro.maru.domain.policy.SelectionPolicy;
 
 import java.util.function.IntUnaryOperator;
 
@@ -24,19 +24,30 @@ record SelectionQuota(
             int societyDiversityApplicantCount,
             IntUnaryOperator multiple
     ) {
-        int regular = FixedNumber.REGULAR;
-        int meisterTalent = FixedNumber.MEISTER_TALENT;
-        int socialIntegration = FixedNumber.SOCIAL_INTEGRATION;
+        return of(SelectionPolicy.defaults(), meisterTalentApplicantCount,
+                equalOpportunityApplicantCount, societyDiversityApplicantCount, multiple);
+    }
 
-        if (meisterTalentApplicantCount < FixedNumber.MEISTER_TALENT) {
-            int gap = FixedNumber.MEISTER_TALENT - meisterTalentApplicantCount;
+    static SelectionQuota of(
+            SelectionPolicy policy,
+            int meisterTalentApplicantCount,
+            int equalOpportunityApplicantCount,
+            int societyDiversityApplicantCount,
+            IntUnaryOperator multiple
+    ) {
+        int regular = policy.regular();
+        int meisterTalent = policy.meisterTalent();
+        int socialIntegration = policy.socialIntegration();
+
+        if (meisterTalentApplicantCount < policy.meisterTalent()) {
+            int gap = policy.meisterTalent() - meisterTalentApplicantCount;
             regular += gap;
             meisterTalent -= gap;
         }
 
         int socialIntegrationApplicantCount = equalOpportunityApplicantCount + societyDiversityApplicantCount;
-        if (socialIntegrationApplicantCount < FixedNumber.SOCIAL_INTEGRATION) {
-            int gap = FixedNumber.SOCIAL_INTEGRATION - socialIntegrationApplicantCount;
+        if (socialIntegrationApplicantCount < policy.socialIntegration()) {
+            int gap = policy.socialIntegration() - socialIntegrationApplicantCount;
             regular += gap;
             socialIntegration -= gap;
         }
@@ -61,8 +72,8 @@ record SelectionQuota(
                 multiple.applyAsInt(meisterTalent),
                 equalOpportunity,
                 societyDiversity,
-                multiple.applyAsInt(FixedNumber.NATIONAL_VETERANS_EDUCATION),
-                multiple.applyAsInt(FixedNumber.SPECIAL_ADMISSION)
+                multiple.applyAsInt(policy.nationalVeteransEducation()),
+                multiple.applyAsInt(policy.specialAdmission())
         );
     }
 }

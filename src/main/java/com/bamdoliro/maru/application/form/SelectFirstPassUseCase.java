@@ -5,7 +5,8 @@ import com.bamdoliro.maru.domain.form.domain.type.FormType;
 import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.shared.annotation.UseCase;
-import com.bamdoliro.maru.shared.constants.FixedNumber;
+import com.bamdoliro.maru.application.policy.AdmissionPolicyService;
+import com.bamdoliro.maru.domain.policy.SelectionPolicy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,12 +19,12 @@ import java.util.function.Consumer;
 public class SelectFirstPassUseCase {
 
     private final FormRepository formRepository;
+    private final AdmissionPolicyService admissionPolicyService;
     private final CalculateFormScoreService calculateFormScoreService;
     @Transactional
     public void execute() {
-        AtomicInteger otherRegionCount = new AtomicInteger(
-                (int) (calculateMultiple(FixedNumber.TOTAL) * FixedNumber.OTHER_REGION_RATE)
-        );
+        SelectionPolicy policy = admissionPolicyService.selectionForExecution();
+        AtomicInteger otherRegionCount = new AtomicInteger(policy.otherRegionCount(true));
 
         List<Form> specialFormList = formRepository.findApprovedSpecialForm();
         List<Form> meisterTalentFormList = classifyFormsByType(specialFormList, FormType::isMeister);
@@ -31,10 +32,11 @@ public class SelectFirstPassUseCase {
         List<Form> societyDiversityFormList = classifyFormsByType(specialFormList, FormType::isSocietyDiversity);
 
         SelectionQuota quota = SelectionQuota.of(
+                policy,
                 meisterTalentFormList.size(),
                 equalOpportunityFormList.size(),
                 societyDiversityFormList.size(),
-                this::calculateMultiple
+                policy::firstRoundCount
         );
 
         processForms(
@@ -125,10 +127,6 @@ public class SelectFirstPassUseCase {
         return formList.stream()
                 .filter(form -> filter.execute(form.getType()))
                 .toList();
-    }
-
-    private int calculateMultiple(int count) {
-        return (int) Math.ceil(count * FixedNumber.MULTIPLE);
     }
 }
 
