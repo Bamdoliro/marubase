@@ -236,6 +236,9 @@ public abstract class ControllerTest {
     protected ExportFinalPassedFormUseCase exportFinalPassedFormUseCase;
 
     @MockitoBean
+    protected ExportApplicationFormUseCase exportApplicationFormUseCase;
+
+    @MockitoBean
     protected ExportFirstRoundResultUseCase exportFirstRoundResultUseCase;
 
     @MockitoBean

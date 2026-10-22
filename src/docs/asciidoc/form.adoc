@@ -803,3 +803,20 @@ include::{snippets}/admin-form-controller-test/정상적으로_과목별_성적_
 
 ===== 정상 응답
 include::{snippets}/admin-form-controller-test/정상적으로_과목별_성적_상세를_다운로드한다/http-response.adoc[]
+
+
+=== 고입업무지원시스템 지원자등록양식 다운로드
+어드민은 고입업무지원시스템에 업로드할 지원자등록양식을 엑셀로 다운로드 받을 수 있습니다.
+
+==== 요청 형식
+
+===== Request Cookie
+include::{snippets}/admin-form-controller-test/정상적으로_지원자등록양식을_다운로드한다/request-cookies.adoc[]
+
+==== 요청
+include::{snippets}/admin-form-controller-test/정상적으로_지원자등록양식을_다운로드한다/http-request.adoc[]
+
+==== 응답
+
+===== 정상 응답
+include::{snippets}/admin-form-controller-test/정상적으로_지원자등록양식을_다운로드한다/http-response.adoc[]
