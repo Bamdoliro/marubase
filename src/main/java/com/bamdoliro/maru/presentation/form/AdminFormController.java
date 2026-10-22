@@ -193,7 +193,7 @@ public class AdminFormController {
 
     @GetMapping("/xlsx/application-form")
     public ResponseEntity<Resource> exportApplicationForm(
-            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user // NOSONAR 인증 주체 주입이며 요청 바인딩이 아님
     ) throws IOException {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
