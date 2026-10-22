@@ -42,3 +42,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### xlsx templates ###
+/local-templates/

@@ -45,6 +45,7 @@ public class AdminFormController {
     private final ExportSecondRoundResultUseCase exportSecondRoundResultUseCase;
     private final ExportResultUseCase exportResultUseCase;
     private final ExportSubjectGradeDetailUseCase exportSubjectGradeDetailUseCase;
+    private final ExportApplicationFormUseCase exportApplicationFormUseCase;
     private final PassOrFailFormUseCase passOrFailFormUseCase;
     private final QueryFormUrlUseCase queryFormUrlUseCase;
     private final MergeFormPdfUseCase mergeFormPdfUseCase;
@@ -188,6 +189,15 @@ public class AdminFormController {
                 .header("Content-Disposition",
                         "attachment; filename=\"export.xlsx\"; filename*=UTF-8''" + encodedFilename)
                 .body(exportSubjectGradeDetailUseCase.execute());
+    }
+
+    @GetMapping("/xlsx/application-form")
+    public ResponseEntity<Resource> exportApplicationForm(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+    ) throws IOException {
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(exportApplicationFormUseCase.execute());
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
