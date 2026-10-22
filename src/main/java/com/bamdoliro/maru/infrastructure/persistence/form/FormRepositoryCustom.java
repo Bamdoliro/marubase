@@ -8,11 +8,13 @@ import com.bamdoliro.maru.infrastructure.persistence.form.vo.FormUrlVo;
 import com.bamdoliro.maru.infrastructure.persistence.form.vo.GradeVo;
 import com.bamdoliro.maru.infrastructure.persistence.form.vo.SchoolStatusVo;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface FormRepositoryCustom {
 
     List<Form> findByStatus(FormStatus status);
+    List<Form> findByStatusIn(Collection<FormStatus> statuses);
     List<Form> findByType(FormType type);
     List<Form> findByCategory(FormType.Category category);
     List<Form> findByOriginalCategory(FormType.Category category);
