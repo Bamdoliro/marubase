@@ -11,6 +11,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -31,6 +32,14 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                 .selectFrom(form)
                 .where(eqStatus(status))
                 .orderBy(form.examinationNumber.asc())
+                .fetch();
+    }
+
+    @Override
+    public List<Form> findByStatusIn(Collection<FormStatus> statuses) {
+        return queryFactory
+                .selectFrom(form)
+                .where(form.status.in(statuses))
                 .fetch();
     }
 
