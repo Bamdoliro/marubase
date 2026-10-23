@@ -18,5 +18,5 @@ public class PassOrFailFormRequest {
     private Long formId;
 
     @NotNull(message = "필수값입니다.")
-    private boolean pass;
+    private Boolean pass;
 }

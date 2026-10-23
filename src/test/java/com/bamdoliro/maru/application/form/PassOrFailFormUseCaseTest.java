@@ -12,6 +12,9 @@ import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormRequest;
 import com.bamdoliro.maru.shared.config.DatabaseClearExtension;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
 import com.bamdoliro.maru.shared.fixture.UserFixture;
+import com.bamdoliro.maru.shared.fixture.ScheduleFixture;
+import com.bamdoliro.maru.infrastructure.persistence.schedule.AdmissionScheduleRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +42,16 @@ class PassOrFailFormUseCaseTest {
     @Autowired
     private FormRepository formRepository;
 
+    @Autowired
+    private AdmissionScheduleRepository scheduleRepository;
+
+    @BeforeEach
+    void 현재_일정을_준비한다() {
+        if (scheduleRepository.findByActiveTrue().isEmpty()) {
+            scheduleRepository.save(ScheduleFixture.createSchedule());
+        }
+    }
+
     @Test
     void 정상적으로_합격자를_처리한다() {
         // given
@@ -46,6 +59,7 @@ class PassOrFailFormUseCaseTest {
             User user = userRepository.save(UserFixture.createUser());
             Form form = FormFixture.createRandomBusanForm(user);
             calculateFormScoreService.execute(form);
+            form.firstPass();
             formRepository.save(form);
         }
 
