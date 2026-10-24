@@ -668,7 +668,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
 
     @Test
     void 정상적으로_2차_합격_여부를_입력한다() throws Exception {
-        User user = UserFixture.createAdminUser();
+        AuthenticatedUser user = AuthenticatedUser.from(UserFixture.createAdminUser());
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
@@ -704,7 +704,7 @@ class AdminFormControllerTest extends RestDocsTestSupport {
 
     @Test
     void 어드민이_2차_합격_여부를_입력할_때_존재하지_않는_원서를_입력했다면_에러가_발생한다() throws Exception {
-        User user = UserFixture.createAdminUser();
+        AuthenticatedUser user = AuthenticatedUser.from(UserFixture.createAdminUser());
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
@@ -822,11 +822,11 @@ class AdminFormControllerTest extends RestDocsTestSupport {
 
     @Test
     void 자동으로_2차_합격_여부를_결정한다() throws Exception {
-        User user = UserFixture.createAdminUser();
+        AuthenticatedUser user = AuthenticatedUser.from(UserFixture.createAdminUser());
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        willDoNothing().given(selectSecondPassUseCase).execute();
+        willDoNothing().given(executeSecondPassSelectionUseCase).execute();
 
         mockMvc.perform(patch("/admin/forms/second-round/select")
                         .cookie(AuthFixture.createAuthCookie()))
@@ -838,22 +838,22 @@ class AdminFormControllerTest extends RestDocsTestSupport {
                         )
                 ));
 
-        verify(selectSecondPassUseCase, times(1)).execute();
+        verify(executeSecondPassSelectionUseCase, times(1)).execute();
     }
 
     @Test
     void 자동으로_2차_합격_여부를_결정할_때_최종_점수가_없는_원서가_존재하면_에러가_발생한다() throws Exception {
-        User user = UserFixture.createAdminUser();
+        AuthenticatedUser user = AuthenticatedUser.from(UserFixture.createAdminUser());
 
         given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
         given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
-        willThrow(new MissingTotalScoreException()).given(selectSecondPassUseCase).execute();
+        willThrow(new MissingTotalScoreException()).given(executeSecondPassSelectionUseCase).execute();
 
         mockMvc.perform(patch("/admin/forms/second-round/select")
                         .cookie(AuthFixture.createAuthCookie()))
                 .andExpect(status().isConflict())
                 .andDo(restDocs.document());
 
-        verify(selectSecondPassUseCase, times(1)).execute();
+        verify(executeSecondPassSelectionUseCase, times(1)).execute();
     }
 }

@@ -462,6 +462,28 @@ GET /admin/forms?sort=first-round-score-desc
 GET /admin/forms?status=SUBMITTED&type=REGULAR&sort=first-round-score-asc
 ----
 
+===== 목록 상태 필터
+
+`GET /admin/forms`의 `status`는 관리자 목록 화면의 표시 기준으로 필터링합니다.
+응답의 `status`는 실제 저장 상태를 유지하며, 새로운 표시 필드는 추가하지 않습니다.
+
+[cols="1,3",options="header"]
+|===
+|요청 status |포함되는 실제 상태
+|`FINAL_SUBMITTED` |`SUBMITTED`를 제외한 모든 상태 (화면의 최종 제출)
+|`APPROVED` |`APPROVED`, `FIRST_PASSED`, `FIRST_FAILED`, `PASSED`, `FAILED`, `NO_SHOW`, `ENTERED` (화면의 승인)
+|`FIRST_PASSED` |`FIRST_PASSED`, `PASSED`, `FAILED`, `NO_SHOW`, `ENTERED` (1차 합격)
+|`PASSED` |`PASSED`, `ENTERED` (최종 합격)
+|그 외 상태 |지정한 상태만
+|생략 |전체
+|===
+
+예를 들어 `status=APPROVED` 응답에는 실제 `status=FIRST_PASSED`인 원서도 포함됩니다.
+상태 그룹은 서로 배타적이지 않습니다. 1차 합격자는 최종 제출·승인·1차 합격 조회 모두에 포함됩니다.
+이는 현재 상태에서 도출한 화면 표시 기준이며, 과거 승인 처리 이력을 증명하는 조회가 아닙니다.
+선발·문자 발송·검토 목록(`/admin/forms/review`) 등 다른 기능의 상태 조건은 변경하지 않습니다.
+DB 변경이나 프론트 수정 없이 기존 목록 요청 URL을 그대로 사용할 수 있습니다.
+
 ===== 상세 검색 조건
 include::{snippets}/admin-form-controller-test/원서_상세_검색조건을_전달한다/query-parameters.adoc[]
 
@@ -787,6 +809,71 @@ include::{snippets}/admin-form-controller-test/자동으로_2차_합격_여부�
 ===== 최종 점수가 없는 원서가 있을 경우
 include::{snippets}/admin-form-controller-test/자동으로_2차_합격_여부를_결정할_때_최종_점수가_없는_원서가_존재하면_에러가_발생한다/http-response.adoc[]
 
+
+=== 관리자 수동 일괄 선발과 결과 변경
+
+아래 세 API는 모두 관리자 accessToken 쿠키 인증이 필요합니다.
+비인증 요청은 401, 일반 사용자 요청은 403입니다. 성공은 본문 없는 204이며,
+프론트는 성공 후 목록/상세/분석 조회 캐시를 무효화하고 다시 조회해야 합니다.
+현재 입학 일정이 없으면 404 `SCHEDULE_NOT_FOUND`입니다.
+
+[cols="2,4,5"]
+|===
+|메서드 |경로 |대상과 동작
+|PATCH |/admin/forms/first-round/select |본문 없음. APPROVED 원서만 1차 일괄 선발.
+|PATCH |/admin/forms/second-round/select |본문 없음. FIRST_PASSED 원서만 최종 일괄 선발.
+|PATCH |/admin/forms/second-round/result |formList의 ID별 합격/불합격을 수동 변경.
+|===
+
+1차는 특별전형 선발 → 미선발자 일반전형 환산 및 재선발 → 정원 외 선발 순서로
+기존 알고리즘을 실행하여 FIRST_PASSED / FIRST_FAILED를 확정합니다.
+미승인 원서를 자동 불합격으로 바꾸지 않고 그대로 제외합니다.
+2차는 기존 전형 전환/점수 환산을 거쳐 PASSED / FAILED로 확정하며,
+대상자의 최종 점수가 하나라도 없으면 409 `MISSING_TOTAL_SCORE`로 전체 거부합니다.
+점수 산식, 정원 및 지역·동점 기준은 이 변경에서 수정하지 않습니다.
+
+예약 자동 선발은 폐기되었습니다. 서버 시작·일정 수정·예정 시각 도달로 실행되지 않습니다.
+수동 API는 선발 예정 시각을 검사하지 않으므로 접수·검토 완료 후 호출해야 합니다.
+문자 발송 및 발표 시각 변경은 수행하지 않습니다. 기존 결과 공개 규칙은 유지됩니다.
+
+1차는 기존 일정별 실행 기록을 사용합니다. 이미 실행했다면
+409 `FIRST_PASS_ALREADY_EXECUTED`입니다. 승인 대상이 없으면
+409 `NO_SELECTION_CANDIDATES`이며 실행 기록을 만들지 않습니다.
+실행 기록이 존재하는 과거 선발도 재실행하지 않습니다.
+실행 기록 삭제나 새 일정 생성으로 재실행을 우회해서는 안 됩니다.
+현재 원서는 학년도 귀속이 없으므로 조회 범위는 기존과 동일한 전체 원서 중 대상 상태입니다.
+
+2차는 실행 후 FIRST_PASSED 대상이 없어지므로 연속 재요청은
+409 `NO_SELECTION_CANDIDATES`입니다. 2차에 영구 실행 이력을 새로 만드는 것은 아니며,
+나중에 다른 경로로 FIRST_PASSED 대상이 생기면 다시 대상이 될 수 있습니다.
+세 API는 현재 일정 행의 DB 잠금을 공유하여 서로 동시에 실행되지 않습니다.
+수동 결과 변경은 대상 원서도 잠근 뒤 현재 상태를 검사합니다.
+요청 도중 예외가 나면 해당 요청의 결과 변경과 1차 실행 기록은 함께 롤백됩니다.
+
+수동 결과 변경 요청 예시:
+
+[source,json]
+----
+{
+  "formList": [
+    { "formId": 1, "pass": true },
+    { "formId": 2, "pass": false }
+  ]
+}
+----
+
+* 허용 상태: FIRST_PASSED, PASSED, FAILED. 기존 최종 결과 정정은 계속 가능합니다.
+* 차단 상태: SUBMITTED, FINAL_SUBMITTED, APPROVED, RECEIVED, REJECTED,
+  FIRST_FAILED, NO_SHOW, ENTERED. 한 건이라도 섞이면 409 `INVALID_FORM_STATUS`로 전체 거부합니다.
+* 존재하지 않는 ID가 섞이면 404 `FORM_NOT_FOUND`로 전체 거부합니다.
+* 중복 ID는 400 `INVALID_FORM_RESULT_REQUEST`입니다.
+* 빈 목록, null 항목, pass 누락/null은 400입니다. pass 생략을 false로 처리하지 않습니다.
+* formList 순서와 관계없이 각 ID에 지정한 결과를 반영합니다.
+
+DB 컬럼·테이블 추가는 없습니다. 기존 `tbl_first_pass_selection_execution` 및
+schedule_id 고유 제약이 배포 환경에 있어야 합니다.
+자동 실행을 확실히 중단하려면 구버전 서버 인스턴스도 모두 종료/교체해야 합니다.
+프론트 버튼 추가는 별도 작업이며 이 변경에는 포함하지 않습니다.
 
 === 과목별 성적 상세 엑셀 다운로드
 어드민은 합격자들의 과목별 성적 상세 정보를 엑셀로 다운로드 받을 수 있습니다.

@@ -17,6 +17,12 @@ public class AdmissionScheduleFacade {
                 .orElseThrow(ScheduleNotFoundException::new);
     }
 
+    // 호출자의 트랜잭션 안에서 선발 및 수동 결과 변경을 직렬화한다.
+    public AdmissionSchedule getCurrentScheduleForUpdate() {
+        return admissionScheduleRepository.findActiveForUpdate()
+                .orElseThrow(ScheduleNotFoundException::new);
+    }
+
     public AdmissionSchedule getSchedule(Integer admissionYear) {
         return admissionScheduleRepository.findByAdmissionYear(admissionYear)
                 .orElseThrow(ScheduleNotFoundException::new);
