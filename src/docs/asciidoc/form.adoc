@@ -462,6 +462,28 @@ GET /admin/forms?sort=first-round-score-desc
 GET /admin/forms?status=SUBMITTED&type=REGULAR&sort=first-round-score-asc
 ----
 
+===== 목록 상태 필터
+
+`GET /admin/forms`의 `status`는 관리자 목록 화면의 표시 기준으로 필터링합니다.
+응답의 `status`는 실제 저장 상태를 유지하며, 새로운 표시 필드는 추가하지 않습니다.
+
+[cols="1,3",options="header"]
+|===
+|요청 status |포함되는 실제 상태
+|`FINAL_SUBMITTED` |`SUBMITTED`를 제외한 모든 상태 (화면의 최종 제출)
+|`APPROVED` |`APPROVED`, `FIRST_PASSED`, `FIRST_FAILED`, `PASSED`, `FAILED`, `NO_SHOW`, `ENTERED` (화면의 승인)
+|`FIRST_PASSED` |`FIRST_PASSED`, `PASSED`, `FAILED`, `NO_SHOW`, `ENTERED` (1차 합격)
+|`PASSED` |`PASSED`, `ENTERED` (최종 합격)
+|그 외 상태 |지정한 상태만
+|생략 |전체
+|===
+
+예를 들어 `status=APPROVED` 응답에는 실제 `status=FIRST_PASSED`인 원서도 포함됩니다.
+상태 그룹은 서로 배타적이지 않습니다. 1차 합격자는 최종 제출·승인·1차 합격 조회 모두에 포함됩니다.
+이는 현재 상태에서 도출한 화면 표시 기준이며, 과거 승인 처리 이력을 증명하는 조회가 아닙니다.
+선발·문자 발송·검토 목록(`/admin/forms/review`) 등 다른 기능의 상태 조건은 변경하지 않습니다.
+DB 변경이나 프론트 수정 없이 기존 목록 요청 URL을 그대로 사용할 수 있습니다.
+
 ===== 상세 검색 조건
 include::{snippets}/admin-form-controller-test/원서_상세_검색조건을_전달한다/query-parameters.adoc[]
 
