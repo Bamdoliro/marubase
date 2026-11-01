@@ -1,5 +1,15 @@
 package com.bamdoliro.maru.application.form;
 
+import com.bamdoliro.maru.infrastructure.persistence.schedule.AdmissionScheduleRepository;
+import com.bamdoliro.maru.shared.fixture.ScheduleFixture;
+import com.bamdoliro.maru.application.policy.AdmissionPolicyService;
+import com.bamdoliro.maru.domain.policy.SelectionPolicy;
+import com.bamdoliro.maru.domain.policy.TicketNotice;
+import com.bamdoliro.maru.presentation.policy.dto.PolicyRequest;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import org.springframework.test.util.ReflectionTestUtils;
+
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.service.AssignExaminationNumberService;
 import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
@@ -47,8 +57,15 @@ class SelectFirstPassUseCaseTest {
 
     private SelectionScenarioSupport scenario;
 
+    @Autowired
+    private AdmissionScheduleRepository scheduleRepository;
+
+    @Autowired
+    private AdmissionPolicyService policyService;
+
     @BeforeEach
     void setUp() {
+        scheduleRepository.save(ScheduleFixture.createSchedule());
         scenario = new SelectionScenarioSupport(userRepository, formRepository, assignExaminationNumberService, calculateFormScoreService);
     }
 
@@ -64,6 +81,22 @@ class SelectFirstPassUseCaseTest {
             calculateFormScoreService.execute(form);
             formRepository.save(form);
         });
+    }
+
+    @Test
+    void 관리자_설정_정원이_실제_선발에_적용된다() {
+        var schedule = scheduleRepository.findByActiveTrue().orElseThrow();
+        ReflectionTestUtils.setField(schedule, "applicationFormStart", LocalDateTime.now().plusYears(1));
+        scheduleRepository.saveAndFlush(schedule);
+        var policy = new SelectionPolicy(40, 8, 4, 1, 1, new BigDecimal("1.3"), new BigDecimal("0.5"));
+        policyService.update(7L, new PolicyRequest(schedule.getId(), -1L, policy, TicketNotice.defaults()));
+        scenario.saveApprovedForms(13, 10, 10);
+
+        selectFirstPassUseCase.execute();
+
+        assertEquals("regular=52, meisterTalent=11, equalOpportunity=3, societyDiversity=3",
+                scenario.countPassedForms(Form::isFirstPassedNow));
+        assertTrue(policyService.current().selectionLocked());
     }
 
     @Test

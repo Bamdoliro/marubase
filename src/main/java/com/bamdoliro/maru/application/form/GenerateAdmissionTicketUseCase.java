@@ -1,6 +1,8 @@
 package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.application.schedule.AdmissionScheduleFacade;
+import com.bamdoliro.maru.application.policy.AdmissionPolicyService;
+import com.bamdoliro.maru.domain.policy.TicketNotice;
 import com.bamdoliro.maru.domain.schedule.domain.AdmissionSchedule;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.exception.InvalidFormStatusException;
@@ -28,6 +30,7 @@ public class GenerateAdmissionTicketUseCase {
     private final GeneratePdfService generatePdfService;
     private final FileService fileService;
     private final AdmissionScheduleFacade admissionScheduleFacade;
+    private final AdmissionPolicyService admissionPolicyService;
 
     public ByteArrayResource execute(User user) {
         Form form = formFacade.getForm(user);
@@ -37,6 +40,7 @@ public class GenerateAdmissionTicketUseCase {
         Map<String, Object> formMap = Map.ofEntries(
                 Map.entry("form", form),
                 Map.entry("year", schedule.getAdmissionYear()),
+                Map.entry("notice", admissionPolicyService.ticketFor(schedule.getId())),
                 Map.entry("codingTest", ScheduleFormatter.toLocaleString(schedule.getCodingTest())),
                 Map.entry("ncs", ScheduleFormatter.toLocaleString(schedule.getNcs())),
                 Map.entry("depthInterview", ScheduleFormatter.toLocaleString(schedule.getDepthInterview())),

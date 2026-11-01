@@ -2,6 +2,7 @@ package com.bamdoliro.maru.shared.constants;
 
 import lombok.experimental.UtilityClass;
 
+/** 정책 분리 전 선발 결과를 고정하는 회귀 테스트 기준값. */
 @UtilityClass
 public class FixedNumber {
 
