@@ -42,13 +42,30 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, length = 10)
     private Authority authority;
 
-    @Builder
+    @Column(nullable = false)
+    private boolean isTestData;
+
     public User(String phoneNumber, String name, String password, Authority authority) {
+        this(phoneNumber, name, password, authority, false);
+    }
+
+    @Builder
+    public User(String phoneNumber, String name, String password, Authority authority, boolean isTestData) {
+        this(phoneNumber, name, new Password(PasswordUtil.encode(password)), authority, isTestData);
+    }
+
+    private User(String phoneNumber, String name, Password password, Authority authority, boolean isTestData) {
         this.uuid = UUID.randomUUID();
         this.phoneNumber = phoneNumber;
         this.name = name;
-        this.password = new Password(PasswordUtil.encode(password));
+        this.password = password;
         this.authority = authority;
+        this.isTestData = isTestData;
+    }
+
+    // 테스트 데이터를 대량 생성할 때 BCrypt 인코딩 비용을 줄이기 위해 미리 인코딩한 비밀번호를 받는다.
+    public static User createTestData(String phoneNumber, String name, Password encodedPassword) {
+        return new User(phoneNumber, name, encodedPassword, Authority.USER, true);
     }
 
     public boolean isAdmin() {
