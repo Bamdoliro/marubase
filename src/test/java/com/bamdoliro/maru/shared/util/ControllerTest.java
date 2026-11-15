@@ -319,6 +319,12 @@ public abstract class ControllerTest {
     protected QueryAdmissionAndPledgeUseCase queryAdmissionAndPledgeUseCase;
 
     @MockitoBean
+    protected GenerateTestFormUseCase generateTestFormUseCase;
+
+    @MockitoBean
+    protected DeleteTestFormUseCase deleteTestFormUseCase;
+
+    @MockitoBean
     protected CookieUtil cookieUtil;
 
     protected String toJson(Object object) throws JsonProcessingException {

@@ -2,16 +2,20 @@ package com.bamdoliro.maru.presentation.form;
 
 import com.bamdoliro.maru.application.form.*;
 import com.bamdoliro.maru.presentation.form.dto.request.FormListRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.GenerateTestFormListRequest;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListRequest;
 import com.bamdoliro.maru.presentation.form.dto.response.AdmissionAndPledgeUrlResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.DeleteTestFormResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
 import com.bamdoliro.maru.presentation.form.dto.response.FormUrlResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.GenerateTestFormResponse;
 import com.bamdoliro.maru.shared.auth.AuthenticatedUser;
 import com.bamdoliro.maru.shared.auth.AuthenticationPrincipal;
 import com.bamdoliro.maru.shared.auth.Authority;
 import com.bamdoliro.maru.shared.response.CommonResponse;
 import com.bamdoliro.maru.shared.response.ListCommonResponse;
+import com.bamdoliro.maru.shared.response.SingleCommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -51,6 +55,8 @@ public class AdminFormController {
     private final MergeFormPdfUseCase mergeFormPdfUseCase;
     private final SelectSecondPassUseCase selectSecondPassUseCase;
     private final QueryAdmissionAndPledgeUseCase queryAdmissionAndPledgeUseCase;
+    private final GenerateTestFormUseCase generateTestFormUseCase;
+    private final DeleteTestFormUseCase deleteTestFormUseCase;
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/{form-id}/approve")
@@ -253,5 +259,25 @@ public class AdminFormController {
             @AuthenticationPrincipal(authority = Authority.ADMIN) User user
     ) {
         selectSecondPassUseCase.execute();
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/test-data")
+    public SingleCommonResponse<GenerateTestFormResponse> generateTestForm(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
+            @RequestBody @Valid GenerateTestFormListRequest request
+    ) {
+        return CommonResponse.ok(
+                generateTestFormUseCase.execute(request)
+        );
+    }
+
+    @DeleteMapping("/test-data")
+    public SingleCommonResponse<DeleteTestFormResponse> deleteTestForm(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+    ) {
+        return CommonResponse.ok(
+                deleteTestFormUseCase.execute()
+        );
     }
 }
