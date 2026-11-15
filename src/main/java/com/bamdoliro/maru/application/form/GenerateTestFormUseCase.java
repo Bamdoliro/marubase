@@ -59,6 +59,7 @@ public class GenerateTestFormUseCase {
                 Form form = randomFormGenerator.generate(user, type);
                 calculateFormScoreService.execute(form);
                 form.submit();
+                form.approve();
 
                 users.add(user);
                 forms.add(form);

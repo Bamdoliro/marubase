@@ -36,7 +36,7 @@ class GenerateTestFormUseCaseTest {
 
     @Transactional
     @Test
-    void 전형별로_요청한_개수만큼_최종_제출된_테스트_원서를_생성한다() {
+    void 전형별로_요청한_개수만큼_승인된_테스트_원서를_생성한다() {
         // given
         GenerateTestFormListRequest request = new GenerateTestFormListRequest(List.of(
                 new GenerateTestFormRequest(FormType.REGULAR, 3),
@@ -57,7 +57,7 @@ class GenerateTestFormUseCaseTest {
         assertEquals(4, forms.stream().filter(form -> form.getType() == FormType.REGULAR).count());
         assertEquals(2, forms.stream().filter(form -> form.getType() == FormType.ONE_PARENT).count());
         forms.forEach(form -> {
-            assertEquals(FormStatus.FINAL_SUBMITTED, form.getStatus());
+            assertEquals(FormStatus.APPROVED, form.getStatus());
             assertTrue(form.getUser().isTestData());
             assertNotNull(form.getScore());
             assertNotNull(form.getExaminationNumber());
