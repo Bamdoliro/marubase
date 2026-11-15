@@ -12,6 +12,7 @@ import com.bamdoliro.maru.shared.util.RandomUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -283,6 +284,21 @@ class QueryAllFormUseCaseTest {
 
         assertThat(query(null, null, sort))
                 .extracting(FormSimpleResponse::getExaminationNumber).containsExactly(1001L, 1002L);
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"unknown-sort"})
+    void 수험번호가_없는_원서가_있어도_수험번호_순으로_조회하고_마지막에_배치한다(String sort) {
+        Form noNumber = FormFixture.createForm(FormType.REGULAR);
+        Form second = FormFixture.createForm(FormType.REGULAR);
+        Form first = FormFixture.createForm(FormType.REGULAR);
+        second.assignExaminationNumber(1002L);
+        first.assignExaminationNumber(1001L);
+        given(formRepository.findByStatus(null)).willReturn(List.of(noNumber, second, first));
+
+        assertThat(query(null, null, sort))
+                .extracting(FormSimpleResponse::getExaminationNumber).containsExactly(1001L, 1002L, null);
     }
 
     private Form createScoredForm(Double firstRoundScore, Double totalScore, FormType type) {
