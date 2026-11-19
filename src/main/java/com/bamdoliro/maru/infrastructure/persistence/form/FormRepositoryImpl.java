@@ -101,7 +101,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                         form.status.eq(FormStatus.APPROVED)
                                 .and(isSpecialType())
                 )
-                .orderBy(form.score.firstRoundScore.desc())
+                .orderBy(form.score.firstRoundScore.desc(), form.id.asc())
                 .fetch();
     }
 
@@ -113,7 +113,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                         form.status.eq(FormStatus.APPROVED)
                                 .and(isRegularType())
                 )
-                .orderBy(form.score.firstRoundScore.desc())
+                .orderBy(form.score.firstRoundScore.desc(), form.id.asc())
                 .fetch();
     }
 
@@ -125,7 +125,7 @@ public class FormRepositoryImpl implements FormRepositoryCustom {
                         form.status.eq(FormStatus.APPROVED)
                                 .and(isSupernumeraryType())
                 )
-                .orderBy(form.score.firstRoundScore.desc())
+                .orderBy(form.score.firstRoundScore.desc(), form.id.asc())
                 .fetch();
     }
 
