@@ -31,4 +31,6 @@ include::analysis.adoc[]
 
 include::schedule.adoc[]
 
+include::admission-policy.adoc[]
+
 include::enum.adoc[]

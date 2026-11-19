@@ -146,7 +146,7 @@
                 <tr style="height: 53px">
                     <td style="border-left: none">코딩 테스트<br>(마이스터인재전형 지원자)</td>
                     <td th:text="${codingTest}"></td>
-                    <td>본교 평가장</td>
+                    <td th:text="${notice.examinationLocation}"></td>
                     <td style="border-right: none" rowspan="4">
                         <div class="left" style="margin-bottom: 10px">• 코딩 테스트는 '마이스터인재전형' 지원자만 실시함</div>
                         <div class="left" style="margin-bottom: 10px">• 수험표 반드시 지참</div>
@@ -156,32 +156,32 @@
                 <tr style="height: 35px">
                     <td style="border-left: none">NCS 인적성검사</td>
                     <td th:text="${ncs}"></td>
-                    <td>본교 평가장</td>
+                    <td th:text="${notice.examinationLocation}"></td>
                 </tr>
                 <tr style="height: 35px">
                     <td style="border-left: none">심층면접</td>
                     <td th:text="${depthInterview}"></td>
-                    <td>본교 평가장</td>
+                    <td th:text="${notice.examinationLocation}"></td>
                 </tr>
                 <tr style="height: 35px">
                     <td style="border-left: none">신체검사</td>
                     <td th:text="${physicalExamination}"></td>
-                    <td>본교 평가장</td>
+                    <td th:text="${notice.examinationLocation}"></td>
                 </tr>
                 <tr style="height: 35px">
                     <td class="background-blue" style="border-left: none">합격자 발표</td>
                     <td class="background-blue" th:text="${announcementOfSecondPass}"></td>
-                    <td class="background-blue">본교 홈페이지</td>
+                    <td class="background-blue" th:text="${notice.announcementLocation}"></td>
                     <td class="background-blue" style="border-right: none">
-                        <div class="left">• 예비소집일 별도 안내 예정</div>
+                        <div class="left" th:text="|• ${notice.preliminaryMeetingNotice}|"></div>
                     </td>
                 </tr>
                 <tr style="height: 35px">
                     <td class="background-blue" style="border-left: none">입학등록기간</td>
                     <td class="background-blue" th:text="${entranceRegistrationTime}"></td>
-                    <td class="background-blue">본교 행정실</td>
+                    <td class="background-blue" th:text="${notice.registrationLocation}"></td>
                     <td class="background-blue" style="border-right: none">
-                        <div class="left">• 우편, 등기, 직접 제출</div>
+                        <div class="left" th:text="|• ${notice.registrationMethod}|"></div>
                     </td>
                 </tr>
             </table>
@@ -205,18 +205,18 @@
                 <tr style="height: 27px">
                     <td style="border-left: none">마이스터인재전형</td>
                     <td th:text="${meisterTalentEntranceTime}"></td>
-                    <td>본교 평가장</td>
+                    <td th:text="${notice.examinationLocation}"></td>
                     <td style="border-right: none">ㅤ</td>
                 </tr>
                 <tr style="height: 27px">
                     <td style="border-left: none">일반 전형, 사회통합전형</td>
                     <td th:text="${meisterTalentExclusionEntranceTime}"></td>
-                    <td>본교 평가장</td>
+                    <td th:text="${notice.examinationLocation}"></td>
                     <td style="border-right: none">ㅤ</td>
                 </tr>
             </table>
             <div class="information-container-indent">나. 수험생 외의 인원은 고시장 출입이 불가합니다.</div>
-            <div class="information-container-indent red">다. 점심식사 제공 안함, 개별 도시락 반드시 지참 바랍니다.</div>
+            <div class="information-container-indent red" th:text="|다. ${notice.lunchNotice}|"></div>
             <div class="information-container-indent">라. 필수 휴대 품목과 휴대 가능 품목, 휴대 금지 품목을 반드시 확인하기 바랍니다.</div>
             <table class="information-container-table" style="width: 658px">
                 <colgroup>
@@ -225,16 +225,16 @@
                 </colgroup>
                 <tr>
                     <td style="border-left: none">필수 휴대 품목</td>
-                    <td class="left" style="border-right: none">수험표, 컴퓨터용 사인펜, 흑색 또는 청색 볼펜 등</td>
+                    <td class="left" style="border-right: none" th:text="${notice.requiredItems}"></td>
                 </tr>
                 <tr>
                     <td style="border-left: none">휴대 가능 품목</td>
-                    <td class="left" style="border-right: none">컴퓨터용 사인펜, 연필(흑색), 지우개, 샤프연필, 샤프심,<br> 아날로그 시계(블루투스 등 통신기능 및 전자식 화면표시(LCD, LED)가 없는 시계 등</td>
+                    <td class="left" style="border-right: none" th:text="${notice.allowedItems}"></td>
                 </tr>
                 <tr>
                     <td style="border-left: none">휴대 금지 품목</td>
                     <td class="left" style="border-right: none">
-                        <div>휴대용 전화기, 노트북, 태블릿 PC, 스마트 센서 등의 웨어러블 기기, 통신기기 등</div>
+                        <div th:text="${notice.prohibitedItems}"></div>
                         <br>
                         <div>☞ 휴대 금지 물품을 불가피하게 반입한 경우 전형 시작 전에 감독관의 지시에 따라 제출해야 하며 <br>
                             <span style="margin-left: 14px">미제출 시 부정행위 간주됩니다.</span></div>

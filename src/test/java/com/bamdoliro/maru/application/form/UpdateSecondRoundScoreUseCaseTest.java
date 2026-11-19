@@ -1,5 +1,8 @@
 package com.bamdoliro.maru.application.form;
 
+import com.bamdoliro.maru.infrastructure.persistence.schedule.AdmissionScheduleRepository;
+import com.bamdoliro.maru.shared.fixture.ScheduleFixture;
+
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.service.AssignExaminationNumberService;
@@ -52,8 +55,12 @@ class UpdateSecondRoundScoreUseCaseTest {
     @Autowired
     private AssignExaminationNumberService assignExaminationNumberService;
 
+    @Autowired
+    private AdmissionScheduleRepository scheduleRepository;
+
     @BeforeEach
     void setUp() {
+        scheduleRepository.save(ScheduleFixture.createSchedule());
         List<User> userList = userRepository.saveAll(
                 UserFixture.generateUserList(FixedNumber.TOTAL * 2)
         );

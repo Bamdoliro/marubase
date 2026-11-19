@@ -1,5 +1,8 @@
 package com.bamdoliro.maru.application.form;
 
+import com.bamdoliro.maru.infrastructure.persistence.schedule.AdmissionScheduleRepository;
+import com.bamdoliro.maru.shared.fixture.ScheduleFixture;
+
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.domain.type.FormType;
@@ -54,8 +57,12 @@ public class SelectSecondPassUseCaseTest {
 
     private SelectionScenarioSupport scenario;
 
+    @Autowired
+    private AdmissionScheduleRepository scheduleRepository;
+
     @BeforeEach
     void setUp() {
+        scheduleRepository.save(ScheduleFixture.createSchedule());
         scenario = new SelectionScenarioSupport(userRepository, formRepository, assignExaminationNumberService, calculateFormScoreService);
     }
 

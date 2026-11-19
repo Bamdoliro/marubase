@@ -7,7 +7,8 @@ import com.bamdoliro.maru.domain.form.exception.MissingTotalScoreException;
 import com.bamdoliro.maru.domain.form.service.CalculateFormScoreService;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.shared.annotation.UseCase;
-import com.bamdoliro.maru.shared.constants.FixedNumber;
+import com.bamdoliro.maru.application.policy.AdmissionPolicyService;
+import com.bamdoliro.maru.domain.policy.SelectionPolicy;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -21,13 +22,15 @@ import java.util.function.IntUnaryOperator;
 public class SelectSecondPassUseCase {
 
     private final FormRepository formRepository;
+    private final AdmissionPolicyService admissionPolicyService;
     private final CalculateFormScoreService calculateFormScoreService;
 
     @Transactional
     public void execute() {
         validate();
 
-        AtomicInteger otherRegionCount = new AtomicInteger((int) Math.ceil(FixedNumber.TOTAL * FixedNumber.OTHER_REGION_RATE));
+        SelectionPolicy policy = admissionPolicyService.selectionForExecution();
+        AtomicInteger otherRegionCount = new AtomicInteger(policy.otherRegionCount(false));
 
         // 1차 합격자 수를 원 정원과 비교해 미달분을 이월한다. 2차는 배수 없이 원 정원으로 선발한다.
         List<Form> specialFormList = formRepository.findFirstPassedSpecialForm();
@@ -36,6 +39,7 @@ public class SelectSecondPassUseCase {
         List<Form> societyDiversityFormList = classifyFormsByType(specialFormList, FormType::isSocietyDiversity);
 
         SelectionQuota quota = SelectionQuota.of(
+                policy,
                 meisterTalentFormList.size(),
                 equalOpportunityFormList.size(),
                 societyDiversityFormList.size(),
