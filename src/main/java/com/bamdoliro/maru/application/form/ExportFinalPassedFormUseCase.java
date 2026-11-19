@@ -3,6 +3,7 @@ package com.bamdoliro.maru.application.form;
 import com.bamdoliro.maru.domain.form.domain.Form;
 import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.domain.form.service.FormFacade;
+import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.infrastructure.xlsx.FormColumn;
 import com.bamdoliro.maru.infrastructure.xlsx.XlsxGenerator;
 import com.bamdoliro.maru.shared.annotation.UseCase;
@@ -13,16 +14,21 @@ import org.springframework.core.io.Resource;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @UseCase
 public class ExportFinalPassedFormUseCase {
 
     private final FormFacade formFacade;
+    private final FormRepository formRepository;
     private final XlsxGenerator xlsxGenerator;
 
     public Resource execute() throws IOException {
-        List<Form> formList = formFacade.getSortedFormList(FormStatus.ENTERED);
+        List<Form> formList = formRepository.findByStatusIn(Set.of(FormStatus.PASSED, FormStatus.ENTERED))
+                .stream()
+                .sorted(formFacade.getFormComparator().thenComparing(Form::getExaminationNumber))
+                .toList();
 
         List<FormColumn> columns = List.of(
                 FormColumn.text(Form::getId),
