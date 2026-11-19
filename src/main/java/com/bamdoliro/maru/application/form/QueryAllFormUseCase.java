@@ -42,10 +42,10 @@ public class QueryAllFormUseCase {
                 case "total-score-desc" ->
                         formList.sort(Comparator.comparing(form -> form.getScore().getTotalScore(), Comparator.nullsLast(Comparator.reverseOrder())));
                 case "form-id" -> formList.sort(Comparator.comparing(Form::getId));
-                default -> formList.sort(Comparator.comparing(Form::getExaminationNumber));
+                default -> formList.sort(Comparator.comparing(Form::getExaminationNumber, Comparator.nullsLast(Comparator.naturalOrder())));
             }
         } else {
-            formList.sort(Comparator.comparing(Form::getExaminationNumber));
+            formList.sort(Comparator.comparing(Form::getExaminationNumber, Comparator.nullsLast(Comparator.naturalOrder())));
         }
 
         return formList.stream()

@@ -18,7 +18,9 @@ public enum FormErrorProperty implements ErrorProperty {
     MISSING_TOTAL_SCORE(HttpStatus.CONFLICT, "최종 점수가 입력되지 않은 원서가 존재합니다."),
     OUT_OF_APPLICATION_FORM_PERIOD(HttpStatus.FORBIDDEN, "지금은 원서 접수 기간이 아닙니다."),
     OUT_OF_ADMISSION_AND_PLEDGE_PERIOD(HttpStatus.FORBIDDEN, "지금은 입학 등록원 및 서약서 제출 기간이 아닙니다."),
-    INVALID_GRADE(HttpStatus.BAD_REQUEST, "%s 성적을 입력해 주세요.")
+    INVALID_GRADE(HttpStatus.BAD_REQUEST, "%s 성적을 입력해 주세요."),
+    EXAMINATION_NUMBER_RANGE_EXCEEDED(HttpStatus.CONFLICT, "전형별 수험번호 구간을 초과하여 원서를 생성할 수 없습니다."),
+    CANNOT_GENERATE_UNIQUE_TEST_DATA(HttpStatus.CONFLICT, "중복되지 않는 테스트 데이터를 생성하지 못했습니다. 다시 시도해 주세요.")
     ;
 
     private final HttpStatus status;

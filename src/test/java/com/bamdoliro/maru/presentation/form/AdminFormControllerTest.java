@@ -10,6 +10,10 @@ import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormRequest;
 import com.bamdoliro.maru.presentation.form.dto.request.FormListRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.GenerateTestFormListRequest;
+import com.bamdoliro.maru.presentation.form.dto.request.GenerateTestFormRequest;
+import com.bamdoliro.maru.presentation.form.dto.response.DeleteTestFormResponse;
+import com.bamdoliro.maru.presentation.form.dto.response.GenerateTestFormResponse;
 import com.bamdoliro.maru.shared.auth.AuthenticatedUser;
 import com.bamdoliro.maru.shared.fixture.AuthFixture;
 import com.bamdoliro.maru.shared.fixture.FormFixture;
@@ -27,7 +31,9 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
@@ -855,5 +861,105 @@ class AdminFormControllerTest extends RestDocsTestSupport {
                 .andDo(restDocs.document());
 
         verify(selectSecondPassUseCase, times(1)).execute();
+    }
+
+    @Test
+    void 전형별로_테스트_원서를_생성한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+        GenerateTestFormListRequest request = new GenerateTestFormListRequest(List.of(
+                new GenerateTestFormRequest(FormType.REGULAR, 10),
+                new GenerateTestFormRequest(FormType.ONE_PARENT, 3)
+        ));
+        Map<FormType, Integer> countByType = new EnumMap<>(FormType.class);
+        countByType.put(FormType.REGULAR, 10);
+        countByType.put(FormType.ONE_PARENT, 3);
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(generateTestFormUseCase.execute(any(GenerateTestFormListRequest.class)))
+                .willReturn(new GenerateTestFormResponse(13, countByType));
+
+        mockMvc.perform(post("/admin/forms/test-data")
+                        .cookie(AuthFixture.createAuthCookie())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(toJson(request)))
+                .andExpect(status().isCreated())
+                .andDo(restDocs.document(
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        ),
+                        requestFields(
+                                fieldWithPath("formList").type(JsonFieldType.ARRAY).description("생성할 전형별 원서 개수 목록"),
+                                fieldWithPath("formList[].type").type(JsonFieldType.STRING).description("전형 (FormType)"),
+                                fieldWithPath("formList[].count").type(JsonFieldType.NUMBER).description("생성할 원서 개수 (1 이상 500 이하)")
+                        )
+                ));
+
+        verify(generateTestFormUseCase, times(1)).execute(any(GenerateTestFormListRequest.class));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 501})
+    void 테스트_원서를_생성할_때_개수가_범위를_벗어나면_에러가_발생한다(int count) throws Exception {
+        User user = UserFixture.createAdminUser();
+        GenerateTestFormListRequest request = new GenerateTestFormListRequest(List.of(
+                new GenerateTestFormRequest(FormType.REGULAR, count)
+        ));
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+
+        mockMvc.perform(post("/admin/forms/test-data")
+                        .cookie(AuthFixture.createAuthCookie())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(toJson(request)))
+                .andExpect(status().isBadRequest())
+                .andDo(restDocs.document());
+
+        verify(generateTestFormUseCase, never()).execute(any(GenerateTestFormListRequest.class));
+    }
+
+    @Test
+    void 테스트_원서를_생성할_때_목록이_비어있으면_에러가_발생한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+        GenerateTestFormListRequest request = new GenerateTestFormListRequest(List.of());
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+
+        mockMvc.perform(post("/admin/forms/test-data")
+                        .cookie(AuthFixture.createAuthCookie())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(toJson(request)))
+                .andExpect(status().isBadRequest())
+                .andDo(restDocs.document());
+
+        verify(generateTestFormUseCase, never()).execute(any(GenerateTestFormListRequest.class));
+    }
+
+    @Test
+    void 테스트_원서와_사용자를_삭제한다() throws Exception {
+        User user = UserFixture.createAdminUser();
+
+        given(authenticationArgumentResolver.supportsParameter(any(MethodParameter.class))).willReturn(true);
+        given(authenticationArgumentResolver.resolveArgument(any(), any(), any(), any())).willReturn(user);
+        given(deleteTestFormUseCase.execute()).willReturn(new DeleteTestFormResponse(13, 13));
+
+        mockMvc.perform(delete("/admin/forms/test-data")
+                        .cookie(AuthFixture.createAuthCookie())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        requestCookies(
+                                cookieWithName("accessToken")
+                                        .description("이것은.액세스.토큰")
+                        )
+                ));
+
+        verify(deleteTestFormUseCase, times(1)).execute();
     }
 }
