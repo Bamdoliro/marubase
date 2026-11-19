@@ -1,6 +1,8 @@
 package com.bamdoliro.maru.presentation.form;
 
 import com.bamdoliro.maru.application.form.*;
+import com.bamdoliro.maru.application.schedule.ExecuteFirstPassSelectionUseCase;
+import com.bamdoliro.maru.application.schedule.ExecuteSecondPassSelectionUseCase;
 import com.bamdoliro.maru.presentation.form.dto.request.FormListRequest;
 import com.bamdoliro.maru.domain.user.domain.User;
 import com.bamdoliro.maru.presentation.form.dto.request.PassOrFailFormListRequest;
@@ -49,7 +51,8 @@ public class AdminFormController {
     private final PassOrFailFormUseCase passOrFailFormUseCase;
     private final QueryFormUrlUseCase queryFormUrlUseCase;
     private final MergeFormPdfUseCase mergeFormPdfUseCase;
-    private final SelectSecondPassUseCase selectSecondPassUseCase;
+    private final ExecuteFirstPassSelectionUseCase executeFirstPassSelectionUseCase;
+    private final ExecuteSecondPassSelectionUseCase executeSecondPassSelectionUseCase;
     private final QueryAdmissionAndPledgeUseCase queryAdmissionAndPledgeUseCase;
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -203,7 +206,7 @@ public class AdminFormController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/second-round/result")
     public void passOrFailForm(
-            @AuthenticationPrincipal(authority = Authority.ADMIN) User user,
+            @AuthenticationPrincipal(authority = Authority.ADMIN) AuthenticatedUser user,
             @RequestBody @Valid PassOrFailFormListRequest request
     ) {
         passOrFailFormUseCase.execute(request);
@@ -248,10 +251,18 @@ public class AdminFormController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/first-round/select")
+    public void selectFirstPass(
+            @AuthenticationPrincipal(authority = Authority.ADMIN) AuthenticatedUser user
+    ) {
+        executeFirstPassSelectionUseCase.execute();
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/second-round/select")
     public void selectSecondPass(
-            @AuthenticationPrincipal(authority = Authority.ADMIN) User user
+            @AuthenticationPrincipal(authority = Authority.ADMIN) AuthenticatedUser user
     ) {
-        selectSecondPassUseCase.execute();
+        executeSecondPassSelectionUseCase.execute();
     }
 }

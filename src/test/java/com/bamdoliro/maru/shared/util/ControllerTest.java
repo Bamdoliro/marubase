@@ -17,6 +17,8 @@ import com.bamdoliro.maru.application.schedule.CreateScheduleUseCase;
 import com.bamdoliro.maru.application.schedule.QueryCurrentScheduleUseCase;
 import com.bamdoliro.maru.application.schedule.QueryScheduleUseCase;
 import com.bamdoliro.maru.application.schedule.UpdateScheduleUseCase;
+import com.bamdoliro.maru.application.schedule.ExecuteFirstPassSelectionUseCase;
+import com.bamdoliro.maru.application.schedule.ExecuteSecondPassSelectionUseCase;
 import com.bamdoliro.maru.application.user.*;
 import com.bamdoliro.maru.domain.auth.service.TokenService;
 import com.bamdoliro.maru.infrastructure.message.SendMessageService;
@@ -257,7 +259,10 @@ public abstract class ControllerTest {
     protected MergeFormPdfUseCase mergeFormPdfUseCase;
 
     @MockitoBean
-    protected SelectSecondPassUseCase selectSecondPassUseCase;
+    protected ExecuteSecondPassSelectionUseCase executeSecondPassSelectionUseCase;
+
+    @MockitoBean
+    protected ExecuteFirstPassSelectionUseCase executeFirstPassSelectionUseCase;
 
     @MockitoBean
     protected SendMessageUseCase sendMessageUseCase;

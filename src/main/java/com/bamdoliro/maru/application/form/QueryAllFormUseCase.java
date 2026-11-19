@@ -1,6 +1,7 @@
 package com.bamdoliro.maru.application.form;
 
 import com.bamdoliro.maru.domain.form.domain.Form;
+import com.bamdoliro.maru.domain.form.domain.type.FormStatus;
 import com.bamdoliro.maru.presentation.form.dto.request.FormListRequest;
 import com.bamdoliro.maru.infrastructure.persistence.form.FormRepository;
 import com.bamdoliro.maru.presentation.form.dto.response.FormSimpleResponse;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,7 +21,7 @@ public class QueryAllFormUseCase {
     private final FormRepository formRepository;
 
     public List<FormSimpleResponse> execute(FormListRequest request) {
-        List<Form> formList = new ArrayList<>(formRepository.findByStatus(request.getStatus()).stream()
+        List<Form> formList = new ArrayList<>(findFormsByDisplayStatus(request.getStatus()).stream()
                 .filter(form -> Objects.isNull(request.getType()) || form.getType().equals(request.getType()))
                 .filter(form -> request.getMentoringProgram() == null
                         || form.getGrade().isMentoringProgram() == request.getMentoringProgram())
@@ -50,6 +52,29 @@ public class QueryAllFormUseCase {
 
         return formList.stream()
                 .map(FormSimpleResponse::new)
+                .toList();
+    }
+
+    // 관리자 목록의 표시 기준이다. 선발·문자 발송 등에서 사용하는 정확한 상태 조회와 분리한다.
+    private List<Form> findFormsByDisplayStatus(FormStatus status) {
+        if (status == null) {
+            return formRepository.findByStatus(null);
+        }
+        EnumSet<FormStatus> statuses = switch (status) {
+            case FINAL_SUBMITTED -> EnumSet.complementOf(EnumSet.of(FormStatus.SUBMITTED));
+            case APPROVED -> EnumSet.of(FormStatus.APPROVED, FormStatus.FIRST_PASSED,
+                    FormStatus.FIRST_FAILED, FormStatus.PASSED, FormStatus.FAILED,
+                    FormStatus.NO_SHOW, FormStatus.ENTERED);
+            case FIRST_PASSED -> EnumSet.of(FormStatus.FIRST_PASSED, FormStatus.PASSED,
+                    FormStatus.FAILED, FormStatus.NO_SHOW, FormStatus.ENTERED);
+            case PASSED -> EnumSet.of(FormStatus.PASSED, FormStatus.ENTERED);
+            default -> EnumSet.of(status);
+        };
+        if (statuses.size() == 1) {
+            return formRepository.findByStatus(status);
+        }
+        return formRepository.findByStatusIn(statuses).stream()
+                .sorted(Comparator.comparing(Form::getExaminationNumber))
                 .toList();
     }
 
