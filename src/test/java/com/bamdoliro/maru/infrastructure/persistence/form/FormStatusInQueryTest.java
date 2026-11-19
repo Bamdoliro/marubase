@@ -55,6 +55,21 @@ class FormStatusInQueryTest {
     }
 
     @Test
+    void 최종합격자_조회에_합격과_입학만_포함한다() {
+        Form passed = saveForm(Form::pass);
+        Form entered = saveForm(Form::enter);
+        saveForm(Form::approve);
+        saveForm(Form::firstPass);
+        saveForm(Form::firstFail);
+        saveForm(Form::fail);
+        saveForm(Form::noShow);
+        saveForm(Form::reject);
+
+        assertThat(formRepository.findByStatusIn(Set.of(FormStatus.PASSED, FormStatus.ENTERED)))
+                .containsExactlyInAnyOrder(passed, entered);
+    }
+
+    @Test
     void 해당하는_원서가_없으면_빈_목록을_반환한다() {
         saveForm(Form::submit);
 
